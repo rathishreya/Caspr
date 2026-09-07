@@ -10,7 +10,7 @@ and exactly which parts have been copied into this repository so far.
 
 ## Status: partial copy
 
-**11 of ~600 files copied.** Every copied file was verified byte-exact against the
+**12 of ~600 files copied.** Every copied file was verified byte-exact against the
 Drive source (size + UTF-8 validity) before being committed. Nothing below is a
 silent partial.
 
@@ -46,6 +46,7 @@ likely simpler still.
 
 | Path | Bytes |
 |---|---|
+| `CLAUDE.md` | 36,764 |
 | `CONCEPTS.md` | 7,216 |
 | `.claude/settings.json` | 1,808 |
 | `.claude/serve-docs.ps1` | 1,340 |
@@ -142,6 +143,18 @@ same name; where they do not, they need exporting rather than copying.
 Every copied file was written via `base64 -d` and then checked with `wc -c` against
 the size reported by the Drive API, plus a UTF-8 decode for text files. Two files
 failed on the first attempt (`scripts/extract_pdfs.py`, `CLAUDE.md`) and were caught
-by this check. `extract_pdfs.py` was re-transferred successfully; `CLAUDE.md`
-(36,764 bytes) failed twice and was **deliberately not committed** rather than
-committed corrupt. It remains the highest-priority file to transfer.
+by this check and re-transferred successfully.
+
+`CLAUDE.md` (36,764 bytes) failed twice as a single 49 KB base64 blob. It was then
+transferred as **12 independently-decoded chunks**, each verified for size and UTF-8
+validity before assembly. That surfaced three separate transcription errors — two
+mangled em-dash sequences and one dropped `*` — each isolated to one chunk and fixed
+without re-transferring the rest. The assembled file is byte-exact at 36,764 bytes.
+
+**Chunking is the working method for any file over ~10 KB.** A single large blob has
+roughly a 1-in-7 failure rate and gives no way to localise the fault; chunks of
+2–5 KB fail rarely and localise immediately.
+
+`CLAUDE.md` also names `.agents/product-marketing-context.md` as *"the master
+reference"* — that file, plus `icp-personas.md`, `pricing-model.md`,
+`gtm-strategy.md` and `brand-guidelines.md`, are the highest-value remaining items.
