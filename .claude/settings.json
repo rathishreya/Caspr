@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "additionalDirectories": [],
+    "allow": [
+      "Bash(node .claude/skills/caspr-release-check/run.mjs:*)",
+      "Bash(node \".claude/skills/caspr-release-check/run.mjs\":*)",
+      "Bash(node docs/app-handoff/conformance/run.mjs:*)",
+      "Bash(node \"docs/app-handoff/conformance/run.mjs\":*)",
+      "Bash(node docs/app-handoff/conformance/selftest/run.mjs:*)",
+      "Bash(node docs/app-handoff/conformance/contract-parity.mjs:*)",
+      "Bash(node docs/app-handoff/conformance/spec-drift.mjs:*)",
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git worktree list:*)",
+      "Bash(git diff --stat:*)"
+    ],
+    "deny": [
+      "Read(G:/My Drive/Caspr/[0-9]*/**)",
+      "Edit(G:/My Drive/Caspr/[0-9]*/**)",
+      "Write(G:/My Drive/Caspr/[0-9]*/**)",
+      "Read(G:/My Drive/Caspr/Top Reports/**)",
+      "Edit(G:/My Drive/Caspr/Top Reports/**)",
+      "Write(G:/My Drive/Caspr/Top Reports/**)",
+
+      "Read(**/.env)",
+      "Read(**/.env.local)",
+      "Read(**/.env.development)",
+      "Read(**/.env.staging)",
+      "Read(**/.env.production)",
+      "Read(**/.env.test)",
+      "Read(**/*.pem)",
+      "Read(**/*.key)",
+      "Read(**/*.p12)",
+      "Read(**/*.pfx)",
+      "Read(**/*_rsa)",
+      "Read(**/id_ed25519)",
+      "Read(**/id_ecdsa)",
+      "Read(**/credentials)",
+      "Read(**/*service-account*.json)",
+      "Read(**/kubeconfig)",
+      "Read(**/*.tfstate)",
+      "Read(**/Ahrefs_Key.txt)",
+      "Read(**/CASPR-KEYS-REQUEST.txt)",
+
+      "Bash(printenv:*)",
+      "Bash(env)",
+      "Bash(ps auxeww:*)",
+      "Bash(aws configure get:*)",
+      "Bash(gcloud auth print-access-token:*)",
+      "Bash(terraform output:*)"
+    ]
+  }
+}
