@@ -8,25 +8,31 @@ and exactly which parts have been copied into this repository so far.
 
 ---
 
-## Status: partial copy
+## Status: partial copy — the whole `.agents/` core is in
 
-**12 of ~600 files copied.** Every copied file was verified byte-exact against the
-Drive source (size + UTF-8 validity) before being committed. Nothing below is a
-silent partial.
+**31 of ~600 files copied**, including **every file in `.agents/`** — the set
+`CLAUDE.md` names as authoritative. Every copied file is byte-exact against the
+Drive source (size + UTF-8 validity). Nothing below is a silent partial.
 
-### Why this is partial
+### Fidelity is solved; volume is not
 
-The only available transfer path is the Google Drive MCP connector, which returns
-file contents as base64 through the agent's context window. Two consequences:
+The transfer method changed partway through this migration, and the change matters:
 
-1. **Volume.** The folder is ~40–60 MB. Text alone is ~8 MB, which is transferable
-   but slow; the binaries (a 24 MB zip, ~30 MB of PDFs, ~10 MB of PNGs, a 1.9 MB
-   MP4, ~1 MB of TTFs) are not, because base64 inflates them ~1.37× and every byte
-   must pass through context twice.
-2. **Fidelity.** Reproducing large base64 blobs by hand is error-prone — measured at
-   roughly a 1-in-7 corruption rate on files >30 KB during this migration. Every
-   write is therefore size-verified and re-done on mismatch, which roughly doubles
-   the cost per file.
+- **Old method — hand-transcribing base64.** Error-prone, measured at roughly a
+  1-in-7 corruption rate on files >30 KB. Required chunking and per-chunk
+  verification. Used for `CLAUDE.md` and `.agents/brand-guidelines.md` only.
+- **Current method — decoding from disk.** `download_file_content` results are
+  persisted by the harness (oversized ones to a tool-results file, the rest to the
+  session transcript). `scripts/drive_extract.py` reads the base64 straight from
+  there and decodes it. **No transcription, so no opportunity for corruption.**
+  `brand-guidelines.md` was re-derived this way and confirmed byte-identical to the
+  hand-transcribed copy, which validates both.
+
+**What still limits the copy is volume, not accuracy.** Each file needs its own
+`download_file_content` call, and the base64 for anything under ~40 KB passes
+through the agent's context. ~470 text files remain, which is mechanical but slow.
+The binaries (a 24 MB zip, ~35 MB of PDFs, ~8 MB of PNGs, a 1.9 MB MP4, ~1 MB of
+TTFs) cannot pass through this channel at all.
 
 **Recommended instead:** mirror the folder directly with a tool built for it. From a
 machine with the Drive folder mounted or `rclone` configured:
@@ -48,6 +54,24 @@ likely simpler still.
 |---|---|
 | `CLAUDE.md` | 36,764 |
 | `CONCEPTS.md` | 7,216 |
+| `.agents/icp-personas.md` | 76,533 |
+| `.agents/pricing-model.md` | 67,615 |
+| `.agents/gtm-strategy.md` | 43,364 |
+| `.agents/product-marketing-context.md` | 43,177 |
+| `.agents/website-visual-design-guidelines.md` | 36,533 |
+| `.agents/brand-guidelines.md` | 27,318 |
+| `.agents/brief-spec.md` | 24,679 |
+| `.agents/icp-copy.md` | 16,632 |
+| `.agents/academic-programme.md` | 16,205 |
+| `.agents/security-posture.md` | 15,802 |
+| `.agents/website-architecture.md` | 15,195 |
+| `docs/website-copy-deck.md` | 45,311 |
+| `docs/website-session-prompt.md` | 30,813 |
+| `docs/website-revision-plan.md` | 26,007 |
+| `docs/od-10-results.md` | 22,641 |
+| `docs/site-truth.md` | 20,433 |
+| `docs/website-structure.md` | 19,153 |
+| `docs/source-assess-conclude.md` | 11,261 |
 | `.claude/settings.json` | 1,808 |
 | `.claude/serve-docs.ps1` | 1,340 |
 | `.agents/caspr-brand-integration-brief.md` | 2,157 |
@@ -84,8 +108,8 @@ Folder IDs are given so each can be fetched directly.
 
 | Drive folder | ID | Contents |
 |---|---|---|
-| `.agents/` | `1IFDjFfG7OVIJKPoFGmPp2xZmNcNBeHoR` | 11 remaining .md — `icp-personas.md` (76 KB), `pricing-model.md` (68 KB), `gtm-strategy.md` (43 KB), `product-marketing-context.md` (43 KB), `brand-guidelines.md` (27 KB), `website-visual-design-guidelines.md` (37 KB), `brief-spec.md` (25 KB), `icp-copy.md` (17 KB), `website-architecture.md` (15 KB), `security-posture.md` (16 KB), `academic-programme.md` (16 KB) |
-| `docs/` (root) | `1PaZnR9lx79VQjq9MKcJVxGVf42Rc51Rc` | ~40 .md + .html — site truth, copy decks, website/app session prompts, SEO, report corpus briefs |
+| `.agents/` | `1IFDjFfG7OVIJKPoFGmPp2xZmNcNBeHoR` | ✅ **complete — all 13 files copied** |
+| `docs/` (root) | `1PaZnR9lx79VQjq9MKcJVxGVf42Rc51Rc` | 7 of ~37 copied. Remaining: `report-corpus-brief.md`, `report-evaluation-2026-08.md`, `website-workplan.md`, `language-capability-report.md`, `website-updates-from-product.md`, `copy-pricing.md`, `demonstration-analyses-brief.md`, `phase-b-fold-map.md`, `entry-routes-and-cta.md`, `copy-homepage.md`, `app-positioning-alignment.md`, `app-session-prompt.md`, `figma-vs-live-diff.md`, `website-proposal-v2.md`, `report-evaluation-rubric.md`, `website-copy-rules.md`, `od-10-quotation-brief.md`, `website-copy-step2.md`, `copy-deck-brief.md`, `website-session-handoff-2026-08-21.md`, `figma-vs-live-diff-plan.md`, `od-10-research-brief.md`, `WEBSITE-PROMPT-*.md`, `APP-PROMPT-*.md`, `dev-ask-style-template.md`, `DRIVE-MIGRATION-REPORT.md`, 2 `.html` one-pagers, 2 `.xlsx` trackers |
 | `docs/app-handoff/` | `1hAySEj1cTML_i2mM1DhusheKZxEaguE5` | ~70 .md — dev prompts, build status, FIGMA-* exchange, conformance, test reports |
 | `docs/gtm/` | `1hrapVPcXBlGPsHpNisSGucTLY6zaVvp_` | ~25 .md — portal specs, content engine, launch plan, tracking spec |
 | `docs/product/` | `127hXzkF7tErAwngLllnWnFIoMW0SFeqj` | ~30 .md — app shell framework (91 KB), design spec, API specs, access model |
@@ -158,3 +182,22 @@ roughly a 1-in-7 failure rate and gives no way to localise the fault; chunks of
 `CLAUDE.md` also names `.agents/product-marketing-context.md` as *"the master
 reference"* — that file, plus `icp-personas.md`, `pricing-model.md`,
 `gtm-strategy.md` and `brand-guidelines.md`, are the highest-value remaining items.
+
+
+---
+
+## The working method, for whoever continues this
+
+`scripts/drive_extract.py` is committed alongside this manifest. The loop is:
+
+1. Call `download_file_content` with the Drive file ID.
+2. Run `drive_extract.py "<Drive title>" "<repo-relative path>"`.
+3. Check the reported byte count against the `fileSize` the Drive API gave.
+
+The script finds the base64 in whichever place the harness persisted it — the
+tool-results spill directory for oversized results, the session transcript
+otherwise — and decodes it directly. Run it with `--list` to see every download
+available in the current session.
+
+**This only works inside the session that made the downloads.** A new session
+starts with an empty transcript and must re-download.
