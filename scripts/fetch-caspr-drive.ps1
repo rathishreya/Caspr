@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Mirror the shared Google Drive folder "caspr-claude-core" into this repository.
 
@@ -6,7 +6,7 @@
     Does the whole job in one run:
       1. Finds rclone, or downloads a portable copy next to this script (no admin, no installer).
       2. Configures a Google Drive remote if one is not already set up (opens a browser once).
-      3. Copies the shared folder — binaries included — to a staging directory.
+      3. Copies the shared folder -- binaries included -- to a staging directory.
       4. Mirrors staging into the repository working tree.
       5. Commits and pushes.
 
@@ -21,7 +21,7 @@
     Branch to commit and push to.
 
 .PARAMETER IncludeSecrets
-    Copy credential-bearing files too. Off by default — see the SECURITY note below.
+    Copy credential-bearing files too. Off by default -- see the SECURITY note below.
 
 .PARAMETER SkipGit
     Fetch to staging and mirror into the tree, but do not commit or push.
@@ -40,11 +40,11 @@
     .\scripts\fetch-caspr-drive.ps1 -SkipGit
 
 .NOTES
-    SECURITY — read before using -IncludeSecrets.
+    SECURITY -- read before using -IncludeSecrets.
     By default this skips files that carry live credentials: Ahrefs_Key.txt,
     docs/app-handoff/CASPR-KEYS-REQUEST.txt, .env, *.pem, *.key and similar.
     They are skipped because this repository is on GitHub, and a credential
-    committed to git history stays recoverable even after the file is deleted —
+    committed to git history stays recoverable even after the file is deleted --
     rotating the key becomes the only real remedy. CLAUDE.md rule 7 names
     Ahrefs_Key.txt as the specific reason that rule was extended to cover Drive.
     Pass -IncludeSecrets only if you have decided that is acceptable.
@@ -70,7 +70,7 @@ $StagingRoot = if ($env:LOCALAPPDATA) { $env:LOCALAPPDATA }
 $Staging     = Join-Path $StagingRoot 'caspr-drive-staging'
 $ToolsDir    = Join-Path $PSScriptRoot '.tools'
 
-# Sum file sizes under a path, ignoring git metadata. Returns MB, 0 when empty —
+# Sum file sizes under a path, ignoring git metadata. Returns MB, 0 when empty --
 # Measure-Object yields a null Sum for an empty set, which would otherwise throw
 # under StrictMode.
 function Get-TreeSizeMb {
@@ -102,13 +102,16 @@ function Resolve-Rclone {
         return $portable
     }
 
-    Write-Step 'rclone not found — downloading a portable copy'
+    Write-Step 'rclone not found -- downloading a portable copy'
     Write-Note 'Nothing is installed system-wide and no admin rights are needed.'
 
     New-Item -ItemType Directory -Force -Path $ToolsDir | Out-Null
     $zip     = Join-Path $ToolsDir 'rclone.zip'
     $extract = Join-Path $ToolsDir 'unzipped'
     $url     = 'https://downloads.rclone.org/rclone-current-windows-amd64.zip'
+
+    # Windows PowerShell 5.1 defaults to TLS 1.0, which the download host rejects.
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
     # Progress rendering makes Invoke-WebRequest an order of magnitude slower.
     $priorProgress = $ProgressPreference
@@ -147,7 +150,7 @@ function Confirm-Remote {
     Write-Step "Configuring the '$Name' remote"
     Write-Note 'A browser window will open. Sign in as the account the folder is'
     Write-Note 'shared with (shreyanshi.rathi@ez.works) and approve read access.'
-    Write-Note 'Read-only scope — this cannot modify anything in Drive.'
+    Write-Note 'Read-only scope -- this cannot modify anything in Drive.'
 
     & $Rclone config create $Name drive scope drive.readonly
     if ($LASTEXITCODE -ne 0) {
@@ -178,7 +181,7 @@ function Invoke-DriveCopy {
         'copy'
         "${Name}:$DriveFolder"
         $Destination
-        '--drive-shared-with-me'   # the folder is shared, not owned — required
+        '--drive-shared-with-me'   # the folder is shared, not owned -- required
         '--drive-acknowledge-abuse'
         '--progress'
         '--transfers'; '8'
@@ -272,7 +275,7 @@ function Publish-Changes {
         }
 
         if (-not (git status --porcelain)) {
-            Write-Step 'Nothing changed — repository already matches Drive'
+            Write-Step 'Nothing changed -- repository already matches Drive'
             return
         }
 
@@ -282,14 +285,14 @@ function Publish-Changes {
         $added = (git diff --cached --numstat | Measure-Object).Count
         $mb    = Get-TreeSizeMb -Path $Target
 
-        Write-Step "Committing $added changed file(s) — working tree is $mb MB"
+        Write-Step "Committing $added changed file(s) -- working tree is $mb MB"
         if ($mb -gt 90) {
             Write-Warn "That is large for a git repository. GitHub rejects any single file over 100 MB."
         }
 
-        # A here-string is only recognised in expression mode, so it has to be
-        # bound to a variable — passing @" directly as a command argument is a
-        # parse error.
+        # A here-string is only recognised in expression mode, so it must be
+        # bound to a variable first. Passing one straight to a command as an
+        # argument is a parse error.
         $stamp = Get-Date -Format 'yyyy-MM-dd HH:mm'
         $message = @"
 Mirror caspr-claude-core from Google Drive via rclone
@@ -336,13 +339,13 @@ $sizeMb    = Get-TreeSizeMb -Path $Staging
 Write-Step "Fetched $fileCount files ($sizeMb MB) to staging"
 
 if ($fileCount -eq 0) {
-    throw "Staging is empty — nothing was copied. Run '$rclone lsd ${Remote}: --drive-shared-with-me' to see what the account can actually see."
+    throw "Staging is empty -- nothing was copied. Run '$rclone lsd ${Remote}: --drive-shared-with-me' to see what the account can actually see."
 }
 
 Copy-IntoRepo -Source $Staging -Target $RepoPath
 
 if ($SkipGit) {
-    Write-Step 'Done — files are in the working tree, nothing committed (-SkipGit)'
+    Write-Step 'Done -- files are in the working tree, nothing committed (-SkipGit)'
     Write-Note 'Review with: git status'
 } else {
     Publish-Changes -Target $RepoPath -BranchName $Branch
