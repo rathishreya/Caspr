@@ -1,0 +1,23 @@
+# Portable rclone downloaded by scripts/fetch-caspr-drive.ps1.
+# Roughly 70 MB, and re-downloadable in seconds — never commit it.
+scripts/.tools/
+
+# Credential-shaped files. The fetch script already skips these, but a manual
+# copy or a Drive-for-Desktop sync would not.
+# See CLAUDE.md rule 7 — a credential in git history survives deleting the file.
+.env
+!.env.example
+*.pem
+*.key
+*_rsa
+id_ed25519
+**/credentials
+*service-account*.json
+kubeconfig
+*.tfstate
+docs/app-handoff/CASPR-KEYS-REQUEST.txt
+
+# OS and editor noise
+Thumbs.db
+desktop.ini
+.DS_Store
