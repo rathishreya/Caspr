@@ -810,6 +810,353 @@ ranks page one.
 
 ---
 
-*Document: `content-engine-example.md` · 2026-09-08 · A worked example of
-[`content-engine-runtime-spec.md`](content-engine-runtime-spec.md). Every fact is marked 🟢 real with its
-source, or 🔵 illustrative. No specification is changed by this file.*
+---
+---
+
+# CASE B — the harder one
+
+## 11 · Why a second case
+
+**Case A is the clean path.** A question is asked, Caspr has the answer, the answer is publishable, and every
+gate passes. It is the common case and it is worth understanding first.
+
+**Case B is the one that teaches more**, because it is a genuinely high-value trend where **the obvious content
+response is banned** — and watching the engine route around a prohibition is the only way to see whether the
+gates actually hold.
+
+🟢 It is also the trend Joy's own documents call the biggest thing currently being missed:
+
+> **"And the highest-value family was missed entirely: AI deep research. Buyers are choosing an AI research
+> tool right now, explicitly on citation reliability, and Caspr is absent from every list and every AI answer.
+> That is purchase intent, it is our exact claim, and it needs no ranking — it needs inclusion."**
+> — [`docs/seo/decision.md`](../seo/decision.md) §2
+
+---
+
+## 12 · The case
+
+> 🟢 People are actively choosing an AI research tool, in public, **on citation reliability** — which is Caspr's
+> exact claim. 🟢 **Caspr appears in none of it.**
+>
+> 🟢 And the tools that *are* named mostly solve a different problem.
+
+**This is a real, recorded reading, not a supposition** — 🟢
+[`presence-baseline-2026-08.md`](presence-baseline-2026-08.md) §3, measured 2026-08-25:
+
+| | Question | Caspr present |
+|---|---|---|
+| **C1** | best AI tool for market research | **No** |
+| **C2** | best AI deep research tool | **No** |
+| **C6** | alternatives to IBISWorld | **No** |
+
+> **`p` = 0. Caspr appears in nothing.** Not in a result, not in a roundup, not in an answer, on any question
+> tested.
+
+---
+
+## 13 · Where Case B diverges, station by station
+
+Only the stations that behave differently are walked. Everything else runs as in Case A.
+
+### ②③ Listener and Trend Reader
+
+🔵 **What the listener would pick up** (illustrative threads; 🟢 the underlying phenomenon is recorded):
+
+```
+r/consulting     "which AI tool actually cites its sources?"
+r/PromptEngineering  comparison threads, rising weekly
+Hacker News      "Show HN"-adjacent discussion of research agents
+LinkedIn         practitioners posting their tool stacks
+```
+
+🟢 **Velocity is high and sustained, and the audience is right** — these are practitioners choosing tools with
+budget, which is exactly what the CPC discriminator selects for.
+
+**On paper this is the strongest trend the engine will see. That is what makes what happens next instructive.**
+
+---
+
+### ④⑤ Claim Reader and Verifier — **the claim is not a number**
+
+**Case A's claim was a market size.** Case B's claim is a **category claim**, and it verifies differently.
+
+🔵 The extracted claim:
+
+```json
+{ "statement": "the leading AI research tools cite their sources reliably",
+  "asserted_value": "category assertion",
+  "basis": "tool capability",
+  "source_cited": null }
+```
+
+🟢 **`retrieve_analysis` and `fact_lookup` cannot verify this.** There is no market figure to look up. What
+*is* verifiable — and is already recorded — is **who the answer names, and what those tools actually do:**
+
+🟢 [`presence-baseline-2026-08.md`](presence-baseline-2026-08.md) §5 — the tools named in the answer to
+*"best AI tool for market research"*:
+
+| What they are | Named |
+|---|---|
+| **Qualitative synthesis** — interviews and open-ends into insight | Yabble · DoReveal · Notably |
+| **Trend and signal detection** | Glimpse · Optimo |
+| **Consumer-data platform with an AI layer** | GWI Spark |
+| **Workflow aggregation over multiple models** | nexos.ai |
+| **Actually generates a market research report** | **Manus, and essentially only Manus** |
+
+> 🟢 **"Almost none of them do what Caspr does."**
+
+🟢 And for *"best AI deep research tool"*, the answer names **Perplexity, ChatGPT DR, Kimi, Consensus, Scite**
+— *"Caspr appears in none of it"* ([`docs/seo/decision.md`](../seo/decision.md) §2).
+
+**So the verdict is not one of the four content verdicts at all.** 🔵 The Verifier returns:
+
+```
+verdict: no_data     — the claim is a category assertion, not a sourceable figure
+finding: the answer set is real, recorded, and shaped around a different problem
+```
+
+🟢 **`no_data` would normally end it** — `INSUFFICIENT_SOURCE`, item not produced. **But the finding underneath
+is not a content finding. It is a distribution finding**, and that is what the next station is for.
+
+---
+
+### ⑥ The Angle Desk — **the gates that fire, and the one that blocks**
+
+🟢 Four gates, in order:
+
+| Gate | Result | |
+|---|---|---|
+| **1 · Source** | ⚠️ **No sourceable figure** — but a recorded, citable observation exists | `presence-baseline-2026-08.md` §5 |
+| **2 · Lane** | ✅ **Joy.** *"the category argument"* is explicitly in her lane | `audit.md` §5 |
+| **3 · Collision** | ✅ Pass | |
+| **4 · Movement** | ✅ Fits *"Where numbers come from"* obliquely; fits Pillar 2 directly | `content-calendar.md` §2 |
+
+**And then the constraint that decides the whole case:**
+
+> 🟢 **`L21` — Competitor in lead copy.** *"Named competitor or the LLM category in a headline, hero, first
+> line, or any ad."*
+> **Exempt: body copy on `/vs/*`, `/alternatives/*`, social and founder content.**
+> — [`content-engine.md`](content-engine.md) §4.2
+
+> 🟢 **`CLAUDE.md`, message stack rule 1:** *"Never name a competitor or the LLM category in lead copy. Naming
+> them **concedes we are in the same category**. The contrast with generative AI is category education — it
+> belongs on `/vs/*` pages, in social and in founder content, **never in a hero, a headline or an ad.**"*
+
+> 🟢 **And Pillar 2 — Analytical AI — carries the same restriction and a weight cap:** *"**Category education
+> only** — `/vs/*`, `/alternatives/*`, social and founder content. Never a hero, headline or ad."* **~18% of
+> output.**
+
+**So the desk cannot produce the obvious thing.** A blog post titled *"Caspr vs ChatGPT for research"* is
+blocked three separate ways, and none of them is a style preference — 🟢 it is *"the one thing the positioning
+exists to avoid."*
+
+🔵 **What the desk returns instead — three angles, none of which is a headline:**
+
+```json
+[
+  { "type": "D", "channel": "linkedin", "lane": "joy",
+    "note": "social is L21-exempt — the category argument is her lane" },
+
+  { "type": "B", "channel": "web", "destination": "/vs/chatgpt",
+    "note": "the sanctioned home for the generative contrast" },
+
+  { "type": "outreach", "owner": "seo",
+    "note": "NOT content. Inclusion in the roundups that already rank" }
+]
+```
+
+---
+
+### ⑦ The Topic Board — and the routing that follows
+
+🔵 **What Joy sees:**
+
+| Candidate | Signal | Velocity | ICP | `sourceable` | Verdict |
+|---|---|---|---|---|---|
+| **AI research tool comparisons** | community | **high** | consulting · investors | ⚠️ **`thin`** | **`no_data`** |
+
+**Note it is the same row that was demoted in Case A.** 🟢 There, `not_found`/`thin` correctly pushed it below
+a lower-volume, better-sourced candidate — *"a high-demand question Caspr cannot source well produces a weak
+analysis."*
+
+**Here it is picked anyway — because it is not being routed to content.** 🟢 It is being routed to the
+distribution answer Joy's own decision record already gives:
+
+> 🟢 **"Get into the lists buyers and AIs already read"** — ranked **item 1**, ahead of everything else.
+> *"Purchase intent, immediate on inclusion, **outreach not ranking**. **6.5× more citations come via third
+> parties than own domain.**"* — [`docs/seo/decision.md`](../seo/decision.md) §2
+
+**This is the lesson of Case B in one line:**
+
+> **The highest-value trend the engine will find does not produce a blog post. It produces an outreach list.**
+
+---
+
+### ⑧⑩ Work Order and Writer — what actually gets made
+
+🔵 Three items, and they are deliberately unlike Case A's twenty:
+
+**1 · A founder LinkedIn post — Joy's lane, `L21`-exempt**
+
+🟢 Written to `content-engine-prompts.md` §4.1. 🟢 The approved category-education line is available to it —
+*"While the world was building generative AI, we built analytical AI"* — **and only here.** It is marked
+*"Category education only — `/vs/*`, social, founder content. **Never a hero, headline or ad**"* in
+`CLAUDE.md`.
+
+🟢 The `§4.1` rules still bind: **120–200 words · first person · opens with the finding · two hashtags at most,
+or none · ends on the conclusion, not a question** — *"we do not fish for comments."*
+
+🔵 The finding it opens with is the recorded one: *the tools the answer names solve a different problem.*
+
+> 🟢 ⛔ **And even here, one prohibition does not lift:** *"Never characterise a named firm's work as poor.
+> State price, date, coverage and specificity as facts. Those are unarguable; judgements are not."*
+> **Naming what a tool does is a fact. Calling it worse is a judgement.**
+
+**2 · A `/vs/chatgpt` refresh — the sanctioned home**
+
+🟢 *"The nine existing `/vs/*` pages are **rewritten and linked, not deleted** — they are the sanctioned home
+for the generative contrast (`CLAUDE.md`, rule 1) and they cost nothing to keep. They simply stop being the
+primary acquisition bet."* — [`content-approach.md`](content-approach.md) §3B
+
+**3 · An outreach list — and this is not content at all**
+
+🟢 The targets are already named, and they came free:
+
+> *"The domains that own these questions were the point of the ~15-domain Ahrefs qualification pull. **Running
+> the questions produced the list directly.**"*
+
+| Target | Shape | Who does the work |
+|---|---|---|
+| **cybernews.com** | Editorial roundup. 🟢 **Confirmed across two query families — the priority target** | Outreach to a named editor |
+| pollfish · gwi · sembly · standard-insights | Vendor blog roundups | Outreach |
+| **g2 · sourceforge · slashdot** | Directory listings | 🟢 *"Inclusion is a form submission, not outreach"* |
+| **datarade.ai** | Data-provider directory — IBISWorld is listed there | Form |
+| **searchfunder.com** | 🟢 ⚠️ **A community forum thread, not a roundup** — a real acquirer asking real peers | 🟢 ⛔ **"Never automate a post here; a person posts, always"** |
+
+🟢 *"The split matters for who does the work. **Directories are a form and a login. Editorial roundups are
+outreach to a named editor. A forum thread is neither, and it is the only one that could go wrong.**"*
+
+🟢 **This work belongs to SEO, not Content & Social** — guest posts and directories were redistributed to SEO
+when Outreach was dissolved ([`portal-design-spec.md`](portal-design-spec.md) §5).
+
+---
+
+### ⑫ The Linter — where Case B would fail if the routing were wrong
+
+🔵 If someone had written the obvious blog post, this is what would have caught it:
+
+| Check | Result |
+|---|---|
+| **`L21` competitor in lead copy** | ❌ **FAIL** — the headline names the LLM category |
+| Regenerate | ❌ **FAIL again** — the topic *is* the category |
+| Third attempt | ❌ → 🟢 marked **`linter_blocked`**, surfaced on the dashboard, **not looped** |
+
+🟢 **The linter is the backstop, not the design.** The Angle Desk is where this should be caught — and it is,
+because gate 4 reads Pillar and `L21` reads channel. **A trend routed to the wrong channel fails three times
+and produces nothing.** That is the correct outcome and it is expensive; catching it at ⑥ is free.
+
+---
+
+## 14 · What Case B does to `x` — and why it looks like nothing at first
+
+**Case A produced revenue-shaped output.** Case B produces **presence**, and presence is measured by a
+different instrument.
+
+```
+outreach → inclusion in cybernews / G2 / Datarade / roundups
+                    │
+                    ▼
+        🟢 p  — "does Caspr appear when the buyer looks?"
+           three ways, weighted equally:
+             · cited in an AI answer (a mention without a link still counts)
+             · listed on a third-party page ranking page one  ← 6.5× of citations
+             · our own page ranks page one
+                    │
+                    ▼
+        traffic arrives already stamped by the destination's utm
+                    │
+                    ▼
+                   x@3 · x@6
+```
+
+🟢 **This is why `p` exists as a separate metric:**
+
+> **`x` measures whether the machine pays for itself. `p` measures whether we exist at the moment the buyer
+> looks.** One is lagging and commercial; the other is leading and cannot be bought.
+
+🟢 **And why this channel is ranked first despite producing no content:**
+
+| | | Speed | Risk | Audience |
+|---|---|---|---|---|
+| (a) Ranking our own pages | | 6 months | Thin-content penalty | Mixed |
+| **(b) Being present where buyers already look** | | **Weeks** | **Near zero** | **Purchase intent by definition** |
+| (c) Being cited by AI | | Weeks–months | Near zero | Whoever asked |
+
+> 🟢 *"**The first-quarter contribution comes from presence, not position.**"*
+
+---
+
+## 15 · ⚠ The open question Case B sits on top of
+
+🟢 This is recorded in `presence-baseline-2026-08.md` §5 and it is not resolved. It should be visible in any
+build that acts on this trend:
+
+> **Two readings, and they point in opposite directions:**
+>
+> | | |
+> |---|---|
+> | **Opportunity** | *"The category as currently answered **contains no analyst-grade report generator**. The question is being answered by tools that solve a different problem, which means **the position is genuinely open**"* |
+> | **Problem** | *"A buyer searching this phrase is shown survey and qual tools. If that is the phrase our ICP uses, we are competing for a term whose answer set has already been shaped around something else — and **reshaping an established answer set is far harder than entering an empty one**"* |
+>
+> **Which reading is right depends on a question we have not answered: is *"AI tool for market research"* even
+> the phrase our buyer uses?** The persona research says investors and consultants **describe the job, not the
+> tool category** — *"industry primer on commercial logistics in the Nordics"*, not *"AI market research
+> tool."*
+
+🟢 And the conclusion Joy drew, which the engine should encode rather than relitigate:
+
+> *"This **strengthens the existing decision rather than changing it** — roundup and directory inclusion first,
+> job-shaped content over category terms. **This is the same conclusion arriving from a different direction,
+> which is the most reassuring way for a conclusion to arrive.**"*
+
+**For the build, that means one concrete rule:**
+
+> **A category-term trend is routed to outreach and to `/vs/*`. A job-shaped trend is routed to content.**
+> The Angle Desk decides which by reading whether the claim is a *tool comparison* or a *question about a
+> market*.
+
+---
+
+## 16 · The two cases, side by side
+
+| | **Case A — UK ready meals** | **Case B — AI research tools** |
+|---|---|---|
+| **Trend origin** | A practitioner question in a thread | A live category being chosen in public |
+| **Velocity** | Rising | **High and sustained** |
+| **Verdict** | `definitional` + **`diverges`** | **`no_data`** — the claim is not a figure |
+| **Caspr call** | `retrieve_analysis` **hit** · $0 | Nothing to look up |
+| **Blocked by** | Nothing | **`L21` · Pillar 2 · message-stack rule 1** |
+| **Primary output** | **A published analysis** → 16–23 items | **An outreach list** → 3 content items |
+| **Owner** | Content & Social | **SEO** (outreach) + Content & Social (the post) |
+| **Reaches** | **`x`** — directly, via stamped links | **`p`** — leading, and `x` follows |
+| **Payback** | Weeks | **Weeks for (b), months for (c)** |
+| **What it teaches** | The clean path, and that the common path is cheap | **That the biggest trend can be one you must not write a headline about** |
+
+---
+
+## 17 · What Case B exposes that Case A did not
+
+| | Finding | Where it lands |
+|---|---|---|
+| **1** | **The Angle Desk needs to read `L21` and Pillar weight, not just lane and movement.** Case A never tested this — every gate passed | Runtime spec ⑥. **A build note, not an open question** |
+| **2** | **Not every trend produces content.** The engine needs a route to **outreach** as a first-class outcome, not as a leftover | ⑥ output must allow `type: "outreach"` with `owner: "seo"` |
+| **3** | **`no_data` is not always a dead end.** Case A's rule — `no_data` → `INSUFFICIENT_SOURCE` → not produced — is right **for content**. Case B shows a `no_data` claim carrying a real distribution finding | ⑥. **Worth confirming with Joy — a twelfth open question** |
+| **4** | **The presence basket is frozen for a year**, so a trend cannot add a question to it. The trend informs outreach; it never edits `p` | ⑱. Confirms open question 11 |
+
+---
+
+*Document: `content-engine-example.md` · 2026-09-08 · Two worked examples of
+[`content-engine-runtime-spec.md`](content-engine-runtime-spec.md). **Case A** is the clean path where every
+gate passes; **Case B** is the high-value trend where the obvious response is prohibited and the engine routes
+around it. Every fact is marked 🟢 real with its source, or 🔵 illustrative. No specification is changed by this
+file; §17 raises one further open question for Joy.*
