@@ -4,6 +4,7 @@
 
 **Reads with:** [`content-engine-runtime-spec.md`](content-engine-runtime-spec.md) — the mechanism this example
 walks through. Station numbers below (①–⑱) are its numbering.
+**The diagrams:** [`content-engine-flowchart.md`](content-engine-flowchart.md).
 
 ---
 

@@ -14,6 +14,9 @@
 | [`operations-runbook.md`](operations-runbook.md) | The weekly cycle, who reviews what, the health metrics |
 | `caspr-dm-handover/02-linkedin-profiles/audit.md` §5 | The voice lanes and the engagement rule |
 
+**The diagrams:** [`content-engine-flowchart.md`](content-engine-flowchart.md) — ten flowcharts of this
+mechanism. It holds no rules; where it and this file disagree, this file is correct.
+
 ---
 
 ## 0 · What this document is, and what it deliberately is not
