@@ -108,6 +108,39 @@ function Write-Step { param([string] $Message) Write-Host "`n==> $Message" -Fore
 function Write-Note { param([string] $Message) Write-Host "    $Message" -ForegroundColor DarkGray }
 function Write-Warn { param([string] $Message) Write-Host "    ! $Message" -ForegroundColor Yellow }
 
+# Run an external program without letting its stderr abort the script.
+#
+# Windows PowerShell turns anything a native command writes to stderr into a
+# terminating error while $ErrorActionPreference is 'Stop'. Both rclone and git
+# use stderr for ordinary progress and status -- rclone's "config file not found,
+# using defaults" notice, git's "Switched to a new branch" -- so every one of
+# these calls would abort. PowerShell 7 dropped that behaviour, which is why it
+# only shows up on Windows PowerShell.
+#
+# The preference is relaxed for the call and success is judged by exit code,
+# which is what every caller here already checks.
+function Invoke-Native {
+    param(
+        [Parameter(Mandatory = $true)][string] $FilePath,
+        [string[]] $ArgumentList = @(),
+        [switch] $Quiet          # capture output instead of writing it through
+    )
+
+    $prior = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        if ($Quiet) {
+            $captured = & $FilePath @ArgumentList 2>$null
+        } else {
+            & $FilePath @ArgumentList 2>&1 | ForEach-Object { Write-Host $_ }
+            $captured = $null
+        }
+        return [pscustomobject]@{ ExitCode = $LASTEXITCODE; Output = $captured }
+    } finally {
+        $ErrorActionPreference = $prior
+    }
+}
+
 # ---------------------------------------------------------------- 1. rclone --
 
 function Resolve-Rclone {
@@ -168,8 +201,8 @@ function Resolve-Rclone {
 function Confirm-Remote {
     param([string] $Rclone, [string] $Name)
 
-    $existing = & $Rclone listremotes 2>$null
-    if ($LASTEXITCODE -eq 0 -and $existing -contains "${Name}:") {
+    $listed = Invoke-Native -FilePath $Rclone -ArgumentList @('listremotes') -Quiet
+    if ($listed.ExitCode -eq 0 -and $listed.Output -contains "${Name}:") {
         Write-Note "rclone remote '$Name' already configured"
         return
     }
@@ -179,8 +212,9 @@ function Confirm-Remote {
     Write-Note 'shared with (shreyanshi.rathi@ez.works) and approve read access.'
     Write-Note 'Read-only scope -- this cannot modify anything in Drive.'
 
-    & $Rclone config create $Name drive scope drive.readonly
-    if ($LASTEXITCODE -ne 0) {
+    $created = Invoke-Native -FilePath $Rclone `
+                             -ArgumentList @('config', 'create', $Name, 'drive', 'scope', 'drive.readonly')
+    if ($created.ExitCode -ne 0) {
         throw "rclone config failed. Run '$Rclone config' by hand to set up a Google Drive remote named '$Name'."
     }
 }
@@ -232,9 +266,9 @@ function Invoke-DriveCopy {
     }
     Write-Note 'First run downloads ~40-60 MB and takes a couple of minutes.'
 
-    & $Rclone @rcloneArgs
-    if ($LASTEXITCODE -ne 0) {
-        $code = $LASTEXITCODE
+    $copy = Invoke-Native -FilePath $Rclone -ArgumentList $rcloneArgs
+    if ($copy.ExitCode -ne 0) {
+        $code = $copy.ExitCode
         $hint = @"
 rclone copy failed (exit $code).
 
@@ -290,27 +324,35 @@ function Publish-Changes {
 
     Push-Location $Target
     try {
-        $current = (git rev-parse --abbrev-ref HEAD).Trim()
+        $head = Invoke-Native -FilePath 'git' -ArgumentList @('rev-parse', '--abbrev-ref', 'HEAD') -Quiet
+        $current = "$($head.Output)".Trim()
+
         if ($current -ne $BranchName) {
             Write-Step "Switching to $BranchName"
             # Ask first rather than letting a failed checkout print 'error:
             # pathspec ... did not match', which reads like a real failure.
-            git rev-parse --verify --quiet "refs/heads/$BranchName" | Out-Null
-            if ($LASTEXITCODE -eq 0) { git checkout $BranchName }
-            else { git checkout -b $BranchName }
-            if ($LASTEXITCODE -ne 0) { throw "could not switch to $BranchName" }
+            $exists = Invoke-Native -FilePath 'git' `
+                        -ArgumentList @('rev-parse', '--verify', '--quiet', "refs/heads/$BranchName") -Quiet
+            $switch = if ($exists.ExitCode -eq 0) {
+                Invoke-Native -FilePath 'git' -ArgumentList @('checkout', $BranchName) -Quiet
+            } else {
+                Invoke-Native -FilePath 'git' -ArgumentList @('checkout', '-b', $BranchName) -Quiet
+            }
+            if ($switch.ExitCode -ne 0) { throw "could not switch to $BranchName" }
         }
 
-        if (-not (git status --porcelain)) {
+        $dirty = Invoke-Native -FilePath 'git' -ArgumentList @('status', '--porcelain') -Quiet
+        if (-not $dirty.Output) {
             Write-Step 'Nothing changed -- repository already matches Drive'
             return
         }
 
-        git add -A
-        if ($LASTEXITCODE -ne 0) { throw 'git add failed' }
+        $stage = Invoke-Native -FilePath 'git' -ArgumentList @('add', '-A') -Quiet
+        if ($stage.ExitCode -ne 0) { throw 'git add failed' }
 
-        $added = (git diff --cached --numstat | Measure-Object).Count
-        $mb    = Get-TreeSizeMb -Path $Target
+        $staged = Invoke-Native -FilePath 'git' -ArgumentList @('diff', '--cached', '--numstat') -Quiet
+        $added  = @($staged.Output).Count
+        $mb     = Get-TreeSizeMb -Path $Target
 
         Write-Step "Committing $added changed file(s) -- working tree is $mb MB"
         if ($mb -gt 90) {
@@ -331,12 +373,12 @@ partial copy recorded in MANIFEST.md.
 Fetched $stamp by scripts/fetch-caspr-drive.ps1.
 "@
 
-        git commit -q -m $message
-        if ($LASTEXITCODE -ne 0) { throw 'git commit failed' }
+        $commit = Invoke-Native -FilePath 'git' -ArgumentList @('commit', '-q', '-m', $message) -Quiet
+        if ($commit.ExitCode -ne 0) { throw 'git commit failed' }
 
         Write-Step "Pushing to origin/$BranchName"
-        git push -u origin $BranchName
-        if ($LASTEXITCODE -ne 0) { throw 'git push failed' }
+        $push = Invoke-Native -FilePath 'git' -ArgumentList @('push', '-u', 'origin', $BranchName)
+        if ($push.ExitCode -ne 0) { throw 'git push failed' }
     } finally {
         Pop-Location
     }
