@@ -42,6 +42,57 @@ slot, the prompts and the rules are all real.
 
 ## 2 · The timeline
 
+### 2.0 · Read the week numbers backwards — they are not elapsed time
+
+**The single most misread thing in this example.** Almost none of the calendar below is the machine working.
+
+🟢 **The week numbers come from [`content-calendar.md`](content-calendar.md) §2 — Joy's twelve-week plan.**
+Type A lands on weeks **3, 6, 9, 12**, and the week after each is marked *(fan-out)*:
+
+| Wk | Movement | Type A |
+|---|---|---|
+| 3 | The question after the number | **Analysis 1** — THE RECORD no.1 |
+| 4 | " | *(fan-out)* |
+| 5 | **Where numbers come from** | — |
+| **6** | " | **Analysis 2** ← **this example** |
+| 7 | " | *(fan-out)* |
+
+**So week 6 is the anchor, and everything else is counted backwards from it:**
+
+```
+   Week 6 = Analysis 2's slot                    ← the calendar fixes this
+   Weeks 5–8 movement = "Where numbers come from"   ← a reconciliation fits
+            ▲
+            │  generation fires Thu 06:00, so the topic must already be picked
+            │
+   Week 5 Wed 15:00 — Joy picks at the Wednesday review
+            ▲
+            │  the board needs evidence, so the verdict must already exist
+            │
+   Week 5 Mon–Tue — claim reader → verifier → angle desk
+            ▲
+            │  a trend needs a prior week to compare against
+            │
+   Week 4–5 — the listener accumulates (6 → 31 mentions)
+            ▲
+   Week 4 Wed — 🔵 the thread appears
+```
+
+### 2.1 · What is actually elapsed, and what is not
+
+| | | Machine? |
+|---|---|---|
+| **Generation** — all ~23 items | **minutes** | ✅ **Yes. This is the only processing time in the diagram** |
+| **Review** — Thu → Mon 18:00 | 🟢 **62–77 min of human attention**, spread over 5 days | ❌ Three people at ~2.5 hrs/week each. The machine is waiting on them |
+| **Publishing** — Tue → Sun | 🟢 Deliberately spread | ❌ Twenty-three posts in one day is spam |
+| **Type A cadence** — 1 per 3 weeks | 🟢 One Study, human-commissioned, human-checked | ❌ *"The constraint is not money. It is who picks the question"* |
+| **Trend latency** — thread Wed → pick next Wed | 🔵 Up to 6 days | ⚠️ **Neither. This is the weekly pick, and §5A of the runtime spec is the answer to it** |
+
+> **The machine's part of this diagram is one Thursday morning.** Everything else is a person's calendar, a
+> publishing rhythm, or a cost cadence — and only the last row is a queue this design has since answered.
+
+### 2.2 · The diagram
+
 ```
 WEEK 4                                                    WEEK 5
 ─────────────────────────────────────────────────────────────────────────────────
@@ -1152,6 +1203,7 @@ build that acts on this trend:
 | **2** | **Not every trend produces content.** The engine needs a route to **outreach** as a first-class outcome, not as a leftover | ⑥ output must allow `type: "outreach"` with `owner: "seo"` |
 | **3** | **`no_data` is not always a dead end.** Case A's rule — `no_data` → `INSUFFICIENT_SOURCE` → not produced — is right **for content**. Case B shows a `no_data` claim carrying a real distribution finding | ⑥. **Worth confirming with Joy — a twelfth open question** |
 | **4** | **The presence basket is frozen for a year**, so a trend cannot add a question to it. The trend informs outreach; it never edits `p` | ⑱. Confirms open question 11 |
+| **5** | **⚡ Case B is the reason the fast lane cannot trigger on velocity alone.** It is the highest-velocity trend the engine will see, **and it must not become a post.** A lane keyed to velocity would have grabbed exactly this one | Runtime spec §5A rule 6: **fires only on `confirmed`, `diverges` or `definitional` — never on `no_data`.** Case B returns `no_data`, so it correctly never enters the fast lane |
 
 ---
 
@@ -1159,4 +1211,5 @@ build that acts on this trend:
 [`content-engine-runtime-spec.md`](content-engine-runtime-spec.md). **Case A** is the clean path where every
 gate passes; **Case B** is the high-value trend where the obvious response is prohibited and the engine routes
 around it. Every fact is marked 🟢 real with its source, or 🔵 illustrative. No specification is changed by this
-file; §17 raises one further open question for Joy.*
+file. §2.0 reads the calendar backwards from its anchor so the week numbers are not misread as elapsed time;
+§2.1 separates machine time from human time; §17 raises two further open questions for Joy.*

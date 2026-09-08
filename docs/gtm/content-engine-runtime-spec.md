@@ -36,7 +36,7 @@ And one more, added because it is the question that decides whether any of it wa
 2. **Where a prompt exists, it is used verbatim.** This file never restates prompt text — it says who fills
    which `{brace}`, from where, and what happens when a token cannot be filled.
 3. **Where something is genuinely undecided, it is listed in §8 as an open question rather than resolved
-   quietly.** Eleven are open. None blocks the first four stations.
+   quietly.** Thirteen are open. None blocks the first four stations.
 
 **Not in scope here:** the Website, SEO, Performance and Email workstreams beyond where content crosses into
 them; paid campaign management; video editing (`portal-build-spec.md` §11 — the DM team's editor owns it).
@@ -127,11 +127,38 @@ once per derivative.
                               + p (presence), monthly
 ```
 
-**One loop and one re-entry, and they are different things:**
+**One loop, one re-entry and one shortcut, and they are different things:**
 
 - **The rejection loop** — ⑬ → ⑭ → ⑩. Compounds. This is how the engine gets better.
 - **The fan-out re-entry** — a published analysis re-enters at ⑨ once per derivative, 16–23 times,
   spread across two weeks. This is how the engine gets *bigger* without getting more expensive.
+- **The fast lane** — ⑥ → ⑧ directly, skipping the weekly pick at ⑦, for **derivatives only**, on a
+  **24-hour expiry** and **zero notifications**. This is how the engine gets *quicker* without breaking the
+  weekly rhythm. **A mode, not a second pipeline — §5A.**
+
+```
+                    ⑥ ANGLE DESK
+                         │
+          ┌──────────────┴──────────────┐
+          ▼                             ▼
+    ⑦ TOPIC BOARD                 ⚡ FAST LANE  §5A
+      weekly pick                    derivatives only
+      any type                       confirmed│diverges│definitional
+      Wed review                     ⛔ never no_data
+          │                          no notification · expires in 24h
+          ▼                             │
+    ⑧ WORK ORDER ◄────────────────────┘
+      ~23 rows                       1–2 rows
+          │                             │
+          └──────────────┬──────────────┘
+                         ▼
+              ⑨⑩⑫⑬⑮⑯  identical from here
+```
+
+**⏱ Timing, so the diagram is not misread as elapsed time.** The whole of ⑧ through ⑫ is **minutes of
+machine work**. What makes a week a week is ⑬ (three people at ~2.5 hrs each, spread Thu→Mon), the deliberate
+publishing spread Tue→Sun, and the Type A cadence of one per three weeks. **The fast lane exists because one
+row of that list — the weekly pick at ⑦ — was latency rather than any of those three.**
 
 ---
 
@@ -598,6 +625,104 @@ core team, distribution only.** *"The core team should not be reviewing content.
 
 ---
 
+## 5A · The fast lane — a mode, not a second pipeline · **NEW**
+
+> **The problem, stated plainly: a trend does not wait for Thursday.**
+>
+> Every station from ② to ⑥ runs **daily**. Only the **pick** (⑦) and the **generation** (⑧) are weekly. So a
+> trend that appears on a Thursday afternoon sits until the following Wednesday's review — up to six days —
+> and a six-day-old trend post is not a trend post.
+
+**This is the one place where Joy's weekly rhythm and a live signal genuinely conflict**, and this section is
+the answer. **It is an addition and it needs sign-off — open question 13.**
+
+### 5A.1 · The design constraint that shapes everything below
+
+🟢 The rhythm exists for a reason, and the reason is not tidiness:
+
+> **"Two notifications per week. No more. A queue that nags gets muted, and a muted queue is a stopped
+> machine."** — [`operations-runbook.md`](operations-runbook.md) §1
+
+**So a fast lane that adds notifications defeats the thing it is trying to serve.** Every rule below follows
+from that.
+
+### 5A.2 · Seven rules
+
+| | Rule | Why |
+|---|---|---|
+| **1** | **It is a mode over the same eighteen stations, never a parallel pipeline** | 🟢 Joy's own pattern — *"review is a mode, not a node."* A second pipeline is a second set of rules that will drift from the first |
+| **2** | **Derivatives only.** One X post and one lane-matched LinkedIn post. ⛔ Never Type A, Type B, email, or a community draft | 🟢 Review cost differs **tenfold** — origination 8–15 min, derivative 1–2. **A fast lane carrying origination is the weekly queue with a shorter deadline** |
+| **3** | ⛔ **Zero notifications.** It surfaces as a badge on My Week and nowhere else | 🟢 Rule 1 above. The count stays at two a week |
+| **4** | **It expires.** Unreviewed after its window, the item is **discarded**, not carried | **This is what stops it becoming queue debt.** A trend post reviewed three days late is worthless, so nothing is lost by dropping it — and a lane that cannot accumulate a backlog cannot nag |
+| **5** | **Hard cap: at most one open at a time, and a small weekly ceiling** | 🟢 Volume is a function of review capacity. At 1–2 min each this is single-digit minutes a week against ~450 — but the cap is what makes that true rather than hoped |
+| **6** | ⛔ **Only fires on `confirmed`, `diverges` or `definitional`. Never on `no_data`** | **Case B is the reason.** The highest-velocity trend the engine found was the one that must not become a post. A lane triggered by velocity alone would have grabbed exactly that |
+| **7** | **Every other gate is unchanged, and none is relaxed** | The hard gate, the full linter, hygiene, the `utm` stamp, lane integrity, one-subject-one-week, and *communities are posted by a human, always* |
+
+> **⚠ The temptation to resist:** speed and a defensibility brand pull against each other, so the instinct is to
+> loosen a check "just for the fast lane." **The guard rails are tighter here, not looser** — because this is
+> the lane where a mistake reaches the public fastest and with the least deliberation behind it.
+
+### 5A.3 · How each station behaves in fast mode
+
+```
+②③④⑤⑥   unchanged — already daily
+            │
+            ▼
+   ⑦  TOPIC BOARD ─────────► ⛔ SKIPPED. No weekly pick.
+            │                   The Angle Desk's output enters directly,
+            │                   because a derivative commissions nothing
+            ▼
+   ⑧  WORK ORDER ──────────► fast variant: 1–2 rows, not ~23.
+            │                   No calendar slot is consumed
+            ▼
+   ⑨⑩⑫  ASSEMBLY · WRITER · LINTER
+            │                unchanged. Haiku, per tiering.
+            │                {movement} comes from the current week
+            ▼
+   ⑬  REVIEW ─────────────► same three actions, same ten codes,
+            │                same full-screen mode, same commit-on-action.
+            │                ⛔ NO notification. A badge on My Week.
+            │                ⏱ EXPIRES if unreviewed in the window
+            ▼
+   ⑮⑯  HYGIENE · PUBLISH ─► unchanged. Stamped. Scheduled to the
+                              next open slot, not queued to Monday
+```
+
+**One station is skipped and one is reshaped. Nothing is bypassed.**
+
+### 5A.4 · The two numbers this needs, and they are Joy's
+
+| | | Suggested starting value | Why it is a starting value |
+|---|---|---|---|
+| **The expiry window** | How long an unreviewed fast item survives | 🔵 **24 hours** | Long enough for one working day; short enough that nothing published is stale |
+| **The weekly ceiling** | How many fast items may fire in a week | 🔵 **3** | 3 × 2 min = **6 minutes** against ~450. 🟢 Same posture as `gtm-api-contract.md` §1.1's credit ceiling — *"chosen as a runaway backstop rather than as a budget; set it properly on the first month of actuals"* |
+
+### 5A.5 · What this changes about Joy's design — stated, not buried
+
+**Three things, and they are the reason this needs a sign-off rather than a note:**
+
+| | Change | Mitigation |
+|---|---|---|
+| **1** | **A second generation trigger.** Today generation fires only at Thursday 06:00 | The fast trigger produces 1–2 derivative rows, never a work order |
+| **2** | **A review surface outside the Monday deadline** | No notification, and it expires — so it cannot become a second deadline |
+| **3** | **An item source that is not the Work Order Desk** | It consumes no calendar slot and counts against its own ceiling, so the weekly plan is untouched |
+
+**What it does not change:** the volume table, the review budget, the notification count, the reject taxonomy,
+the publishing rules, the hard gate, or any prohibition.
+
+### 5A.6 · → `x`
+
+**Numerator, and it is the only station that can act inside a trend's window.**
+
+🟢 A `diverges` finding is the highest-travelling artefact the engine produces, and travel is what `p` measures
+— *"cited in an AI answer · listed on a third-party page ranking page one · our own page ranks page one."*
+**A finding published six days after the conversation has moved on reaches none of them.**
+
+**And the cost is near zero:** at the suggested ceiling, the fast lane spends **~6 review minutes a week** and
+a handful of Haiku calls.
+
+---
+
 ## 6 · The artefact breakdown — every format, every rule
 
 Each of the following is one `type` value moving through the same eighteen stations. **What differs is the
@@ -848,6 +973,8 @@ one.
 | **9** | **`diverges` findings — Type A or Type B?** | ⑥ classification | Editorial |
 | **10** | **Does `index-engine.md` already do stations ④–⑤?** It is an autonomous engine publishing how old figures are and how far sources disagree. **We should not build two.** We can map the overlap on request | ④⑤ scope | Avoids duplicating your own engine |
 | **11** | **`p` and atom-travel — same instrument or two?** The `p` basket is **frozen for a year**; a travel signal must not break that freeze | ⑪⑱ | The freeze is the metric's defence |
+| **12** | **Does a `no_data` verdict always end a content item?** Today it does — `INSUFFICIENT_SOURCE`, not produced, which is right for content. **But Case B shows a `no_data` claim carrying a real distribution finding**, and that finding is worth acting on through outreach rather than through a post. Should ⑥ be allowed to emit `type: "outreach"`, `owner: "seo"`? | ⑥ | It widens what a station may produce |
+| **13** | **⚡ The fast lane — approved?** §5A. Derivatives only · zero notifications · 24-hour expiry · a small weekly ceiling · never on `no_data`. **Three things it changes are named in §5A.5.** The two numbers — the expiry window and the ceiling — are yours to set | 5A | It touches the two-notifications rule, which is deliberate |
 
 ---
 
@@ -863,6 +990,7 @@ Sequenced so nothing waits on an answer it does not need.
 | **4** | **⑤ Verifier** | Replaces mocked facts with real ones | **Q3 — service principal** |
 | **5** | **② Listener · ③ Trend · ④ Claim · ⑥ Angle · ⑦ Board** | The intake half | **Q1, Q2, Q4, Q10** |
 | **6** | **⑪ Visual Desk · ⑰ Comment Desk** | The two genuinely new capabilities | **Q5, Q6, Q8** |
+| **6b** | **⚡ Fast lane** (§5A) | **Two flags and an expiry timer over stations already built.** Cheap once ⑬ and ⑯ exist; pointless before the intake half is live | **Q13** + phases 2, 3, 5 |
 | **7** | **⑱ Meter** | Needs the app live for the event stream | Product event tracking |
 
 **Start at ⑨.** Listing every `{brace}` and naming its source produces the data model for all eighteen
@@ -872,5 +1000,5 @@ stations, and it is the one piece of work that no open question touches.
 
 *Document: `content-engine-runtime-spec.md` · 2026-09-08 · An addition to the content engine specification,
 not a revision of it. Every station cites the file and section it implements; every station marked **NEW**
-states what it adds and why nothing existing covers it. Eleven open questions in §8 are flagged rather than
-resolved.*
+states what it adds and why nothing existing covers it. Thirteen open questions in §8 are flagged rather than
+resolved — including §5A, the fast lane, which is proposed in full and named as needing sign-off.*
