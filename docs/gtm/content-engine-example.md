@@ -116,7 +116,16 @@ lane and routes it to the daily track — 🟢 which **skips the topic board ent
 commissions nothing and needs no pick.
 
 ```
-09:40   ⑤ VERIFIER      → diverges
+09:30   ⑤ VERIFIER — two steps only, never three        §5A.5
+          │
+          │ 0. own recent verdicts?  → miss, first sighting
+          │ 1. retrieve_analysis     → ✅ HIT
+          │      "UK Ready Meals Market: Sizing and Analysis v1"
+          │      metering: credits_charged 0 · cache_hit true
+          │ 2. fact_lookup           → not reached
+          │ 3. trigger_generation    → ⛔ CLOSED on this track
+          ▼
+09:40   verdict: diverges           💰 COST: $0
 09:45   ⑥ ANGLE DESK    → Type D, Joy's lane, daily track
 09:50   ⑧ WORK ORDER    → 2 rows. No calendar slot consumed
 09:55   ⑨⑩ ASSEMBLY · WRITER (Haiku)
@@ -125,6 +134,22 @@ commissions nothing and needs no pick.
 10:15   ⑮ HYGIENE       → prose cleaned
 10:20   ⑯ PUBLISH       → live, stamped utm_campaign=daily-readymeals
 ```
+
+**🟢 The daily track stopped at step 1 and cost nothing** — the analysis already existed, so the call was a
+retrieve and `credits_charged` came back `0`. **This is the common case and it is why a daily cadence is
+affordable at all:** *"Most content needs a fact, and a fact should never cost a Study."*
+
+**⛔ And note what it could not have done.** Had step 1 and step 2 both missed, the daily track **would not
+commission the analysis** — 🟢 `trigger_generation` requires `{"commissioned_by": "joy@caspr.ai"}`, *"a named
+human, recorded in the audit trail. **Reject the call if it is absent.**"* An unattended 09:30 run has no such
+human.
+
+**The candidate would not be lost.** It would be **promoted to the weekly topic board** with its evidence
+attached, and Joy would decide at the Wednesday review whether it is worth a Study. 🟢 *"The pipeline ranks. A
+person picks."*
+
+> **Step 2 is the boundary between the two clocks.** The daily track answers what is already answerable; the
+> weekly track answers what is worth commissioning.
 
 🔵 **What went out:**
 
@@ -809,6 +834,9 @@ company's name."*
 | If | Station | What happens |
 |---|---|---|
 | **`retrieve_analysis` had missed** | ⑤ | Fall to `fact_lookup`. Only if *that* missed would `trigger_generation` be considered — **and only with `commissioned_by` present** |
+| **Both steps had missed, ⏱ on the daily track** | ⑤ §5A.5 | ⛔ **`trigger_generation` is closed on that track.** No item is produced, and the **candidate is promoted to the weekly topic board** for a human to commission. Nothing is lost; it changes clock |
+| **The same trend recurs tomorrow** | ⑤ §5A.5 | **The track's own recent verdict is reused. No call is made.** 🟢 The remote rule agrees — a repeat lookup of the same pair *"is not new compute"* |
+| **`403 gtm_budget_exhausted`** | ⑤ | 🟢 *"Not a queue, not a silent degrade. The engine surfaces it and halts."* **⏱ The daily track yields first** — a daily post is one post; a Type A is the parent of 16–23 |
 | **`fact_lookup` returned `not_found`** | ⑤⑦ | The candidate is **demoted regardless of its demand**. It would not have reached the board's top rows |
 | **The two `basis` values had differed** | ⑤ | Verdict is **`definitional`, never `diverges`.** *"These measure different things. The finding is that nobody says so"* — a different, and per `index-engine.md` §2 often sharper, story |
 | **`source_last_verified` were >30 days old** | ⑤ | **Row suppressed, not published** |

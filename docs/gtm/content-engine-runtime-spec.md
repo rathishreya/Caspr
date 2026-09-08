@@ -673,7 +673,7 @@ this line:**
 **So the Comment Desk (⑰) was always a daily station.** It needs no new approval mechanism, no new budget and
 no sign-off. **What is new is only the post half.**
 
-### 5A.3 · Eight rules
+### 5A.3 · Nine rules
 
 | | Rule | Why |
 |---|---|---|
@@ -685,6 +685,7 @@ no sign-off. **What is new is only the post half.**
 | **6** | ⛔ **Fires only on `confirmed`, `diverges` or `definitional`. Never on `no_data`** | **Case B is the reason.** The highest-velocity trend the engine found was the one that must not become a post. A track keyed to velocity alone would have grabbed exactly that |
 | **7** | **It consumes no calendar slot** and publishes to the next open window, not to a fixed day | 🟢 The Tue/Wed/Thu/Fri/Mon slots belong to the weekly plan. Joy's post lands Tuesday for a reason; a daily item must not displace it |
 | **8** | **Every other gate is unchanged, and none is relaxed** | The hard gate, the full linter, hygiene, the `utm` stamp, **lane integrity**, **one subject one person one week**, and *communities are posted by a human, always* |
+| **9** | ⛔ **Two Caspr calls, never three.** `retrieve_analysis` then `fact_lookup`. **Never `trigger_generation`** | 🟢 That call requires a named `commissioned_by`, which an unattended run cannot supply honestly — and 🟢 *"a loop in a marketing engine that can start billable work is the most expensive bug available here."* **§5A.5** |
 
 > **⚠ The temptation to resist:** speed and a defensibility brand pull against each other, so the instinct is to
 > loosen a check "just for the daily items." **The guard rails are tighter here, not looser** — this is the
@@ -695,12 +696,23 @@ no sign-off. **What is new is only the post half.**
 ```
 EVERY DAY
 ─────────────────────────────────────────────────────────────────────
-07:00   ②③④⑤⑥  listen · trend · claim · verify · angle
-                    (these already ran daily — unchanged)
+07:00   ②③④  listen · trend · claim   (already daily — unchanged)
+          │
+          ▼
+07:30   ⑤ VERIFIER — two steps only, never three   §5A.5
+          │   1. own recent verdicts   → reuse, no call
+          │   2. retrieve_analysis     → FREE
+          │   3. fact_lookup (batched) → CHEAP
+          │   ⛔ trigger_generation is CLOSED on this track
+          │
+          ├── nothing found ─────────────► ⛔ not a daily item.
+          │                                 Candidate is PROMOTED to ⑦,
+          │                                 where a human may commission it
+          ▼
+07:45   ⑥ ANGLE DESK
           │
           ├── verdict is no_data ────────► ⛔ not a daily item.
-          │                                 Routes to ⑦ for the weekly
-          │                                 board, or to outreach
+          │                                 Routes to ⑦, or to outreach
           ▼
 08:00   ⑧ WORK ORDER (daily variant)
           │   1–3 rows. No calendar slot consumed
@@ -725,7 +737,84 @@ EVERY THURSDAY 06:00 — the weekly clock, unchanged
         ⑦ topic board pick → ⑧ ~23 rows → … → Mon 18:00 deadline
 ```
 
-### 5A.5 · The budget — stated, so it cannot quietly grow
+### 5A.5 · Calling Caspr on the daily track — two steps, never three
+
+**The daily track runs unattended and fires every day. That changes which Caspr calls it may make.**
+
+🟢 The call order itself is unchanged — [`gtm-api-contract.md`](gtm-api-contract.md) §2 — but **the third step
+is closed on this track:**
+
+```
+STEP 1   retrieve_analysis     "have we already answered this?"        FREE
+              │  hit  ─────────────────────────────► use it. Proceed.
+              ▼  miss
+STEP 2   fact_lookup           "is this a single fact?"               CHEAP
+              │  found ────────────────────────────► use it. Proceed.
+              ▼  thin / not_found
+STEP 3   trigger_generation                        ⛔ NEVER ON THIS TRACK
+              │
+              └──► the item is not produced, and the candidate is
+                   HANDED TO THE WEEKLY TOPIC BOARD (⑦), where a
+                   human can commission it if it is worth a Study
+```
+
+#### Why step 3 is closed, and it is not a preference
+
+🟢 [`gtm-api-contract.md`](gtm-api-contract.md) §2 — `trigger_generation` from a service principal carries one
+extra required field:
+
+```json
+{ "commissioned_by": "joy@caspr.ai" }
+```
+
+> *"A named human, recorded in the audit trail. **Reject the call if it is absent.** This is the interface
+> making an editorial policy unforgettable rather than trusting the engine to remember it."*
+
+**A daily automated track has no named human at the moment it fires.** It could not satisfy that field
+honestly, and filling it with a standing name would be exactly the fiction the field exists to prevent.
+
+🟢 The second reason is the one Joy states most sharply:
+
+> **"A loop in a marketing engine that can start billable work is the most expensive bug available here, and
+> it is exactly the failure that never shows up in testing."** — §1.1
+
+**A track that fires daily, unattended, is that loop.** Closing step 3 is what makes the daily track safe to
+run with nobody watching it.
+
+#### The candidate is not lost — it is promoted
+
+**This is what makes the rule cheap rather than restrictive.** A daily candidate needing research Caspr has not
+done **does not die at step 2.** It is written to the topic board with its evidence attached, and 🟢 the weekly
+pick decides — *"the pipeline ranks. A person picks from the top of that list."*
+
+> **The daily track answers what is already answerable. The weekly track answers what is worth commissioning.
+> Step 2 is the boundary between them — a routing decision, not a failure.**
+
+#### Four operating rules
+
+| | Rule | Why |
+|---|---|---|
+| **1** | ⛔ **Never `trigger_generation`. Two steps only** | Above. `commissioned_by` cannot be satisfied honestly by an unattended run |
+| **2** | **Check the track's own recent verdicts before calling out at all** | The same trend recurs for days. A claim verified inside the retention window is reused. 🟢 The remote rule is the same — anything *"served from your cache"* is never metered, because *"a repeat lookup of the same sector–geography pair is not new compute"* |
+| **3** | **Batch the day's probes** into one `POST /fact_lookup/batch` | 🟢 It exists, and 🟢 charging is **per query, never per request** — *"if a batch were charged once, the batch endpoint would look free, and the accounting would quietly stop being true"* |
+| **4** | **On `403 gtm_budget_exhausted` the daily track halts; the weekly track continues** | 🟢 *"Not a queue, not a silent degrade. The engine surfaces it and halts."* **The priority is deliberate:** a daily post is one post; a Type A is the parent of 16–23 items and a Type B is the compounding line. **If credits are scarce, the daily track yields first** |
+
+#### Metering and visibility
+
+🟢 Every metered response carries the same block, and the daily track reads it exactly as the weekly one does:
+
+```json
+"metering": { "credits_charged": 0, "credits_remaining": 138204, "cache_hit": true }
+```
+
+🟢 **One ceiling, not one per endpoint** — *"the whole service principal."* **This section does not propose a
+second ceiling and must not be read as doing so.** What it asks for is **visibility**: the dashboard shows
+daily-track consumption as a distinct line beneath the single ceiling, so a runaway is attributable before it
+is exhausting.
+
+🟢 **The ledger rule is unchanged:** *"One ledger line per published item, not per call."*
+
+### 5A.6 · The budget — stated, so it cannot quietly grow
 
 🟢 The weekly plan spends **62–77 minutes against ~450 available**. The headroom is not spare capacity — it is
 deliberate: *"The headroom absorbs regeneration and the weeks a published analysis lands."*
@@ -748,7 +837,7 @@ budget — set it properly on the first month of actuals."*
 when a reviewer's minutes exist for it. The failure mode is origination creeping up because derivatives are
 cheap."*
 
-### 5A.6 · What this changes about Joy's design — named, not buried
+### 5A.7 · What this changes about Joy's design — named, not buried
 
 **Four things, and they are why this needs a sign-off rather than a note:**
 
@@ -762,7 +851,11 @@ cheap."*
 **What it does not change:** the notification count, the reject taxonomy, the publishing day slots, the review
 model, the hard gate, lane integrity, one-subject-one-week, or any prohibition.
 
-### 5A.7 · Which track a trend goes to
+**And on one axis it is deliberately *more* restrictive than the weekly track:** 🟢 the call order is unchanged,
+but **step 3 is closed** — the daily track may never call `trigger_generation`. **§5A.5.** Nothing this track
+does can start billable work.
+
+### 5A.8 · Which track a trend goes to
 
 **One question decides it, and the Angle Desk already asks it:**
 
@@ -783,7 +876,7 @@ Is there a publishable angle, and what type is it?
 > analysis that says *what is true*. **Case A in the example does exactly this** — the X post goes out on day
 > one, the reconciliation lands in week 6.
 
-### 5A.8 · → `x`
+### 5A.9 · → `x`
 
 **Numerator, and it is the only track that can act inside a window.**
 
