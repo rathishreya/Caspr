@@ -1,6 +1,6 @@
 # Content Engine — A Worked Example
 
-*2026-09-08. One case, start to finish, through all eighteen stations.*
+*2026-09-08. Two cases, start to finish, through all eighteen stations — and across both clocks.*
 
 **Reads with:** [`content-engine-runtime-spec.md`](content-engine-runtime-spec.md) — the mechanism this example
 walks through. Station numbers below (①–⑱) are its numbering.
@@ -40,11 +40,25 @@ slot, the prompts and the rules are all real.
 
 ---
 
-## 2 · The timeline
+## 2 · The timeline — two clocks on one trend
 
-### 2.0 · Read the week numbers backwards — they are not elapsed time
+### 2.0 · The trend is answered twice, and that is the design
 
-**The single most misread thing in this example.** Almost none of the calendar below is the machine working.
+**One trend, two responses, two clocks** — 🟢 runtime spec §5A:
+
+| | **⏱ Daily track** | **📅 Weekly track** |
+|---|---|---|
+| **Fires** | The day the trend clears the Verifier | Thursday 06:00, on the calendar's schedule |
+| **Produces** | An X post and one lane-matched LinkedIn post | **The published analysis** + its 16–23 derivatives |
+| **Says** | *What is happening* | *What is true* |
+| **Review** | 1–2 min · badge on My Week · ⏱ expires in 24h | 62–77 min · Thu → Mon 18:00 |
+| **Live** | **Same day** | Week 6, Tuesday |
+
+> **Neither is a compromise for the other.** A same-day post that arrives after the conversation has moved on
+> is worthless; a reconciliation rushed out in an afternoon is not one. **The engine does both because the two
+> jobs have different clocks.**
+
+### 2.1 · Why the weekly track's weeks are what they are — read them backwards
 
 🟢 **The week numbers come from [`content-calendar.md`](content-calendar.md) §2 — Joy's twelve-week plan.**
 Type A lands on weeks **3, 6, 9, 12**, and the week after each is marked *(fan-out)*:
@@ -57,10 +71,10 @@ Type A lands on weeks **3, 6, 9, 12**, and the week after each is marked *(fan-o
 | **6** | " | **Analysis 2** ← **this example** |
 | 7 | " | *(fan-out)* |
 
-**So week 6 is the anchor, and everything else is counted backwards from it:**
+**Week 6 is the anchor. Everything else is counted backwards from it:**
 
 ```
-   Week 6 = Analysis 2's slot                    ← the calendar fixes this
+   Week 6 = Analysis 2's slot                       ← the calendar fixes this
    Weeks 5–8 movement = "Where numbers come from"   ← a reconciliation fits
             ▲
             │  generation fires Thu 06:00, so the topic must already be picked
@@ -69,61 +83,106 @@ Type A lands on weeks **3, 6, 9, 12**, and the week after each is marked *(fan-o
             ▲
             │  the board needs evidence, so the verdict must already exist
             │
-   Week 5 Mon–Tue — claim reader → verifier → angle desk
-            ▲
-            │  a trend needs a prior week to compare against
+   Week 5 Mon — claim reader → verifier → angle desk
+            ▲                    │
+            │                    └──► ⏱ AND THE DAILY TRACK FIRES HERE.
+            │                          Same day. See §2.3
             │
    Week 4–5 — the listener accumulates (6 → 31 mentions)
             ▲
    Week 4 Wed — 🔵 the thread appears
 ```
 
-### 2.1 · What is actually elapsed, and what is not
+🟢 **Week 5–8 movement is *"Where numbers come from"*** — a reconciliation story is the literal subject of that
+movement, which is why this case lands in this window rather than being forced into it.
+
+### 2.2 · What is actually elapsed, and what is not
 
 | | | Machine? |
 |---|---|---|
-| **Generation** — all ~23 items | **minutes** | ✅ **Yes. This is the only processing time in the diagram** |
-| **Review** — Thu → Mon 18:00 | 🟢 **62–77 min of human attention**, spread over 5 days | ❌ Three people at ~2.5 hrs/week each. The machine is waiting on them |
+| **Generation** — either clock | **minutes** | ✅ **Yes. The only processing time anywhere in this document** |
+| **Daily review** | 🟢 **1–2 min**, same day | ❌ But it is one glance, not a deadline |
+| **Weekly review** — Thu → Mon 18:00 | 🟢 **62–77 min**, spread over 5 days | ❌ Three people at ~2.5 hrs/week each. The machine waits on them |
 | **Publishing** — Tue → Sun | 🟢 Deliberately spread | ❌ Twenty-three posts in one day is spam |
 | **Type A cadence** — 1 per 3 weeks | 🟢 One Study, human-commissioned, human-checked | ❌ *"The constraint is not money. It is who picks the question"* |
-| **Trend latency** — thread Wed → pick next Wed | 🔵 Up to 6 days | ⚠️ **Neither. This is the weekly pick, and §5A of the runtime spec is the answer to it** |
 
-> **The machine's part of this diagram is one Thursday morning.** Everything else is a person's calendar, a
-> publishing rhythm, or a cost cadence — and only the last row is a queue this design has since answered.
+> **The machine's part of this whole example is one morning on the daily clock and one Thursday morning on the
+> weekly one.** Everything else is a person's calendar, a publishing rhythm, or a cost cadence.
 
-### 2.2 · The diagram
+### 2.3 · ⏱ Day one — what went out the same day
+
+🔵 **Week 5, Monday.** The Verifier returns `diverges` at 09:40. The Angle Desk sees a Type D angle in Joy's
+lane and routes it to the daily track — 🟢 which **skips the topic board entirely**, because a derivative
+commissions nothing and needs no pick.
 
 ```
+09:40   ⑤ VERIFIER      → diverges
+09:45   ⑥ ANGLE DESK    → Type D, Joy's lane, daily track
+09:50   ⑧ WORK ORDER    → 2 rows. No calendar slot consumed
+09:55   ⑨⑩ ASSEMBLY · WRITER (Haiku)
+10:05   ⑫ LINTER        → pass
+10:10   ⑬ REVIEW        → badge on My Week. Social approves in 90 seconds
+10:15   ⑮ HYGIENE       → prose cleaned
+10:20   ⑯ PUBLISH       → live, stamped utm_campaign=daily-readymeals
+```
+
+🔵 **What went out:**
+
+> **X post** — *"Two research firms size the UK ready meals market on the same 2024 basis. One says $5.86bn at
+> 4.95% CAGR. The other says $6.46bn at 12.4%. Neither page mentions the other."*
+
+🟢 260 characters, **the number leads**, the source is named in the post rather than only in the link, and no
+thread-bait — `content-engine-prompts.md` §4.2.
+
+🟢 **And ⑰ the Comment Desk ran alongside, needing no approval mechanism at all** — comments were always
+outside the gate: *"14 personal comments — two per person — which **do not pass the review gate**."*
+
+**Total human time on day one: about two minutes.** 🟢 Against the daily track's budget of 3–6 minutes.
+
+**What the daily track deliberately did not do:** claim the reconciliation, name a winner, or resolve the gap.
+🟢 That is the analysis's job — *"Do not resolve them. Do not average them. **The disagreement is the
+finding**."* **The post states what is happening; week 6 states what is true.**
+
+### 2.4 · The full picture
+
+```
+⏱ DAILY CLOCK
+────────────────────────────────────────────────────────────────────────────────
+WK5 Mon 09:40 ─── 10:20      X post + LinkedIn live, same day
+                             ⑰ comment targets surfaced, human posts
+────────────────────────────────────────────────────────────────────────────────
+
+📅 WEEKLY CLOCK
+────────────────────────────────────────────────────────────────────────────────
 WEEK 4                                                    WEEK 5
-─────────────────────────────────────────────────────────────────────────────────
 Wed         Thu ── Sat            Mon              Tue            Wed 15:00
  │             │                   │                │                │
  ▼             ▼                   ▼                ▼                ▼
 🔵thread    ②LISTENER          ④CLAIM READER   ⑥ANGLE DESK   ⑦TOPIC BOARD
- appears    ③TREND READER      ⑤VERIFIER       → Type A?      Joy picks
+ appears    ③TREND READER      ⑤VERIFIER       → also Type A   Joy picks
             velocity ↑          → DIVERGES                    + commissions
-                                                              (Wednesday review)
-─────────────────────────────────────────────────────────────────────────────────
+                                     │                        (Wednesday review)
+                                     └──► ⏱ daily track, above
+────────────────────────────────────────────────────────────────────────────────
 WEEK 6                                                    WEEK 6 ── 7
-─────────────────────────────────────────────────────────────────────────────────
 Thu 06:00      Thu ── Mon 18:00      Mon 20:00      Tue ── Sun     spread
     │                 │                   │             │             │
     ▼                 ▼                   ▼             ▼             ▼
 ⑧WORK ORDER      ⑬REVIEW ROOM       ⑮HYGIENE      ⑯PUBLISHER    16–23 items
-⑨ASSEMBLY        ⑭LEDGER            branch on     +utm/icp_hint  ⑰COMMENTS
+⑨ASSEMBLY        ⑭LEDGER            branch on     +utm/icp_hint
 ⑩WRITER          (1 rejection)      artefact_type
 ⑪VISUAL DESK
 ⑫LINTER
-─────────────────────────────────────────────────────────────────────────────────
+────────────────────────────────────────────────────────────────────────────────
 MONTH 3                                    MONTH 6
     │                                          │
     ▼                                          ▼
  ⑱ x@3 — the fast signal              ⑱ x@6 — the scale gate
 ```
 
-🟢 **Week 5–8 movement is *"Where numbers come from"*** — [`content-calendar.md`](content-calendar.md) §2.
-A reconciliation story is the literal subject of that movement, which is why this case lands in this window
-rather than being forced into it.
+**Read the two blocks as one trend.** The daily clock answered it in forty minutes; the weekly clock answered
+it properly two weeks later. 🟢 **And the weekly one is what carries the atom, the PDF and the fan-out** — the
+artefacts built to travel, which the daily post cannot produce because it has no analysis behind it yet.
 
 ---
 
@@ -1203,7 +1262,7 @@ build that acts on this trend:
 | **2** | **Not every trend produces content.** The engine needs a route to **outreach** as a first-class outcome, not as a leftover | ⑥ output must allow `type: "outreach"` with `owner: "seo"` |
 | **3** | **`no_data` is not always a dead end.** Case A's rule — `no_data` → `INSUFFICIENT_SOURCE` → not produced — is right **for content**. Case B shows a `no_data` claim carrying a real distribution finding | ⑥. **Worth confirming with Joy — a twelfth open question** |
 | **4** | **The presence basket is frozen for a year**, so a trend cannot add a question to it. The trend informs outreach; it never edits `p` | ⑱. Confirms open question 11 |
-| **5** | **⚡ Case B is the reason the fast lane cannot trigger on velocity alone.** It is the highest-velocity trend the engine will see, **and it must not become a post.** A lane keyed to velocity would have grabbed exactly this one | Runtime spec §5A rule 6: **fires only on `confirmed`, `diverges` or `definitional` — never on `no_data`.** Case B returns `no_data`, so it correctly never enters the fast lane |
+| **5** | **⏱ Case B is the reason the daily track cannot trigger on velocity alone.** It is the highest-velocity trend the engine will see, **and it must not become a post.** A track keyed to velocity would have grabbed exactly this one | Runtime spec §5A rule 6: **fires only on `confirmed`, `diverges` or `definitional` — never on `no_data`.** Case B returns `no_data`, so it correctly never enters the daily track — it routes to outreach instead |
 
 ---
 
@@ -1211,5 +1270,6 @@ build that acts on this trend:
 [`content-engine-runtime-spec.md`](content-engine-runtime-spec.md). **Case A** is the clean path where every
 gate passes; **Case B** is the high-value trend where the obvious response is prohibited and the engine routes
 around it. Every fact is marked 🟢 real with its source, or 🔵 illustrative. No specification is changed by this
-file. §2.0 reads the calendar backwards from its anchor so the week numbers are not misread as elapsed time;
-§2.1 separates machine time from human time; §17 raises two further open questions for Joy.*
+file. §2 shows both clocks on one trend — the daily track answering it in forty minutes and the weekly track
+answering it properly two weeks later — and reads the calendar backwards from its anchor so the week numbers
+are not misread as elapsed time. §17 raises two further open questions for Joy.*

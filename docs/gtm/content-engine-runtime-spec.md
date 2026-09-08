@@ -127,38 +127,42 @@ once per derivative.
                               + p (presence), monthly
 ```
 
-**One loop, one re-entry and one shortcut, and they are different things:**
+**One loop, one re-entry and two clocks:**
 
 - **The rejection loop** — ⑬ → ⑭ → ⑩. Compounds. This is how the engine gets better.
 - **The fan-out re-entry** — a published analysis re-enters at ⑨ once per derivative, 16–23 times,
   spread across two weeks. This is how the engine gets *bigger* without getting more expensive.
-- **The fast lane** — ⑥ → ⑧ directly, skipping the weekly pick at ⑦, for **derivatives only**, on a
-  **24-hour expiry** and **zero notifications**. This is how the engine gets *quicker* without breaking the
-  weekly rhythm. **A mode, not a second pipeline — §5A.**
+- **Two clocks** — the **weekly track** produces what compounds; the **daily track** produces what responds.
+  **Same stations, same gates, different trigger and budget — §5A.**
 
 ```
                     ⑥ ANGLE DESK
                          │
           ┌──────────────┴──────────────┐
           ▼                             ▼
-    ⑦ TOPIC BOARD                 ⚡ FAST LANE  §5A
-      weekly pick                    derivatives only
-      any type                       confirmed│diverges│definitional
-      Wed review                     ⛔ never no_data
-          │                          no notification · expires in 24h
-          ▼                             │
-    ⑧ WORK ORDER ◄────────────────────┘
-      ~23 rows                       1–2 rows
+   WEEKLY CLOCK                   DAILY CLOCK   §5A
+   ⑦ TOPIC BOARD                    ⛔ skips ⑦ — nothing is commissioned
+     Wed pick · any type             Type D only  (+ ⑰ comments)
+     Type A · Type B                 confirmed │ diverges │ definitional
+          │                          ⛔ never no_data
+          ▼                             │  no notification · expires 24h
+   ⑧ WORK ORDER ◄────────────────────┘
+     Thu 06:00 · ~23 rows           daily · 1–3 rows · no calendar slot
           │                             │
           └──────────────┬──────────────┘
                          ▼
               ⑨⑩⑫⑬⑮⑯  identical from here
+          │                             │
+          ▼                             ▼
+   Mon 18:00 deadline              same day, next open window
+   Tue–Sun publishing              ⏱ or discarded
 ```
 
-**⏱ Timing, so the diagram is not misread as elapsed time.** The whole of ⑧ through ⑫ is **minutes of
-machine work**. What makes a week a week is ⑬ (three people at ~2.5 hrs each, spread Thu→Mon), the deliberate
-publishing spread Tue→Sun, and the Type A cadence of one per three weeks. **The fast lane exists because one
-row of that list — the weekly pick at ⑦ — was latency rather than any of those three.**
+**⏱ Timing, so the diagram is not misread as elapsed time.** ⑧ through ⑫ is **minutes of machine work on both
+clocks.** What makes a week a week on the weekly track is ⑬ (three people at ~2.5 hrs each, spread Thu→Mon),
+the deliberate publishing spread Tue→Sun, and the Type A cadence of one per three weeks. **The daily track
+exists because none of those three applies to a derivative** — it is 1–2 minutes to review and it has a window
+that closes.
 
 ---
 
@@ -625,101 +629,169 @@ core team, distribution only.** *"The core team should not be reviewing content.
 
 ---
 
-## 5A · The fast lane — a mode, not a second pipeline · **NEW**
+## 5A · The daily track — the engine's second clock · **NEW**
 
-> **The problem, stated plainly: a trend does not wait for Thursday.**
+> **The engine runs on two clocks, not one.**
 >
-> Every station from ② to ⑥ runs **daily**. Only the **pick** (⑦) and the **generation** (⑧) are weekly. So a
-> trend that appears on a Thursday afternoon sits until the following Wednesday's review — up to six days —
-> and a six-day-old trend post is not a trend post.
+> **The weekly clock produces what compounds** — a published analysis, a search answer. Calendar-anchored,
+> movement-bound, origination, expensive to review.
+>
+> **The daily clock produces what responds** — a post and a comment on something being discussed today.
+> Trend-anchored, lane-bound, transformation, cheap to review.
+>
+> **They are separate tracks that share the same eighteen stations, the same gates and the same prohibitions.
+> Only the trigger, the cadence and the budget differ.**
 
-**This is the one place where Joy's weekly rhythm and a live signal genuinely conflict**, and this section is
-the answer. **It is an addition and it needs sign-off — open question 13.**
+**This is an addition and it needs sign-off — open question 13.** §5A.6 names exactly what it changes.
 
-### 5A.1 · The design constraint that shapes everything below
+### 5A.1 · Joy's own taxonomy already implies two clocks
 
-🟢 The rhythm exists for a reason, and the reason is not tidiness:
+🟢 [`content-approach.md`](content-approach.md) §3 splits content four ways, and **the split is already along
+this line:**
 
-> **"Two notifications per week. No more. A queue that nags gets muted, and a muted queue is a stopped
-> machine."** — [`operations-runbook.md`](operations-runbook.md) §1
+| Type | Rate | Origination? | Clock |
+|---|---|---|---|
+| **A** Published analysis | 1–2 / month | ✅ Yes — a real Caspr run | **Weekly.** Calendar-anchored |
+| **B** Search answers | 2 / week | ✅ Yes | **Weekly.** Evergreen, no window |
+| **C** Permission layer | ~10, once | ✅ Yes | Neither — written once |
+| **D** Derivatives | ~20 / week | ❌ **Transformation only** | **Daily.** This is the responsive half |
 
-**So a fast lane that adds notifications defeats the thing it is trying to serve.** Every rule below follows
-from that.
+> 🟢 *"Origination is small, expensive and human-picked. Derivatives are large, cheap and machine-made.
+> **The engine is a fan-out machine, not a writing machine** — and that distinction is what keeps volume
+> affordable and quality defensible."*
 
-### 5A.2 · Seven rules
+**The daily track is Type D plus comments. Nothing else.**
+
+### 5A.2 · Half of it already exists
+
+🟢 **Comments are already outside the weekly gate**, and Joy put them there deliberately:
+
+> *"**Plus 14 personal comments** — two per person — which **do not pass the review gate**. They are personal,
+> low-risk, and gating them would triple the queue for no benefit."*
+> — [`content-calendar.md`](content-calendar.md) §1.1
+
+**So the Comment Desk (⑰) was always a daily station.** It needs no new approval mechanism, no new budget and
+no sign-off. **What is new is only the post half.**
+
+### 5A.3 · Eight rules
 
 | | Rule | Why |
 |---|---|---|
-| **1** | **It is a mode over the same eighteen stations, never a parallel pipeline** | 🟢 Joy's own pattern — *"review is a mode, not a node."* A second pipeline is a second set of rules that will drift from the first |
-| **2** | **Derivatives only.** One X post and one lane-matched LinkedIn post. ⛔ Never Type A, Type B, email, or a community draft | 🟢 Review cost differs **tenfold** — origination 8–15 min, derivative 1–2. **A fast lane carrying origination is the weekly queue with a shorter deadline** |
-| **3** | ⛔ **Zero notifications.** It surfaces as a badge on My Week and nowhere else | 🟢 Rule 1 above. The count stays at two a week |
-| **4** | **It expires.** Unreviewed after its window, the item is **discarded**, not carried | **This is what stops it becoming queue debt.** A trend post reviewed three days late is worthless, so nothing is lost by dropping it — and a lane that cannot accumulate a backlog cannot nag |
-| **5** | **Hard cap: at most one open at a time, and a small weekly ceiling** | 🟢 Volume is a function of review capacity. At 1–2 min each this is single-digit minutes a week against ~450 — but the cap is what makes that true rather than hoped |
-| **6** | ⛔ **Only fires on `confirmed`, `diverges` or `definitional`. Never on `no_data`** | **Case B is the reason.** The highest-velocity trend the engine found was the one that must not become a post. A lane triggered by velocity alone would have grabbed exactly that |
-| **7** | **Every other gate is unchanged, and none is relaxed** | The hard gate, the full linter, hygiene, the `utm` stamp, lane integrity, one-subject-one-week, and *communities are posted by a human, always* |
+| **1** | **Same eighteen stations. A second clock, never a second pipeline** | 🟢 Joy's own pattern — *"review is a mode, not a node."* Two pipelines are two rulesets that will drift |
+| **2** | **Type D only** — one X post, one lane-matched LinkedIn post, plus comment targets. ⛔ Never Type A, Type B, email or a community draft | 🟢 Review cost differs **tenfold**: origination 8–15 min, derivative 1–2. **A daily track carrying origination is the weekly queue with a shorter deadline** |
+| **3** | ⛔ **Zero new notifications.** It appears as a badge on My Week — 🟢 which is already *"every person's landing"* | 🟢 *"Two notifications per week. No more. **A queue that nags gets muted, and a muted queue is a stopped machine**"* |
+| **4** | **⏱ It expires in 24 hours.** Unreviewed, the item is **discarded**, never carried into the weekly queue | **This is what stops it becoming queue debt.** A response reviewed three days late is not a response, so nothing is lost by dropping it — and a track that cannot accumulate a backlog cannot nag |
+| **5** | **Its own budget, stated and capped** — see 5A.5. It never draws on the weekly plan's minutes | 🟢 *"Volume is a function of review capacity, not ambition"* |
+| **6** | ⛔ **Fires only on `confirmed`, `diverges` or `definitional`. Never on `no_data`** | **Case B is the reason.** The highest-velocity trend the engine found was the one that must not become a post. A track keyed to velocity alone would have grabbed exactly that |
+| **7** | **It consumes no calendar slot** and publishes to the next open window, not to a fixed day | 🟢 The Tue/Wed/Thu/Fri/Mon slots belong to the weekly plan. Joy's post lands Tuesday for a reason; a daily item must not displace it |
+| **8** | **Every other gate is unchanged, and none is relaxed** | The hard gate, the full linter, hygiene, the `utm` stamp, **lane integrity**, **one subject one person one week**, and *communities are posted by a human, always* |
 
 > **⚠ The temptation to resist:** speed and a defensibility brand pull against each other, so the instinct is to
-> loosen a check "just for the fast lane." **The guard rails are tighter here, not looser** — because this is
-> the lane where a mistake reaches the public fastest and with the least deliberation behind it.
+> loosen a check "just for the daily items." **The guard rails are tighter here, not looser** — this is the
+> track where a mistake reaches the public fastest and with the least deliberation behind it.
 
-### 5A.3 · How each station behaves in fast mode
+### 5A.4 · The daily cycle
 
 ```
-②③④⑤⑥   unchanged — already daily
-            │
-            ▼
-   ⑦  TOPIC BOARD ─────────► ⛔ SKIPPED. No weekly pick.
-            │                   The Angle Desk's output enters directly,
-            │                   because a derivative commissions nothing
-            ▼
-   ⑧  WORK ORDER ──────────► fast variant: 1–2 rows, not ~23.
-            │                   No calendar slot is consumed
-            ▼
-   ⑨⑩⑫  ASSEMBLY · WRITER · LINTER
-            │                unchanged. Haiku, per tiering.
-            │                {movement} comes from the current week
-            ▼
-   ⑬  REVIEW ─────────────► same three actions, same ten codes,
-            │                same full-screen mode, same commit-on-action.
-            │                ⛔ NO notification. A badge on My Week.
-            │                ⏱ EXPIRES if unreviewed in the window
-            ▼
-   ⑮⑯  HYGIENE · PUBLISH ─► unchanged. Stamped. Scheduled to the
-                              next open slot, not queued to Monday
+EVERY DAY
+─────────────────────────────────────────────────────────────────────
+07:00   ②③④⑤⑥  listen · trend · claim · verify · angle
+                    (these already ran daily — unchanged)
+          │
+          ├── verdict is no_data ────────► ⛔ not a daily item.
+          │                                 Routes to ⑦ for the weekly
+          │                                 board, or to outreach
+          ▼
+08:00   ⑧ WORK ORDER (daily variant)
+          │   1–3 rows. No calendar slot consumed
+          ▼
+08:15   ⑨⑩⑫  assemble · write (Haiku) · lint
+          │   ⛔ INSUFFICIENT_SOURCE / LANE_MISMATCH → item not produced
+          ▼
+        ⑬ REVIEW — badge on My Week, no notification
+          │   same 3 actions · same 10 codes · same full screen
+          │   1–2 min each
+          │   ⏱ unreviewed by 08:00 tomorrow → DISCARDED
+          ▼
+        ⑮⑯  hygiene → publish, same day, next open window
+                 stamped utm_* + icp_hint
+
+        ⑰ COMMENT DESK — runs alongside, already outside the gate
+                 surfaces post + the_fact_to_bring + assigned person
+                 ⛔ a human posts. always
+─────────────────────────────────────────────────────────────────────
+
+EVERY THURSDAY 06:00 — the weekly clock, unchanged
+        ⑦ topic board pick → ⑧ ~23 rows → … → Mon 18:00 deadline
 ```
 
-**One station is skipped and one is reshaped. Nothing is bypassed.**
+### 5A.5 · The budget — stated, so it cannot quietly grow
 
-### 5A.4 · The two numbers this needs, and they are Joy's
+🟢 The weekly plan spends **62–77 minutes against ~450 available**. The headroom is not spare capacity — it is
+deliberate: *"The headroom absorbs regeneration and the weeks a published analysis lands."*
 
-| | | Suggested starting value | Why it is a starting value |
-|---|---|---|---|
-| **The expiry window** | How long an unreviewed fast item survives | 🔵 **24 hours** | Long enough for one working day; short enough that nothing published is stale |
-| **The weekly ceiling** | How many fast items may fire in a week | 🔵 **3** | 3 × 2 min = **6 minutes** against ~450. 🟢 Same posture as `gtm-api-contract.md` §1.1's credit ceiling — *"chosen as a runaway backstop rather than as a budget; set it properly on the first month of actuals"* |
+**So the daily track takes a named slice of it, not "whatever is left":**
 
-### 5A.5 · What this changes about Joy's design — stated, not buried
+| | 🔵 Suggested | Working |
+|---|---|---|
+| **Items per day** | **2–3** | Type D only |
+| **Review per day** | **3–6 min** | at 1–2 min per derivative |
+| **Review per week** | **~20–40 min** | |
+| **Combined weekly total** | **~85–115 min of ~450** | weekly 62–77 + daily 20–40 |
+| **Expiry window** | **24 hours** | one working day, and nothing stale publishes |
 
-**Three things, and they are the reason this needs a sign-off rather than a note:**
+🟢 **Both numbers are starting values and are labelled as such** — the same posture
+`gtm-api-contract.md` §1.1 takes with its credit ceiling: *"chosen as a runaway backstop rather than as a
+budget — set it properly on the first month of actuals."*
+
+🟢 **And the existing scaling rule governs both tracks:** *"Scale derivatives freely. Scale origination only
+when a reviewer's minutes exist for it. The failure mode is origination creeping up because derivatives are
+cheap."*
+
+### 5A.6 · What this changes about Joy's design — named, not buried
+
+**Four things, and they are why this needs a sign-off rather than a note:**
 
 | | Change | Mitigation |
 |---|---|---|
-| **1** | **A second generation trigger.** Today generation fires only at Thursday 06:00 | The fast trigger produces 1–2 derivative rows, never a work order |
+| **1** | **A second generation trigger.** Today generation fires only at Thursday 06:00 | The daily trigger produces 1–3 Type D rows and never a work order |
 | **2** | **A review surface outside the Monday deadline** | No notification, and it expires — so it cannot become a second deadline |
-| **3** | **An item source that is not the Work Order Desk** | It consumes no calendar slot and counts against its own ceiling, so the weekly plan is untouched |
+| **3** | **An item source that is not the Work Order Desk** | It consumes no calendar slot and draws on its own capped budget |
+| **4** | **Weekly volume rises from ~23 to ~35–44 items** | All of the increase is derivative, at 1–2 min each. **Origination is unchanged at 2.5 a week**, which is the figure the capacity case actually rests on |
 
-**What it does not change:** the volume table, the review budget, the notification count, the reject taxonomy,
-the publishing rules, the hard gate, or any prohibition.
+**What it does not change:** the notification count, the reject taxonomy, the publishing day slots, the review
+model, the hard gate, lane integrity, one-subject-one-week, or any prohibition.
 
-### 5A.6 · → `x`
+### 5A.7 · Which track a trend goes to
 
-**Numerator, and it is the only station that can act inside a trend's window.**
+**One question decides it, and the Angle Desk already asks it:**
 
-🟢 A `diverges` finding is the highest-travelling artefact the engine produces, and travel is what `p` measures
-— *"cited in an AI answer · listed on a third-party page ranking page one · our own page ranks page one."*
-**A finding published six days after the conversation has moved on reaches none of them.**
+```
+Is there a publishable angle, and what type is it?
 
-**And the cost is near zero:** at the suggested ceiling, the fast lane spends **~6 review minutes a week** and
-a handful of Haiku calls.
+  Type D — a post responding to something being said today
+     └─► DAILY TRACK.  Same day. Expires in 24h.
+
+  Type A or B — an analysis to commission, or an evergreen answer
+     └─► WEEKLY TRACK.  Topic board → Wednesday pick → Thursday generation.
+
+  no_data with a distribution finding
+     └─► NEITHER. Outreach — see open question 12.
+```
+
+> **A trend can produce both, and often should.** A same-day post that says *what is happening*, and a weekly
+> analysis that says *what is true*. **Case A in the example does exactly this** — the X post goes out on day
+> one, the reconciliation lands in week 6.
+
+### 5A.8 · → `x`
+
+**Numerator, and it is the only track that can act inside a window.**
+
+🟢 A finding published six days after the conversation moved on reaches none of the three ways `p` counts an
+appearance. **The daily track is what makes a trend reachable at all.**
+
+**And the cost is small and bounded:** ~20–40 review minutes a week, a few Haiku calls, and a hard expiry that
+guarantees the number cannot drift.
 
 ---
 
@@ -974,7 +1046,7 @@ one.
 | **10** | **Does `index-engine.md` already do stations ④–⑤?** It is an autonomous engine publishing how old figures are and how far sources disagree. **We should not build two.** We can map the overlap on request | ④⑤ scope | Avoids duplicating your own engine |
 | **11** | **`p` and atom-travel — same instrument or two?** The `p` basket is **frozen for a year**; a travel signal must not break that freeze | ⑪⑱ | The freeze is the metric's defence |
 | **12** | **Does a `no_data` verdict always end a content item?** Today it does — `INSUFFICIENT_SOURCE`, not produced, which is right for content. **But Case B shows a `no_data` claim carrying a real distribution finding**, and that finding is worth acting on through outreach rather than through a post. Should ⑥ be allowed to emit `type: "outreach"`, `owner: "seo"`? | ⑥ | It widens what a station may produce |
-| **13** | **⚡ The fast lane — approved?** §5A. Derivatives only · zero notifications · 24-hour expiry · a small weekly ceiling · never on `no_data`. **Three things it changes are named in §5A.5.** The two numbers — the expiry window and the ceiling — are yours to set | 5A | It touches the two-notifications rule, which is deliberate |
+| **13** | **⏱ The daily track — approved?** §5A. A second clock: **Type D only** · zero new notifications · 24-hour expiry · its own capped budget · never on `no_data`. **Four things it changes are named in §5A.6**, the largest being weekly volume rising ~23 → ~35–44 — **all of it derivative; origination stays at 2.5.** The two numbers — items per day and the expiry window — are yours to set | 5A | It adds a second review cadence, and the two-notifications rule is deliberate |
 
 ---
 
@@ -990,7 +1062,7 @@ Sequenced so nothing waits on an answer it does not need.
 | **4** | **⑤ Verifier** | Replaces mocked facts with real ones | **Q3 — service principal** |
 | **5** | **② Listener · ③ Trend · ④ Claim · ⑥ Angle · ⑦ Board** | The intake half | **Q1, Q2, Q4, Q10** |
 | **6** | **⑪ Visual Desk · ⑰ Comment Desk** | The two genuinely new capabilities | **Q5, Q6, Q8** |
-| **6b** | **⚡ Fast lane** (§5A) | **Two flags and an expiry timer over stations already built.** Cheap once ⑬ and ⑯ exist; pointless before the intake half is live | **Q13** + phases 2, 3, 5 |
+| **6b** | **⏱ Daily track** (§5A) | **A second trigger, a track flag and an expiry timer over stations already built.** ⑰ comments need none of it — 🟢 they are already outside the gate. Cheap once ⑬ and ⑯ exist; pointless before the intake half is live | **Q13** + phases 2, 3, 5 |
 | **7** | **⑱ Meter** | Needs the app live for the event stream | Product event tracking |
 
 **Start at ⑨.** Listing every `{brace}` and naming its source produces the data model for all eighteen
@@ -1001,4 +1073,4 @@ stations, and it is the one piece of work that no open question touches.
 *Document: `content-engine-runtime-spec.md` · 2026-09-08 · An addition to the content engine specification,
 not a revision of it. Every station cites the file and section it implements; every station marked **NEW**
 states what it adds and why nothing existing covers it. Thirteen open questions in §8 are flagged rather than
-resolved — including §5A, the fast lane, which is proposed in full and named as needing sign-off.*
+resolved — including §5A, the daily track, which is proposed in full and named as needing sign-off.*
