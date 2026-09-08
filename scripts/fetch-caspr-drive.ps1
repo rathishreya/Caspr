@@ -123,13 +123,21 @@ function Invoke-Native {
     param(
         [Parameter(Mandatory = $true)][string] $FilePath,
         [string[]] $ArgumentList = @(),
-        [switch] $Quiet          # capture output instead of writing it through
+        [switch] $Quiet,         # capture output instead of writing it through
+        [switch] $HideOutput     # let stderr through, discard stdout
     )
 
     $prior = $ErrorActionPreference
     $ErrorActionPreference = 'Continue'
     try {
-        if ($Quiet) {
+        if ($HideOutput) {
+            # stderr still reaches the console, because that is where rclone puts
+            # the sign-in URL and prompts. stdout is discarded: rclone echoes the
+            # finished remote there, OAuth refresh token included, and that must
+            # not land in a terminal scrollback or a pasted screenshot.
+            & $FilePath @ArgumentList 1>$null
+            $captured = $null
+        } elseif ($Quiet) {
             $captured = & $FilePath @ArgumentList 2>$null
         } else {
             & $FilePath @ArgumentList 2>&1 | ForEach-Object { Write-Host $_ }
@@ -211,8 +219,9 @@ function Confirm-Remote {
     Write-Note 'A browser window will open. Sign in as the account the folder is'
     Write-Note 'shared with (shreyanshi.rathi@ez.works) and approve read access.'
     Write-Note 'Read-only scope -- this cannot modify anything in Drive.'
+    Write-Note 'The resulting token is written to rclone.conf, not to this window.'
 
-    $created = Invoke-Native -FilePath $Rclone `
+    $created = Invoke-Native -FilePath $Rclone -HideOutput `
                              -ArgumentList @('config', 'create', $Name, 'drive', 'scope', 'drive.readonly')
     if ($created.ExitCode -ne 0) {
         throw "rclone config failed. Run '$Rclone config' by hand to set up a Google Drive remote named '$Name'."
