@@ -52,8 +52,8 @@
 
 [CmdletBinding()]
 param(
-    [string] $RepoPath = (Split-Path -Parent $PSScriptRoot),
-    [string] $Branch   = 'claude/google-drive-to-repo-rpda75',
+    [string] $RepoPath    = '',
+    [string] $Branch      = 'claude/google-drive-to-repo-rpda75',
     [string] $Remote      = 'gdrive',
     [string] $DriveFolder = 'caspr-claude-core',
     [switch] $IncludeSecrets,
@@ -63,12 +63,33 @@ param(
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
+# StrictMode treats a never-set $LASTEXITCODE as an error, and nothing has run a
+# native command yet.
+if (-not (Test-Path Variable:\LASTEXITCODE)) { $global:LASTEXITCODE = 0 }
+
+# $PSScriptRoot is not populated inside a param block on Windows PowerShell 5.1,
+# so the script directory is resolved here in the body instead, with fallbacks.
+$ScriptDir = $PSScriptRoot
+if (-not $ScriptDir -and $MyInvocation.MyCommand.Path) {
+    $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+}
+if (-not $ScriptDir) { $ScriptDir = (Get-Location).Path }
+
+# Default to the repository containing this script, falling back to wherever the
+# shell happens to be if that is not a clone.
+if (-not $RepoPath) {
+    $parent = Split-Path -Parent $ScriptDir
+    if ($parent -and (Test-Path (Join-Path $parent '.git'))) { $RepoPath = $parent }
+    else { $RepoPath = (Get-Location).Path }
+}
+$RepoPath = (Resolve-Path -LiteralPath $RepoPath).Path
+
 # LOCALAPPDATA is the right home on Windows but is not defined elsewhere, which
 # would make Join-Path throw on a null path.
 $StagingRoot = if ($env:LOCALAPPDATA) { $env:LOCALAPPDATA }
                else { [System.IO.Path]::GetTempPath() }
 $Staging     = Join-Path $StagingRoot 'caspr-drive-staging'
-$ToolsDir    = Join-Path $PSScriptRoot '.tools'
+$ToolsDir    = Join-Path $ScriptDir '.tools'
 
 # Sum file sizes under a path, ignoring git metadata. Returns MB, 0 when empty --
 # Measure-Object yields a null Sum for an empty set, which would otherwise throw
@@ -118,6 +139,12 @@ function Resolve-Rclone {
     $ProgressPreference = 'SilentlyContinue'
     try {
         Invoke-WebRequest -Uri $url -OutFile $zip -UseBasicParsing
+    } catch {
+        throw ("Could not download rclone: " + $_.Exception.Message + "`n`n" +
+               "A proxy or firewall is probably blocking downloads.rclone.org.`n" +
+               "Install it another way, then re-run this script -- it will find`n" +
+               "rclone on PATH and skip the download:`n`n" +
+               "    winget install Rclone.Rclone`n")
     } finally {
         $ProgressPreference = $priorProgress
     }
