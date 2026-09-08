@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350">
+<rect x="0" y="0" width="1080" height="1350" rx="0" fill="#ffffff"/>
+<rect x="0" y="0" width="1080" height="320" rx="0" fill="#0b0b09"/>
+<text x="96" y="116" font-family="Inter, Helvetica, Arial, sans-serif" font-size="20" font-weight="600" fill="#cfcecb" text-anchor="start" letter-spacing="3" style="">ANALYTICAL VS GENERATIVE</text>
+<line x1="96" y1="132" x2="160" y2="132" stroke="#e8453c" stroke-width="3"/>
+<text x="96" y="196" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="72" font-weight="400" fill="#ffffff" text-anchor="start" style="">Caspr vs a chat model</text>
+<text x="96" y="420" font-family="Inter, Helvetica, Arial, sans-serif" font-size="28" font-weight="600" fill="#6b6b66" text-anchor="start" style="">A general chat model</text>
+<text x="96" y="474" font-family="Inter, Helvetica, Arial, sans-serif" font-size="25" font-weight="400" fill="#111111" text-anchor="start" style="">—  Generates fluent text from training data</text>
+<text x="96" y="528" font-family="Inter, Helvetica, Arial, sans-serif" font-size="25" font-weight="400" fill="#111111" text-anchor="start" style="">—  Can invent sources</text>
+<text x="96" y="582" font-family="Inter, Helvetica, Arial, sans-serif" font-size="25" font-weight="400" fill="#111111" text-anchor="start" style="">—  Returns a conversation</text>
+<line x1="96" y1="672" x2="984" y2="672" stroke="#e5e4e1" stroke-width="1"/>
+<text x="96" y="742" font-family="Inter, Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#e8453c" text-anchor="start" style="">Caspr</text>
+<text x="96" y="796" font-family="Inter, Helvetica, Arial, sans-serif" font-size="25" font-weight="400" fill="#111111" text-anchor="start" style="">—  Analyses 25M+ curated, live sources</text>
+<text x="96" y="850" font-family="Inter, Helvetica, Arial, sans-serif" font-size="25" font-weight="400" fill="#111111" text-anchor="start" style="">—  Cites every insight to a source</text>
+<text x="96" y="904" font-family="Inter, Helvetica, Arial, sans-serif" font-size="25" font-weight="400" fill="#111111" text-anchor="start" style="">—  Returns a 100-page report</text>
+<text x="96" y="1014" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="52" font-weight="400" fill="#111111" text-anchor="start" style="">A defensible report.</text>
+<text x="96" y="1078" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="52" font-weight="400" fill="#111111" text-anchor="start" style="">Not a conversation</text>
+<circle cx="582" cy="1069" r="9" fill="#e8453c"/>
+<line x1="96" y1="1252" x2="984" y2="1252" stroke="#e5e4e1" stroke-width="1"/>
+<text x="96" y="1280" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="34" font-weight="400" fill="#111111" text-anchor="start" style="">Caspr</text>
+<circle cx="192" cy="1271" r="6" fill="#e8453c"/>
+<text x="984" y="1280" font-family="Inter, Helvetica, Arial, sans-serif" font-size="22" font-weight="400" fill="#6b6b66" text-anchor="end" style="">caspr.ai</text>
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+<rect width="1080" height="1080" fill="#0b0b09"/>
+<text x="100" y="190" font-family="Inter, Helvetica, Arial, sans-serif" font-size="22" font-weight="600" fill="#e8453c" text-anchor="start" letter-spacing="3">FOR CORPORATE DEV</text>
+<line x1="100" y1="212" x2="170" y2="212" stroke="#e8453c" stroke-width="3"/>
+<text x="100" y="377" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="76" font-weight="400" fill="#ffffff" text-anchor="start">Map the targets.</text>
+<text x="100" y="463" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="76" font-weight="400" fill="#ffffff" text-anchor="start">In 15 minutes.</text>
+<circle cx="582.1600000000001" cy="439" r="11" fill="#e8453c"/>
+<text x="100" y="543" font-family="Inter, Helvetica, Arial, sans-serif" font-size="26" font-weight="400" fill="#8a8984" text-anchor="start">15 minutes. 100 pages. Cited to source.</text>
+<line x1="100" y1="960" x2="980" y2="960" stroke="#2a2a27" stroke-width="1"/>
+<text x="100" y="990" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="40" font-weight="400" fill="#ffffff" text-anchor="start">Caspr</text>
+<circle cx="208" cy="979" r="7" fill="#e8453c"/>
+<text x="980" y="990" font-family="Inter, Helvetica, Arial, sans-serif" font-size="24" font-weight="400" fill="#8a8984" text-anchor="end">caspr.ai</text>
+</svg>

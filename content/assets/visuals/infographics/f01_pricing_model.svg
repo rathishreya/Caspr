@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350">
+<rect x="0" y="0" width="1080" height="1350" rx="0" fill="#ffffff"/>
+<rect x="0" y="0" width="1080" height="320" rx="0" fill="#0b0b09"/>
+<text x="96" y="116" font-family="Inter, Helvetica, Arial, sans-serif" font-size="20" font-weight="600" fill="#cfcecb" text-anchor="start" letter-spacing="3" style="">PRICING</text>
+<line x1="96" y1="132" x2="160" y2="132" stroke="#e8453c" stroke-width="3"/>
+<text x="96" y="196" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="72" font-weight="400" fill="#ffffff" text-anchor="start" style="">How Caspr pricing works</text>
+<text x="96" y="426" font-family="'DM Mono', Menlo, Consolas, monospace" font-size="40" font-weight="400" fill="#e8453c" text-anchor="start" style="">01</text>
+<text x="186" y="420" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="36" font-weight="400" fill="#111111" text-anchor="start" style="">Your Research Budget</text>
+<text x="186" y="460" font-family="Inter, Helvetica, Arial, sans-serif" font-size="24" font-weight="400" fill="#6b6b66" text-anchor="start" style="">A monthly amount you control — like a research retainer.</text>
+<line x1="114" y1="484" x2="114" y2="544" stroke="#e5e4e1" stroke-width="1"/>
+<text x="96" y="566" font-family="'DM Mono', Menlo, Consolas, monospace" font-size="40" font-weight="400" fill="#e8453c" text-anchor="start" style="">02</text>
+<text x="186" y="560" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="36" font-weight="400" fill="#111111" text-anchor="start" style="">Draw analyses from it</text>
+<text x="186" y="600" font-family="Inter, Helvetica, Arial, sans-serif" font-size="24" font-weight="400" fill="#6b6b66" text-anchor="start" style="">Each analysis has a fixed price. Run what you need.</text>
+<line x1="114" y1="624" x2="114" y2="684" stroke="#e5e4e1" stroke-width="1"/>
+<text x="96" y="706" font-family="'DM Mono', Menlo, Consolas, monospace" font-size="40" font-weight="400" fill="#e8453c" text-anchor="start" style="">03</text>
+<text x="186" y="700" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="36" font-weight="400" fill="#111111" text-anchor="start" style="">Unused balance carries forward</text>
+<text x="186" y="740" font-family="Inter, Helvetica, Arial, sans-serif" font-size="24" font-weight="400" fill="#6b6b66" text-anchor="start" style="">You never lose what you didn't spend.</text>
+<line x1="96" y1="840" x2="984" y2="840" stroke="#e5e4e1" stroke-width="1"/>
+<text x="96" y="910" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="56" font-weight="400" fill="#111111" text-anchor="start" style="">One budget.</text>
+<text x="96" y="976" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="56" font-weight="400" fill="#111111" text-anchor="start" style="">Every analysis</text>
+<circle cx="526" cy="967" r="9" fill="#e8453c"/>
+<line x1="96" y1="1252" x2="984" y2="1252" stroke="#e5e4e1" stroke-width="1"/>
+<text x="96" y="1280" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="34" font-weight="400" fill="#111111" text-anchor="start" style="">Caspr</text>
+<circle cx="192" cy="1271" r="6" fill="#e8453c"/>
+<text x="984" y="1280" font-family="Inter, Helvetica, Arial, sans-serif" font-size="22" font-weight="400" fill="#6b6b66" text-anchor="end" style="">caspr.ai</text>
+</svg>

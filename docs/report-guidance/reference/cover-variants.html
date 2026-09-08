@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caspr — Cover Variants · Sodium Production for Pharma</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+
+  /* ─────────────────────────────────────────
+     CASPR DESIGN TOKENS — verbatim from spec
+  ───────────────────────────────────────── */
+  :root {
+    --black:      #0B0B09;
+    --white:      #FFFFFF;
+    --red:        #E8453C;
+    --grey-dark:  #1A1A18;
+    --grey-mid:   #6B6B66;
+    --grey-light: #F2F1EF;
+    --rule:       #D6D4CF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1C1C1A;
+    font-family: 'Inter', -apple-system, sans-serif;
+    padding: 64px 48px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ── Page header ── */
+  .page-heading {
+    width: 952px;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .ph-text {
+    font-size: 8px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.22);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .ph-rule { flex: 1; height: 1px; background: rgba(255,255,255,0.07); }
+  .ph-note { font-size: 8px; color: rgba(255,255,255,0.14); white-space: nowrap; }
+
+  /* ── Three-cover row ── */
+  .cover-row {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 52px;
+  }
+
+  .variant {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .v-label {
+    font-size: 7.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+    font-weight: 400;
+  }
+
+  /* ═══════════════════════════════════════
+     COVER SHELL — A4 proportions (1:1.414)
+     284 × 402 px display
+  ════════════════════════════════════════ */
+  .cover {
+    width: 284px;
+    height: 402px;
+    position: relative;
+    overflow: hidden;
+    background: var(--grey-dark);
+
+    /* Subtle paper shadow */
+    box-shadow:
+      0 4px 24px rgba(0,0,0,0.6),
+      0 1px 3px rgba(0,0,0,0.4),
+      inset 0 0 0 1px rgba(255,255,255,0.04);
+  }
+
+  /* ─────────────────────────────────────────
+     FULL-BLEED PHOTOGRAPH
+     Industrial chemical / sodium production plant.
+     Photo: Unsplash (free commercial licence).
+     Dark-treated per spec §11 photography brief.
+  ───────────────────────────────────────── */
+  .photo {
+    position: absolute;
+    inset: 0;
+    background-image: url('sodium-cover.png');
+    background-size: cover;
+    background-position: center 30%;
+    /* Darken to editorial register — image is high-key daylight, needs strong treatment */
+    filter: brightness(0.38) contrast(1.08) saturate(0.85);
+  }
+
+  /* ─────────────────────────────────────────
+     PHOTOGRAPHY OVERLAY
+     Gradient permitted per spec exception:
+     "photography treatment, not UI decoration."
+     Darkens bottom portion for white text legibility.
+     Image is bright daylight so needs deeper overlay.
+  ───────────────────────────────────────── */
+  .photo-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(11,11,9,0.98) 0%,
+      rgba(11,11,9,0.92) 28%,
+      rgba(11,11,9,0.55) 52%,
+      rgba(11,11,9,0.12) 72%,
+      transparent 100%
+    );
+    z-index: 1;
+  }
+
+  /* ─────────────────────────────────────────
+     CASPR DOT MARK + DEPTH INDICATOR
+     Top-left, 18px from edges.
+     All marks contained within page margins.
+  ───────────────────────────────────────── */
+  .mark {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    z-index: 3;
+  }
+
+  .caspr-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--red);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* Depth lines — flat var(--red), no gradient */
+  .depth { display: flex; flex-direction: column; gap: 4px; }
+  .dl    { height: 1px; background: var(--red); }
+
+  /* ─────────────────────────────────────────
+     BOTTOM CONTENT BLOCK
+     Per spec §11 element order:
+     badge → title → subtitle → [capabilities]
+     → date/wordmark
+  ───────────────────────────────────────── */
+  .btm {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0 19px 18px;
+    z-index: 3;
+  }
+
+  /* Thin rule separating photo zone from content block */
+  .content-rule {
+    width: 100%;
+    height: 1px;
+    background: rgba(214,212,207,0.2);
+    margin-bottom: 13px;
+  }
+
+  /* Badge — spec: caspr-red text on white pill, ALL CAPS, Semi Bold */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 6px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--red);
+    background: var(--white);
+    padding: 2.5px 8px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+    line-height: 1;
+  }
+
+  /* Report title — spec: Bold 36–44pt, white, bottom left */
+  .title {
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.18;
+    letter-spacing: -0.022em;
+    margin-bottom: 7px;
+  }
+
+  /* Subtitle/scope — spec: Regular, white */
+  .subtitle {
+    font-size: 7.5px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.58);
+    line-height: 1.65;
+    margin-bottom: 10px;
+  }
+
+  /* Intelligence-only: short caspr-red rule between scope and capabilities */
+  .intel-rule {
+    width: 32px;
+    height: 1px;
+    background: var(--red);
+    margin-bottom: 8px;
+  }
+
+  /* Intelligence capability row */
+  .cap-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 11px;
+  }
+  .cap {
+    font-size: 5.5px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.32);
+  }
+  .csep {
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: var(--red);
+    flex-shrink: 0;
+    opacity: 0.55;
+  }
+
+  /* Footer: date left, Caspr. wordmark right */
+  .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 9px;
+    border-top: 1px solid rgba(214,212,207,0.16);
+  }
+
+  .date {
+    font-size: 6.5px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.32);
+    letter-spacing: 0.06em;
+  }
+
+  /* ─────────────────────────────────────────
+     CASPR. WORDMARK
+     Playfair Display Bold (heavy editorial serif)
+     per brand guidelines: "Caspr." — heavy
+     editorial serif with red dot as full stop.
+     White on dark background (reversed variant).
+  ───────────────────────────────────────── */
+  .wordmark {
+    display: inline-flex;
+    align-items: baseline;
+  }
+  .wm-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.75);
+    letter-spacing: 0.01em;
+    line-height: 1;
+  }
+  .wm-period {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--red);
+    line-height: 1;
+  }
+
+
+  /* ─────────────────────────────────────────
+     ANNOTATION SECTION
+  ───────────────────────────────────────── */
+  .anno {
+    width: 952px;
+    border-top: 1px solid rgba(214,212,207,0.07);
+    padding-top: 28px;
+  }
+
+  .anno-head {
+    font-size: 7px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.16);
+    font-weight: 500;
+    margin-bottom: 22px;
+  }
+
+  .anno-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px;
+  }
+
+  .a-col-title {
+    font-size: 7px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--red);
+    margin-bottom: 11px;
+  }
+
+  .a-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    align-items: flex-start;
+  }
+  .a-dot {
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: rgba(232,69,60,0.4);
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+  .a-text {
+    font-size: 8px;
+    color: rgba(255,255,255,0.26);
+    line-height: 1.65;
+  }
+  .a-text strong {
+    color: rgba(255,255,255,0.5);
+    font-weight: 500;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="page-heading">
+  <span class="ph-text">Caspr · Brief / Study / Intelligence</span>
+  <div class="ph-rule"></div>
+  <span class="ph-note">Sodium Production for Pharma · same report, three depth tiers</span>
+</div>
+
+<div class="cover-row">
+
+  <!-- ══════════ BRIEF ══════════ -->
+  <div class="variant">
+    <div class="cover">
+      <div class="photo"></div>
+      <div class="photo-overlay"></div>
+
+      <div class="mark">
+        <div class="caspr-dot"></div>
+        <div class="depth">
+          <div class="dl" style="width:17px;"></div>
+        </div>
+      </div>
+
+      <div class="btm">
+        <div class="content-rule"></div>
+        <div class="badge">Brief</div>
+        <div class="title">Sodium Production<br>for Pharma</div>
+        <div class="foot">
+          <span class="date">May 2026</span>
+          <div class="wordmark">
+            <span class="wm-name">Caspr</span><span class="wm-period">.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="v-label">Brief · ~20 pages</div>
+  </div>
+
+  <!-- ══════════ STUDY ══════════ -->
+  <div class="variant">
+    <div class="cover">
+      <div class="photo"></div>
+      <div class="photo-overlay"></div>
+
+      <div class="mark">
+        <div class="caspr-dot"></div>
+        <div class="depth">
+          <div class="dl" style="width:21px;"></div>
+          <div class="dl" style="width:13px;"></div>
+        </div>
+      </div>
+
+      <div class="btm">
+        <div class="content-rule"></div>
+        <div class="badge">Study</div>
+        <div class="title">Sodium Production<br>for Pharma</div>
+        <div class="subtitle">India's pharmaceutical sodium market: supply concentration, production economics, and competitive dynamics.</div>
+        <div class="foot">
+          <span class="date">May 2026</span>
+          <div class="wordmark">
+            <span class="wm-name">Caspr</span><span class="wm-period">.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="v-label">Study · ~60 pages</div>
+  </div>
+
+  <!-- ══════════ INTELLIGENCE ══════════ -->
+  <div class="variant">
+    <div class="cover">
+      <div class="photo"></div>
+      <div class="photo-overlay"></div>
+
+      <div class="mark">
+        <div class="caspr-dot"></div>
+        <div class="depth">
+          <div class="dl" style="width:25px;"></div>
+          <div class="dl" style="width:17px;"></div>
+          <div class="dl" style="width:9px;"></div>
+        </div>
+      </div>
+
+      <div class="btm">
+        <div class="content-rule"></div>
+        <div class="badge">Intelligence</div>
+        <div class="title">Sodium Production<br>for Pharma</div>
+        <div class="subtitle">An analysis of India's pharmaceutical sodium market: supply concentration, production economics, and capital viability.</div>
+        <div class="intel-rule"></div>
+        <div class="cap-row">
+          <span class="cap">Regulatory Environment</span>
+          <div class="csep"></div>
+          <span class="cap">Build / Buy / Partner</span>
+          <div class="csep"></div>
+          <span class="cap">Multi-Scenario Model</span>
+        </div>
+        <div class="foot">
+          <span class="date">May 2026</span>
+          <div class="wordmark">
+            <span class="wm-name">Caspr</span><span class="wm-period">.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="v-label">Intelligence · ~120 pages</div>
+  </div>
+
+</div>
+
+
+<!-- ── Annotations ── -->
+<div class="anno">
+  <div class="anno-head">Differentiation system — no edge elements · all marks within page margins · photo overlay per spec exception</div>
+  <div class="anno-grid">
+
+    <div>
+      <div class="a-col-title">Brief</div>
+      <div class="a-row"><div class="a-dot"></div><div class="a-text"><strong>1 depth line (17px)</strong> beside the Caspr dot. One tier, one mark. The system is immediately learnable.</div></div>
+      <div class="a-row"><div class="a-dot"></div><div class="a-text"><strong>Title only.</strong> No scope line. More white space above the title — signals a contained, decisive scope.</div></div>
+      <div class="a-row"><div class="a-dot"></div><div class="a-text"><strong>Badge:</strong> BRIEF in caspr-red on white pill, per spec §11.</div></div>
+    </div>
+
+    <div>
+      <div class="a-col-title">Study</div>
+      <div class="a-row"><div class="a-dot"></div><div class="a-text"><strong>2 depth lines (21 + 13px)</strong> cascading. The descending lengths create a visual step — depth increases, lines accumulate.</div></div>
+      <div class="a-row"><div class="a-dot"></div><div class="a-text"><strong>Title + scope line</strong> surfaces the analytical territory without crowding the cover.</div></div>
+      <div class="a-row"><div class="a-dot"></div><div class="a-text"><strong>Badge:</strong> STUDY — same white pill treatment.</div></div>
+    </div>
+
+    <div>
+      <div class="a-col-title">Intelligence</div>
+      <div class="a-row"><div class="a-dot"></div><div class="a-text"><strong>3 depth lines (25 / 17 / 9px).</strong> Full cascade — the premium tier is immediately legible even before reading the badge.</div></div>
+      <div class="a-row"><div class="a-dot"></div><div class="a-text"><strong>Title + scope + capability row.</strong> A 32px caspr-red rule separates scope from capabilities — the only cover element exclusive to Intelligence.</div></div>
+      <div class="a-row"><div class="a-dot"></div><div class="a-text"><strong>Caspr. wordmark</strong> — Playfair Display Bold (heavy editorial serif) with red period throughout. Every cover an opportunity to establish the brand mark.</div></div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

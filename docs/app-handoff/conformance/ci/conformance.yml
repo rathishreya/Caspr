@@ -1,0 +1,165 @@
+# Caspr conventions conformance — Rings 2 and 3
+#
+# Install at .github/workflows/conformance.yml in caspr-frontend.
+# Architecture: docs/app-handoff/CONFORMANCE-CI-ARCHITECTURE.md (Drive)
+# Rules:        conformance/rules.json
+#
+# Ring 2 (pull_request) — static + runtime, ratchet mode. A regression fails.
+# Ring 3 (push to main) — adds build + cross-repo. This is the production gate:
+#                         it must sit BEFORE the image is pushed, not after.
+
+name: conformance
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write   # SARIF upload → inline annotations on the diff
+  pull-requests: write
+
+concurrency:
+  group: conformance-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── Ring 1 + 2 ──────────────────────────────────────────────────────────────
+  static:
+    name: static conformance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # The harness tests itself first. A runner whose detectors have silently
+      # stopped firing reports a clean tree, which is the worst possible failure
+      # mode for a conformance gate — it looks like success.
+      - name: Self-test the harness
+        run: node conformance/selftest/run.mjs
+
+      # No `npm ci` on purpose. The runner has zero dependencies so it can run
+      # even when the dependency tree is broken — which is exactly when you most
+      # want to know whether the conventions still hold.
+      - name: Run conformance (Tier 1 — blocking, ratcheted)
+        run: |
+          node conformance/run.mjs \
+            --tier 1 \
+            --mode ratchet \
+            --format md --out "$GITHUB_STEP_SUMMARY"
+
+      - name: Emit SARIF
+        if: always()
+        run: node conformance/run.mjs --tier 1 --format sarif --out conformance.sarif
+
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: conformance.sarif
+          category: conformance
+
+      # Tier 2 is the proposal — measured, reported, never blocking, until Joy
+      # answers ENGINEERING-STANDARDS-PROPOSAL.md's three questions.
+      - name: Run conformance (Tier 2 — advisory)
+        if: always()
+        continue-on-error: true
+        run: |
+          {
+            echo ''
+            echo '<details><summary>Tier 2 — proposed, not adopted. Advisory only.</summary>'
+            echo ''
+          } >> "$GITHUB_STEP_SUMMARY"
+          node conformance/run.mjs --tier 2 --mode report --format md >> "$GITHUB_STEP_SUMMARY"
+          echo '</details>' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Archive JSON for the trend
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: conformance-${{ github.sha }}
+          path: conformance.sarif
+          retention-days: 90
+
+  # ── Ring 2 runtime — the families no static check can see ───────────────────
+  runtime:
+    name: runtime conformance (a11y, focus, keyboard, shell)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+
+      # These rules are runtime-only BY DECLARATION and refuse to run in jsdom.
+      # The existing 829-test suite runs in jsdom, which has no layout engine —
+      # getBoundingClientRect returns zeros — so it is structurally incapable of
+      # checking TARGET-01, FOCUS-05 or any SHELL rule. A green unit suite is not
+      # evidence for any of them.
+      - name: Runtime conformance suite
+        working-directory: apps/web
+        run: npx playwright test --grep "@conformance"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-conformance-${{ github.sha }}
+          path: apps/web/playwright-report/
+          retention-days: 30
+
+  # ── Ring 3 — the production gate. Only on main. ─────────────────────────────
+  contract-parity:
+    name: contract parity (SEAM-07)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+
+      # The backend commits contract/openapi.json and fails its own build if the
+      # committed file drifts from what FastAPI actually serves. So this file is
+      # always current, and a contract change is a reviewable line in a diff
+      # rather than a surprise at runtime.
+      - name: Fetch the backend contract
+        env:
+          GH_TOKEN: ${{ secrets.BACKEND_CONTRACT_TOKEN }}   # read-only, Contents: Read
+        run: |
+          gh api \
+            -H "Accept: application/vnd.github.raw" \
+            /repos/caspr-ai/caspr-backend/contents/contract/openapi.json \
+            > backend-openapi.json
+          echo "fetched $(wc -c < backend-openapi.json) bytes"
+
+      # Compares on three axes — field presence, casing, nullability.
+      # Casing is the one that produced $NaN: the server sent spendable_cents,
+      # the type declared spendableCents, and the cast compiled either way.
+      - name: Compare packages/contract against the wire
+        run: node conformance/contract-parity.mjs --openapi backend-openapi.json --contract packages/contract/src
+
+  # ── Ring 3 — deploy gate ────────────────────────────────────────────────────
+  gate:
+    name: production gate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [static, runtime, contract-parity]
+    runs-on: ubuntu-latest
+    steps:
+      - name: All conformance rings green
+        run: echo "Conformance passed. The image may be built and pushed."
+
+      # The deploy job must declare `needs: gate`. A conformance check that runs
+      # after the rollout is a report, not a gate — the whole value is being the
+      # last thing that can say no.

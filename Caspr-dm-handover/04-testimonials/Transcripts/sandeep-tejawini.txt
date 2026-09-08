@@ -1,0 +1,241 @@
+Tejaswini (03:01.645)
+So my first question for you is, you have spent around a decade working across research, business and lesson consulting. Could you walk us through your career and the kind of research and analytic work you have been responsible for?
+
+Sandeep (03:19.423)
+Yeah, so I spent a decade around a decade in market research and strategy consulting. So I've started off working as an intern for a strategy consulting firm headquartered in the US and I work my way upwards towards a senior research analyst. So as I progressed into these senior level roles, my job role and my specific
+
+Search patterns have changed. I focus in a senior role. I focused on trying to figure out what the client wants and configuring what the data says. I was asking questions like what does this mean for the client and I tried to put myself in the client's shoes and to think what would they need. So over the years I worked on a bunch of different components across
+
+secondary as well as primary research. So I worked on market sizing components, competitor and customer landscape, pricing, understanding customer pricing and customer segmentation, as well as other broader, much more broader and larger projects like the due diligence, &A, market screening, market sizing, and so on.
+
+As well as the sectors I have worked on had varied broadly from healthcare, IT, real estate, education. I worked on a bunch of industries over the years. So that's something I have gained industry specific knowledge on across different markets, global markets in the US.
+
+Asia, North America, the Pacific.
+
+Tejaswini (05:27.489)
+Okay. You have worked across IT industry and real estate as well, a different consulting research environment. How has your research approach evolved the course of your career and what kind of research assignment have you been worked on most efficiently?
+
+Sandeep (05:50.378)
+Yeah, so that's a good question. So at the beginning, I mentioned where my internship focus on and at the early levels of my career, I was focusing more on gathering more data. I believe like more data you have the better. But over the years, I've understood more doesn't necessarily mean quality data. So over time, I've tried to focus on finding the actual data which
+
+is very much relevant and useful for the customer that they can make a decision. So for example, today at the beginning of a research, I spend much more time and try to figure out what the customer wants, trying to figure out what is exactly the market, how you define the market, what is included in the market and how you exclude. So and what decision the client is exactly taking. So for a good example, if you take a market size,
+
+you might find three, four market reports that give completely different market size. So that doesn't mean that the market size is entirely wrong. So how they calculate it and the way the inputs are, it might differ. So in that sense, the understanding of market differently is part of the researcher's job. How they define the market, what the inputs are, the calculation that goes behind it. So that is like a key part. So over time, my
+
+My research has evolved. So I've done extensively market landscapes, market sizing, custom analysis. So these are the parts that I've evolved over time. While earlier at the beginning, I used to focus entirely on like data gathering and doing primary interviews. So over time, my research has evolved into much more complex and analytical tasks basically.
+
+Tejaswini (07:48.361)
+Okay, so before tools like this become available, how long would a substantial piece of sector or market analysis typically takes from the initial brief through research analysts and final delivery?
+
+Sandeep (08:05.101)
+Yeah, so for example, for a very tight scope, like a short project, say, you would take around two to three weeks. But say, for example, if you take a heavy data project, something that includes like a market size, segmentation, customer analysis, pins and other drivers, so that would take somewhere in the ballpark range of four to six weeks.
+
+So, so significant amount of time on the mouse and subject.
+
+Tejaswini (08:37.933)
+So sorry to interrupt, just one thing like can you please look into my camera when you are speaking and right now you are doing with your hand that yeah this will be your recording right?
+
+Sandeep (08:45.422)
+See ya.
+
+So, yeah, yeah, sorry. So, so significant number. So, I start from the beginning.
+
+Tejaswini (08:58.829)
+I I had this question.
+
+Sandeep (09:00.255)
+Okay, yeah. So for example, like a tight scope project would take somewhere around two to three weeks, like a small rundown of like a high, high level overview. So some on the other hand, like a detailed project, like complex project that that involves like trends and drivers analysis, market sizing, competitive analysis.
+
+customer segmentation, trends and focus that would take somewhere around four to six weeks. So even on the project like a significant amount of time isn't spent on the actual project but it's defining the market and like spreading on how you define the market and the entry, how you gather the data at the inception of the project. So for example like a researcher might spend the entire day
+
+pulling information on the certain market and then breaking down the sources, then structuring the research and defining the market. So there's a lot of back and forth involved. So that is where like the majority of the time goes towards. And for example, say like a detailed competitive analysis of say 30 competitors. that would and it includes around gathering 15 to 30 data points on a single company.
+
+So that itself would take a couple of weeks.
+
+Tejaswini (10:31.084)
+Looking at that workflow which part genuinely requires analytic judgment and research expertise and which part are more about gathering, validating, organizing and assembling information.
+
+Sandeep (10:45.453)
+Yeah, so the part that requires judgment is at the inception, where you had to decide on what the market is, how you define the market, gathering the data, the evidence to prove your hypothesis and interpreting the data basically. So for example, if a researcher as like show shows the growth, three different growth rates that understand what the difference is where it comes from like.
+
+how you define the market and what the geography is. So for example, there are things that you have to make a judgment on based on evidence. So on the other hand, like in Casper's case, like gathering a number of data and analyzing it, summarizing it, it helps to produce that workload basically.
+
+So that's like a huge area where tools like Casper comes into play. I believe it makes a huge difference.
+
+Tejaswini (11:50.092)
+From your experience working with research and consulting assessment, what would a client typically be paying for a substantial piece of market research or sector analysis and what factor would influence the time and cost involved?
+
+Sandeep (12:09.311)
+Yeah, so I don't think there is an exact standard price per se, but I would think that the price is, price depends on a bunch of different factors. Say for example, the nature of the project, the complexity, the team size, and the requirements of the client. So based on those factors, it kind of differs. Say if I would estimate like on the lower end,
+
+like a short project with say one or two team members, like a two to three week project, it could run from several hundreds to few thousands of dollars. On the other end, I would think that the large scale, massive team effort, say 10 to 20 members, like a massive scale, which also includes like a survey component as well as primary research.
+
+I would think that would run from a few couple of 10,000 to even hundreds of thousands of dollars. So there's a huge difference between how you define the project, I think, that comes into play when configuring the cost of a market report.
+
+Tejaswini (13:28.62)
+So when you first reviewed a full CASPer analysis, what were you expecting based on your experience and conventional research and what did you actually find?
+
+Sandeep (13:41.914)
+Yeah, so when I first gathered a report, so yeah, so when I first developed a report, I was expecting like a basic summary like a brief executive summary or like something like a brief overview of the market. I was expecting something along the lines of like a high level view, say like the table of contents and executive summary and something along those lines.
+
+But I was quite surprised on the level of detail and the structured output Casper generated. So that was something I found quite surprising and the breadth. And within the limited amount of time, I was pretty surprised on how much data it generated, how much useful data it generated.
+
+Tejaswini (14:35.436)
+You have spent years evaluating markets and business information. When you reviewed the Casper analysis, where did it hold up against your own understanding of the subject and where did you feel it needed correction, addition, context or a different interpretation?
+
+Sandeep (14:56.446)
+Yeah, so Casper held up pretty well on defining the market and how the market was identified like the broader structure, like the definitions, the industry dynamics and so on. And as well as it quoted pretty recent data and recent developments in the market, the changes, market trends. I've noticed like in a recent report in the photonics space, how we define the market between mere commercial adoption as well as optical.
+
+how the optical network landscape was defined and the various structures. It was actually in line with how I would represent the market myself. As well as the sources it used are predominantly pretty good, like especially in the text space, know that sources like Gartner, IDC, forest research are very renowned syndicated research databases.
+
+That is pretty much in the lines of something where I would also focus in my research as well.
+
+Tejaswini (16:06.285)
+How did the CASPER sourcing compare with how you traditionally approach sourcing information for a consulting or research assignment? Were there any aspects of the sourcing that particularly stood out to you?
+
+Sandeep (16:26.136)
+Yeah. So when it comes to sourcing, to finding different data from different sources, I have a picture in mind where I usually look at the most reputable sources. For example, like government databases, company filings, industry journals, government regulatory bodies, and academic research.
+
+Then I used like secondary other databases, say for example, paid databases, industry, certain industry databases, associations and so on. What I liked was how Casper, it was the speed, it casted all these sources, generated the report and at the bottom of the report, it also shows the underlying sources and how you validate the research.
+
+So what I liked was how Casper, the speed it surfaced the broad source base and how it connected to those analysis. So at the report, each and every data point, there's a footnote which links to the source. So it also helps the researcher to go into those links and to figure out if they are valid and relevant. So still, yeah.
+
+These reports are good, but I would actually go into these links and see if these are from reputable sources.
+
+Tejaswini (18:02.348)
+So if a client has presented Casper analysis to you as a commissioned piece of research without telling you how it has been produced what would your professional assessment of the work have been?
+
+Sandeep (18:21.054)
+If a client added me a Casper report, I will look at certain things. Say for example, for first, I will look at how the market has been defined. How they define it, what are the inclusions, exclusions, the broader market, for example. Second, I would look at are the numbers traceable to the most credible and recent sources.
+
+Say for example in certain reports, they link pretty outdated and old data. So that isn't quite relevant for the recent developments. Third, I would also look at are the facts, and assumptions clearly differentiated? So that means if they explain something,
+
+are the forecast valid for the next few years? Does it make practical sense analysis? And finally, I would look at if the conclusion flows smoothly from the evidence presented. If the report generated, if the opening in the body makes sense, what does the report say that would make the conclusion actually flow?
+
+In the flow, in the contents of the report. So the report has to follow a structure and the final conclusion has to make sense to the client on what decision they are making. So I would, so that's like a key part. I would look at a Casper report and finally I would also look at, would spot check some data points here and there to see if it makes sense.
+
+But based on my experience so far, I've noticed that the report it generates are pretty much in line with like a solid consulting report.
+
+Tejaswini (20:28.044)
+Given your experience supporting business and consulting decision would you be comfortable using an output like of Casper as an input into a client recommendation or business decision what would you personally want to verify before relying on it?
+
+Sandeep (20:47.774)
+Yes, I would be very much comfortable using Casper particularly in a way to get input on a client recommendation. So I won't treat pretty much any research source AI otherwise any differently as a sole basis of a client recommendation, whether to go ahead with the market strategy or to expand into a new and different market.
+
+So before relying on a report, even Casper like a report or like a general market research piece, I would verify the numbers behind the material. I would check like the primary sources behind it. The market figures make practical sense and so on. I would verify a bunch of different things that will go into the report before making or recommending it to a client.
+
+Tejaswini (21:50.476)
+So having reviewed the Casper analysis from the perspective of an experienced researcher and consultant, where do you think it falls short?
+
+Sandeep (22:02.318)
+Yeah. So the limitation I see is pretty much in the interface. So for example, at the moment, I know that there are working things, so many working things that the platform is still being modified and tweaked with. So it would be like a much more appealing interface. I would like that.
+
+So also another key thing is like the limitation is like sometimes the output or the report generated, it can communicate other different things like in complex and emerging markets or like reports, there are gaps in the data. Sometimes the right analytical analysis cannot be proven in a report and like the
+
+The report doesn't particularly generate a strong conclusion in certain reports I have generated. this end, the conclusion is kind of weak. So that's where like a manual researcher has to add into and to develop like some high quality insights that goes way beyond AI. I've also encountered some issues in the workflows.
+
+So for example in the report some charts and graphs always at the bottom it says title and it gives the name of the chart or graph. In a professional report I don't typically include the word title and just go on to explain. So even in the prompt when I usually enter do not generate the word title in front of any graphs when you label it.
+
+it still generates it. Another minor issue in the workflow I've encountered is that when editing certain parts of the report, like the edit button pops up. So when you edit it, even the visual gets edited. So it gets triggered to change the visual, which in the case, the previous visual is much more much more in line with the story that the reporters.
+
+Sandeep (24:29.011)
+So when I click on edit a certain section, even the visual gets edited. that's, these are small, small issues, it impacts like the final output and the quality of the research. Yeah.
+
+Tejaswini (24:43.305)
+you
+
+Are there particular type of research question industries or client situation where you would not rely on a tool like Aspergill? What makes those situations different?
+
+Sandeep (24:59.012)
+Yeah, so there are definitely some areas where I wouldn't use AI tool and depend on AI tool entirely. Say for example, like heavy &A due diligence, like mergers and acquisition kind of research tasks. AI could help like to initially find the companies and to map out the landscape, but I won't go.
+
+deeper and to figure out the financials and propriety data and management decisions information I won't rely on AI tools. Another case is with legal and the legatory landscape where the legislation is changing every day and there are subtle changes and market conditions. Two factor in those cases I won't
+
+use AI tools. Also in niche market cases, I would be extremely careful in using AI tools where the data isn't publicly available.
+
+Tejaswini (26:13.516)
+you
+
+Tejaswini (26:17.997)
+For someone who does not have a strong research or consulting background, what should they understand about the limitation of AI generated analysis before using it to support an important business decision?
+
+Sandeep (26:33.707)
+So the most important thing to note for someone without a research background is to understand that a polished report isn't entirely a validated report. So you can have a report that seems pretty solid on the outside like a consulting grade market report but
+
+As the data isn't validated, so the data is dumped from a bunch of different, unvalidated sources like say Wikipedia and so on, it doesn't automatically become a validated research. So every number should have a definition. So the report has to be claimed like the time period, the geography, the methodology behind it.
+
+So the report has to be validated. on the other hand, like an AI system, it may tell you that a market is worth $100 billion. What researchers should do is to figure out what is included in this $100 billion. So that is the distinction between what the researchers should do and to make. So experience researchers.
+
+may know how to make those distinctions. So someone using AI tools may blindly omit these key requirements that you need to look for.
+
+Tejaswini (28:05.964)
+Some people might look at Casper and think it's just a chatbot writing a report. Having reviewed the output, do you see as the actual difference between a conventional AI tool and a system designed to perform an
+
+Sandeep (28:28.854)
+Yeah, so for me the difference is about the workflow. So AI chatbot, the basic understanding of AI chatbot is to reply to your prompt. You ask a question and it generates an answer. Meanwhile, analytical research system should be doing something much more than that. So you like a sophisticated
+
+chatbot AI research chatbot should be doing something close to what a research team does. Breaking down the problem figuring out the customer needs gathering the data figuring out the sources structuring the market figuring out the competitors analyzing trends and so on. So that is where think Casper comes into play and he does a good job compared to its other competitors.
+
+So the value isn't where Casper can generate a 50 page market report quickly, but it's how it helps the researcher to build a stable starting line, to build a structure for the research and to help the researcher to save time.
+
+where it shows us all the research and the evidence and the sources, it gives a much more useful starting line for the researcher. So I think that's where Casper's value proposition is and how it helps the researcher basically.
+
+Tejaswini (30:23.049)
+across both researchers and business analysts if CASPER becomes part of the standard research work group, what changes for the research professional or consultant, which part of the role could change more significantly.
+
+Sandeep (30:40.252)
+So I don't think that the research profession changes dramatically through AI tools per se. At the same time, I don't think that the role of the researcher will be made redundant. traditionally, like a research analyst may spend like a large number of time finding the sources, building the data points.
+
+populating tables and computer profiles and so on and creating slides. But I believe that AI can compress that time and it saves the research to focus on much more important workloads and so on. Like framing the problem, figuring out what the client wants, validating the evidence and so on.
+
+and focusing on much more challenging and much more time consuming tasks. The researcher's workload definitely gets reduced, but as well as the much more thinking, requires much. So the task that requires much more thinking and environment, think that is there for the researcher.
+
+Tejaswini (32:01.836)
+So having seen and evaluating the output, if you had to give your honest assessment of CASPER in one or two sentences, what would you can say?
+
+Sandeep (32:16.203)
+Yeah, I would say that they are partly right AI should be trusted blindly but I don't think at the same time human generated content without the lines of an expert like an amateur should be trusted blindly either. So
+
+Personally, I've looked at like few reports that are quite baseless, that relies on outdated data, poor assumptions, and market research statistics that have been copied from unauthorized or unverified sources. So the response is to trust AI blindly, but it's to take AI as face value and to develop on it.
+
+I would basically treat strong AI output the way I would treat like a human generated report. So understanding the methodology, the sources, challenging the assumptions and spot checking finding goes a long way in figuring out and making a market report much more validating.
+
+Tejaswini (33:41.068)
+So my last question for you is based on your experience who do you think would benefit most from using our Tunglai Casper and who should still rely primarily on traditional research and consulting approaches.
+
+Sandeep (34:03.534)
+So I think that the biggest beneficiaries of research focus AI tools are like consultants, strategic consultants, founders, corporate due diligence teams and so on, and folk in market intelligence research. But I think that the value proposition of Casper as I mentioned earlier is condensing
+
+What you need like a condensed version of a large market report, it gives in a short period of time. So that is I think where Casper's value proposition lies in. So whereas like a previous market research report would take weeks, Casper would generate a market report in hours. So
+
+as well as folks who are like unfamiliar on neutral market it would be like an ideal starting point for them to understand the market and to figure out where I should like what I should be doing how should I go about it so I think Casper provides a clear map on how these companies on how like founders startups across
+
+Different industries can go about their research.
+
+Tejaswini (35:36.588)
+Thank you so much Sandeep for your time on this. I hope you enjoyed it.
+
+Sandeep (35:44.817)
+Yeah, yes definitely it was quite insightful. I enjoyed answering this question.
+
+Tejaswini (35:52.14)
+So for now we are done. Am I ordered? So for now we have done. After leaving this chat like Riverside, just try to open your Riverside app for sometime because I think the uploading is done from backend. So that will keep happening.
+
+Sandeep (35:59.261)
+Yeah.
+
+Sandeep (36:23.888)
+Yeah, sounds good.
+
+Tejaswini (36:26.941)
+questions, anything.
+
+Sandeep (36:28.168)
+No, they got good.
+
+Tejaswini (36:32.62)
+Thank you, nice talking to you.
+
+Sandeep (36:35.172)
+Likewise, thanks for your time, Jai Rasi. Okay, bye-bye.
+

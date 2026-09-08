@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350">
+<rect x="0" y="0" width="1080" height="1350" rx="0" fill="#ffffff"/>
+<rect x="0" y="0" width="1080" height="320" rx="0" fill="#0b0b09"/>
+<text x="96" y="116" font-family="Inter, Helvetica, Arial, sans-serif" font-size="20" font-weight="600" fill="#cfcecb" text-anchor="start" letter-spacing="3" style="">DEPTH</text>
+<line x1="96" y1="132" x2="160" y2="132" stroke="#e8453c" stroke-width="3"/>
+<text x="96" y="196" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="72" font-weight="400" fill="#ffffff" text-anchor="start" style="">Brief. Study.</text>
+<text x="96" y="272" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="72" font-weight="400" fill="#ffffff" text-anchor="start" style="">Intelligence</text>
+<rect x="96" y="410" width="888" height="190" rx="0" fill="#ffffff" stroke="#e5e4e1" stroke-width="1"/>
+<rect x="96" y="410" width="6" height="190" rx="0" fill="#e8453c"/>
+<text x="136" y="482" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="46" font-weight="400" fill="#111111" text-anchor="start" style="">Brief</text>
+<text x="944" y="476" font-family="'DM Mono', Menlo, Consolas, monospace" font-size="34" font-weight="400" fill="#111111" text-anchor="end" style="">$15</text>
+<text x="136" y="538" font-family="Inter, Helvetica, Arial, sans-serif" font-size="25" font-weight="400" fill="#6b6b66" text-anchor="start" style="">A quick, sourced answer to a single question.</text>
+<rect x="96" y="634" width="888" height="190" rx="0" fill="#ffffff" stroke="#e5e4e1" stroke-width="1"/>
+<rect x="96" y="634" width="6" height="190" rx="0" fill="#e8453c"/>
+<text x="136" y="706" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="46" font-weight="400" fill="#111111" text-anchor="start" style="">Study</text>
+<text x="944" y="700" font-family="'DM Mono', Menlo, Consolas, monospace" font-size="34" font-weight="400" fill="#111111" text-anchor="end" style="">$80</text>
+<text x="136" y="762" font-family="Inter, Helvetica, Arial, sans-serif" font-size="25" font-weight="400" fill="#6b6b66" text-anchor="start" style="">A full market or competitive analysis.</text>
+<rect x="96" y="858" width="888" height="190" rx="0" fill="#ffffff" stroke="#e5e4e1" stroke-width="1"/>
+<rect x="96" y="858" width="6" height="190" rx="0" fill="#e8453c"/>
+<text x="136" y="930" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="46" font-weight="400" fill="#111111" text-anchor="start" style="">Intelligence</text>
+<text x="944" y="924" font-family="'DM Mono', Menlo, Consolas, monospace" font-size="34" font-weight="400" fill="#111111" text-anchor="end" style="">$300 / $399</text>
+<text x="136" y="986" font-family="Inter, Helvetica, Arial, sans-serif" font-size="25" font-weight="400" fill="#6b6b66" text-anchor="start" style="">The deepest, board-grade deep dive.</text>
+<text x="96" y="1122" font-family="Inter, Helvetica, Arial, sans-serif" font-size="24" font-weight="600" fill="#e8453c" text-anchor="start" style="">Depth, not type</text>
+<text x="326" y="1122" font-family="Inter, Helvetica, Arial, sans-serif" font-size="24" font-weight="400" fill="#6b6b66" text-anchor="start" style="">— every analysis draws from your Research Budget.</text>
+<line x1="96" y1="1252" x2="984" y2="1252" stroke="#e5e4e1" stroke-width="1"/>
+<text x="96" y="1280" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="34" font-weight="400" fill="#111111" text-anchor="start" style="">Caspr</text>
+<circle cx="192" cy="1271" r="6" fill="#e8453c"/>
+<text x="984" y="1280" font-family="Inter, Helvetica, Arial, sans-serif" font-size="22" font-weight="400" fill="#6b6b66" text-anchor="end" style="">caspr.ai</text>
+</svg>

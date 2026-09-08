@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+<rect x="0" y="0" width="1200" height="760" rx="0" fill="#ffffff"/>
+<text x="80" y="66" font-family="Inter, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#e8453c" text-anchor="start" letter-spacing="2.5">ANALYTICAL, NOT GENERATIVE</text>
+<text x="80" y="116" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="46" font-weight="400" fill="#111111" text-anchor="start">Not a conversation. A report</text>
+<rect x="80" y="210" width="460" height="340" rx="2" fill="#f6f5f3" stroke="#d9d8d4" stroke-width="1.5"/>
+<text x="110" y="266" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="26" font-weight="400" fill="#6b6b66" text-anchor="start">A chatbot</text>
+<rect x="110" y="320" width="240" height="44" rx="2" fill="#ffffff" stroke="#d9d8d4" stroke-width="1.5"/>
+<rect x="270" y="390" width="240" height="44" rx="2" fill="#ececea"/>
+<rect x="110" y="460" width="240" height="44" rx="2" fill="#ffffff" stroke="#d9d8d4" stroke-width="1.5"/>
+<text x="110" y="540" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" font-weight="400" fill="#6b6b66" text-anchor="start">A conversation thread</text>
+<rect x="660" y="210" width="460" height="340" rx="2" fill="#ffffff" stroke="#e8453c" stroke-width="2"/>
+<text x="690" y="266" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="26" font-weight="400" fill="#e8453c" text-anchor="start">Caspr</text>
+<circle cx="788" cy="258" r="5" fill="#e8453c"/>
+<line x1="690" y1="320" x2="980" y2="320" stroke="#d9d8d4" stroke-width="6"/>
+<line x1="690" y1="346" x2="980" y2="346" stroke="#d9d8d4" stroke-width="6"/>
+<line x1="690" y1="372" x2="980" y2="372" stroke="#d9d8d4" stroke-width="6"/>
+<line x1="690" y1="398" x2="980" y2="398" stroke="#d9d8d4" stroke-width="6"/>
+<rect x="1000" y="314" width="90" height="120" rx="2" fill="#f6f5f3" stroke="#e8453c" stroke-width="1"/>
+<text x="1045" y="380" font-family="Inter, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#e8453c" text-anchor="middle">cited</text>
+<text x="690" y="540" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" font-weight="400" fill="#111111" text-anchor="start">A 100-page, cited report</text>
+<line x1="80" y1="688" x2="1120" y2="688" stroke="#d9d8d4" stroke-width="1.5"/>
+<text x="80" y="714" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="28" font-weight="400" fill="#111111" text-anchor="start">Caspr</text>
+<circle cx="158" cy="706" r="5" fill="#e8453c"/>
+<text x="1120" y="714" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" font-weight="400" fill="#6b6b66" text-anchor="end">caspr.ai</text>
+</svg>

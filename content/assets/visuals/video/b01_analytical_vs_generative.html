@@ -1,0 +1,51 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Analytical vs Generative AI — Caspr concept video</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#111;--red:#e8453c;--dark:#0b0b09;--white:#fff;--muted:#8a8984;--hair:#2a2a27;
+--serif:'Instrument Serif',Georgia,serif;--sans:'Inter',Helvetica,Arial,sans-serif;--mono:'DM Mono',Menlo,monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:#000;overflow:hidden}
+.stage{position:relative;width:100vw;height:100vh;max-width:100vh;max-height:56.25vw;margin:auto;
+background:var(--dark);overflow:hidden;aspect-ratio:16/9}
+@media(min-aspect-ratio:16/9){.stage{width:calc(100vh*16/9)}}
+.scene{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+padding:9% 8%;opacity:0}
+.eyebrow{font-family:var(--sans);font-weight:600;letter-spacing:.22em;font-size:1.5vh;color:var(--red);
+text-transform:uppercase;margin-bottom:2.5vh}
+.eyebrow::after{content:"";display:block;width:5vh;height:2px;background:var(--red);margin-top:1.4vh}
+h1{font-family:var(--serif);font-weight:400;color:var(--white);font-size:8.5vh;line-height:1.02;letter-spacing:.4px}
+h1 .r{color:var(--red)}
+.dot{color:var(--red)}
+.sub{font-family:var(--sans);color:var(--muted);font-size:2.6vh;margin-top:4vh;line-height:1.5}
+.tagline{font-family:var(--mono);color:var(--white);font-size:2.4vh;margin-top:3vh;letter-spacing:.02em}
+.split{display:flex;gap:4vh;margin-top:1vh}
+.col{flex:1;border:1.5px solid var(--hair);padding:4vh 3.5vh}
+.col.on{border-color:var(--red)}
+.col .lab{font-family:var(--sans);font-weight:600;letter-spacing:.18em;font-size:1.5vh;text-transform:uppercase;color:var(--muted);margin-bottom:2.5vh}
+.col.on .lab{color:var(--red)}
+.col p{font-family:var(--serif);color:var(--white);font-size:3.4vh;line-height:1.35}
+.steps{display:flex;flex-direction:column;gap:2.4vh;margin-top:1vh}
+.step{font-family:var(--serif);color:var(--white);font-size:4.6vh;line-height:1.1}
+.step .n{font-family:var(--mono);color:var(--red);font-size:2.6vh;margin-right:1.4vh}
+.foot{position:absolute;left:8%;bottom:6%;font-family:var(--serif);color:var(--white);font-size:3.4vh}
+.foot .d{color:var(--red)}
+/* 4-scene 24s loop */
+.s1{animation:sc1 24s infinite}.s2{animation:sc2 24s infinite}.s3{animation:sc3 24s infinite}.s4{animation:sc4 24s infinite}
+@keyframes sc1{0%{opacity:0;transform:translateY(2vh)}3%{opacity:1;transform:none}22%{opacity:1}25%{opacity:0}100%{opacity:0}}
+@keyframes sc2{0%,25%{opacity:0;transform:translateY(2vh)}28%{opacity:1;transform:none}47%{opacity:1}50%{opacity:0}100%{opacity:0}}
+@keyframes sc3{0%,50%{opacity:0;transform:translateY(2vh)}53%{opacity:1;transform:none}72%{opacity:1}75%{opacity:0}100%{opacity:0}}
+@keyframes sc4{0%,75%{opacity:0;transform:translateY(2vh)}78%{opacity:1;transform:none}97%{opacity:1}100%{opacity:0}}
+.foot{animation:footfade 24s infinite}@keyframes footfade{0%,74%{opacity:0}80%{opacity:1}100%{opacity:1}}
+</style></head><body><div class="stage">
+<div class="scene s1"><div class="eyebrow">Analytical AI</div><h1>While the world was<br>building generative AI —</h1></div>
+<div class="scene s2"><h1>— we built<br>analytical AI<span class='dot'>.</span></h1></div>
+<div class="scene s3"><div class="split">
+<div class="col"><div class="lab">Generative</div><p>Converses. Generates.<br>Can invent its sources.</p></div>
+<div class="col on"><div class="lab">Analytical</div><p>Analyses. Structures.<br>Cites every insight.</p></div></div></div>
+<div class="scene s4"><h1>Caspr<span class='dot'>.</span></h1><div class="sub">Purpose-built for analysis. Not conversation.</div><div class="tagline">15 minutes. 100 pages. Cited to source.</div></div>
+<div class="foot">Caspr<span class="d">.</span></div>
+</div></body></html>

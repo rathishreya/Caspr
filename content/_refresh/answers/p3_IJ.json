@@ -1,0 +1,62 @@
+[
+ {
+  "id": "I-01",
+  "answer": "How long a report takes depends on its depth. A Brief typically returns in about 15 minutes. A Study runs longer — expect 1–2 hours, since it structures a full report across market, competitive, and strategic angles. Intelligence, the deepest depth, can take up to 24 hours: it draws on the broadest sourcing and runs multiple reasoning passes to stress-test the conclusion before it reaches the page.\n\nA longer wait at Study or Intelligence depth is not, by itself, a problem — it usually means the assessment stage is working through more evidence than a Brief requires. Give a Study up to a few hours, and an Intelligence run its full 24-hour window, before treating it as stuck.\n\nIf a report sits well past its expected window with no movement, don't re-run it — that risks a duplicate charge against your Research Budget. Contact support with the analysis ID instead, and we will check the status and fix it if something genuinely stalled.\n\nContact support.",
+  "changed": "facts"
+ },
+ {
+  "id": "I-02",
+  "answer": "Running out of Research Budget is rare — unused balance carries forward automatically, so it takes a genuinely heavy month to hit zero. When it does happen, there's no penalty and no dead end. Three paths, none urgent.\n\n**Wait for the recharge.** Your budget recharges monthly, and it restores based only on what you actually spent — nothing wasted, nothing lost in the process. If you're close to your cycle date, waiting costs you nothing but a few days.\n\n**Upgrade your milestone.** Move to a higher Research Budget and the added spend is available from the next cycle onward. Business unlocks a larger budget plus Intelligence-depth analyses, data upload, and editing — worth doing if you're consistently running against the ceiling, not just running over it once.\n\n**Buy Intelligence à la carte.** Need a single high-stakes analysis right now, without waiting or committing to a higher budget? Intelligence is available standalone at $399, charged once, no subscription required — open to any account, trial or paid.\n\nCaspr never lets you start a run it can't finish. It blocks the analysis before it begins and tells you exactly how much more you need, so there's no surprise mid-run and no partial report to clean up after.",
+  "changed": "none"
+ },
+ {
+  "id": "I-03",
+  "answer": "A report that misses the mark is almost always a scoping problem, not an analysis problem — and it's fixable without paying for a full re-run.\n\nStart with the prompt. If it didn't name the market, geography, and the decision it needed to inform, that's usually the miss: a broad prompt gets a broad report back. Add the specifics next time — subject, market, and what the report needs to decide — and Caspr has far less to guess at.\n\nBefore you commit to running again, use the two checkpoints built for exactly this. The clarifying questions close scope gaps before Caspr writes a single page — if you rushed through them, slow down on the next pass and read each one properly. The layout proposal shows the report's skeleton before it's built; if a section is missing, wrong, or out of order, fix it there. It's the cheapest place to steer, because nothing has been generated yet and no budget has been spent.\n\nIf the report already exists and only one section missed, don't re-run the whole thing — refine that section instead. It costs less than a fresh analysis and keeps everything else the report already got right intact. Save a full re-run for when the market itself was mis-scoped from the start, not when one section simply needs sharpening.\n\nTreat a miss as information, not a dead end: it tells you exactly which checkpoint to lean on harder next time — a sharper prompt, closer attention at the layout stage, or a targeted section refine before you spend on running the whole thing again.",
+  "changed": "none"
+ },
+ {
+  "id": "I-04",
+  "answer": "To report an issue or reach support, use [VERIFY: confirm real support channel — email address, help widget, or contact form] and include your account email, the analysis ID if the issue relates to a specific report, and a short description of what happened. A screenshot helps when something looks visibly wrong.\n\nIf a report is stalled or slow, note how long it has been running and its depth — Brief, Study, or Intelligence — since deeper analyses legitimately take longer, and that detail lets us triage faster.\n\n[VERIFY: confirm target response time / support hours before publishing.]\n\nContact support.",
+  "changed": "none"
+ },
+ {
+  "id": "J-01",
+  "answer": "Analytical AI is artificial intelligence purpose-built to analyze data, structure conclusions, and cite every source — not to hold a conversation. Where generative AI predicts plausible-sounding text, Analytical AI reasons through evidence and delivers a decision-ready report. It is the model behind Caspr: put in a question, get back a cited, boardroom-ready analysis. Learn more.",
+  "changed": "none"
+ },
+ {
+  "id": "J-02",
+  "answer": "Assessment is Caspr's research methodology: it reasons through data and structures conclusions, rather than retrieving and repeating snippets. It decides what a report needs, in what order, and how each finding supports the next — the way a research desk plans an analysis before writing it. Every Caspr report runs on it. Learn more.",
+  "changed": "none"
+ },
+ {
+  "id": "J-03",
+  "answer": "Sourcing is Caspr's real-time live data layer — continuous feeds from documents, government databases, and news sources that keep every analysis current. Rather than reasoning from a training cutoff, Caspr pulls today's data into today's report, so a market that moved this quarter shows up in the numbers, not last year's snapshot. Learn more.",
+  "changed": "none"
+ },
+ {
+  "id": "J-04",
+  "answer": "A Research Budget is the monthly pool of spend you set — starting at $200/month — from which each analysis is drawn at a fixed price: $15 for a Brief, $80 for a Study, $300 for Intelligence. One charge a month, no surprise line items. Unused balance carries forward automatically, so nothing you don't spend is lost. Learn more.",
+  "changed": "facts"
+ },
+ {
+  "id": "J-05",
+  "answer": "Brief, Study, and Intelligence are Caspr's three fixed analysis depths — the difference is how far the analysis goes. Brief ($15) answers one question fast. Study ($80) builds the full picture. Intelligence ($300 in-budget, $399 à la carte) is deepest, for board-grade decisions. The deliverable's name can adapt to your field — Screen/Thesis/Diligence for investors — but the depth underneath stays the same. Learn more.",
+  "changed": "facts"
+ },
+ {
+  "id": "J-06",
+  "answer": "A boardroom-ready report is Caspr's standard output: a presentation-quality PDF or editable PPTX, ready to put in front of decision-makers without rework. Length scales with depth — a few pages at Brief, about 100 at Study. Every insight is cited to its source, so the numbers can be defended on the spot. It is the deliverable, not a draft. Learn more.",
+  "changed": "facts"
+ },
+ {
+  "id": "J-07",
+  "answer": "A citation is the credible source shown next to every insight in a Caspr report — a document, government database, or news feed the claim can be traced back to. Nothing is asserted without one, which is how a Caspr report stays verifiable instead of asking to be taken on faith. Learn more.",
+  "changed": "none"
+ },
+ {
+  "id": "J-08",
+  "answer": "The layout proposal is the structured skeleton Caspr proposes right after your prompt — the report's sections and flow, before any research runs. You confirm it or adjust it, and a few clarifying questions sharpen it further, so the analysis that follows is built to the shape you actually need. Learn more.",
+  "changed": "none"
+ }
+]

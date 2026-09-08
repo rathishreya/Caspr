@@ -1,0 +1,12 @@
+Pull 1 - competitor organic keywords
+date=2026-08-20 country=us pos<=20 vol>=50 non-branded, top 250 by traffic
+ibisworld.com: 100
+statista.com: 100
+driveresearch.com: 100
+mordorintelligence.com: 100
+mintel.com: 100
+euromonitor.com: 100
+thefarnsworthgroup.com: 30
+grandviewresearch.com: 100
+researchandmarkets.com: 100
+units spent: 31540

@@ -1,0 +1,17 @@
+{
+  "note": "Dated, owned exceptions to Tier 1 conformance rules. R-VER-3: 'a static key requires a documented exception with an expiry date.' An exception with no `expires` is NOT honoured — the finding stays a failure and says why. On expiry the finding returns as a failure naming the owner and how many days it is overdue. Every report prints the live exceptions and the days remaining, so a deferral stays visible instead of becoming the new normal.",
+  "howToAdd": "rule + path + reason + owner + approved + expires. All six required. Never add one to quiet a report you have not read.",
+  "exceptions": [
+    {
+      "rule": "CRED-15",
+      "path": "Ahrefs_Key.txt",
+      "reason": "Ahrefs marketing API key, Tier 1 under R-CLS-2. Rotation deferred to the new.caspr.ai -> caspr.ai cutover, when the whole credential set is cycled (Joy, 2026-08-25 — every current credential is treated as provisional until then). The key is NOT in the deploy path and touches no product infrastructure. PREFERRED FIX, which removes the need for this exception entirely: move the file out of G:\\My Drive\\Caspr\\ into a password manager now. That satisfies R-CTX-1 immediately without touching the rotation schedule, because the file's LOCATION and the key's ROTATION are separable problems.",
+      "owner": "joy@caspr.ai",
+      "approved": "2026-08-25",
+      "expires": "2026-11-25",
+      "expiresIsProvisional": true,
+      "expiryNote": "PLACEHOLDER — 90 days, not the real cutover date, which was not known when this was written. Replace with the actual new.caspr.ai -> caspr.ai date. If cutover slips past this, the finding returns as a failure, which is the intended behaviour: an exception that outlives its justification is a rule that was quietly deleted.",
+      "residualRisk": "The file remains readable by every session in this project and remains replicated to Google Drive for the life of this exception. Under R-RSP-3 the value should already be considered compromised, so the exception defers remediation of a known exposure rather than accepting an unknown one."
+    }
+  ]
+}

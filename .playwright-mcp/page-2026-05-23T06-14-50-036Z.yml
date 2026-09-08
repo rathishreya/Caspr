@@ -1,0 +1,331 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Caspr." [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - button "Solutions ↓" [ref=e7]:
+          - text: Solutions
+          - generic [ref=e8]: ↓
+        - button "Use Cases ↓" [ref=e10]:
+          - text: Use Cases
+          - generic [ref=e11]: ↓
+        - button "Analyses ↓" [ref=e13]:
+          - text: Analyses
+          - generic [ref=e14]: ↓
+        - link "Pricing" [ref=e15] [cursor=pointer]:
+          - /url: /pricing
+        - link "Blog" [ref=e16] [cursor=pointer]:
+          - /url: /blog
+      - link "Start Free →" [ref=e19] [cursor=pointer]:
+        - /url: https://caspr.ai/signup
+  - main [ref=e20]:
+    - generic [ref=e23]:
+      - generic [ref=e24]:
+        - paragraph [ref=e25]: ANALYTICAL AI
+        - heading "15 minutes. 100 pages. Cited to source." [level=1] [ref=e26]:
+          - text: 15 minutes.
+          - text: 100 pages.
+          - text: Cited to source.
+        - paragraph [ref=e27]: Any question your board will ask. From $15. No subscription required.
+        - generic [ref=e28]:
+          - link "Start Free — first $100 on Caspr" [ref=e29] [cursor=pointer]:
+            - /url: https://caspr.ai/signup
+          - link "See a sample report →" [ref=e30] [cursor=pointer]:
+            - /url: /samples
+        - paragraph [ref=e31]: No credit card · 1M+ curated sources · Zero hallucinations
+      - generic [ref=e33]:
+        - generic [ref=e38]: caspr.ai · Competitive Analysis Report
+        - generic [ref=e39]:
+          - paragraph [ref=e40]: "Competitive Analysis: Cloud Infrastructure 2024"
+          - paragraph [ref=e41]: 108 pages · 47 sources · Generated in 12 min
+          - paragraph [ref=e43]: 03 Market Share Analysis
+          - generic [ref=e49]:
+            - generic [ref=e50]:
+              - paragraph [ref=e51]: 34%
+              - paragraph [ref=e52]: AWS share
+            - generic [ref=e53]:
+              - paragraph [ref=e54]: 21%
+              - paragraph [ref=e55]: Azure YoY
+            - generic [ref=e56]:
+              - paragraph [ref=e57]: $480B
+              - paragraph [ref=e58]: Market 2024
+          - paragraph [ref=e59]: "[12] Gartner Cloud Infrastructure Report, Q3 2024"
+        - paragraph [ref=e66]: Page 23 of 108
+    - generic [ref=e68]:
+      - paragraph [ref=e69]: TRUSTED BY
+      - generic [ref=e70]:
+        - generic [ref=e71]: Meridian
+        - generic [ref=e72]: Hartwell Group
+        - generic [ref=e73]: VPC
+        - generic [ref=e74]: Stonegate
+        - generic [ref=e75]: Crestfield
+        - generic [ref=e76]: Elara & Co.
+    - generic [ref=e78]:
+      - generic [ref=e79]:
+        - paragraph [ref=e80]: HOW IT WORKS
+        - heading "One prompt. Boardroom-ready output." [level=2] [ref=e81]
+      - generic [ref=e82]:
+        - generic [ref=e83]:
+          - paragraph [ref=e84]: "01"
+          - heading "You ask" [level=3] [ref=e85]
+          - paragraph [ref=e86]: One line. Any business topic. Caspr proposes a structured layout and asks targeted clarifying questions.
+        - generic [ref=e87]:
+          - paragraph [ref=e88]: "02"
+          - heading "Caspr analyses" [level=3] [ref=e89]
+          - paragraph [ref=e90]: Caspr reasons through 1M+ curated sources — government databases, academic papers, news feeds, financial reports. Every insight verified. Every claim traceable to a credible source before it reaches your report.
+        - generic [ref=e91]:
+          - paragraph [ref=e92]: "03"
+          - heading "You present" [level=3] [ref=e93]
+          - paragraph [ref=e94]: A boardroom-ready PDF or editable PPTX — structured, cited, and ready to present. In under 15 minutes.
+    - generic [ref=e96]:
+      - generic [ref=e97]:
+        - paragraph [ref=e98]: THE ENGINE
+        - heading "Built to reason. Not just retrieve." [level=2] [ref=e99]
+        - paragraph [ref=e100]: Two proprietary systems. One output you can defend.
+      - generic [ref=e101]:
+        - generic [ref=e102]:
+          - paragraph [ref=e103]: THE THINKING BRAIN
+          - paragraph [ref=e104]: Applies analytical methodology.
+          - paragraph [ref=e105]: Not retrieval — reasoning. Caspr structures your question, applies analytical frameworks, and interprets data the way a senior consultant would. Every conclusion is built from evidence, not generated from pattern-matching.
+        - generic [ref=e106]:
+          - paragraph [ref=e107]: THE LEARNING BRAIN
+          - paragraph [ref=e108]: 1M+ curated, credible sources.
+          - paragraph [ref=e109]: Real-time feeds from government databases, academic papers, financial reports, and news sources. Not web-scraped noise. Every source vetted. Every insight traceable. Your analysis reflects today's reality — not training data from two years ago.
+      - generic [ref=e110]:
+        - generic [ref=e111]:
+          - paragraph [ref=e112]: 1M+
+          - paragraph [ref=e113]: curated sources
+        - generic [ref=e115]:
+          - paragraph [ref=e116]: Real-time
+          - paragraph [ref=e117]: live data pipelines
+        - generic [ref=e119]:
+          - paragraph [ref=e120]: Zero
+          - paragraph [ref=e121]: hallucinations
+    - generic [ref=e123]:
+      - generic [ref=e124]:
+        - paragraph [ref=e125]: PLANS & PRICING
+        - heading "The $50,000 question. From $15." [level=2] [ref=e126]
+        - paragraph [ref=e127]:
+          - text: The same analysis costs $50,000 from a consulting firm and takes weeks.
+          - text: Caspr delivers it in 15 minutes. Starting at $15.
+      - generic [ref=e128]:
+        - generic [ref=e129]:
+          - generic [ref=e131]:
+            - paragraph [ref=e132]: BRIEF
+            - paragraph [ref=e133]: $15
+            - paragraph [ref=e134]: per analysis
+            - paragraph [ref=e135]: 15 min · 1–3 pages
+          - list [ref=e137]:
+            - listitem [ref=e138]: — Boardroom-ready PDF/PPTX
+            - listitem [ref=e139]: — 1M+ curated sources
+            - listitem [ref=e140]: — Every insight cited
+            - listitem [ref=e141]: — Defensible to any board or client
+          - link "Start Free — first $100 on Caspr" [ref=e143] [cursor=pointer]:
+            - /url: https://caspr.ai/signup
+        - generic [ref=e144]:
+          - paragraph [ref=e146]: MOST POPULAR
+          - generic [ref=e147]:
+            - paragraph [ref=e148]: STUDY
+            - paragraph [ref=e149]: $80
+            - paragraph [ref=e150]: per analysis
+            - paragraph [ref=e151]: 1–2 hrs · 100 pages
+          - list [ref=e153]:
+            - listitem [ref=e154]: — Boardroom-ready PDF/PPTX
+            - listitem [ref=e155]: — 1M+ curated sources
+            - listitem [ref=e156]: — Every insight cited
+            - listitem [ref=e157]: — Defensible to any board or client
+          - link "Start Free — first $100 on Caspr" [ref=e159] [cursor=pointer]:
+            - /url: https://caspr.ai/signup
+        - generic [ref=e160]:
+          - generic [ref=e162]:
+            - paragraph [ref=e163]: INTELLIGENCE
+            - paragraph [ref=e164]: $300
+            - paragraph [ref=e165]: per analysis
+            - paragraph [ref=e166]: 24 hrs · Multi-model
+          - list [ref=e168]:
+            - listitem [ref=e169]: — Boardroom-ready PDF/PPTX
+            - listitem [ref=e170]: — 1M+ curated sources
+            - listitem [ref=e171]: — Every insight cited
+            - listitem [ref=e172]: — Defensible to any board or client
+          - link "Start Free — first $100 on Caspr" [ref=e174] [cursor=pointer]:
+            - /url: https://caspr.ai/signup
+      - paragraph [ref=e175]: Your first $100 is on Caspr — no credit card. Run a Study today.
+    - generic [ref=e177]:
+      - generic [ref=e178]:
+        - paragraph [ref=e179]: FROM THE FIELD
+        - heading "For decisions that can't afford to be wrong." [level=2] [ref=e180]
+      - generic [ref=e181]:
+        - generic [ref=e182]:
+          - paragraph [ref=e183]: "\"I ran a 40-country competitive analysis in 90 minutes. That used to take my team three weeks and a $40,000 research budget.\""
+          - generic [ref=e184]:
+            - paragraph [ref=e185]: Sarah Chen
+            - paragraph [ref=e186]: VP Strategy, Global Technology Group
+        - generic [ref=e187]:
+          - paragraph [ref=e188]: "\"Every insight is cited. I can walk into a board meeting and defend every number. That's not something I could say about any other AI tool.\""
+          - generic [ref=e189]:
+            - paragraph [ref=e190]: James Okafor
+            - paragraph [ref=e191]: Partner, Meridian Capital PE
+        - generic [ref=e192]:
+          - paragraph [ref=e193]: "\"We use Caspr for every pitch. Our sector knowledge has visibly improved — and we're spending 80% less time on research.\""
+          - generic [ref=e194]:
+            - paragraph [ref=e195]: Alex Rivera
+            - paragraph [ref=e196]: Director, Strategy Consulting
+    - generic [ref=e199]:
+      - generic [ref=e200]:
+        - paragraph [ref=e201]: A NEW CATEGORY
+        - heading "Generative AI writes. Analytical AI analyses." [level=2] [ref=e202]:
+          - generic [ref=e203]: Generative AI writes.
+          - generic [ref=e204]: Analytical AI analyses.
+        - paragraph [ref=e205]: While the world was building generative AI, we built analytical AI. Caspr reasons through your question, structures an analytical methodology, and delivers conclusions — every one cited to a credible source.
+      - generic [ref=e207]:
+        - paragraph [ref=e208]: Executive Summary
+        - paragraph [ref=e216]: "[1] McKinsey Global Institute — The State of AI, 2024"
+        - paragraph [ref=e217]: "[2] Gartner, Magic Quadrant for Analytics, Q2 2024"
+        - paragraph [ref=e218]: 03 Market Sizing & TAM Analysis
+        - generic [ref=e219]:
+          - generic [ref=e220]:
+            - paragraph [ref=e221]: $2.4T
+            - paragraph [ref=e222]:
+              - text: Total addressable
+              - text: market 2024
+          - generic [ref=e223]:
+            - paragraph [ref=e224]: 34%
+            - paragraph [ref=e225]:
+              - text: CAGR next
+              - text: 5 years
+          - generic [ref=e226]:
+            - paragraph [ref=e227]: 180+
+            - paragraph [ref=e228]:
+              - text: Countries
+              - text: covered
+        - paragraph [ref=e233]: Page 12 of 100
+    - generic [ref=e235]:
+      - heading "Caspr means Business." [level=2] [ref=e236]
+      - paragraph [ref=e237]: START FOR FREE
+      - paragraph [ref=e238]: Your first $100. On us.
+      - paragraph [ref=e239]: No credit card required. No subscription. No commitment.
+      - generic [ref=e240]:
+        - link "Start Free — first $100 on Caspr" [ref=e241] [cursor=pointer]:
+          - /url: https://caspr.ai/signup
+        - link "See a sample report →" [ref=e242] [cursor=pointer]:
+          - /url: /samples
+    - link "ISO 27001:2022 · GDPR Compliant · Your data never trains our models →" [ref=e245] [cursor=pointer]:
+      - /url: /security
+  - contentinfo [ref=e246]:
+    - generic [ref=e247]:
+      - generic [ref=e248]:
+        - link "Caspr." [ref=e249] [cursor=pointer]:
+          - /url: /
+        - paragraph [ref=e250]: Analytical AI — purpose-built for business analysis, not conversation.
+        - generic [ref=e251]:
+          - link "LinkedIn" [ref=e252] [cursor=pointer]:
+            - /url: https://linkedin.com/company/caspr-ai
+            - text: in
+          - link "X (Twitter)" [ref=e253] [cursor=pointer]:
+            - /url: https://x.com/caspr_ai
+            - text: X
+      - generic [ref=e254]:
+        - generic [ref=e255]:
+          - paragraph [ref=e256]: Product
+          - list [ref=e257]:
+            - listitem [ref=e258]:
+              - link "Pricing" [ref=e259] [cursor=pointer]:
+                - /url: /pricing
+            - listitem [ref=e260]:
+              - link "Enterprise" [ref=e261] [cursor=pointer]:
+                - /url: /enterprise
+            - listitem [ref=e262]:
+              - link "Sample Reports" [ref=e263] [cursor=pointer]:
+                - /url: /samples
+            - listitem [ref=e264]:
+              - link "Brief" [ref=e265] [cursor=pointer]:
+                - /url: /analyses/brief
+            - listitem [ref=e266]:
+              - link "Study" [ref=e267] [cursor=pointer]:
+                - /url: /analyses/study
+            - listitem [ref=e268]:
+              - link "Intelligence" [ref=e269] [cursor=pointer]:
+                - /url: /analyses/intelligence
+        - generic [ref=e270]:
+          - paragraph [ref=e271]: Solutions
+          - list [ref=e272]:
+            - listitem [ref=e273]:
+              - link "Consulting" [ref=e274] [cursor=pointer]:
+                - /url: /consulting
+            - listitem [ref=e275]:
+              - link "Strategy" [ref=e276] [cursor=pointer]:
+                - /url: /strategy
+            - listitem [ref=e277]:
+              - link "Investors" [ref=e278] [cursor=pointer]:
+                - /url: /investors
+            - listitem [ref=e279]:
+              - link "Agencies" [ref=e280] [cursor=pointer]:
+                - /url: /agencies
+            - listitem [ref=e281]:
+              - link "Startups" [ref=e282] [cursor=pointer]:
+                - /url: /startups
+            - listitem [ref=e283]:
+              - link "Category Managers" [ref=e284] [cursor=pointer]:
+                - /url: /category-managers
+            - listitem [ref=e285]:
+              - link "Academic" [ref=e286] [cursor=pointer]:
+                - /url: /academic
+        - generic [ref=e287]:
+          - paragraph [ref=e288]: Use Cases
+          - list [ref=e289]:
+            - listitem [ref=e290]:
+              - link "Market Research" [ref=e291] [cursor=pointer]:
+                - /url: /use-cases/market-research
+            - listitem [ref=e292]:
+              - link "Business Case" [ref=e293] [cursor=pointer]:
+                - /url: /use-cases/business-case
+            - listitem [ref=e294]:
+              - link "Due Diligence" [ref=e295] [cursor=pointer]:
+                - /url: /use-cases/due-diligence
+            - listitem [ref=e296]:
+              - link "Competitive Analysis" [ref=e297] [cursor=pointer]:
+                - /url: /use-cases/competitive-analysis
+            - listitem [ref=e298]:
+              - link "Investment Thesis" [ref=e299] [cursor=pointer]:
+                - /url: /use-cases/investment-thesis
+            - listitem [ref=e300]:
+              - link "RFP Response" [ref=e301] [cursor=pointer]:
+                - /url: /use-cases/rfp-response
+        - generic [ref=e302]:
+          - paragraph [ref=e303]: Company
+          - list [ref=e304]:
+            - listitem [ref=e305]:
+              - link "About" [ref=e306] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e307]:
+              - link "Blog" [ref=e308] [cursor=pointer]:
+                - /url: /blog
+            - listitem [ref=e309]:
+              - link "Careers" [ref=e310] [cursor=pointer]:
+                - /url: /careers
+            - listitem [ref=e311]:
+              - link "Contact" [ref=e312] [cursor=pointer]:
+                - /url: /contact
+        - generic [ref=e313]:
+          - paragraph [ref=e314]: Trust & Legal
+          - list [ref=e315]:
+            - listitem [ref=e316]:
+              - link "Security" [ref=e317] [cursor=pointer]:
+                - /url: /security
+            - listitem [ref=e318]:
+              - link "Privacy" [ref=e319] [cursor=pointer]:
+                - /url: /privacy
+            - listitem [ref=e320]:
+              - link "Terms" [ref=e321] [cursor=pointer]:
+                - /url: /terms
+            - listitem [ref=e322]:
+              - link "GDPR" [ref=e323] [cursor=pointer]:
+                - /url: /privacy#gdpr
+            - listitem [ref=e324]:
+              - link "Refund Policy" [ref=e325] [cursor=pointer]:
+                - /url: /refund
+      - generic [ref=e326]:
+        - paragraph [ref=e327]: © 2026 Caspr Holding Pte Ltd. All rights reserved.
+        - paragraph [ref=e328]: Caspr means Business.
+  - alert [ref=e329]

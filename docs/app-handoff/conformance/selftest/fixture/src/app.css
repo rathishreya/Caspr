@@ -1,0 +1,8 @@
+.btn:focus { outline: 2px solid #e8453c; outline-offset: 0; }
+.card { box-shadow: 0 2px 8px rgba(0,0,0,.1); transition: all 250ms ease; }
+.title { font-family: Georgia, serif; color: #0a0a0a; }
+@media (min-width: 1024px) { .pane { width: 390px; } }
+.x { outline: none; }
+.ok { outline: none; box-shadow: 0 0 0 1.5px var(--focus-ring); }
+/* conformance-ignore FOCUS-04 -- dark card, ring sits on #0b0b09. joy 2026-08-25 */
+.dark:focus-visible { outline-offset: 0; }

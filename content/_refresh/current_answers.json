@@ -1,0 +1,793 @@
+{
+ "A-01": {
+  "id": "A-01",
+  "question": "What is Caspr and what does it do?",
+  "depth": "L4",
+  "word_count": "L2:300 / L3:1200",
+  "answer": "Caspr is Analytical AI — purpose-built for business analysis, not conversation. Most AI tools generate plausible text. Caspr produces defensible conclusions, grounded in cited sources, structured the way a senior analyst would structure them.\n\nThe loop is simple. Type a single-line prompt — the market, the deal, the question you need answered. Caspr proposes a structured layout, the skeleton of your report, and asks a few clarifying questions to scope it precisely, the way an analyst scopes a brief before starting work. Confirm everything at the gate — depth, formats, language, price — and Caspr runs. In under 15 minutes, you have a boardroom-ready report: up to 100 pages, delivered as PDF and, at the Business milestone, editable PPTX — with every insight linked to the source behind it.\n\nThree stages make this possible. Assessment applies rigorous research methodology: it reasons through data and structures conclusions, rather than simply retrieving text. Sourcing draws on real-time data feeds, so the analysis reflects today's reality, not a training set frozen months ago. Behind both sit 1M+ curated, credible sources — documents, government databases, news feeds — not scraped web noise.\n\nGenerative AI writes. Analytical AI analyses. The difference shows up in the output: a report you can put in front of a board, an investor, or a client, where every number traces back to where it came from — not one you have to fact-check before you can trust it.\n\nStart free with $100 Research Budget. No credit card required."
+ },
+ "A-02": {
+  "id": "A-02",
+  "question": "How do I create my first analysis?",
+  "depth": "L4",
+  "word_count": "L2:400",
+  "answer": "Your first analysis starts the moment you sign up — there is no setup wizard, no tour to click through. You land directly in the prompt box.\n\n1. **Type your prompt.** One line is enough: name the subject, the market or geography, and the decision it needs to inform. For example, \"Market size and key players in India's EV charging infrastructure market, for a Series B pitch.\"\n\n2. **Submit.** Caspr reads the prompt and asks a short round of clarifying questions — scoping details it needs to target the report precisely, such as timeframe, geography, or the audience the report is for. Answer what you can; there is no wrong answer here, this step exists to catch gaps before any research runs.\n\n3. **Review the layout.** Caspr proposes a structured layout — the report's table of contents, section by section, before a word is written. Add, remove, or reorder sections if you want to steer the output further. This is the scope you're actually paying for.\n\n4. **Confirm at the gate.** One screen shows exactly what will be produced — depth, output formats, language, style, and price — all pre-set by Caspr, all changeable. Your first analysis is covered by the $100 Research Budget you start with, so there's nothing to weigh here.\n\n5. **Hit Generate.** Caspr runs. Generation is atomic — no pausing, no mid-run edits — so you can watch it build in Theater, or step away entirely. Most analyses finish in under 15 minutes.\n\n6. **Receive your report.** A boardroom-ready PDF, up to 100 pages, every insight cited to its source, ready to open the moment it lands.\n\nThat's the entire loop, start to finish, faster than a coffee break.\n\nRun your first analysis now."
+ },
+ "A-03": {
+  "id": "A-03",
+  "question": "What should I type in the prompt box?",
+  "depth": "L4",
+  "word_count": "L2:400 / L3:1400",
+  "answer": "A strong prompt names three things: the subject, the market or geography, and the decision it needs to inform. You don't need a paragraph — one precise line beats five vague ones.\n\nWeak: \"Tell me about the fintech industry.\"\nStrong: \"Competitive landscape of B2B payments fintechs in Southeast Asia, for a market-entry decision.\"\n\nA few examples across use cases:\n\n- **Investor, deal sourcing:** \"Market size and growth drivers for veterinary telehealth in the US, for an early-stage investment thesis.\"\n- **Consultant, client deliverable:** \"Business case for a mid-market grocery chain entering quick-commerce in Brazil.\"\n- **Category manager:** \"Competitive landscape and pricing benchmarks for private-label snacks in UK retail.\"\n- **Corporate development:** \"Acquisition targets in European industrial IoT, sub-$200M revenue.\"\n\nNotice the pattern in every one: subject, geography, decision. That's what turns a general topic into a report someone can act on, rather than a summary of a Wikipedia page.\n\nYou will not get this wrong. If your prompt is thin — just an industry name, no geography, no stated purpose — Caspr asks clarifying questions before it runs anything. It scopes the gaps: which markets count as competitors, what timeframe matters, who the report is ultimately for. That round exists precisely so a one-line prompt is enough to start; you don't need to anticipate every detail up front.\n\nThe layout proposal that follows is your second checkpoint. Before any research runs, Caspr shows you the report's structure — the sections it intends to build — and you can add, remove, or reorder before confirming. Between the prompt, the clarifying questions, and the layout, there is no version of this where you're locked into the wrong report with no way back.\n\nTry one of these prompts."
+ },
+ "A-04": {
+  "id": "A-04",
+  "question": "What happens after I submit a prompt?",
+  "depth": "L3",
+  "word_count": "L2:350",
+  "answer": "Submitting a prompt starts a short sequence, not an immediate report.\n\nFirst, Caspr proposes a **structured layout** — the report's skeleton: the sections it intends to produce, laid out before any research runs. You can add, remove, or reorder sections here, which is the main way you steer the final output.\n\nNext, Caspr asks a handful of **clarifying questions** — scoping details that sharpen the geography, timeframe, or angle of the analysis. This is a senior analyst confirming the brief before starting work, not a form to get through. It takes seconds to answer.\n\nBoth steps exist for the same reason: a 100-page report is expensive to get wrong, and cheap to scope right. Confirming structure and intent up front is what makes the output boardroom-ready rather than a generic pass at your topic — and it's why you don't need to write a lengthy prompt to get a targeted result.\n\nOnce you confirm at the gate, the analysis runs. Generation is atomic from that point — no pausing, no stopping, no mid-run edits — and most reports finish in **under 15 minutes**. You can watch it build in Theater, ask questions in the Ask Caspr drawer while you wait, or step away and come back to a finished PDF (and editable PPTX at Business).\n\nWhat arrives is structured, cited, and ready to present — not raw notes to be cleaned up before anyone sees it.\n\nSee an example layout."
+ },
+ "A-05": {
+  "id": "A-05",
+  "question": "Why is Caspr asking me clarifying questions?",
+  "depth": "L2",
+  "word_count": "L1:280 / L2:250",
+  "answer": "Because a senior analyst never starts writing before scoping the brief — and neither does Caspr.\n\nA one-line prompt tells Caspr what you want to know. The clarifying questions tell it what you actually mean: which geography counts, which timeframe matters, what decision the report needs to support, who it's ultimately for. Skip that step and you'd get a generic report on a broad topic. Answer it, and you get one built for your specific question — the difference between a report that describes an industry and one that answers what you actually asked.\n\nThis is the assessment stage at work before the research even starts — targeting the analysis so the output is boardroom-ready on the first pass, not something you have to re-run three times to get right. It's also cheaper: a scoped report the first time costs less than a mis-scoped one you regenerate.\n\nIt takes seconds. A handful of short questions, then straight to the layout proposal and the gate. Nothing about this step spends your budget or slows you down in any meaningful way — it's the fastest checkpoint in the entire flow.\n\nAnswer and run."
+ },
+ "A-06": {
+  "id": "A-06",
+  "question": "How long does an analysis take?",
+  "depth": "L2",
+  "word_count": "L1:280 / L2:200",
+  "answer": "Under 15 minutes. That is the figure that matters: a request that takes a research team or agency weeks to scope, research, draft and format arrives from Caspr as a boardroom-ready report before your next meeting starts.\n\nDepth changes the clock slightly. A Brief, built to answer one focused question, returns fastest. A Study, Caspr's full analysis, takes a little longer as it structures a complete report across market, competitive and strategic angles. Intelligence, the deepest depth, draws on the broadest sourcing and the most rigorous reasoning, so it runs longest of the three — still comfortably inside the 15-minute window, not the weeks a comparable deep dive costs elsewhere.\n\nThe process explains why speed doesn't come at the expense of rigour. You type a single-line prompt, Caspr proposes a structured layout, asks a few clarifying questions to sharpen scope, then runs — pulling from 1M+ curated sources and citing every insight along the way. No back-and-forth with an analyst, no waiting on someone else's calendar.\n\nYour competitors are still waiting for the research.\n\nTime it yourself — run one free."
+ },
+ "A-07": {
+  "id": "A-07",
+  "question": "What do I get at the end — PDF or PPTX?",
+  "depth": "L2",
+  "word_count": "L2:250",
+  "answer": "A boardroom-ready report, roughly 100 pages, delivered as **PDF**. At the Business milestone, you also get an **editable PPTX** — the same report, restructured into slides you can adapt into your own deck and your own template.\n\nBoth formats carry every citation: click the red dot beside any insight and trace it to its source, without leaving the page. Neither is a rough draft. The PDF is finished, presentation-grade output — not raw research notes you need to clean up before anyone sees it. The PPTX exists for the exact moment you need to walk into a client meeting or a board session with the analysis already in your own format, not Caspr's.\n\nStudy and Intelligence depth reports also include XLSX, CSV, and Markdown in the base set, all delivered in your chosen language at no extra cost. Additional formats or languages beyond that base are available afterward from the Outputs tab, priced per output, whenever you need them.\n\nWant to know what's actually inside those 100 pages — the sections, the exhibits, where the exec summary sits? That's covered separately.\n\nSee a sample report."
+ },
+ "A-08": {
+  "id": "A-08",
+  "question": "What is the $100 free Research Budget?",
+  "depth": "L3",
+  "word_count": "L2:300 / L3:1000",
+  "answer": "The $100 Research Budget is Caspr's free trial: $100 in gifted spend, no credit card, live for 90 days. It works exactly like a paid budget — a pool you draw down at fixed prices per analysis — except the balance is a gift, not a charge.\n\nIn runs, that is up to six Briefs at $15, or a full Study at $80 with room for a Brief or two alongside. A common first pass: one Brief to see how Caspr proposes a layout and asks clarifying questions, then a Study once the format has earned it. Intelligence, the deepest depth, sits above the trial — it unlocks at the Business milestone or can be bought à la carte for $399 — but everything below it covers the questions most people bring to Caspr first.\n\nThis is not a stripped-down demo. A Brief or Study run on trial spend is the identical analysis a paying customer receives: a structured layout, clarifying questions, then a ~100-page boardroom-ready PDF or editable PPTX in under 15 minutes, every insight cited. Nothing is watermarked or truncated because it was paid for with gifted budget.\n\nThe point is proof. Run the market sizing you would otherwise brief a firm for $50,000 and three weeks. Check the citations. Judge whether it would survive your own board. Reports you generate stay in your account, readable and exportable, after the trial ends.\n\nThe one constraint is the clock: 90 days, then the unused balance expires — it does not roll into a paid plan. Spend it on a live question, not a hypothetical one.\n\nClaim your $100 budget."
+ },
+ "A-09": {
+  "id": "A-09",
+  "question": "Do I need a credit card to start?",
+  "depth": "L1",
+  "word_count": "L1:200 / L2:150",
+  "answer": "No. Caspr's free trial gifts $100 in Research Budget the moment you sign up, and no credit card is required to claim it or to run analyses against it. There is no card-on-file step hidden further down the signup flow, no auto-charge waiting at the end of a trial period, and nothing to remember to cancel.\n\nThat matters because it removes the one piece of friction that stops most people from ever testing a new tool: the mental tax of typing in payment details for something you haven't used yet. With Caspr, you sign up, get a structured layout proposed from your first prompt, answer a few clarifying questions, and receive a boardroom-ready report — PDF or editable PPTX — in under 15 minutes, with every insight cited to source. All of that happens on the gifted $100, no billing relationship required.\n\nThe $100 covers real runs, not a locked-down preview: up to six Briefs at $15 each, a full Study at $80 with budget to spare, or a mix of both. The only limit is a 90-day expiry on the trial balance — a deadline to use it, not a card charged when it passes.\n\nIf you later want more Research Budget, or want to unlock Intelligence, data upload and editing at the Business milestone, that's a deliberate plan decision you make — never a default you fall into.\n\nStart now — no card."
+ },
+ "A-10": {
+  "id": "A-10",
+  "question": "Brief vs Study vs Intelligence — which do I pick first?",
+  "depth": "L3",
+  "word_count": "L2:350 / L3:1300",
+  "answer": "Start with a Study. For most questions it is the best first taste of the full product, and it sits in the middle of Caspr's three depths.\n\nDepth is one axis, not three separate products. Every analysis draws from your Research Budget at a fixed price:\n\n- Brief — $15. A quick, sourced answer to a single focused question. Use it to sample how Caspr works or to settle one specific point.\n- Study — $80. A full market or competitive analysis: the structured, ~100-page report Caspr is built to produce. Most serious questions land here.\n- Intelligence — $300 in-budget, or $399 à la carte. The deepest, board-grade deep dive, with broader sourcing and deeper reasoning. It unlocks at the Business milestone, or can be bought on its own with no subscription.\n\nPick by the decision in front of you. Checking a single fact or scoping a question — Brief. Sizing a market, mapping a landscape, building a business case — Study. A due-diligence screen or a board-level call where the stakes justify the depth — Intelligence.\n\nEvery depth returns the same core: a structured layout you confirm, clarifying questions, and a cited report in under 15 minutes. The difference is how far Caspr goes, not whether the output is boardroom-ready.\n\nIf you are not sure, run a Study. It shows you the full shape of a Caspr report, and your $100 trial budget covers one with room to spare.\n\nPick a depth and run."
+ },
+ "A-11": {
+  "id": "A-11",
+  "question": "Can I see an example report before I run one?",
+  "depth": "L3",
+  "word_count": "L3:1000",
+  "answer": "Yes — and you should look before you run one blind. A live sample report is the fastest way to judge whether Caspr's output matches what you actually need, without spending any budget to find out first.\n\nWhat you'll see mirrors exactly what a real run produces, because it is a real run — not a mockup built for marketing. The report opens with a cover and an executive summary that states the conclusion up front, in the way a senior analyst would open a briefing, rather than a table of contents promising conclusions somewhere later. From there it moves through structured sections built around the layout Caspr proposed from the original prompt: typically market sizing and definition, competitive positioning, trends and drivers, risks, and strategic implications, though the exact shape follows whatever the underlying question called for. Charts and tables carry the numbers; the narrative around them explains what the numbers mean for the decision at hand, not just what they are.\n\nThe detail worth paying closest attention to when you read a sample is the citation. Every factual insight in the report — a market size, a growth rate, a competitor's stated strategy, a regulatory shift — is shown next to the credible source it came from: a filing, a government database entry, a news report. This isn't a bibliography tacked on at the end of the document; it's inline, insight by insight, so any individual claim can be traced back and checked before it gets repeated in a room where someone will ask where the number came from. Walking through a sample report chapter by chapter and spot-checking two or three citations against their sources is the single fastest way to build confidence in the method, faster than reading any description of it.\n\nPresentation quality is the other thing worth checking, because it's the part that's hardest to take on faith from a description. The sample is delivered in the same format a real analysis is: a boardroom-ready PDF or an editable PPTX, formatted to go directly into a deck rather than needing to be rebuilt by hand afterward. If your team's usual pattern after any research effort is 'now someone has to spend a day making this presentable,' that step is the one Caspr removes — and it's visible directly in the sample, not just claimed about it.\n\nIt's also worth reading a sample with an eye to scope, not just polish. Notice how narrowly or broadly the layout is built around the original question, and how the clarifying questions Caspr would have asked before the run shaped that scope. That's useful context for writing your own first prompt well — a tightly scoped question tends to produce a tighter, more useful report than a broad one.\n\nSkeptical readers — an investor who's used to discounting glossy research decks, a consultant who's trained to poke holes in someone else's analysis — get more out of the sample than a casual skim. Pull one chart, trace its number back to the cited source, and check whether the source actually says what the chart claims. That single check, repeated two or three times across a report, tells you more about whether Caspr is trustworthy than any amount of description does. Pair that with the written and video accounts from analysts and researchers who've run their own reports, where available, for a second, independent read on whether the output holds up outside a controlled demo.\n\nNo login or spend is needed to browse the sample — it exists specifically so the decision to run your own analysis can be made with evidence already in hand, not on faith.\n\nReading a sample answers the two questions almost everyone actually has before they commit to running their own: does the structure hold up for a real business problem, and are the sources genuinely real and checkable. Once both of those hold up on someone else's question, running one on your own is the only way left to find out if it holds up on yours — and the cost of finding out starts at $15 for a Brief, a fraction of what a single hour with an outside analyst costs.\n\nRun your own like this."
+ },
+ "B-01": {
+  "id": "B-01",
+  "question": "What is Analytical AI, and how is it different from Generative AI?",
+  "depth": "L4",
+  "word_count": "L2:400 / L3:1800",
+  "answer": "Analytical AI is purpose-built to analyse: it takes a business question, reasons through data, structures a conclusion, and cites every source. Generative AI is purpose-built to converse: it predicts the next plausible word from patterns in its training data. Both use large models. They are built for opposite jobs.\n\nAsk a generative model for a market analysis and it drafts fluent prose that sounds authoritative, assembled from probability, not evidence. It can invent a statistic, misattribute a source, or answer confidently on data it never saw. That is not a flaw to patch; it is the job it was built for — conversation, not analysis.\n\nCaspr is Analytical AI. Type a single-line prompt, and Caspr proposes a structured layout, asks the clarifying questions an analyst would ask, then delivers a ~100-page boardroom-ready PDF or editable PPTX in under 15 minutes — every insight cited to a credible source, drawn from 1M+ curated documents, government databases, and news feeds. No scraping, no invention.\n\nThree stages do the work. Assessment is the research methodology: it reasons through the data and structures the conclusions, rather than retrieving and paraphrasing snippets. Sourcing is the live data layer: it pulls from real-time feeds, so the analysis reflects today's market, not a training cutoff from months or years ago.\n\nThe distinction matters commercially, not just technically. A chatbot gives you a starting point you still have to verify line by line. Caspr gives you a document you can put in front of a board, because you can trace every claim back to its source before anyone in the room asks where the number came from.\n\nThat's why consultants, investors, and strategy teams reach for Caspr instead of a chat window when the deliverable is a market sizing, a competitive landscape, or a due-diligence screen. Generative AI is excellent at drafting an email or a first pass at a pitch. It was never built to defend a number in a boardroom — and it shouldn't have to be, because that was never the job.\n\nWhile the world was building generative AI, we built analytical AI.\n\nSee Analytical AI in action."
+ },
+ "B-02": {
+  "id": "B-02",
+  "question": "How does Caspr handle sources that disagree?",
+  "depth": "L4",
+  "word_count": "L2:350 / L3:1400",
+  "answer": "Assessment is Caspr's research methodology — the stage that reconciles what sources disagree on that turns a question into a structured, defensible answer. Most AI tools retrieve: they search a corpus, pull the closest-matching snippets, and stitch them into a paragraph. Assessment reasons: it works through the data the way a senior analyst would, weighing sources against each other and building toward a conclusion, not just returning what it found first.\n\nIn practice, this is what separates a report from a lookup. When you prompt Caspr, the assessment stage proposes a structured layout for the analysis, asks the clarifying questions that sharpen scope, then works through the relevant sources to construct each section's argument — figures, comparisons, and conclusions that follow from the evidence, not just sit beside it. Every insight it produces carries its source, so the reasoning can be checked, not just trusted.\n\nThis is why a Caspr report reads like something an analyst wrote, not something a search engine assembled. A market-sizing section doesn't just list numbers pulled from different reports — it reconciles them, flags where sources disagree, and lands on a defensible estimate. A competitive landscape doesn't just describe competitors — it structures them against the dimensions that matter to your question.\n\nAssessment runs on every analysis, from a $15 Brief to a $300 Intelligence report. Deeper depths simply give it more scope to reason through, not a different method.\n\nIt's paired with the sourcing stage, Caspr's live data layer, so the reasoning is always applied to current information rather than a fixed, ageing dataset. One structures the argument; the other keeps the facts underneath it current. Neither replaces judgment — both are built so the reader can check the judgment for themselves, source by source.\n\nWatch the assessment stage work."
+ },
+ "B-03": {
+  "id": "B-03",
+  "question": "How current is Caspr's data?",
+  "depth": "L4",
+  "word_count": "L2:350 / L3:1400",
+  "answer": "Sourcing is Caspr's live data layer — the system that keeps every analysis current. A trained model's knowledge is frozen at the point its training data was collected; ask it about this quarter's numbers and it either doesn't know or guesses. Sourcing pulls from real-time feeds, so the analysis reflects today's reality, not a training cutoff.\n\nThis matters most exactly when it's least convenient to ignore: a market that moved this quarter, a competitor that just raised a round, a regulation that changed last month. A model trained months ago will describe the market as it stood when that training data was collected. Caspr's sourcing checks against live sources — documents, government databases, news feeds — as the report is built, so the figures and events in your analysis are current, not stale.\n\nPaired with the assessment stage, which structures the reasoning, the sourcing stage supplies the facts to reason with. Together they're why a Caspr report can cite a source published last week as readily as one published last year, and why its conclusions hold up when someone in the room checks them against this morning's news.\n\nFor anything time-sensitive — a live deal, a fast-moving category, a board update due this quarter — the sourcing stage is the difference between an analysis that was true and one that still is.\n\nThis is also the practical reason Caspr doesn't simply run on a fixed, pre-indexed dataset. A market can shift meaningfully in the weeks between a training run and the day you need an answer. Sourcing is built so that gap never shows up in your report.\n\nAnalyse today's data."
+ },
+ "B-04": {
+  "id": "B-04",
+  "question": "Where does Caspr get its data?",
+  "depth": "L3",
+  "word_count": "L2:350 / L3:1300",
+  "answer": "Caspr draws on 1M+ curated, credible sources — documents, government databases, and news feeds — not the open web. Every source is selected for credibility before it enters the system, not filtered after the fact.\n\nThat distinction is the point. Web scraping pulls whatever a crawler can reach: SEO content farms, unverified blog posts, outdated pages, content written to game search rankings rather than to inform. Feed that into an analysis and you inherit its noise — numbers with no provenance, claims no one stands behind. Caspr's source base is curated the way a research desk builds its library: government statistics agencies, regulatory filings, industry databases, and vetted news, selected because they can be checked.\n\nThe result shows up in the report itself. Every insight is shown with the source it came from, so a number in a market-sizing section can be traced back to the filing or database it was pulled from, not to \"the internet.\" That's what makes the output defensible in front of people whose job is to find the weak point in your numbers — an analyst, an investment committee, a board.\n\nSourcing keeps this source base live, pulling current data as each analysis runs, so a report built today reflects today's filings and this week's news, not a stale index built once and left to age.\n\nCuration also means Caspr doesn't need to guess at reliability the way an open-web system does. A government database or a regulatory filing doesn't need to be cross-checked against ten other pages to be trusted; it's already the primary source. That's the standard applied to every one of the 1M+ sources in the system, across every industry and geography a question might touch.\n\nSee how sources are cited."
+ },
+ "B-05": {
+  "id": "B-05",
+  "question": "How does Caspr cite its sources?",
+  "depth": "L4",
+  "word_count": "L2:300 / L3:1200",
+  "answer": "Every insight in a Caspr report carries a citation. Look for the small red dot beside a claim — a market-size figure, a growth rate, a competitor's revenue — and you're looking at a number with a source attached, not a number that merely sounded right.\n\nClick the dot and Caspr answers you directly, through Ask Caspr, with the specific source behind that specific claim: the document, the database, the report it came from. The citation is scoped to the sentence you clicked, not a general bibliography you have to search.\n\nThe full list of every source used sits on its own card at the end of the report — the last page, not a footnote buried mid-paragraph. No numbered references, no separate Sources tab to hunt through. Everything traces back from the claim itself, on demand, without you leaving the page you're reading.\n\nThis is what a slide from a boutique consulting deck rarely offers: a number you can defend without calling the analyst who wrote it. Put a Caspr figure in front of your board, and if someone asks where it came from, you already have the answer — click, read, cite it back.\n\nThat's the difference between analytical AI and a chatbot's best guess. Generative AI produces a plausible sentence. Caspr produces a sourced one, drawn from 1M+ curated documents, government databases, and news feeds — not open web scraping — and shows its work the moment you ask. The citation isn't decoration. It's why the report survives a room full of people whose job is finding the hole in your numbers."
+ },
+ "B-06": {
+  "id": "B-06",
+  "question": "What does 'zero hallucinations' actually mean?",
+  "depth": "L3",
+  "word_count": "L2:300 / L3:1200",
+  "answer": "\"Hallucination\" is what happens when generative AI writes a plausible-sounding sentence with no fact behind it — a market size, a date, a quote, invented because it fit the pattern of the text. It reads confidently. It can be entirely wrong, and nothing in the sentence itself tells you which.\n\nCaspr avoids this by construction, not by caution. Every insight in a report is generated from a specific, cited source — one of 1M+ curated documents, government databases, and live data feeds. Assessment doesn't compose a sentence and hope it's accurate; it retrieves and reasons from a source, then states the conclusion that source actually supports. There is nothing unsourced left for it to invent, because invention was never part of the process to begin with.\n\nThat's why every claim carries a red-dot citation you can click and verify yourself, and why the full source list sits on the report's last page. Zero hallucinations doesn't mean \"trust us.\" It means the architecture leaves no room for a plausible-but-invented number to appear in your report in the first place — there's no step where Caspr is asked to guess.\n\nName the fear directly: the wrong figure, stated with total confidence, sitting on slide fourteen of a board deck with your name on the cover. Generative AI cannot promise that won't happen — it wasn't built to know the difference between a real number and a convincing one. Caspr was, because every number is traceable before it ever reaches your slide, which means you can check it before anyone else in the room does.\n\nThat's the practical difference between generative and analytical AI: one produces plausible text, the other produces defensible conclusions. Don't take our word for it — see the sourcing yourself."
+ },
+ "B-07": {
+  "id": "B-07",
+  "question": "Why doesn't Caspr just scrape the web?",
+  "depth": "L3",
+  "word_count": "L2:300 / L3:1200",
+  "answer": "Because scraping optimises for coverage, not credibility. A crawler pulls whatever it can reach — content farms, SEO-written pages, outdated statistics, claims with no author behind them — and an AI system built on that input inherits its noise. Caspr is built the other way round: 1M+ curated sources, selected for credibility before they enter the system, not filtered after.\n\nThe sources are documents, government databases, and news feeds — the kind of material a research desk would actually cite, not whatever a search-engine-optimised blog post happens to rank for. Curation is an editorial standard, applied before the analysis runs, so the conclusion is only ever as good as the evidence it's built on, and the evidence has already been vetted.\n\nThis is why every insight in a Caspr report carries its source. Not because citation is a nice feature, but because it's the natural output of starting from credible material — when you can trust the input, you can show your work without hoping no one checks it. Scraped, unverified content can't make that promise; there's no way to cite a source responsibly if the source itself was never verified.\n\nFor anyone whose numbers get challenged in a room — an analyst, an investment committee, a board — that difference is the whole point of curation over scraping.\n\nIt also means Caspr can be honest about scope. A source base built for coverage of every corner of the web can claim to cover everything and verify little of it. A curated source base is more selective by design — and more defensible for exactly that reason. Depth of trust, not breadth of noise, is the trade Caspr makes.\n\nSee the source quality."
+ },
+ "B-08": {
+  "id": "B-08",
+  "question": "Is Caspr a chatbot?",
+  "depth": "L3",
+  "word_count": "L2:280 / L3:1100",
+  "answer": "No. A chatbot converses — it holds a back-and-forth exchange and produces text as the conversation goes. Caspr analyses — it takes a single-line prompt and delivers a structured, cited, ~100-page report in under 15 minutes. The end product isn't a reply in a thread; it's a boardroom-ready PDF or editable PPTX you can hand to someone else.\n\nThe process reflects the difference. You type your question, Caspr proposes a structured layout for the analysis and asks the clarifying questions that sharpen scope, then it builds the report — reasoning through 1M+ curated sources with the assessment stage, pulling current data with the sourcing stage, and citing every insight along the way. There's no chat window to babysit while it works.\n\nA chatbot's output is a conversation you have to keep going. Caspr's output is a document that stands on its own — every figure sourced, every conclusion structured, ready to put in front of a board without a follow-up prompt to clean it up.\n\nThat's the distinction worth remembering: chat produces text. Caspr produces a decision-ready report.\n\nIf you've used a chatbot for research before, you know the pattern — a promising first answer, then a string of follow-up prompts trying to get it to a usable state, and still no source to check when a number looks off. Caspr is built to skip that entirely: one prompt in, one finished, cited report out.\n\nSee what Caspr delivers."
+ },
+ "B-09": {
+  "id": "B-09",
+  "question": "How current is Caspr's data?",
+  "depth": "L2",
+  "word_count": "L1:280 / L2:220",
+  "answer": "As current as the sourcing stage's live feeds — not a training cutoff. Where a standard AI model answers from data frozen at the point it was trained, Caspr's sourcing pulls from real-time documents, government databases, and news feeds as each analysis runs, so the report reflects today's reality.\n\nAsk for a market analysis this quarter, and the sourcing stage checks against sources published this quarter — a competitor's funding round from last week, a regulation that changed last month, a statistic released this morning — rather than describing the market as it stood whenever a model's training data was last collected.\n\nThis runs on every analysis, at every depth. Assessment structures the reasoning; the sourcing stage supplies the current facts to reason with. Together, they're why a Caspr report can be cited in a meeting today and still hold up next week.\n\nThe alternative is the quiet risk in most AI-generated research: a confident answer built on data that was current when the model was trained, not when you asked the question. Caspr closes that gap by design.\n\nAnalyse the latest data."
+ },
+ "B-10": {
+  "id": "B-10",
+  "question": "How is Caspr different from using ChatGPT for research?",
+  "depth": "L3",
+  "word_count": "L2:350 / L3:1300",
+  "answer": "ChatGPT generates fluent text from patterns in its training data. Caspr analyses 1M+ curated, live sources and cites every insight. That's the difference, and it's the one that matters when the output has to survive a board meeting.\n\nAsk a general chat model for a market analysis and it produces something that reads well, because that's what it's built to do. It can also invent a statistic, misattribute a claim, or answer confidently on a market it has no current data about, because its knowledge is frozen at a training cutoff and its job is plausible conversation, not verified analysis. You're left fact-checking every number before you can use it.\n\nCaspr is built for the opposite job. Type a single-line prompt, and Caspr proposes a structured layout, asks the clarifying questions an analyst would, then delivers a ~100-page boardroom-ready PDF or editable PPTX in under 15 minutes — reasoning through the data with the assessment stage, pulling current data with the sourcing stage, and showing the source behind every insight. Nothing in the report is unsourced, because nothing in the source base is scraped or invented.\n\nThe practical test: can you hand the output straight to someone whose job is to find the hole in it? A chat transcript needs verification before it earns that trust. A Caspr report is built to survive it.\n\nThis isn't a knock on ChatGPT — it's an excellent tool for what it was built to do: draft, summarise, brainstorm, converse. Research that has to hold up under scrutiny is a different job, with a different bar. Caspr was purpose-built for that bar.\n\nSee the difference."
+ },
+ "C-01": {
+  "id": "C-01",
+  "question": "What is the structured layout proposal?",
+  "depth": "L3",
+  "word_count": "L2:300",
+  "answer": "After you submit your prompt and answer Caspr's clarifying questions, Caspr proposes a structured layout — the skeleton of your report, section by section, before a single page gets written.\n\nThis is the checkpoint between \"Caspr understood my question\" and \"Caspr is about to spend my budget answering it.\" Rather than running the full analysis blind and hoping the structure lands, Caspr shows you the plan first: what sections it intends to build, in what order, at what depth for the Tier you've chosen. A Brief comes back as a flat list of sections. A Study or Intelligence report comes back nested — sections with sub-sections beneath them — because there's more ground to cover and more structure needed to hold it.\n\nYou review the layout the way you'd review an analyst's outline before they disappear for a week to write the memo, except here it takes seconds, not a meeting. If the layout covers what you actually need answered, you move forward. If something's missing, or a section doesn't belong, you can add, remove, or reorder it before Caspr runs a single word.\n\nThe layout is the scope. It's the last point where you shape what the report becomes without touching the analysis itself. Once you're satisfied, the next stop is the gate, where Tier, formats, language, and price get their final confirmation before generation starts. Think of it as the difference between briefing a junior analyst and reading their finished memo — Caspr lets you brief first, and see the outline before you commit."
+ },
+ "C-02": {
+  "id": "C-02",
+  "question": "Can I change the layout before it runs?",
+  "depth": "L2",
+  "word_count": "L2:250",
+  "answer": "Yes. Once Caspr proposes the layout — the report's skeleton — you can reshape it before anything runs.\n\nTo add a section, use the add-section control on the layout screen and it drops into the outline wherever you place it. To remove one, select it and choose remove — Caspr won't build a section you don't need, and won't charge for it either. To reorder, drag a section to where it should sit; the sequence you land on is the sequence Caspr writes in, from the executive summary through to the closing exhibits.\n\nThis is the one moment before generation where you steer the report directly, without touching a single word of the analysis itself. Missing a competitor comparison you know the board will ask about? Add the section. Got a section proposed that doesn't matter for this particular decision? Cut it, and Caspr won't spend budget researching it. Want the market context up front instead of buried in the middle? Drag it there.\n\nGet the layout right here, and everything Caspr builds afterward answers the question you actually asked, not the question it guessed at. Once you're satisfied with the structure, move on to the gate, where Tier, output formats, language, and price get their final confirmation before you generate.\n\nThere's no limit on how many changes you make, and no penalty for taking your time over it — Caspr hasn't spent any of your budget yet. Treat the layout the way you'd treat an outline you're about to hand to a research team: read it once for what's missing, once for what's redundant, and adjust until it matches the brief in your head, not just the brief Caspr inferred from your prompt."
+ },
+ "C-03": {
+  "id": "C-03",
+  "question": "How do I choose the right depth for my question?",
+  "depth": "L3",
+  "word_count": "L2:350 / L3:1200",
+  "answer": "Match the depth to the decision, not the topic. Caspr offers three depths, all drawing from your Research Budget at a fixed price:\n\n- A quick fact-check or a single scoped question → Brief ($15).\n- A full market or competitive analysis → Study ($80).\n- A board-grade deep dive or due-diligence screen → Intelligence ($300 in-budget, $399 à la carte; unlocks at Business).\n\nThe test is what the output has to withstand. If you need one sourced answer to move forward, a Brief is enough. If you are producing the analysis itself — a market sizing, a competitor map, a business case someone will act on — a Study is the right floor. If the decision is high-stakes and the report will sit in front of a board or an investment committee, Intelligence gives you the broader sourcing and deeper reasoning to defend it.\n\nCost scales with depth, and so does what you can stake on the result. A $15 Brief and an $80 Study both return a cited, structured report in under 15 minutes; Intelligence goes further where the decision warrants it.\n\nTwo practical notes. You can start shallow and go deeper — run a Brief to scope the question, then commit to a Study. And Premium Data Add-ons ($20–60, opt-in and priced before the run) can strengthen any depth when a market is hard to source.\n\nNot sure? Start with a Study — the best first look at a full Caspr report.\n\nPick a depth."
+ },
+ "C-04": {
+  "id": "C-04",
+  "question": "What is a Premium Data Add-on, and when is it worth it?",
+  "depth": "L3",
+  "word_count": "L2:300 / L3:1000",
+  "answer": "A Premium Data Add-on pulls from a higher tier of sourcing than Caspr's standard research — databases and datasets that cost more to license because they're harder to get, more current, or more authoritative for a specific market. It's shown to you at the gate, priced between $20 and $60, before you commit to anything.\n\nIt's opt-in, always. Caspr never adds it silently and never bills you for it without your say — you see the add-on, see the price, and decide whether the extra spend earns its keep on this particular analysis. There's no default-on toggle to catch you off guard.\n\nWhen is it worth it? When the stakes or the market make standard sourcing thin. A market-sizing report on a well-covered US sector rarely needs it — Caspr's 1M+ curated sources already cover that ground well. A due diligence brief on a niche vertical, an emerging market with sparse public data, or a decision with real money riding on it is a different case: the add-on is what closes the gap between \"good enough\" and \"defensible in the room.\"\n\nThe rule of thumb: if the analysis is informing a decision you'd hate to get wrong, or the subject is one where public data is genuinely scarce, the add-on is cheap insurance against citing a weaker source than the question deserves. If neither is true, skip it — Caspr's standard sourcing is built to be sufficient on its own, and you're not paying for depth you don't need.\n\nEither way, you decide before you generate, never after. The price you see at the gate is the price you pay."
+ },
+ "C-05": {
+  "id": "C-05",
+  "question": "Can I upload my own data?",
+  "depth": "L2",
+  "word_count": "L2:250",
+  "answer": "Yes — at the Business milestone. Upload your own files and Caspr folds them into the analysis alongside its 1M+ curated sources, instead of working from public data alone.\n\nThis is where proprietary numbers earn their keep: your internal sales figures, a client's data room, last quarter's board deck, a dataset no competitor has access to. Upload it, and Caspr treats it as source material — reasoned through and cited, the same way it treats any external document — so the report reflects your actual numbers blended with the market context around them, not just what's publicly available.\n\nData upload lives in the Data Room, alongside Intelligence-depth analyses and editing, as one of the capabilities that unlock at Business ($600/month). Below that milestone, Caspr works from its own curated sources only — still 1M+ documents, databases, and feeds, just without your own files in the mix.\n\nIf your work regularly starts from data no one else has — a due diligence data room, a proprietary tracker, internal figures a public report could never capture — this is the milestone where Caspr stops being a market researcher and starts being an analyst who's read your files too. Once uploaded, manage what Caspr actually uses from your Data Room, file by file: mark a file Included and it's attached to analyses by default, or Excluded and it's kept but never used unless you opt it in for a specific run. Nothing you upload gets folded into a report silently — you decide what's in scope every time."
+ },
+ "C-06": {
+  "id": "C-06",
+  "question": "Can I run multiple analyses at once?",
+  "depth": "L2",
+  "word_count": "L2:200",
+  "answer": "Yes. Each analysis you start is its own run, drawing its own budget from your Research Budget — there's no shared queue slowing one report down because another is already in progress.\n\nStart three analyses back to back and each still completes in its own sub-15-minute window; running more than one doesn't push any of them further out, because Caspr isn't processing them in a single line. The only real limit is your budget: each analysis costs what its Tier costs — Brief, Study, or Intelligence — deducted as it runs, and your total spend is whatever the sum of what you've started comes to.\n\nThat means you can send a Brief on one market while a Study runs on another, and check back on both inside fifteen minutes. There's no plan-level cap on concurrent runs, no penalty for keeping several questions moving at once.\n\nIf you've got several questions worth answering, there's no reason to wait for one report to finish before starting the next. Queue them up and let Caspr work through all of them in parallel."
+ },
+ "C-07": {
+  "id": "C-07",
+  "question": "What topics and industries can Caspr analyze?",
+  "depth": "L3",
+  "word_count": "L2:350 / L3:1400",
+  "answer": "Caspr analyses markets, industries, companies, competitive landscapes, and geographies — any business question you can scope in a prompt. If a serious analyst could research it from credible sources, Caspr can build the report.\n\nIn practice, that covers:\n\n- Market sizing — the size, growth, and structure of a market (TAM, SAM, SOM), cited to source.\n- Competitive landscapes — the players, their positioning, and share in a given market.\n- Company and sector analysis — a named company or a narrow segment, scoped through clarifying questions.\n- Industry and geographic deep dives — a sector in a specific country or region.\n- Business cases and due-diligence screens — the evidence base behind a decision.\n\nEvery analysis draws on 1M+ curated sources — documents, government databases, and news feeds — and cites each insight, so the output holds up under scrutiny wherever the topic sits.\n\nTwo honest limits. Very thin or emerging markets have less public data to draw on; where a market is hard to source, a Premium Data Add-on ($20–60, opt-in) pulls in additional premium sources. And Caspr answers business and market questions — it is built for commercial analysis, not legal advice or personal research.\n\nThe fastest way to find out whether your question fits is to ask it. Caspr's clarifying questions sharpen the scope before anything runs, so a broad prompt still resolves into a targeted report.\n\nAnalyse your market."
+ },
+ "C-08": {
+  "id": "C-08",
+  "question": "Can Caspr analyze a specific company or niche market?",
+  "depth": "L3",
+  "word_count": "L2:300 / L3:1200",
+  "answer": "Yes. Name the company or the narrow market in your prompt, and Caspr scopes the analysis to it — then sharpens it further through the clarifying questions it asks before running.\n\nFor a specific company, say what you need: a competitive profile, a positioning read, a diligence screen, or how it sits within its market. For a niche market, define the boundary — the segment, the geography, the customer — and Caspr builds the report around it rather than defaulting to the broad category.\n\nEvery insight is cited to a source drawn from Caspr's 1M+ curated documents, government databases, and news feeds, so a company profile or a niche sizing is one you can put in front of a board and defend.\n\nOne honest caveat: the thinner the public record, the less there is to analyse. For a small private company or an emerging niche, expect strong structure and full sourcing on what exists, rather than invented figures to fill gaps — Caspr will not manufacture a number it cannot cite. Where a market is hard to source, a Premium Data Add-on ($20–60, opt-in and priced before the run) pulls in additional premium sources.\n\nFor a high-stakes target — an acquisition candidate, an investment, a competitor you are about to move against — run it at Intelligence depth for the broadest sourcing and deepest reasoning.\n\nAnalyse a target."
+ },
+ "C-09": {
+  "id": "C-09",
+  "question": "What regions and languages does Caspr cover?",
+  "depth": "L2",
+  "word_count": "L2:220",
+  "answer": "Caspr's source base — 1M+ curated documents, government databases and news feeds — spans a broad range of regions, which means most market and industry questions are answerable regardless of where you're asking about. Coverage is not uniform, though: markets with strong public reporting and institutional data produce richer, more heavily cited analyses than markets where credible sourcing is thin on the ground, and that gap reflects the state of available public data, not a limit Caspr imposes deliberately.\n\nReports themselves are delivered in English. For regions or languages where source coverage is limited, Premium Data Add-ons ($20–60, opt-in, shown before you run) can bring in additional sourcing to close the gap for a specific market.\n\nIf your question centres on a region you're unsure about, the fastest way to find out is to ask it — Caspr's clarifying questions will surface if scope needs narrowing before the analysis runs.\n\n[VERIFY: exact list of regions/languages with strong vs. limited source coverage, and whether output languages beyond English are supported, before this goes live.]\n\nAnalyse your market."
+ },
+ "D-01": {
+  "id": "D-01",
+  "question": "How to read your Caspr report",
+  "depth": "L4",
+  "word_count": "L2:350",
+  "answer": "Every Caspr report opens the same way: an executive summary first, then the analysis, then the sources behind it. Knowing that shape before you start reading turns 100 pages into something you navigate in seconds, not something you scroll through blind.\n\nStart with the **exec summary**. It states the conclusion before the argument — the way a report for a board should. Read it first even if you plan to read everything; it tells you where the sections that follow are going.\n\nFrom there, the report moves through structured sections — market context, the core analysis, data exhibits — each building on the last. Briefs run flat, one section after another. Studies and Intelligence reports nest: sections carry sub-sections, and the depth of the nesting reflects the depth of the analysis.\n\nYou don't have to scroll to find your place. Open **Contents** — the switcher tab beside the report — and you get a table of contents that scroll-syncs with what you're reading: the current section and sub-section highlight as you move, and tapping any row jumps you straight there. It's the fastest way to move through 100 pages without losing your place.\n\nEvery insight in the report carries an inline red dot — a citation you can click to see the source behind that specific claim. No hunting for a footnote or a separate sources page; the dot sits right next to the number it's proving. The full source list, if you want everything at once, is the report's final card.\n\nOpen the report, read the exec summary, use Contents to move around, click the dots when you want proof. That's the whole system.\n\nOpen your report."
+ },
+ "D-02": {
+  "id": "D-02",
+  "question": "What's inside a 100-page report?",
+  "depth": "L4",
+  "word_count": "L2:400 / L3:1500",
+  "answer": "A Caspr report is built like one a senior analyst would hand to a client, not a pile of generated text. Every section earns its place, and every number in it traces to a source.\n\nIt opens with the **executive summary** — the conclusion, stated plainly, before the supporting argument. If a reader has five minutes, this is what they take away.\n\nFrom there the report moves into **market context** — the landscape your question sits inside: size, structure, the forces shaping it. This is the ground the rest of the analysis stands on.\n\nNext come the **core analysis sections** — the actual work: competitive dynamics, scenario modelling, strategic implications, whatever your prompt and layout called for. This is where the report earns the word \"analysis\" rather than \"summary.\" Depth scales with tier: a Brief covers this in a few pages; a Study or Intelligence report goes several layers deeper, with nested sub-sections you can navigate from the Contents tab.\n\nFindings are backed by **data exhibits** — charts, tables, and infographics tied directly to the data behind them, not decorative graphics. Each one carries the same citation discipline as the prose around it.\n\nEvery insight throughout the report carries an inline red dot you can click to see its source. And at the very end sits the **full source list** — every document, database, and feed the analysis drew on, in one place. No numbered footnotes scattered through the pages, no separate sources tab to dig for.\n\nConclusion, context, analysis, evidence, sources. The same structure whether the report runs 5 pages or 100.\n\nSee a full report."
+ },
+ "D-03": {
+  "id": "D-03",
+  "question": "How do I verify a citation or source?",
+  "depth": "L2",
+  "word_count": "L2:250",
+  "answer": "Every insight in a Caspr report carries an inline red dot next to it. That dot is the citation.\n\nClick it, and Caspr answers — through Ask Caspr — with the specific source behind that specific claim. Not a generic reference list, not a footnote number to cross-check against a bibliography: the source for that number, at the point where the number appears.\n\nDo this for any figure in the report, as many times as you want. Trace a market-size estimate to the database it came from. Trace a growth rate to the report it's cited to. If you're about to put a number in front of a board, this is how you confirm it will hold up to the first question asked.\n\nWant everything the report drew on at once, rather than one claim at a time? The full source list sits on the report's **final card** — every document, database, and feed used, in one place.\n\nThis is what separates a defensible report from a plausible-sounding one: you can check the work, not just trust it.\n\nTrace an insight."
+ },
+ "D-04": {
+  "id": "D-04",
+  "question": "Can I trust the numbers?",
+  "depth": "L3",
+  "word_count": "L2:300 / L3:1200",
+  "answer": "Yes — and you don't have to take that on faith, because every number is traceable.\n\nCaspr's numbers come from the **weighing**, a methodology built to reason through data and structure conclusions, not simply generate plausible-sounding text. Behind it sit 1M+ **curated, credible sources** — documents, government databases, news feeds — not scraped web noise. The **sourcing** keeps that data current, so a market-size figure reflects this week's reality, not a training set frozen months ago.\n\nThe proof is in the report itself. Every insight carries an inline red dot; click it and Caspr shows the specific source behind that specific claim, right where the claim sits. Nothing in a Caspr report is unsourced — there's nothing left to invent, because every figure is grounded in a citation before it ever reaches the page.\n\nThat matters most in the moment you're not thinking about the tool at all — when someone in the room asks where a number came from. You answer with the source, not with \"the AI said so.\"\n\nZero hallucinations isn't a slogan here. It's what happens when an analysis is built to cite, not to guess.\n\nVerify it yourself."
+ },
+ "D-05": {
+  "id": "D-05",
+  "question": "PDF vs editable PPTX — what's the difference?",
+  "depth": "L2",
+  "word_count": "L2:220",
+  "answer": "**PDF** is the finished article — a boardroom-ready report exactly as Caspr produced it, laid out, formatted, ready to send or present as-is. It's included with every analysis, in your language, at no extra cost.\n\n**Editable PPTX** is the same report, restructured into slides you can open in PowerPoint and change — reorder, rewrite, drop into your own template. It unlocks at the **Business milestone**, because editing is a Business-tier feature, not a formatting toggle.\n\nUse the PDF when the report is the deliverable — a standalone document to send to a client or file for the record. Use the PPTX when the report is a starting point — material you need to reshape into your own deck before a meeting.\n\nBoth carry every citation. Adapting the PPTX doesn't cost you the sourcing that makes the report defensible in the first place.\n\nExport your report."
+ },
+ "D-06": {
+  "id": "D-06",
+  "question": "What is Intelligence and what makes it deeper?",
+  "depth": "L3",
+  "word_count": "L2:350 / L3:1300",
+  "answer": "Intelligence is Caspr's deepest analysis depth — built for decisions where being wrong is expensive. Where a Brief answers a single question and a Study builds the full picture, Intelligence goes further on both axes: broader sourcing across the 1M+ document, database, and news-feed library, and more reasoning passes from the assessment stage to stress-test the conclusion before it reaches the page.\n\nThe output format doesn't change — still a boardroom-ready PDF or editable PPTX in under 15 minutes, still every insight cited to a credible source. What changes is the rigor behind it: more angles checked, more evidence weighed, a report built to survive scrutiny in a board meeting or an investment committee, not just to inform one.\n\nPricing reflects the depth. Intelligence runs $300 within a Business or Enterprise Research Budget, or $399 à la carte with no subscription required — useful for a single high-stakes report without committing to a plan. Business is also where Intelligence unlocks in-budget, alongside data upload and editing.\n\nReach for Intelligence when the decision on the other side of the report matters: due diligence ahead of a term sheet, a market-entry call going to the board, a competitive assessment backing an acquisition. Corporate development teams use it to screen targets; investors, to back a diligence memo the partners will pick apart. For everyday questions, a Study at $80 or a Brief at $15 covers it for less.\n\nRun an Intelligence report."
+ },
+ "D-07": {
+  "id": "D-07",
+  "question": "How do I turn a Caspr report into my board deck?",
+  "depth": "L3",
+  "word_count": "L2:300 / L3:1100",
+  "answer": "Start with the report you already have, not a blank deck.\n\nAt the **Business milestone**, every report includes an **editable PPTX** — the same analysis, restructured into slides rather than pages. Open it in PowerPoint and it behaves like any deck you've built by hand: reorder slides, rewrite headlines, drop in your firm's template and branding.\n\nFrom there, adapt rather than rebuild. Keep the sections that carry the argument — the exec summary, the core findings, the exhibits that prove them — and cut what your specific audience doesn't need. This is where **Edit mode** earns its keep beforehand too: if a section needs to read differently for this board, revise it in the report first, then export.\n\nThe one thing not to do is strip the citations on the way in. Every insight in the PPTX still carries the sourcing it had in the report — keep it. A board deck that can answer \"where did this number come from\" is a stronger deck than one that can't, and stripping citations to make slides look cleaner throws away Caspr's entire advantage.\n\nFifteen minutes and an editable deck gets you further than a blank template and a week.\n\nBuild your board deck."
+ },
+ "E-01": {
+  "id": "E-01",
+  "question": "How to edit your report",
+  "depth": "L3",
+  "word_count": "L2:300",
+  "answer": "Editing turns a Caspr report into your report, and it unlocks at the Business milestone. Open any section and Edit mode gives you two ways in: a contextual menu for direct changes — rewrite a paragraph, restructure a section, swap a chart, cut what does not apply — or a rewrite prompt where you describe what you want in plain language and Caspr produces the change for you. Either way, saving creates a new version. Nothing is overwritten; your prior version stays intact on the Versions timeline, so you can always see what changed, compare two readings of the same section, or revert if an edit did not land the way you wanted. Editing is where a Caspr report stops being a one-shot deliverable and starts being a working document you shape. Sharpen the language for a specific audience, restructure the flow to match how your board reads a deck, cut a section that does not apply to this meeting, or push a chart to say what the underlying data actually supports more clearly than the default view did. Citations move with the content, so a rewritten paragraph is still traceable to its original source — editing never breaks the trail back to where a number came from. Editing is the step between a boardroom-ready report and a report that is boardroom-ready for your board specifically, in your language, in your structure, in the order you would present it. If your account has not reached Business, this single capability is the clearest reason to upgrade — everything else about the report is already yours to keep. A consultant tailoring the same market research for three different clients, or an investor trimming a due-diligence report down to what the IC actually needs to see, both live in Edit mode more than anywhere else in the product."
+ },
+ "E-02": {
+  "id": "E-02",
+  "question": "How to export to PowerPoint",
+  "depth": "L2",
+  "word_count": "L2:200",
+  "answer": "Exporting to PowerPoint gives you an editable PPTX — the deck version of your report, built to be dropped into your own template rather than presented exactly as Caspr delivered it. Editable PPTX unlocks at the Business milestone, alongside the rest of Caspr's editing tools, since adapting a deck properly usually means editing it first. From the report, open Outputs, choose PPTX, and pick the language you need it in; it renders natively in that language rather than translating after the fact, and it is priced per output if it falls outside your tier's included base formats. Once exported, the deck holds the same structure, charts, and citations as the PDF version — just reflowed into slide form, ready to be re-themed in your own colours, trimmed to the slides you actually need, or dropped straight into a client or board template. This is the fastest route from a Caspr report to a deck you walk into a meeting with: export the PPTX, adapt it using Edit mode and your own template, and keep the numbers and the sourcing intact underneath every slide."
+ },
+ "E-03": {
+  "id": "E-03",
+  "question": "How to request a follow-up analysis",
+  "depth": "L3",
+  "word_count": "L2:300",
+  "answer": "A follow-up analysis lets you keep working with a report instead of starting over each time a new question occurs to you — Caspr as an ongoing dialogue with your material, not a single answer delivered once and done. It unlocks at the Business milestone, alongside section refinement, since both draw on the same editing engine. From any section, open Edit mode and use the rewrite prompt to ask Caspr to go deeper: expand a section, address a question the original brief never scoped, or build out an angle the report only touched on in passing. Caspr treats that as a targeted extension of the existing analysis, grounded in the same underlying sources rather than started fresh, and saving the result produces a new version on your report's Versions timeline, sitting alongside every prior read of the report. This is the analyst dialogue a one-shot tool cannot offer: you read the report, a real question occurs to you on page forty, and you put it back to Caspr directly without re-running the whole analysis or losing the work already done getting here. Follow-ups draw from your Research Budget like any generation, scoped and priced to what you are actually asking for rather than the full report — going deeper on one question costs a fraction of starting over. Use it the way you would use a second meeting with the analyst who wrote the first draft, not a request to start again. You read a market sizing Study, and the number that jumps out is the competitive intensity in one sub-segment — instead of commissioning a whole new Competitive Landscape brief, you ask Caspr to build that section out inside the report you already have, and it arrives as an addition to the analysis you were already holding, not a disconnected second document to reconcile against the first."
+ },
+ "E-04": {
+  "id": "E-04",
+  "question": "How to refine one section without re-running everything",
+  "depth": "L2",
+  "word_count": "L2:220",
+  "answer": "You do not need to re-run an entire report to fix or deepen one part of it. Open the section that needs work in Edit mode, use the contextual menu or the rewrite prompt to describe exactly what should change, and save — only that section is touched, nothing else moves. The rest of the report, and every citation in it, stays exactly as it was before you opened the editor. This is deliberately narrower than requesting a full follow-up analysis: you are not extending the report's scope, just sharpening what is already there — tightening a paragraph that ran long, correcting emphasis that landed wrong, asking for a table instead of a block of prose, or swapping a chart for one that makes the point faster. Because the change is scoped to a single section rather than the whole document, it costs less than a full re-analysis and returns faster too. Saving still produces a new version on your Versions timeline, so the prior read of that section is never lost — you can always compare or revert. Section refinement unlocks at the Business milestone, the same gate as editing generally. It is the tool for the common case: the report is right almost everywhere, and exactly one section needs another pass before it goes out the door."
+ },
+ "F-01": {
+  "id": "F-01",
+  "question": "How does Caspr pricing work?",
+  "depth": "L3",
+  "word_count": "L2:400 / L3:1300",
+  "answer": "Caspr runs on a Research Budget — one monthly number that funds every analysis you run. No stacked subscription tiers, no token metering, no line-item invoice to decode.\n\nYou set a Research Budget, and each analysis draws from it at a fixed price: Brief $15, Study $80, Intelligence $300 in-budget ($399 à la carte), plus an optional Premium Data Add-on ($20–$60) shown and confirmed before the analysis starts. Whatever you don't spend carries forward automatically — you're billed for what you use, not for a plan you didn't touch.\n\nThe size of your Research Budget determines what you can access:\n\n- Professional — $200/month, roughly $186 available for analyses. Brief and Study.\n- Business — $600/month, roughly $558 available. Adds Intelligence, data upload, output editing, and follow-up refinement.\n- Enterprise — $1,800/month, roughly $1,674 available, pooled across a team of three seats. Adds SSO and API access.\n\nYou're charged once a month. No separate bills for individual reports, no per-seat add-ons layered on top.\n\nBefore committing to a monthly number, start with the $100 Research Budget every new account receives free — no card required — and see exactly what $15 and $80 buy. See plans."
+ },
+ "F-02": {
+  "id": "F-02",
+  "question": "What is a Research Budget?",
+  "depth": "L2",
+  "word_count": "L1:280 / L2:250",
+  "answer": "A Research Budget is the single number you authorise each month — a pool of spend you draw analyses from, not a licence per seat or a fixed subscription tier.\n\nThink of it as a research retainer you control directly, the way you'd control a budget line for external research, except you decide exactly how it gets spent, analysis by analysis. Every Brief, Study, or Intelligence analysis carries a fixed price, shown before you commit. Running one simply draws from the balance — no separate access fee to track, no token metering, no seat-by-seat billing to reconcile.\n\nUnused balance carries forward automatically. Set a $200 budget and spend only $80 in a month, and the remaining balance isn't lost — it sits in your Wallet, ready for next month's analyses, on top of whatever the next recharge adds.\n\nThe budget amount also determines which features unlock — Business and Enterprise sit at higher thresholds — but that's a separate question from how much of it you spend in a given month.\n\nNew accounts start with a $100 gifted Research Budget, no credit card required, so you can run real analyses before committing to anything.\n\nStart with $100 free."
+ },
+ "F-03": {
+  "id": "F-03",
+  "question": "How much does each analysis cost?",
+  "depth": "L2",
+  "word_count": "L1:280 / L2:250",
+  "answer": "Four prices, no fine print.\n\n- Brief — $15. A focused 3–5 page briefing, ready in about 15 minutes.\n- Study — $80. The full analysis: methodology, scenario work, a boardroom-ready PDF or editable PPTX.\n- Intelligence — $300 drawn from your Research Budget, or $399 as a one-off with no subscription required. The deepest depth, built for board-level and diligence-grade decisions.\n- Premium Data Add-on — $20–$60, only when an analysis calls for a source like Bloomberg or specialist regulatory data. You see the exact price and approve it before it's added.\n\nThe $200,000 question a strategy engagement would spend weeks answering costs $80 here, delivered in minutes, not months.\n\nEvery price is fixed and shown upfront — no metered tokens, no per-page charges, no surprise invoice after the report lands. Run one from $15."
+ },
+ "F-04": {
+  "id": "F-04",
+  "question": "What happens to unused budget?",
+  "depth": "L2",
+  "word_count": "L2:200",
+  "answer": "Nothing happens to it — unused Research Budget carries forward automatically. You don't lose what you didn't spend.\n\nEach month, Caspr recharges only the amount you actually used the month before — a delta recharge, not a flat renewal. Say you set a $200 budget: run one Study ($80) in a given month, and your next recharge restores only that $80. The rest of your balance, untouched, carries straight through to the new cycle rather than resetting to zero and forcing you to start over.\n\nThis is the default behaviour, not a setting to configure or a perk to request. There's no \"use it or lose it\" clock on your working balance, and no monthly allowance that expires unused. Your balance simply reflects real usage, cycle over cycle, for as long as the account stays active.\n\nThe only balances that do expire are gifted ones — your free trial's Research Budget, which has a 90-day window, and any promotional credits, which carry their own shorter terms. Balance you've paid for stays yours until you spend it.\n\nSee how budget works."
+ },
+ "F-05": {
+  "id": "F-05",
+  "question": "What's included at each plan?",
+  "depth": "L3",
+  "word_count": "L2:400 / L3:1200",
+  "answer": "Three milestones — Professional, Business, and Enterprise — determine what's unlocked as your Research Budget grows. All three run the same core loop: prompt, layout, gate, boardroom-ready report. What changes across them is analysis depth, editing power, and team scale.\n\n**Professional — $200/month budget, roughly $186 available for analyses.** The entry point for solo use. Run Brief and Study depth analyses — from a 3–5 page briefing note to a full weighing engagement with scenario analysis. You also get a standing Monthly Brief on a topic of your choosing and one Caspr Signals topic for weekly developments. Built for an individual analyst, researcher, or founder who needs analyst-grade output without a team or a retainer around it.\n\n**Business — $600/month budget, roughly $558 available for analyses.** Everything in Professional, plus what turns Caspr from a one-shot report generator into a working research tool: **Intelligence** depth for the highest-rigour, multi-model analysis; **data upload** so your own files feed the analysis alongside Caspr's 1M+ sources; and **output editing**, including section refinement and follow-up queries, so a delivered report keeps evolving. Consulting teams, category managers, and corporate development functions running real due diligence tend to land here.\n\n**Enterprise — $1,800/month budget, roughly $1,674 available, pooled across the team.** Everything in Business, plus **SSO**, **API access**, and **3 pooled seats** as standard — budget and every unlock shared across the team rather than licensed person by person, with an admin able to set per-user spending sub-limits. Built for organisations running Caspr as standing infrastructure: investment teams, agencies serving multiple clients, or strategy functions with several analysts drawing on one shared budget.\n\nEach milestone is a budget threshold, not a separate product to sign up for — cross it, and the features unlock immediately. Start where your current usage sits; moving up is a budget change, not a new contract.\n\nChoose your plan."
+ },
+ "F-06": {
+  "id": "F-06",
+  "question": "Can I buy Intelligence without a subscription?",
+  "depth": "L2",
+  "word_count": "L1:280 / L2:220",
+  "answer": "Yes. Intelligence — Caspr's deepest depth, built for due diligence and board-level strategy — is available at $399 per report with no Research Budget required. Add a card, run the analysis, done.\n\nInside a Research Budget at the Business milestone or above, the same depth of analysis costs $300. À la carte makes sense for a single high-stakes call: a target company, a board paper, a deal you need underwritten by evidence before the meeting — without committing to a monthly budget you may not need again this quarter.\n\nBoth versions are the identical Intelligence engagement: the same source depth, the same rigour, the same citations. The only difference is how you pay for it. Buy an Intelligence report."
+ },
+ "F-07": {
+  "id": "F-07",
+  "question": "How does the free trial work?",
+  "depth": "L3",
+  "word_count": "L2:300 / L3:1000",
+  "answer": "Every new account starts with a $100 Research Budget, gifted, no card required. It's yours to spend for 90 days.\n\n$100 covers real testing, not a token demo: six Briefs at $15 each, or a full Study at $80 with room for a Brief besides. Run the depth that matches the question you actually have — a quick fact-check or the board-grade version — and see the report before you decide whether to set a monthly Research Budget of your own.\n\nThe 90-day window is the only constraint. Whatever balance remains when it lapses is forfeited, so the sooner you run your first analysis, the more of the $100 you put to work. There's no card on file forcing the decision — the clock is the only thing moving.\n\nMost people don't need convincing after the first report. They need to see one. Claim $100 free."
+ },
+ "F-08": {
+  "id": "F-08",
+  "question": "What's your refund policy?",
+  "depth": "L2",
+  "word_count": "L2:200",
+  "answer": "Unused Research Budget is refunded in full if you cancel — Caspr doesn't hold onto money for analyses you never ran. Completed analyses aren't refunded, since the report was already delivered; the one exception is a system error that fails to produce output, in which case the full cost is credited back to your balance automatically, no request needed.\n\nThe $100 free trial balance is gifted, not paid, so it isn't refundable — spend it before the 90-day window closes.\n\nIf you believe an analysis produced materially incorrect output, contact support — each case is reviewed individually.\n\n[VERIFY: confirm the complete, current refund terms — including any first-billing-cycle provisions, processing timelines, and dispute handling — against .agents/pricing-model.md §9 and the published Terms of Service before this answer is published.]\n\nContact support."
+ },
+ "F-09": {
+  "id": "F-09",
+  "question": "How do I upgrade or change plans?",
+  "depth": "L2",
+  "word_count": "L2:220",
+  "answer": "Changing your Research Budget is a single setting inside Wallet, not a plan swap or a new signup — adjust the monthly amount, confirm, done.\n\n**Increasing your budget** unlocks the new milestone's features immediately on confirmation. Move from $200 to $600 and Intelligence, data upload, and output editing are available the moment you confirm — you don't wait for a billing cycle to use them. The higher budget amount itself, and the larger recharge that comes with it, takes effect at your next billing cycle; your current balance and cycle are unaffected until then.\n\n**Decreasing your budget** works in reverse: the lower amount takes effect at your next billing cycle, and access to features above the new threshold is removed at the end of your current cycle, not the moment you confirm. Any analysis already running when a downgrade lands completes uninterrupted — nothing gets cut off mid-report.\n\nThere's a floor: you can't set a budget below $200, or below what your current balance requires. Caspr tells you the minimum if you try to go lower.\n\nBilling stays simple throughout: one charge per month, and it only recharges what you actually spent the cycle before — never billed twice for the same period.\n\nUpgrade your plan."
+ },
+ "F-10": {
+  "id": "F-10",
+  "question": "Is Caspr really cheaper than an analyst or agency?",
+  "depth": "L3",
+  "word_count": "L2:350 / L3:1500",
+  "answer": "Yes, and the gap isn't close. A boutique research agency runs $5,000–$50,000 for comparable scope. A strategy engagement with a firm like McKinsey or BCG starts above $50,000 and can run into the hundreds of thousands — with a multi-week timeline attached. Caspr delivers comparable depth from $15, in under 15 minutes.\n\nRun the math on a Study: $80 against a $50,000 minimum engagement isn't a discount, it's a different order of magnitude — up to 90% cheaper, before counting the weeks you get back. Intelligence, the deepest depth, runs $300–$399 — still a fraction of what a diligence engagement costs a boutique shop, delivered same-day rather than at the end of a multi-week workstream.\n\nThe output holds up to the comparison too: a boardroom-ready PDF or editable PPTX, every insight cited to a credible source, built by a system that reasons through the data rather than summarising it. Analyst-grade insights, without the analyst retainer.\n\nYour competitors are still waiting for the research. Do the math — start free."
+ },
+ "G-01": {
+  "id": "G-01",
+  "question": "Is my data private and secure?",
+  "depth": "L3",
+  "word_count": "L2:350 / L3:1100",
+  "answer": "Your data belongs to you, and it stays that way. Uploaded files and prompts are never used to train any model — Caspr's included. Every analysis you run is retained in your account and is not used to improve the product for anyone else.\n\nCaspr is built to ISO 27001:2022 information security standards and handles data in line with GDPR. Enterprise accounts add SSO for centralised authentication and admin-managed team controls, giving a security or procurement team a single point of control over who can get into the account and what they can do once inside.\n\nAnalyses are private to the account that runs them by default — team visibility is an Enterprise-tier setting, controlled by the account admin, not an automatic behaviour.\n\n[VERIFY: confirm current certification status and audit scope, plus any additional compliance documentation (SOC 2, DPA availability, data residency commitments), with the security and compliance team before this answer is published — certification claims must be stated precisely and kept current.]\n\nTalk to us about security."
+ },
+ "G-02": {
+  "id": "G-02",
+  "question": "Who can see my analyses?",
+  "depth": "L2",
+  "word_count": "L2:200",
+  "answer": "By default, an analysis belongs only to the account that ran it. Nobody else — not a teammate, not an admin — sees it unless you choose to share it.\n\nThat changes at the Enterprise milestone. Budget is pooled across the team's three seats, and account admins get management controls over the team, including an optional per-seat spending sub-limit.\n\n[VERIFY: confirm the exact default visibility rules at Enterprise — specifically what, if anything, an admin can see of a team member's individual analyses without an explicit share — before this answer is published.]\n\nSee account settings."
+ },
+ "G-03": {
+  "id": "G-03",
+  "question": "How do team seats work?",
+  "depth": "L2",
+  "word_count": "L2:220",
+  "answer": "Enterprise accounts come with three seats by default, sharing a single pooled Research Budget of $1,800/month — roughly $1,674 of it available to spend on analyses across the whole team.\n\nAny seat can run a Brief, Study, or Intelligence report; the cost draws from the shared pool rather than an individual allowance. The account admin can set an optional per-seat spending sub-limit to cap how much any one person draws down before the next billing cycle — the default is no limit, so the team simply shares the pool.\n\nAll billing runs through the admin's payment method. When someone leaves the team, their completed reports stay with the account while their access is revoked immediately. Talk to us about teams."
+ },
+ "G-04": {
+  "id": "G-04",
+  "question": "Does Caspr support SSO?",
+  "depth": "L2",
+  "word_count": "L2:180",
+  "answer": "Yes. SSO is part of the Enterprise milestone — a $1,800/month Research Budget unlocks it alongside team seats and API access.\n\nIt's built for the procurement checklist as much as the security one: centralised authentication means IT controls who gets into the account, and deprovisioning happens at the identity layer rather than by chasing down individual logins when someone leaves. It ships bundled with the Enterprise tier, not sold as a standalone add-on.\n\nFor configuration details specific to your identity provider, talk to us about Enterprise."
+ },
+ "G-05": {
+  "id": "G-05",
+  "question": "Is there an API?",
+  "depth": "L2",
+  "word_count": "L2:200",
+  "answer": "Yes, at the Enterprise milestone. A $1,800/month Research Budget unlocks API access alongside SSO and team seats.\n\nThe API lets you trigger analyses programmatically — Briefs, Studies, and Intelligence reports — rather than through the dashboard, so Caspr can sit inside an existing research or reporting process instead of being a separate destination your team has to remember to visit.\n\nEndpoint documentation and rate limits are specific to your setup and use case. If API access is what's driving your decision, talk to us about the API — we'll scope it against what you're building before you commit to a budget."
+ },
+ "G-06": {
+  "id": "G-06",
+  "question": "How do I manage my account settings?",
+  "depth": "L2",
+  "word_count": "L2:220",
+  "answer": "Your account settings live in one place, split into a handful of clear screens rather than one long form.\n\n**Wallet** holds your spendable Research Budget, an activity ledger of what each analysis cost, your next recharge date, and downloadable invoices — the financial side of the account, in one view.\n\n**Research profile** is what Caspr has learned about you — role, interests, the kind of analyses you tend to run — gathered through short get-to-know questions inside Ask Caspr. Every fact is listed in plain language, and you can remove any of them.\n\n**Preferences** sets your defaults: language, output style, and format for new analyses. You can still override any of these per analysis at the gate, so Preferences is a starting point, not a lock.\n\n**Security** covers your password, two-factor authentication, and the devices currently signed in, with the option to sign any of them out remotely.\n\nTeam visibility and seat management apply at the Enterprise milestone, where budget is pooled across seats and an admin can set per-user spending sub-limits.\n\nWant a clean slate, or to close the account entirely? Those are separate, deliberate actions — see Reset vs. Delete.\n\nOpen account settings."
+ },
+ "G-07": {
+  "id": "G-07",
+  "question": "Can I share a report with my team?",
+  "depth": "L2",
+  "word_count": "L2:200",
+  "answer": "Today, sharing a report means exporting it — download the PDF, or at Business the editable PPTX, and send it the way you'd send any file. Every citation travels with it, so a colleague can trace any number back to its source without needing their own Caspr account or logging into anything.\n\nAt the **Enterprise** milestone, sharing becomes structural rather than manual: budget and seats are pooled, so every analysis run on the account belongs to the team, not just the person who ran it. Three seats are included by default, with an admin able to set per-user spending sub-limits if needed.\n\n[VERIFY: exact in-app sharing mechanics — link sharing, view-only access for colleagues outside the seat count, or export-only — with the product team before publishing.]\n\nFor now, treat export as the reliable path: generate the format you need from the Outputs tab, in whatever language your recipient works in, and share the file directly.\n\nShare your report."
+ },
+ "H-01": {
+  "id": "H-01",
+  "question": "How do consulting firms use Caspr?",
+  "depth": "L3",
+  "word_count": "L2:350 / L3:1400",
+  "answer": "Consulting firms use Caspr to do in 15 minutes what used to take a junior analyst a week.\n\nEngagement scoping, market scans, competitor teardowns — the deliverables are the same shape every project needs, and the sourcing work behind them is the least differentiated hour a firm bills. Caspr takes over that hour. Type the engagement brief, confirm the layout Caspr proposes, and a ~100-page boardroom-ready PDF or editable PPTX lands with every figure cited to a credible source — ready to drop into the client deck or hand to a partner for review.\n\nBefore: a first-year associate spends three to five days pulling market sizing, competitor positioning, and industry trend data before a single slide gets written. After: that same scan runs in the background while the team scopes the actual engagement, freeing analyst hours for the judgment work clients are actually paying for.\n\nAssessment structures the analysis the way a research desk would — reasoning through the data rather than summarizing whatever comes back first. Sourcing keeps the numbers current, pulling from 1M+ curated sources rather than a frozen dataset. Every insight carries its source, so a partner can defend the numbers in the room without re-checking them first.\n\nRun a Brief at $15 to sanity-check a market before a pitch, or a full Study at $80 for the desk research behind a live engagement. At Business, reports export as editable PPTX and unlock Intelligence for diligence-grade depth. Either way, it costs a fraction of an associate's day — up to 90% cheaper than staffing the research in-house — and it's ready before the kickoff call ends.\n\nAnalyst-grade insights. Without the analyst retainer. See a consulting example."
+ },
+ "H-02": {
+  "id": "H-02",
+  "question": "How do investors use Caspr for due diligence?",
+  "depth": "L3",
+  "word_count": "L2:350 / L3:1400",
+  "answer": "Investors use Caspr to screen a deal in minutes and diligence it in hours, not weeks.\n\nDeal sourcing starts with a question — is this market big enough, is this company positioned to win it — and that question used to mean a week with an analyst or a call to a research vendor. Now it means a prompt. Caspr proposes a structured layout, asks the clarifying questions that sharpen the target (sector, geography, stage, comparable set), then delivers a ~100-page report with every figure cited to a credible source.\n\nFor an initial screen, a Study at $80 covers market sizing, competitive landscape, and growth drivers for a target sector or company — enough to decide whether a deal is worth a partner meeting. For the diligence that follows a term sheet, Intelligence goes deeper: broader sourcing, more rigorous reasoning, board-grade output for the calls where being wrong is expensive.\n\nBecause Caspr draws from 1M+ curated sources — filings, government databases, live news feeds — rather than an open web scrape, every claim in the report can be traced and checked before it goes in an investment memo. Sourcing keeps the data current, so a market-sizing figure reflects this quarter, not a stale dataset.\n\nPE, VC, hedge fund, or family office — the job is the same: move faster than the next fund without cutting corners on rigor. Caspr does the desk research in fifteen minutes, at a fraction of what an analyst or research vendor charges.\n\nRun a diligence report and see the sourcing for yourself."
+ },
+ "H-03": {
+  "id": "H-03",
+  "question": "How do strategy teams and the C-suite use Caspr?",
+  "depth": "L3",
+  "word_count": "L2:350 / L3:1300",
+  "answer": "Strategy teams and the C-suite use Caspr as an analyst on tap — intelligence on demand, without retaining a firm.\n\nA market-entry question, a competitor's move, a board member asking how big an opportunity really is — these questions arrive on no schedule, and a retained firm's turnaround rarely matches the urgency. Caspr proposes a structured layout from a single prompt, confirms scope with a few clarifying questions, then delivers a ~100-page boardroom-ready PDF or editable PPTX in under 15 minutes, every insight cited to a credible source.\n\nThat last part matters most in the room. A board doesn't take a strategy slide at face value — someone asks where the number came from. Caspr shows its work: every figure traces back to a document, database, or news feed, not a black box. Assessment structures the conclusion the way an analyst would, reasoning through the evidence rather than summarizing it; the sourcing stage keeps it current, so the competitive landscape reflects this quarter, not last year's engagement.\n\nUse a Brief for a fast read before a leadership call, a Study for the market-entry or competitive analysis behind a strategy offsite, or Intelligence for board-grade diligence on a major decision. No retainer, no engagement letter, no three-week wait — just the research, ready before the meeting is.\n\nBrief your board faster — and defend every number in it."
+ },
+ "H-04": {
+  "id": "H-04",
+  "question": "How do category managers use Caspr?",
+  "depth": "L3",
+  "word_count": "L2:350 / L3:1300",
+  "answer": "Category managers use Caspr to size a category, map the competitive set, and track where trends are moving — before the quarterly planning meeting, not after.\n\nThe job runs on a small set of recurring questions: how big is this category, who's winning share, what's driving growth or decline. Answering them properly used to mean pulling reports from multiple research vendors and reconciling numbers that never quite agree. Caspr answers them in one pass. Type the category and geography, confirm the layout Caspr proposes, and a ~100-page report arrives in under 15 minutes — market size, competitor positioning, and trend lines, every figure cited to a credible source.\n\nAn example: sizing a private-label opportunity in a grocery subcategory means knowing total category value, growth rate, top branded players and their share, and where private label already has traction elsewhere. That's a Study at $80 — a fraction of a syndicated research subscription for the same slice of data, and available the same afternoon a question comes up rather than at the next report cycle.\n\nBecause the analysis draws on 1M+ curated sources rather than a single vendor's panel, the numbers can be checked against their origin, not taken on faith. And because it runs in minutes, category managers can afford to ask the question twice — once to size the opportunity, once to stress-test it before it goes in the plan.\n\nSize your category and see the competitive set laid out."
+ },
+ "H-05": {
+  "id": "H-05",
+  "question": "How do agencies use Caspr for pitches?",
+  "depth": "L3",
+  "word_count": "L2:350 / L3:1300",
+  "answer": "Agencies use Caspr to build the industry deep-dive behind a pitch in the time it used to take to schedule the kickoff call.\n\nA new-business pitch lives or dies on whether the agency understands the client's category better than the client does. That means market sizing, competitor spend, channel trends, and category dynamics — research that's rarely billable and always due faster than it's comfortable to produce. Caspr proposes a structured layout from a single prompt, confirms scope with a few clarifying questions, then delivers a ~100-page boardroom-ready report in under 15 minutes, every insight cited to a credible source.\n\nAt Business, reports export as editable PPTX, so the analysis drops straight into the agency's own pitch template instead of getting rebuilt slide by slide. That's the difference between research that informs the deck and research that becomes the deck.\n\nA Study at $80 covers the category deep-dive for a standard new-business pitch; Intelligence goes deeper for a major account review where the client will push back on every number. Either way, the sourcing — 1M+ curated documents, databases, and news feeds, not an open web scrape — means the strategist presenting it can answer where a number came from without hesitating.\n\nWalking into a pitch with analyst-grade research, at agency margins rather than research-vendor rates, changes the room.\n\nResearch your next pitch."
+ },
+ "H-06": {
+  "id": "H-06",
+  "question": "How do graduate researchers use Caspr?",
+  "depth": "L3",
+  "word_count": "L2:300 / L3:1200",
+  "answer": "Graduate researchers use Caspr to build the market or industry context section of a thesis or dissertation in an afternoon instead of a month.\n\nMost Masters and PhD research includes a chapter — market background, industry structure, sector trends — that supports the core academic argument without being the argument itself. That's exactly the work Caspr is built for: a structured, cited synthesis of a market or industry, delivered as a ~100-page report in under 15 minutes. Every claim carries its source, so it can be checked and cited onward rather than taken on faith.\n\nIt's worth being precise about scope. Caspr synthesizes market and industry context from 1M+ curated sources — filings, government data, news feeds. It is not a substitute for primary academic literature review or peer-reviewed citation in the body of a thesis. Use it for the chapter that answers what the market actually looks like, not the literature review itself.\n\nA Brief at $15 is enough to sanity-check a market claim before it goes in a proposal. A Study at $80 covers the fuller context section — sizing, structure, competitive dynamics — for a chapter or committee presentation. Either way, it's built for a student budget: the $100 free trial covers several runs, no card required.\n\nSynthesise your context and see exactly where every number comes from."
+ },
+ "H-07": {
+  "id": "H-07",
+  "question": "How do corporate dev and M&A teams use Caspr?",
+  "depth": "L3",
+  "word_count": "L2:350 / L3:1300",
+  "answer": "Corporate development and M&A teams use Caspr to map a sector and identify acquisition targets before a banker gets involved.\n\nTarget identification starts with a question that sounds simple and rarely is: who are the credible acquisition targets in this sector, and how do they compare on size, growth, and positioning. Caspr turns that question into a structured, cited report in under 15 minutes — market map, competitor set, and the acquisition targets in the sector, every figure sourced from a credible document, database, or news feed rather than a proprietary screen.\n\nFor an initial market map, a Study at $80 lays out the competitive landscape and the plausible target list for a sector or geography. As a deal narrows, Intelligence — $300 in-budget at Business, $399 à la carte — goes deeper: broader sourcing, more rigorous reasoning, the kind of board-grade output that supports an investment committee memo rather than an internal scoping conversation.\n\nThe sourcing matters more here than almost anywhere else. A number that can't be traced doesn't survive diligence, and 1M+ curated sources means every figure in the report can be checked before it reaches the deal team, let alone the board.\n\nRun the market map before you brief the board on where to look.\n\nMap your targets."
+ },
+ "H-08": {
+  "id": "H-08",
+  "question": "How do startups use Caspr to raise capital?",
+  "depth": "L3",
+  "word_count": "L2:350 / L3:1400",
+  "answer": "Startups use Caspr to build the market-sizing and competitive-landscape slides investors will actually stress-test — TAM, SAM, SOM, and the competitor set, every figure cited to a credible source.\n\nInvestors discount a market-size number the moment it looks invented, and founders rarely have the budget to hire an analyst to get it right. Caspr closes that gap: type the market and the business, confirm the layout Caspr proposes, and a ~100-page report arrives in under 15 minutes with sizing, growth drivers, and competitive positioning built in — the backbone of the market section of a deck, not just a slide of guessed numbers.\n\nBecause the analysis draws on 1M+ curated sources rather than a founder's back-of-envelope math, the figures survive a diligence call. An investor who asks where that TAM comes from gets an answer with a citation attached, not a shrug.\n\nThis is where the free trial matters most. Cash-strapped founders get $100 in Research Budget with no credit card, enough to run several Briefs at $15 or a full Study at $80 while building the deck — the market case gets built before the seed round needs it, not after a research line item the startup can't afford yet.\n\nAn investor-ready market case, at a price a pre-seed company can actually pay.\n\nBuild your market case."
+ },
+ "H-09": {
+  "id": "H-09",
+  "question": "How do I do market sizing with Caspr?",
+  "depth": "L3",
+  "word_count": "L2:350 / L3:1400",
+  "answer": "Market sizing lives inside a normal Caspr run — there is no separate tool for it. Type a prompt that names the market, the geography, and the decision the number will inform: \"Size the enterprise cybersecurity software market in North America, to decide whether to launch a new product line in 2027.\" That's enough for Caspr to start.\n\nCaspr asks a few clarifying questions to close the gaps a sizing prompt always leaves open — where the market's edges sit, which year to anchor the figure to, whether you need a growth forecast alongside the snapshot. Answer them, and Caspr proposes a layout: Market Definition, TAM, SAM, SOM, Growth Drivers, Competitive Context, and a Sources exhibit. Adjust it before you run — add a regional breakdown, drop a section you don't need.\n\nThe report doesn't hand you a single number. It builds TAM down to SAM down to SOM, each figure carrying its own methodology and its own cited source — a market report, a regulatory filing, a government dataset. Click the red dot on any figure and Caspr shows exactly where it came from, through Ask Caspr, without leaving the page.\n\nThat traceability is what makes the number defensible. A market size nobody can audit is an opinion. One where every input is one click from its source is evidence — whether you're a category manager sizing a new SKU, an investor scoping a deal, or a founder building the market-size slide for a raise.\n\nRun it as a Study for the full TAM/SAM/SOM breakdown with methodology and growth drivers, or a Brief for a leaner, cited top-line figure. Either way, it's the number you can defend, source by source, in under fifteen minutes — not the number you hope nobody questions.\n\nIf the figure needs revisiting later — a narrower segment, a different year — ask Ask Caspr or refine the section directly, rather than starting a fresh analysis from zero."
+ },
+ "H-10": {
+  "id": "H-10",
+  "question": "How do I run a competitive landscape analysis?",
+  "depth": "L3",
+  "word_count": "L2:350 / L3:1400",
+  "answer": "Ask Caspr to map a market the same way you'd ask for anything else: one prompt, naming the market, the geography, and what you need the landscape for. \"Map the competitive landscape for cloud-based expense-management software in the UK, ahead of a pitch to a mid-market client\" gives Caspr enough to work with.\n\nCaspr asks clarifying questions to scope it properly — how many players to cover, whether to include adjacent entrants, what geography or segment to bound the map to, whether share should be measured by revenue or customer count. Answer them, and it proposes a layout: Market Overview, Player Map, Positioning, Market Share, Competitive Dynamics, and Sources. Adjust the sections before you run.\n\nWhat comes back isn't a list of logos. It's a structured map: who the players actually are, how they're positioned against each other, and where share sits today — each claim tied to a cited source, from filings to market-research reports to press coverage. Click the red dot on any figure or claim to see exactly where it came from, through Ask Caspr.\n\nUse it the way you'd use a competitor landscape from a research firm — but built in minutes and fully traceable, not a static slide someone hands you and hopes you don't question. A category manager checking who else is fighting for shelf space, an agency building the industry-context slide for a client pitch, or an investor scoping a sector before a deal all start from the same map: who's in it, how they're positioned, and what's defensible enough to put in front of the people making the decision.\n\nRun it as a Study for the full player map, positioning, share, and dynamics build, or as a Brief when you just need the field and the positioning quickly, without the deeper share analysis behind it."
+ },
+ "H-11": {
+  "id": "H-11",
+  "question": "How do I run due diligence with Caspr?",
+  "depth": "L3",
+  "word_count": "L2:350 / L3:1300",
+  "answer": "Running due diligence on Caspr is three steps: scope the target, run Intelligence, verify the sourcing.\n\nScope first. A prompt naming the target — company, sector, and the specific question (market position, growth trajectory, competitive exposure) — gets sharper the more precise it is. Caspr proposes a structured layout and asks clarifying questions to narrow it further before anything runs; answering them well is the most valuable minute in the process.\n\nChoose the depth. Diligence calls are high-stakes by definition, so Intelligence is the right depth here — $300 in-budget at Business, $399 à la carte with no subscription required. It goes deeper than a Study: broader sourcing, more rigorous reasoning, board-grade structure built for a decision where being wrong is expensive.\n\nRead and verify. The report lands as a ~100-page boardroom-ready PDF or editable PPTX in under 15 minutes, and every insight carries the credible source it came from — a filing, a government database, a news feed. That's the step diligence actually requires: not just an answer, but an answer a partner or an investment committee can trace and check line by line before it goes in a memo.\n\nThe whole cycle — scope, run, verify — fits inside the time it used to take to schedule a call with an analyst. That's not a shortcut on rigor; the sourcing is the rigor.\n\nRun diligence now."
+ },
+ "H-12": {
+  "id": "H-12",
+  "question": "How do I use Caspr for client and pitch research?",
+  "depth": "L3",
+  "word_count": "L2:300 / L3:1200",
+  "answer": "Researching a prospective client for a pitch takes three moves on Caspr: scope the industry, let the report build the narrative, export it into your deck.\n\nStart with a prompt naming the client's industry and the angle of the pitch — market position, category trends, competitive pressure. Caspr proposes a structured layout and asks a few clarifying questions to sharpen scope, then delivers a ~100-page report in under 15 minutes, every figure cited to a credible source.\n\nThe report doesn't just supply data — its structure is the pitch narrative's backbone: where the category is heading, where the client sits in it, where the opportunity is. A Study at $80 covers the standard pitch deep-dive; for a major account review that needs to withstand harder questions, Intelligence goes deeper.\n\nAt Business, the report exports as editable PPTX, so it drops into the agency or firm's own template rather than getting rebuilt slide by slide the night before the pitch. The citations travel with it — useful when a prospective client asks where a competitive-spend figure came from, and the answer is immediate instead of awkward.\n\nThis is the same job whether it's an agency chasing new business or a consulting team scoping an engagement: understand the client's industry better and faster than they expect, at a fraction of what that research used to cost.\n\nPrep your pitch."
+ },
+ "I-01": {
+  "id": "I-01",
+  "question": "My report is taking longer than expected",
+  "depth": "L2",
+  "word_count": "L2:200",
+  "answer": "Most Caspr reports return in under 15 minutes, though that clock runs differently by depth. A Brief tends to finish fastest; a full Study takes a little longer; Intelligence, the deepest depth, does the most reasoning and pulls the most sources, so a complex question at that tier can run past the 15-minute mark.\n\nA longer wait is not, by itself, a problem — it usually means the assessment stage is working through more evidence than a quick question required. Give an Intelligence run up to 20–30 minutes before treating it as stuck.\n\nIf a report sits well past that window with no movement, don't re-run it — that risks a duplicate charge against your Research Budget. Contact support with the analysis ID instead, and we will check the status and fix it if something genuinely stalled.\n\nContact support."
+ },
+ "I-02": {
+  "id": "I-02",
+  "question": "I've run out of Research Budget — what now?",
+  "depth": "L2",
+  "word_count": "L2:220",
+  "answer": "Running out of Research Budget is rare — unused balance carries forward automatically, so it takes a genuinely heavy month to hit zero. When it does happen, there's no penalty and no dead end. Three paths, none urgent.\n\n**Wait for the recharge.** Your budget recharges monthly, and it restores based only on what you actually spent — nothing wasted, nothing lost in the process. If you're close to your cycle date, waiting costs you nothing but a few days.\n\n**Upgrade your milestone.** Move to a higher Research Budget and the added spend is available from the next cycle onward. Business unlocks a larger budget plus Intelligence-depth analyses, data upload, and editing — worth doing if you're consistently running against the ceiling, not just running over it once.\n\n**Buy Intelligence à la carte.** Need a single high-stakes analysis right now, without waiting or committing to a higher budget? Intelligence is available standalone at $399, charged once, no subscription required — open to any account, trial or paid.\n\nCaspr never lets you start a run it can't finish. It blocks the analysis before it begins and tells you exactly how much more you need, so there's no surprise mid-run and no partial report to clean up after."
+ },
+ "I-03": {
+  "id": "I-03",
+  "question": "My report missed what I wanted — how do I fix the prompt?",
+  "depth": "L3",
+  "word_count": "L2:300 / L3:1000",
+  "answer": "A report that misses the mark is almost always a scoping problem, not an analysis problem — and it's fixable without paying for a full re-run.\n\nStart with the prompt. If it didn't name the market, geography, and the decision it needed to inform, that's usually the miss: a broad prompt gets a broad report back. Add the specifics next time — subject, market, and what the report needs to decide — and Caspr has far less to guess at.\n\nBefore you commit to running again, use the two checkpoints built for exactly this. The clarifying questions close scope gaps before Caspr writes a single page — if you rushed through them, slow down on the next pass and read each one properly. The layout proposal shows the report's skeleton before it's built; if a section is missing, wrong, or out of order, fix it there. It's the cheapest place to steer, because nothing has been generated yet and no budget has been spent.\n\nIf the report already exists and only one section missed, don't re-run the whole thing — refine that section instead. It costs less than a fresh analysis and keeps everything else the report already got right intact. Save a full re-run for when the market itself was mis-scoped from the start, not when one section simply needs sharpening.\n\nTreat a miss as information, not a dead end: it tells you exactly which checkpoint to lean on harder next time — a sharper prompt, closer attention at the layout stage, or a targeted section refine before you spend on running the whole thing again."
+ },
+ "I-04": {
+  "id": "I-04",
+  "question": "How do I report an issue or reach support?",
+  "depth": "L1",
+  "word_count": "L1:200 / L2:150",
+  "answer": "To report an issue or reach support, use [VERIFY: confirm real support channel — email address, help widget, or contact form] and include your account email, the analysis ID if the issue relates to a specific report, and a short description of what happened. A screenshot helps when something looks visibly wrong.\n\nIf a report is stalled or slow, note how long it has been running and its depth — Brief, Study, or Intelligence — since deeper analyses legitimately take longer, and that detail lets us triage faster.\n\n[VERIFY: confirm target response time / support hours before publishing.]\n\nContact support."
+ },
+ "J-01": {
+  "id": "J-01",
+  "question": "What is Analytical AI?",
+  "depth": "L1",
+  "word_count": "L1:60",
+  "answer": "Analytical AI is artificial intelligence purpose-built to analyze data, structure conclusions, and cite every source — not to hold a conversation. Where generative AI predicts plausible-sounding text, Analytical AI reasons through evidence and delivers a decision-ready report. It is the model behind Caspr: put in a question, get back a cited, boardroom-ready analysis. Learn more."
+ },
+ "J-02": {
+  "id": "J-02",
+  "question": "How does Caspr handle sources that disagree?",
+  "depth": "L1",
+  "word_count": "L1:60",
+  "answer": "Assessment is Caspr's research methodology: it reasons through data and structures conclusions, rather than retrieving and repeating snippets. It decides what a report needs, in what order, and how each finding supports the next — the way a research desk plans an analysis before writing it. Every Caspr report runs on it. Learn more."
+ },
+ "J-03": {
+  "id": "J-03",
+  "question": "How current is Caspr's data?",
+  "depth": "L1",
+  "word_count": "L1:60",
+  "answer": "Sourcing is Caspr's real-time live data layer — continuous feeds from documents, government databases, and news sources that keep every analysis current. Rather than reasoning from a training cutoff, Caspr pulls today's data into today's report, so a market that moved this quarter shows up in the numbers, not last year's snapshot. Learn more."
+ },
+ "J-04": {
+  "id": "J-04",
+  "question": "What is a Research Budget?",
+  "depth": "L1",
+  "word_count": "L1:60",
+  "answer": "A Research Budget is the monthly pool of spend a Caspr plan grants — Professional, Business, or Enterprise — from which each analysis is drawn at a fixed price: $15 for a Brief, $80 for a Study, $300 for Intelligence. One charge a month, no surprise line items. Unused balance carries forward automatically, so nothing you don't spend is lost. Learn more."
+ },
+ "J-05": {
+  "id": "J-05",
+  "question": "What are Brief, Study and Intelligence?",
+  "depth": "L1",
+  "word_count": "L1:60",
+  "answer": "Brief, Study, and Intelligence are Caspr's three analysis depths, not different products — the difference is how far the analysis goes. Brief ($15) answers a specific question fast. Study ($80) builds the full picture. Intelligence ($300 in-budget, $399 à la carte) is the deepest: board-grade, for decisions with real stakes. All three arrive as a cited, boardroom-ready report. Learn more."
+ },
+ "J-06": {
+  "id": "J-06",
+  "question": "What is a boardroom-ready report?",
+  "depth": "L1",
+  "word_count": "L1:60",
+  "answer": "A boardroom-ready report is Caspr's standard output: a roughly 100-page, presentation-quality PDF or editable PPTX, structured and designed to be put in front of decision-makers without rework. Every insight is cited to its source, so the numbers can be defended on the spot, not just presented. It is the deliverable, not a draft. Learn more."
+ },
+ "J-07": {
+  "id": "J-07",
+  "question": "What is a citation in a Caspr report?",
+  "depth": "L1",
+  "word_count": "L1:60",
+  "answer": "A citation is the credible source shown next to every insight in a Caspr report — a document, government database, or news feed the claim can be traced back to. Nothing is asserted without one, which is how a Caspr report stays verifiable instead of asking to be taken on faith. Learn more."
+ },
+ "J-08": {
+  "id": "J-08",
+  "question": "What is the layout proposal?",
+  "depth": "L1",
+  "word_count": "L1:60",
+  "answer": "The layout proposal is the structured skeleton Caspr proposes right after your prompt — the report's sections and flow, before any research runs. You confirm it or adjust it, and a few clarifying questions sharpen it further, so the analysis that follows is built to the shape you actually need. Learn more."
+ },
+ "A-12": {
+  "id": "A-12",
+  "question": "What happens when I sign up?",
+  "depth": "L3",
+  "word_count": "L2:300",
+  "answer": "Signup drops you straight into the tool — there is no setup wizard, no onboarding tour to click through, no profile to fill in first. You land directly in the prompt box, ready to run your first analysis.\n\nType a single-line prompt, and Caspr proposes a structured layout — the report's skeleton — and asks a few clarifying questions to scope it to your actual question rather than a generic version of it. From there, the first real checkpoint is the **gate**: one screen showing exactly what's about to be produced — Type and Tier, output formats, language, style, and price — before anything runs. Everything on it is pre-set by Caspr, and everything is changeable if you want a different depth or format.\n\nYour **$100 Research Budget** arrives with your account and covers your first run outright, with room to spare. There's no credit card at signup, no plan to pick, no trial clock beyond the 90-day expiry on the budget itself — just an email address and a prompt.\n\nFrom the gate, hitting Generate commits the run. Generation is atomic once it starts, so most analyses finish in under 15 minutes, and you can watch the build in Theater or step away entirely and come back to a finished report.\n\nThat's the whole path from signup to your first boardroom-ready report: prompt, layout, questions, gate, done.\n\nStart your first analysis."
+ },
+ "C-10": {
+  "id": "C-10",
+  "question": "What is the gate before I generate?",
+  "depth": "L2",
+  "word_count": "L2:300",
+  "answer": "The gate is the single confirmation before Caspr generates anything. Nothing runs until you've seen it and hit Generate — there's no second checkpoint after this one, and no surprise step buried later in the process.\n\nIt shows you everything about to happen in one place: the Type and Tier — Brief, Study, or Intelligence — the output formats, the language, the style, any Premium Data Add-on you've opted into, and the price. Caspr pre-sets every one of these based on your prompt and layout, so you're reviewing a proposal Caspr already built for you, not filling out a form from scratch. And every one of them is changeable, right there on the same screen, before you commit.\n\nThe red Generate button carries the running total. As you adjust anything on the gate — swap a format, add a language, opt into an add-on — the number on that button updates in real time, so what you're about to spend is never a surprise buried in a follow-up invoice. Hit Generate, and the analysis begins: atomic, no pausing, no mid-run edits, delivered in minutes.\n\nThe gate exists so the only thing you ever confirm blind is the prompt itself, back at the very start. Everything downstream of it — scope, format, price — you approve first, in full view, before Caspr spends a cent of your budget.\n\nIt's a single screen, not a checkout flow with pages to click through. Everything you'd need to sign off on a report sits together: what it is, what it costs, what you'll get back. That's deliberate — the layout already did the work of confirming scope, so the gate isn't asking you to re-decide what the report is about. It's asking you to confirm how it gets delivered, and for how much, one last time before Caspr commits the budget and starts the clock."
+ },
+ "C-11": {
+  "id": "C-11",
+  "question": "Can I change the report before it generates?",
+  "depth": "L2",
+  "word_count": "L2:280",
+  "answer": "Yes. At the gate, before you hit Generate, you can change the Tier, output formats, language, and style — all of it, from the same screen.\n\nFormats, language, and style are the easy changes: adjust any of them and the price on the Generate button updates immediately, no rebuild, no re-review needed. Change your mind on PPTX versus PDF, add a second language, or switch the style, and you're straight back to confirming — nothing else about the report resets.\n\nTier is the one that costs you something to change. Brief, Study, and Intelligence aren't the same report at different lengths — they're structurally different, with different sections and different depth — so switching Tier rebuilds the layout from scratch and brings you back through the layout screen before you reach the gate again. Caspr warns you once before this happens, because the layout you already approved won't come back once you confirm the switch; you'll be reviewing a new one built for the new Tier.\n\nSo adjust freely on formats, language, and style at the gate. Think before you touch Tier — you're choosing a different report, not resizing the one you already reviewed.\n\nWhy the warning matters: the layout you approved reflected real thought — sections you added, ones you cut, an order you set deliberately. Rebuilding for a new Tier discards that work and starts over, because a Brief's flat structure and an Intelligence report's nested one aren't the same skeleton at different sizes. Caspr flags it once, clearly, so the decision to trade your approved layout for a different Tier is one you make on purpose, not one you back into by accident."
+ },
+ "C-12": {
+  "id": "C-12",
+  "question": "Can I pause or stop a report while it generates?",
+  "depth": "L2",
+  "word_count": "L2:220",
+  "answer": "No. Once you pass the gate, generation is atomic — there's no pause button, no stop, and no editing mid-run. Caspr commits to the report it's building and finishes it start to finish.\n\nThat's deliberate. A report assembled from interrupted, half-changed instructions isn't one you'd trust putting in front of a board, so Caspr doesn't build one that way. It runs the analysis straight through, the same way an analyst wouldn't hand you a memo rewritten mid-sentence by a change of brief.\n\nWhile it works, you're not stuck watching a progress bar with nothing to do. Open Theater to watch the report build in real time, section by section, or pull out Ask Caspr in the side drawer to ask questions or answer Caspr's get-to-know prompts while you wait. Neither one changes the report underway — they're there for you, not for the run, and collapsing the drawer just returns you to the full Theater view.\n\nOnce the report is finished, that's when change happens — through Edit mode, where every revision produces a new version you can compare against the last. Nothing you want to adjust is lost by waiting. It's just that the report has to exist before there's something to edit."
+ },
+ "D-08": {
+  "id": "D-08",
+  "question": "What output formats do I get?",
+  "depth": "L2",
+  "word_count": "L2:280",
+  "answer": "It depends on the analysis depth.\n\nA **Brief** delivers **PDF** and **Markdown**. A **Study** or **Intelligence** report delivers **PDF, PPTX, XLSX, CSV, and Markdown** — the full set, not a subset you have to unlock.\n\nThat base set is included in the analysis price, generated natively in your own language — not English, translated after the fact. You choose formats and language at the **gate**, before the report runs.\n\nWant something beyond the base — an extra format, a second language? Each one is generated and priced as its own output: PDF, DOCX, XLSX, and CSV run **$5**; PPTX runs **$10**; Markdown is always free. Add them at the gate or later from the **Outputs** tab — either way, the price sums into the button before you commit. [VERIFY exact figures vs .agents/pricing-model.md §4.6]\n\nGenerate your report."
+ },
+ "D-09": {
+  "id": "D-09",
+  "question": "Can I get my report in another language?",
+  "depth": "L2",
+  "word_count": "L2:240",
+  "answer": "Yes. English isn't assumed and it isn't a default you're stuck with — Caspr is multilingual by default, and your working language is included in the base price, generated natively in that language rather than translated after the fact.\n\nEach **additional** language is its own output — a full rewrite of the report, not a format swap — generated in whatever formats you choose and priced per output, the same table used for extra formats. [VERIFY per-language pricing vs .agents/pricing-model.md §4.6]\n\nPick your languages at the **gate**, before the report runs, or add more later from the **Outputs** tab without touching the underlying analysis. Either way, the report you already have stays exactly as it is — you're only choosing what gets rendered from it, and in which language.\n\nAdd a language."
+ },
+ "D-10": {
+  "id": "D-10",
+  "question": "Can I change the report's style or template?",
+  "depth": "L2",
+  "word_count": "L2:260",
+  "answer": "At launch, Caspr runs on a single template — one style, applied consistently across every report.\n\nStyle is doing more work than it sounds like. It governs density, vocabulary, how charts are treated, overall length, and whether appendices appear — the texture of the report, not just its skin. You set it before generating, at the **gate**, and choosing it there costs nothing.\n\nChanging style **after** generation is a different action. \"Make it denser,\" \"add an appendix,\" \"more visual\" — each of these is a re-generation, not a preference toggle, and it's metered as an output like any other post-generation change.\n\nCustom, user-built templates aren't part of the launch scope — one Caspr-designed template, well executed, beats a menu of half-finished ones.\n\nSet your style."
+ },
+ "D-11": {
+  "id": "D-11",
+  "question": "What is Ask Caspr?",
+  "depth": "L3",
+  "word_count": "L2:300",
+  "answer": "Ask Caspr is the conversation that lives with your report — a scoped analyst you can question about the work in front of you, not a general chatbot. Open the Ask tab and you will find two things: a read-only history of everything Caspr already asked and confirmed while scoping your brief, sitting above a live question box. Type a question about a number, a claim, or a section you want explained differently, and Caspr answers from your report and its underlying sources — nothing outside that scope, nothing speculative, and nothing pulled from a different analysis you have run. Ask why a competitor was ranked ahead of another, where a growth figure came from, or what the layout deliberately left out, and you get an answer grounded in the same sources the report itself was built on. Ask Caspr is live from the moment generation starts, not just after delivery. Watching the Theater build your report and want to know why a section is structured a certain way, ask. Waiting through a 15-minute run and want to sharpen your Research profile for future analyses, Caspr's get-to-know questions surface here too. One rule matters more than the rest: asking never changes the report. The Ask tab is for reading and questioning, not writing. If a question surfaces something you actually want changed — a section rewritten, a chart swapped, a claim restated — that happens in Edit mode, and it produces a new version. Ask Caspr is where you interrogate the analysis. Edit is where you act on it. Treat it as a standing line to the analyst who wrote the report, open for as long as the report exists — no extra charge, no time limit."
+ },
+ "D-12": {
+  "id": "D-12",
+  "question": "How do citations work in my report?",
+  "depth": "L3",
+  "word_count": "L2:300",
+  "answer": "Every insight in your report carries an inline red dot. Click it, and Caspr answers with the source behind that specific claim — scoped through Ask Caspr, without leaving the page. No footnote to hunt for, no separate Sources tab to open, no page number to cross-reference. The number stays on screen; the source arrives right next to it, in context, the moment you ask. This is what makes a Caspr report defensible in a room where someone will ask where a figure came from. You are not trusting the claim on faith — you are tracing it, one click at a time, to a named, credible source, and you can keep asking follow-up questions about that same source if you need more than the citation alone gives you. The full reference list for the entire report lives on its own card at the very end — a complete bibliography, in case you want to review every source at once rather than one insight at a time, or hand it to someone doing their own diligence. Day to day, though, you will rarely need it: the red dot does the work of a footnote without the friction of one. This mechanic runs on the same engine as the rest of Ask Caspr — the same scoped, report-specific answers, just triggered by a click instead of typed by you. It applies to every insight in every section, from the executive summary through the data exhibits and appendices. If a number appears in your report, it carries a red dot, and that red dot has an answer waiting behind it. That is the standard analyst-grade output has to clear: not just a confident claim, but a claim you can defend, live, to whoever in the room asks first."
+ },
+ "D-13": {
+  "id": "D-13",
+  "question": "What are Versions?",
+  "depth": "L2",
+  "word_count": "L2:260",
+  "answer": "Versions is your report's timeline. Every edit you save creates a new version, and the Versions tab shows them in order — v1, v2, v3 — as rows you can open individually to read that state of the report in full. Beneath each version sit its outputs: the actual generated files, PDF, PPTX, and the rest, produced from that specific version. Outputs are pinned to the version they came from. Generate a PDF off v2, then edit again to reach v3, and that PDF still belongs to v2 — it does not silently update to reflect your latest changes. If you want a current file, you generate a new output from whichever version you are now on. This matters because it means nothing is ever quietly overwritten. An earlier version and the outputs generated from it stay exactly as they were, so you can compare what changed between two versions, revert to an earlier read of the analysis if a later edit went the wrong way, or hand a colleague the exact file you reviewed together last week without worrying it has since moved. Outputs are generated on command, not automatically on every edit — so editing a report does not quietly spend budget regenerating every file behind it in the background. You choose when a version is worth turning into a deliverable, and which format that deliverable should take. It also gives you an honest audit trail: if a stakeholder asks what changed between the draft you shared on Monday and the one you presented on Friday, the timeline answers that question without you having to remember."
+ },
+ "D-14": {
+  "id": "D-14",
+  "question": "What is the Contents view?",
+  "depth": "L2",
+  "word_count": "L2:240",
+  "answer": "Contents is your report's table of contents, and it moves with you as you read. As you scroll through the report, the current section and sub-section highlight in Contents automatically — you always know exactly where you are inside a hundred pages, even without looking at a page number. Tap any row and the report jumps straight to it, no scrolling required to get there. It works the other way too: keep reading normally and Contents keeps updating to track you. That two-way sync is what makes a long report navigable rather than a wall of text you have to scroll through blind, section by section, to find the one page you actually need. A Brief's Contents is flat — a short, single-level list, matching its tighter three-to-five-page scope. Study and Intelligence reports nest: sections expand into sub-sections in the list itself, mirroring the deeper structure those tiers deliver across a hundred pages. Use Contents to orient yourself the moment a report lands, to jump straight to the section a colleague asked about before a call, or simply to check how much ground the analysis actually covers before you commit to reading it end to end. It functions the way a bookmark pane does in a well-built PDF, except it already knows where you are without you telling it — useful when you are moving between the executive summary and a data exhibit thirty pages apart while prepping talking points for a meeting."
+ },
+ "D-15": {
+  "id": "D-15",
+  "question": "What are Updates?",
+  "depth": "L1",
+  "word_count": "L1:60",
+  "answer": "Updates is coming soon — not yet available. Once live, it will flag when new data could change a finding in a report you have already run, so a standing analysis can be refreshed with what has changed rather than rebuilt from scratch. Watch this space; for now, re-run a fresh analysis if the market has moved since your last report."
+ },
+ "D-16": {
+  "id": "D-16",
+  "question": "What is Theater?",
+  "depth": "L2",
+  "word_count": "L2:240",
+  "answer": "Theater is the immersive view you get while Caspr works — a live look at your analysis being built, section by section, rather than a spinner and a wait with nothing to show for it. Stay on it and you watch the report take shape in real time, the same structure you confirmed at the gate filling in with research as it happens. Open the side drawer and Ask Caspr sits alongside it: ask a question about what is being researched right now, or answer the short get-to-know prompts Caspr uses to sharpen your Research profile for future reports, all without losing sight of the build behind it. Collapse the drawer and you are back to the full Theater view, no progress lost either way. Nothing you do here — watching, asking, answering — touches the report itself. Generation is atomic once it starts: no pause, no stop, no mid-run edit, by design. Theater is where you spend the wait, not where you steer the outcome. If something needs to change once you see it, that happens after delivery, in Edit mode. Most reports finish inside 15 minutes, so Theater is built for a wait that short — something to watch, not a dashboard you need to babysit for an hour. It is also where the sourcing stage's live sourcing becomes visible: instead of a blank progress bar, you see the categories of research the analysis is actually pulling from as it works."
+ },
+ "D-17": {
+  "id": "D-17",
+  "question": "What are the charts and visuals in my report?",
+  "depth": "L2",
+  "word_count": "L2:240",
+  "answer": "Caspr renders its findings as charts, tables, and infographics inside the report — a number rarely stands alone when a visual makes the finding clearer to a reader skimming for the headline. Every one of them is tied to its cited data, so a chart is not decoration sitting next to a claim; it is the claim, rendered, with the same sourcing standard as the surrounding text. Want something different once you see it? Open Edit mode on any visual and you can swap a chart type, adjust a table, or ask Caspr for a different treatment entirely — a bar chart instead of a line, a ranked table instead of a paragraph, a simplified view for a slide instead of a dense one for a page. Saving that change produces a new version, alongside any text edits you have made elsewhere in the report, and the prior version of the visual stays on the Versions timeline if you want it back. Charts and standard infographics render deterministically, so revising them is fast and does not touch the underlying data. A limited number of bespoke visual generations are included with each analysis, scaled to its tier, which covers the shaping most reports actually need before you run out. Every visual carries the same red-dot citation as the text around it, so a chart is exactly as traceable as the sentence describing it — nothing in the report gets to make a claim the rest of it does not have to answer for."
+ },
+ "E-05": {
+  "id": "E-05",
+  "question": "How do I get more formats or languages after generating?",
+  "depth": "L2",
+  "word_count": "L2:280",
+  "answer": "Generating additional formats or languages after delivery happens from the Outputs tab. Open Generate Output and you will see the same selector you saw at the gate before your first run — pick any format or language you have not already received, and each one is priced per output as you add it to the queue. Choices queue as individual cards, format and language and price shown together on each, and every card you add sums into the Generate button so you always see the running total before you commit to anything. Remove a card before generating if you change your mind about a format. The Tier and the underlying data behind your report stay fixed here — you are not re-running the analysis, re-scoping the layout, or changing what was researched, only choosing what to render from work Caspr has already completed. That keeps this fast: no clarifying questions to answer again, no layout to reconfirm, just format, language, and a clear price before you generate. Use it when a colleague needs the deck in French, when a base PDF was enough at first but you now want the XLSX behind the numbers, or when a stakeholder in another market needs the whole report translated into their language. Everything generated here is pinned to the version you generated it from, and shows up as a card on that version's row in Versions, exactly like any other output. Formats you already received as part of your base tier are marked as such, so you are never charged twice for a file you already have sitting in your report."
+ },
+ "G-08": {
+  "id": "G-08",
+  "question": "Where do I see my balance and spending?",
+  "depth": "L2",
+  "word_count": "L2:240",
+  "answer": "Open your **Wallet** — it's the single screen for everything about what you have and what you've spent.\n\nAt the top: your spendable Research Budget balance, the amount actually available to run analyses right now. Below it, an **activity ledger** — every analysis you've run, what it cost, and when, itemised individually rather than lumped into one monthly total. Run a Study and a Brief in the same week, and the ledger shows both, separately, at their fixed prices.\n\nYour **next recharge** date and amount are shown too. Caspr recharges only what you spent the cycle before, so this number moves with your actual usage rather than sitting at a fixed monthly figure.\n\nInvoices are downloadable directly from the ledger, one per billing cycle, ready for expensing or bookkeeping without digging through email.\n\nOne terminology note worth internalising: this is a **budget**, not a plan. There's no seat count to manage, no feature tier to remember — just a number you control and a balance that reflects exactly what you've used.\n\nIf your balance runs low, Wallet is also where you top it up or raise your monthly budget.\n\nOpen your Wallet."
+ },
+ "G-09": {
+  "id": "G-09",
+  "question": "How does Caspr learn about me (Research profile)?",
+  "depth": "L2",
+  "word_count": "L2:260",
+  "answer": "Caspr occasionally asks a short question inside the Ask Caspr thread — your role, the industries you follow, the kind of decisions your analyses tend to support. Nothing that blocks the report you're waiting on; answer it or skip it and keep going.\n\nEach answer sharpens your **Research profile** — a running record of what Caspr knows about you, used to fit future analyses to your actual work rather than starting from a generic template every time. Ask the same market-sizing question as a PE analyst and as a category manager, and the two reports come back differently scoped, in part because of what's in each profile.\n\nEvery fact Caspr has learned is listed in your Research profile screen, in plain language — nothing inferred silently and hidden from view. If something's wrong, outdated, or you'd simply rather Caspr forget it, remove it with one tap. There's no bulk reset required to correct a single fact.\n\nTwo things worth being clear on: answering these questions is entirely optional, and it never changes or blocks the report currently generating. The profile shapes future analyses, not the one already in progress.\n\nWant a full clean slate instead of removing facts one at a time? That's what Reset is for — it clears the whole profile at once, while keeping your account and wallet balance intact.\n\nSharpen your profile."
+ },
+ "G-10": {
+  "id": "G-10",
+  "question": "How do I change my language or output style?",
+  "depth": "L2",
+  "word_count": "L2:200",
+  "answer": "Open **Preferences** from your account. It holds three defaults Caspr applies to every new analysis: your language, your output style, and your preferred format.\n\nSet your language once — French, say — and every new report generates natively in French from the start, written that way, not English translated afterward. Output style governs how the report actually reads: vocabulary, chart treatment, appendices, overall length and density. Format sets which file type Caspr produces by default when a new analysis completes.\n\nNone of this locks you in per analysis. At the **gate**, before any specific report generates, you can override any of these defaults for that one run — send one analysis out in Spanish while your account default stays English, without touching Preferences at all.\n\nChanging your defaults in Preferences doesn't reach back into reports already generated; it only applies going forward, from the next analysis you run.\n\nOpen Preferences."
+ },
+ "G-11": {
+  "id": "G-11",
+  "question": "How do I secure my account?",
+  "depth": "L2",
+  "word_count": "L2:220",
+  "answer": "Everything account security lives on one screen: **Security**, under your account settings.\n\n**Password** — change it any time; you'll need your current password to confirm the change, standard practice against anyone who's gained partial access.\n\n**Two-factor authentication** — enable it to add a second check on sign-in, beyond just your password. An authenticator app is the recommended method over SMS, which is more vulnerable to interception and SIM-swap attacks.\n\n**Devices** — a list of everything currently signed in to your account. If you don't recognise one, or you've simply lost a laptop, sign it out from here directly, without needing to change your password first.\n\n[VERIFY: exact two-factor methods offered (authenticator app, SMS, or both) and the specific device-list controls (per-device sign-out vs. a single \"sign out everywhere\") with the engineering team before publishing.]\n\nNone of this is optional friction — it's the same discipline you'd expect from any tool holding boardroom-sensitive analysis. Caspr is ISO 27001:2022 certified and GDPR compliant; account-level security is the layer you control directly, on top of that.\n\nOpen Security."
+ },
+ "G-12": {
+  "id": "G-12",
+  "question": "What's the difference between resetting and deleting my account?",
+  "depth": "L2",
+  "word_count": "L2:220",
+  "answer": "**Reset** is the clean slate. It forgets your Research profile and deletes your existing reports, but your account stays open and your **wallet balance is untouched** — you keep what you've paid for and can start running fresh analyses immediately afterward. Reset is what you want when you're changing how you use Caspr, not whether you use it at all — a new client, a new research focus, a profile that's drifted from what you actually need.\n\n**Delete** closes the account entirely. It's final: your remaining Research Budget balance is **forfeited**, not refunded, and there's no walking it back once it's done. To confirm, you type the word DELETE — deliberately, so it can't happen from a stray click.\n\nBoth actions ask for explicit confirmation before doing anything irreversible; neither fires from a single misclick or an accidental tap. If you're not sure which you want, Reset is the safer default — it clears the slate without giving up the balance you've already funded.\n\nManage your account."
+ },
+ "G-13": {
+  "id": "G-13",
+  "question": "How do I get help or contact support?",
+  "depth": "L2",
+  "word_count": "L2:240",
+  "answer": "Open **Get Help** from the navigation — it's built as a searchable FAQ first, a message form second, because most answers don't need a person to deliver them.\n\nSearch directly for what you're stuck on, or browse by category: **Basics, Analyses, Pricing, Reports, Account**. Expand any answer inline, right where you found it — no separate page to load, no ticket to open for something the FAQ already covers.\n\nIf the FAQ genuinely doesn't answer it, use **Message support**. It pre-tags your message with whatever category you were browsing when you opened it, so support already has context before you've finished typing a word. Add a subject line, describe the issue, and send — no need to re-explain where in the product you ran into it.\n\n[VERIFY: support response-time commitment before stating an SLA publicly.]\n\nGet Help is designed so you don't need the exact right words for your problem. Search loosely, browse by category, or skip straight to messaging a person if you'd rather not hunt for the answer yourself. Most account and pricing questions are already answered inline — Message support exists for what's genuinely specific to you.\n\nOpen Get Help."
+ },
+ "K-01": {
+  "id": "K-01",
+  "question": "What is the Data Room?",
+  "depth": "L3",
+  "word_count": "L2:300",
+  "answer": "The Data Room is where your uploaded files live, and where you decide what Caspr is allowed to use. Every file you bring in sits in one of three groups.\n\n**Included** files are attached to your analyses by default — Caspr draws on them automatically alongside its own 1M+ curated sources, no extra step required each time you run an analysis.\n\n**Excluded** files stay in your Data Room but sit out of every analysis unless you opt them in for a specific run. Nothing is deleted; it's simply not in default use, which keeps a one-off document from quietly bleeding into unrelated reports.\n\n**Connected** sources — your own subscriptions to Bloomberg, Refinitiv, S&P Capital IQ, or PitchBook, feeding straight into your analyses — are coming soon. Not yet live, so don't expect them in the Data Room today.\n\nUploading your own data unlocks at the Business milestone. Once unlocked, it's how you fold proprietary numbers, internal decks, or a client's own data room into a Caspr analysis, rather than working from public sources alone — useful for due diligence, a client-specific business case, or any report that needs to reflect information Caspr can't find on its own.\n\nEverything in the Data Room defaults to Private, stays under your control, and can be moved between Included and Excluded, or deleted outright, at any time.\n\nThis is the mechanic behind due diligence: upload the data room, mark the files Included, and Caspr wraps the market intelligence around them — the investment memo builds itself from your numbers plus Caspr's own sources, rather than from your numbers alone."
+ },
+ "K-02": {
+  "id": "K-02",
+  "question": "What file types can I upload?",
+  "depth": "L2",
+  "word_count": "L2:200",
+  "answer": "Caspr accepts four file types: PDF, XLSX, CSV, and DOCX. Upload several at once — there's no one-at-a-time limit, so a full data room's worth of files can go in together.\n\nNo file in hand? Paste a link instead — an article, a dataset, a public report — and Caspr fetches and indexes it the same way it would a document you'd uploaded directly, no separate step required.\n\nWhatever you add, whether uploaded or linked, is folded into your analyses alongside Caspr's 1M+ curated sources, so your own numbers sit next to the market data Caspr already draws on, rather than existing as a separate, disconnected layer.\n\nData upload is a feature of the Business milestone — see what unlocks at Business if your account isn't there yet. Below that, you're working from Caspr's own sources alone.\n\nA pasted link works best for something public and citable — a press release, a regulatory filing, a published dataset. For anything internal or confidential, upload the file directly rather than linking to it, so it stays private to your account from the start rather than depending on a link staying live."
+ },
+ "K-03": {
+  "id": "K-03",
+  "question": "How do I upload a file?",
+  "depth": "L2",
+  "word_count": "L2:240",
+  "answer": "Open the Data Room and use the add-file panel. On desktop, drop your files onto the upload box or click it to browse; on mobile, tap Upload files. No file in hand — paste a link underneath instead, and Caspr fetches and indexes it directly, without needing a downloaded copy first.\n\nNew files land at the top of your Included list immediately, each with its own progress bar while it processes. You don't have to wait for one to finish before adding the next — keep dropping files in and they'll queue and complete independently, so a large batch doesn't force you to sit and watch.\n\nEvery upload defaults to Private, kept to your account and visible only to you. If a file should be shared more broadly, change that from the file's menu once it lands — Private is the safe default, so there's nothing extra to set on the way in, only a deliberate choice to make afterward if you want otherwise.\n\nOnce a file has finished processing, it's ready to use — Caspr will draw on it automatically the next time you run an analysis, since new uploads land in Included by default. Move it to Excluded from the same menu if you'd rather keep it on hand without it feeding every future report."
+ },
+ "K-04": {
+  "id": "K-04",
+  "question": "What's the difference between Private and Public files?",
+  "depth": "L2",
+  "word_count": "L2:240",
+  "answer": "Every file in your Data Room carries a Private or Public tag, visible at a glance from its menu. Private is the default for every upload — the file stays to your account, and only you can see or use it in an analysis.\n\nMaking a file Public is always a deliberate choice, made explicitly from the file's menu — it never happens by default, and it's never a side effect of uploading or of running an analysis. Reversing it is just as easy: switching a file back to Private is always allowed instantly, with no confirmation step, because leaving something Public by mistake is the costly error, and Caspr is built to make that one easy to undo, not the one that's easy to make.\n\n[VERIFY exact Public-file semantics — what \"Public\" makes visible, to whom, and under what conditions — with the team before publishing.]\n\nCheck or change a file's visibility any time from its menu in the Data Room; there's no separate settings screen to hunt through.\n\nKeep board-sensitive material — an internal deck, a client's data room, anything you wouldn't forward without thinking — set to Private by default and leave it there unless you have a specific reason to change it."
+ },
+ "K-05": {
+  "id": "K-05",
+  "question": "What do Included and Excluded mean?",
+  "depth": "L2",
+  "word_count": "L2:240",
+  "answer": "Included and Excluded are the two states a file can sit in while it stays in your Data Room — the difference is whether Caspr uses it automatically, not whether it's kept.\n\n**Included** files are attached to your analyses by default. Upload something and it starts here, folded into every run alongside Caspr's own sources, unless you deliberately move it out.\n\n**Excluded** files are kept, not deleted, but sit out of analyses unless you opt them into a specific run. Use this for a file you want on hand without it bleeding into every report — a one-off document, something outdated, or data relevant to only a single project.\n\nMove a file between the two from its menu. Moving to Excluded is instant, since you're only narrowing what gets used and nothing downstream depends on it. Moving back to Included takes a one-tap confirm, since it reopens the file to default use across every future analysis — a small, deliberate step for a change with much wider reach.\n\nA typical case: last quarter's internal deck was useful when it was current, but you don't want it quietly informing every new analysis six months on. Move it to Excluded instead of deleting it — it stays available to opt into a specific run later, without shaping reports it no longer belongs in."
+ },
+ "K-06": {
+  "id": "K-06",
+  "question": "How do I stop Caspr using a file without deleting it?",
+  "depth": "L2",
+  "word_count": "L2:180",
+  "answer": "Open the file's menu in your Data Room and select Move to Excluded. It's instant, no confirmation needed, and the file stays exactly where it is, just out of the default set Caspr draws on. Excluded files are never attached to an analysis automatically; they only get pulled in if you opt them into that specific run.\n\nThis is the move to reach for whenever you're not sure you'll need the file long-term, rather than deleting it: nothing is lost, and nothing about the file changes except that Caspr stops assuming it's relevant. If you want it back in default rotation later, move it back to Included from the same menu — that direction takes a one-tap confirm, since it re-opens the file to every analysis again.\n\nDeleting is the one step you can't undo. Excluding is the one you can flip either direction, as often as you like."
+ },
+ "K-07": {
+  "id": "K-07",
+  "question": "How do I delete a file?",
+  "depth": "L2",
+  "word_count": "L2:220",
+  "answer": "Open the file's menu in your Data Room and select Delete. A confirmation appears before anything happens — deletion is the one action here you can't reverse, so Caspr makes you pass through it deliberately.\n\nThat confirmation offers you an out: Move to Excluded instead. Excluding takes the file out of default use without destroying it — it stays in your Data Room, available to opt into a specific analysis later. If you're deleting because you don't want the file used automatically, that's usually the answer you actually want, and it costs you nothing to keep.\n\nChoose Delete permanently only when you mean the copy gone for good. Once confirmed, Caspr cannot re-attach the file to any future analysis — not the current one, not one you run next year. There's no recovery and no second confirmation after the first.\n\nDeleting has no effect on analyses that already used the file — the report you generated keeps its citations. Only future runs lose access to the source.\n\nWhen in doubt, exclude first. Delete when you're certain."
+ },
+ "K-08": {
+  "id": "K-08",
+  "question": "Can I connect Bloomberg, Refinitiv or other data sources?",
+  "depth": "L1",
+  "word_count": "L1:60",
+  "answer": "Not yet — Connected sources are coming soon. Caspr will let you link your own subscriptions to Bloomberg, Refinitiv, S&P Capital IQ, and PitchBook, so that data feeds directly into your analyses alongside Caspr's curated sources. Until this ships, the Connected group in your Data Room is a placeholder. This page will update when it goes live."
+ },
+ "K-09": {
+  "id": "K-09",
+  "question": "Are my uploaded files private and secure?",
+  "depth": "L2",
+  "word_count": "L2:200",
+  "answer": "Every file you upload defaults to Private and stays inside your Data Room, visible and usable only within your account unless you explicitly mark it Public. You control what happens to it from there: keep it Included so Caspr draws on it by default, move it to Excluded to keep it on hand without using it, or delete it outright, which removes it for good.\n\nMaking a file Public is always a deliberate choice; reversing that back to Private is instant and needs no confirmation, because the costly mistake is leaving something exposed, not protecting it too much.\n\n[VERIFY: exact data-handling, retention, and storage-security posture for uploaded files — encryption at rest/in transit, retention period after deletion, third-party access — with the team before this goes live.]\n\nFor how your account itself is secured — password, two-factor, device sessions — see Security in your account settings."
+ },
+ "K-10": {
+  "id": "K-10",
+  "question": "Can I organise files into Projects?",
+  "depth": "L1",
+  "word_count": "L1:60",
+  "answer": "Files you upload inside a Project default to Excluded, so a project's material stays out of your general analyses unless you opt it in. [VERIFY: the full Projects model and scope are still being finalized with the team — this answer is a placeholder until confirmed.] Check back here once Projects is fully specified."
+ }
+}

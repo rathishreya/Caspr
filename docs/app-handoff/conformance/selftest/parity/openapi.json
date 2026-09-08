@@ -1,0 +1,16 @@
+{
+  "openapi": "3.1.0",
+  "components": { "schemas": {
+    "WalletSnapshot": {
+      "type": "object",
+      "required": ["spendable_cents", "plan", "billing_anchor"],
+      "properties": {
+        "spendable_cents":  { "type": "integer" },
+        "budget_cents":     { "anyOf": [{ "type": "integer" }, { "type": "null" }] },
+        "plan":             { "type": "string" },
+        "billing_anchor":   { "type": "string" },
+        "held_cents":       { "type": "integer" }
+      }
+    }
+  } }
+}

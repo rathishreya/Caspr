@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "portal",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "C:/Users/joysh/Claude-Local/caspr-team-portal/apps/web"],
+      "port": 3210
+    }
+  ]
+}

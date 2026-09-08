@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350">
+<rect x="0" y="0" width="1080" height="1350" rx="0" fill="#ffffff"/>
+<rect x="0" y="0" width="1080" height="320" rx="0" fill="#0b0b09"/>
+<text x="96" y="116" font-family="Inter, Helvetica, Arial, sans-serif" font-size="20" font-weight="600" fill="#cfcecb" text-anchor="start" letter-spacing="3" style="">CHOOSING DEPTH</text>
+<line x1="96" y1="132" x2="160" y2="132" stroke="#e8453c" stroke-width="3"/>
+<text x="96" y="196" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="72" font-weight="400" fill="#ffffff" text-anchor="start" style="">Which analysis</text>
+<text x="96" y="272" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="72" font-weight="400" fill="#ffffff" text-anchor="start" style="">do you need?</text>
+<text x="96" y="430" font-family="Inter, Helvetica, Arial, sans-serif" font-size="27" font-weight="400" fill="#111111" text-anchor="start" style="">A quick fact-check</text>
+<text x="96" y="468" font-family="Inter, Helvetica, Arial, sans-serif" font-size="27" font-weight="700" fill="#e8453c" text-anchor="start" style="">→  Brief</text>
+<line x1="96" y1="494" x2="984" y2="494" stroke="#e5e4e1" stroke-width="1"/>
+<text x="96" y="564" font-family="Inter, Helvetica, Arial, sans-serif" font-size="27" font-weight="400" fill="#111111" text-anchor="start" style="">A full market or competitive analysis</text>
+<text x="96" y="602" font-family="Inter, Helvetica, Arial, sans-serif" font-size="27" font-weight="700" fill="#e8453c" text-anchor="start" style="">→  Study</text>
+<line x1="96" y1="628" x2="984" y2="628" stroke="#e5e4e1" stroke-width="1"/>
+<text x="96" y="698" font-family="Inter, Helvetica, Arial, sans-serif" font-size="27" font-weight="400" fill="#111111" text-anchor="start" style="">A board-grade deep dive or due diligence</text>
+<text x="96" y="736" font-family="Inter, Helvetica, Arial, sans-serif" font-size="27" font-weight="700" fill="#e8453c" text-anchor="start" style="">→  Intelligence</text>
+<line x1="96" y1="762" x2="984" y2="762" stroke="#e5e4e1" stroke-width="1"/>
+<text x="96" y="862" font-family="Inter, Helvetica, Arial, sans-serif" font-size="30" font-weight="400" fill="#111111" text-anchor="start" style="">Not sure? Start with a Study —</text>
+<text x="96" y="906" font-family="Inter, Helvetica, Arial, sans-serif" font-size="30" font-weight="400" fill="#6b6b66" text-anchor="start" style="">the best first taste of the full report.</text>
+<line x1="96" y1="1252" x2="984" y2="1252" stroke="#e5e4e1" stroke-width="1"/>
+<text x="96" y="1280" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="34" font-weight="400" fill="#111111" text-anchor="start" style="">Caspr</text>
+<circle cx="192" cy="1271" r="6" fill="#e8453c"/>
+<text x="984" y="1280" font-family="Inter, Helvetica, Arial, sans-serif" font-size="22" font-weight="400" fill="#6b6b66" text-anchor="end" style="">caspr.ai</text>
+</svg>

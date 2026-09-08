@@ -1,0 +1,573 @@
+<!-- HISTORICAL DOCUMENT - vocabulary superseded 2026-08-27.
+     "Thinking Brain" and "Learning Brain" are retired. Architecture is now Source. Assess. Conclude.
+     See docs/source-assess-conclude.md. Body left unedited on purpose - do not copy vocabulary out of it. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Caspr Brief — UK Logistics Technology Market [Sample]</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+* { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+@page { size: 210mm 297mm; margin: 0; }
+
+body {
+  background: #D0CECC;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 28px;
+}
+
+.print-note {
+  width: 794px;
+  background: #fff;
+  border-left: 3px solid #E8453C;
+  padding: 12px 16px;
+  font-size: 12px;
+  color: #333;
+  line-height: 1.6;
+  font-family: 'Inter', sans-serif;
+}
+.print-note strong { font-weight: 600; }
+
+.page {
+  width: 794px;
+  height: 1123px;
+  overflow: hidden;
+  background: #fff;
+  position: relative;
+  break-after: page;
+  page-break-after: always;
+}
+
+.page-label {
+  width: 794px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: #888;
+  text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 6px;
+}
+
+
+/* ─── COVER PAGE ─── */
+
+.cover-photo {
+  width: 794px;
+  height: 449px;
+  background: #0D1219;
+  position: relative;
+  overflow: hidden;
+}
+
+.photo-overlay-gradient {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 40%;
+  background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
+}
+
+.photo-placeholder {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: rgba(255,255,255,0.1);
+  text-transform: uppercase;
+  font-weight: 400;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.depth-mark {
+  position: absolute;
+  top: 22px;
+  left: 26px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  z-index: 2;
+}
+.d-dot { width: 9px; height: 9px; border-radius: 50%; background: #E8453C; }
+.d-line { height: 2px; width: 17px; background: rgba(255,255,255,0.55); }
+
+.cover-bottom-left {
+  position: absolute;
+  bottom: 24px;
+  left: 26px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+.brief-badge {
+  background: #fff;
+  color: #E8453C;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  padding: 4px 11px;
+  border-radius: 3px;
+}
+.cover-title {
+  color: #fff;
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1.15;
+  max-width: 440px;
+  letter-spacing: -0.02em;
+}
+.cover-date {
+  color: rgba(255,255,255,0.28);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.cover-wordmark-pos {
+  position: absolute;
+  bottom: 24px;
+  right: 26px;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.01em;
+  z-index: 2;
+}
+.cover-wordmark-pos em { color: #E8453C; font-style: normal; }
+
+
+/* ─── DARK PANEL ─── */
+
+.cover-panel {
+  width: 794px;
+  height: 674px;
+  background: #1A1A18;
+  padding: 24px 26px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.topic-label {
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.24);
+  margin-bottom: 26px;
+}
+
+.stats-row {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 28px;
+}
+.stat-col { flex: 1; padding: 0 22px; }
+.stat-col:first-child { padding-left: 0; }
+.stat-col:last-child { padding-right: 0; text-align: right; }
+.stat-col.center { text-align: center; }
+.stat-sep { width: 1px; height: 64px; background: rgba(214,212,207,0.15); flex-shrink: 0; align-self: center; }
+.stat-num { color: #E8453C; font-size: 46px; font-weight: 800; line-height: 1; margin-bottom: 8px; letter-spacing: -0.025em; }
+.stat-lbl { color: #6B6B66; font-size: 9.5px; line-height: 1.45; max-width: 150px; }
+.stat-col.center .stat-lbl { margin: 0 auto; }
+.stat-col:last-child .stat-lbl { margin-left: auto; }
+
+.panel-divider { height: 1px; background: rgba(214,212,207,0.1); margin-bottom: 24px; }
+
+.panel-findings { display: flex; flex-direction: column; gap: 15px; flex: 1; }
+.pfi { display: flex; align-items: flex-start; gap: 13px; }
+.pfi-dot { width: 5px; height: 5px; background: #E8453C; flex-shrink: 0; margin-top: 5px; }
+.pfi-text { color: rgba(255,255,255,0.72); font-size: 11px; line-height: 1.65; font-weight: 400; }
+
+.panel-footer {
+  border-top: 1px solid rgba(214,212,207,0.12);
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+.pfl { font-size: 7.5px; letter-spacing: 0.1em; color: #6B6B66; }
+.pfc { font-size: 8.5px; color: #6B6B66; font-weight: 500; }
+.pfr { font-size: 10px; font-weight: 700; color: #6B6B66; }
+.pfr em { color: #E8453C; font-style: normal; }
+
+
+/* ─── INTERIOR PAGES ─── */
+
+.page-hd {
+  height: 36px;
+  border-bottom: 1px solid #E9E7E2;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 26px;
+}
+.page-hd-title { font-size: 9px; color: #909088; font-weight: 400; }
+
+.page-body {
+  padding: 30px 83px 0;
+}
+
+.section { margin-bottom: 28px; }
+
+.sec-hd {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 5px;
+}
+.sec-num {
+  color: #E8453C;
+  font-size: 13.5px;
+  font-weight: 800;
+  flex-shrink: 0;
+  line-height: 1.45;
+}
+.sec-finding {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1A1A18;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+}
+
+.sec-rule { height: 3px; background: #E8453C; margin-bottom: 14px; }
+
+.body-p {
+  font-size: 11px;
+  line-height: 1.7;
+  color: #2A2A26;
+  margin-bottom: 14px;
+  font-weight: 400;
+}
+
+table.dt { width: 100%; border-collapse: collapse; margin-bottom: 7px; }
+table.dt th {
+  background: #1A1A18;
+  color: #fff;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 7px 11px;
+  text-align: left;
+}
+table.dt td {
+  padding: 7px 11px;
+  font-size: 10px;
+  color: #2A2A26;
+  border-bottom: 0.5px solid #E9E7E2;
+}
+table.dt tr:nth-child(even) td { background: #F2F1EF; }
+.td-red { color: #E8453C; font-weight: 700; }
+
+.src-line { font-size: 8.5px; color: #909088; font-style: italic; }
+
+.page-ft {
+  height: 40px;
+  border-top: 1px solid #E9E7E2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 26px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.ft-lbl { font-size: 7.5px; letter-spacing: 0.1em; color: #909088; }
+.ft-pg { font-size: 8.5px; color: #909088; font-weight: 500; }
+.ft-wm { font-size: 10px; font-weight: 700; color: #909088; }
+.ft-wm em { color: #E8453C; font-style: normal; }
+
+.tk-block {
+  background: #F2F1EF;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+}
+.tk-label {
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: #1A1A18;
+  margin-bottom: 14px;
+}
+.tk-item {
+  display: flex;
+  gap: 13px;
+  align-items: flex-start;
+  margin-bottom: 11px;
+}
+.tk-item:last-child { margin-bottom: 0; }
+.tk-dot { width: 5px; height: 5px; background: #E8453C; flex-shrink: 0; margin-top: 5px; }
+.tk-text { font-size: 11px; font-weight: 600; color: #1A1A18; line-height: 1.55; }
+
+.upsell { font-size: 9.5px; color: #909088; font-style: italic; line-height: 1.7; }
+
+
+/* ─── LAST PAGE ─── */
+
+.last-page-body {
+  padding: 60px 83px;
+  display: flex;
+  flex-direction: column;
+  height: 1123px;
+  background: #1A1A18;
+}
+.last-caspr-mark {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 48px;
+}
+.last-dot { width: 10px; height: 10px; border-radius: 50%; background: #E8453C; }
+.last-wordmark { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: 0.01em; }
+.last-wordmark em { color: #E8453C; font-style: normal; }
+
+.last-rule { height: 1px; background: rgba(214,212,207,0.15); margin-bottom: 40px; }
+
+.last-tagline { font-size: 28px; font-weight: 700; color: #fff; line-height: 1.3; max-width: 480px; margin-bottom: 18px; letter-spacing: -0.02em; }
+.last-sub { font-size: 11.5px; color: rgba(255,255,255,0.45); line-height: 1.7; max-width: 420px; margin-bottom: 48px; }
+
+.last-meta { display: flex; flex-direction: column; gap: 5px; margin-top: auto; }
+.last-meta-line { font-size: 9px; color: rgba(255,255,255,0.28); line-height: 1.6; }
+.last-meta-line a { color: rgba(255,255,255,0.35); text-decoration: none; }
+
+.disclaimer {
+  border-top: 1px solid rgba(214,212,207,0.1);
+  padding-top: 14px;
+  margin-top: 16px;
+  font-size: 8px;
+  color: rgba(255,255,255,0.2);
+  line-height: 1.7;
+}
+
+
+/* ─── PRINT ─── */
+
+@media print {
+  body { background: #fff; padding: 0; gap: 0; }
+  .print-note, .page-label { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="print-note">
+  <strong>Sample Brief — Illustrative content only.</strong> To export as PDF: File → Print → Destination: Save as PDF → Paper size: A4 → Margins: None → Save. Or run through the Caspr Puppeteer pipeline at A4 / 96dpi. Design spec: <code>docs/report-design/brief-design.md</code>
+</div>
+
+
+<!-- ─── PAGE 1: COVER ─── -->
+<div class="page-label">Page 1 — Cover</div>
+<div class="page">
+  <div class="cover-photo">
+    <div class="photo-overlay-gradient"></div>
+    <div class="photo-placeholder">AI-generated sector photograph · logistics / warehousing · dark treated</div>
+    <div class="depth-mark">
+      <div class="d-dot"></div>
+      <div class="d-line"></div>
+    </div>
+    <div class="cover-bottom-left">
+      <div class="brief-badge">BRIEF</div>
+      <h1 class="cover-title">UK Logistics Technology Market</h1>
+      <div class="cover-date">June 2026 &nbsp;·&nbsp; Caspr Analysis</div>
+    </div>
+    <div class="cover-wordmark-pos">Caspr<em>.</em></div>
+  </div>
+  <div class="cover-panel">
+    <div class="topic-label">MARKET SECTOR BRIEF &nbsp;—&nbsp; UK LOGISTICS TECHNOLOGY</div>
+    <div class="stats-row">
+      <div class="stat-col">
+        <div class="stat-num">£4.2bn</div>
+        <div class="stat-lbl">UK logistics-tech market size, 2025</div>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat-col center">
+        <div class="stat-num">12.4%</div>
+        <div class="stat-lbl">Projected CAGR through 2028</div>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat-col" style="text-align:right">
+        <div class="stat-num">340+</div>
+        <div class="stat-lbl">Active vendors across core segments</div>
+      </div>
+    </div>
+    <div class="panel-divider"></div>
+    <div class="panel-findings">
+      <div class="pfi">
+        <div class="pfi-dot"></div>
+        <div class="pfi-text">Three players control 58% of last-mile routing software — the market is more concentrated than headline vendor counts suggest</div>
+      </div>
+      <div class="pfi">
+        <div class="pfi-dot"></div>
+        <div class="pfi-text">Warehouse automation crossed its economic viability threshold in 2024; a 22% rise in minimum wage costs is the driver, not capability maturity</div>
+      </div>
+      <div class="pfi">
+        <div class="pfi-dot"></div>
+        <div class="pfi-text">PE-backed consolidation has accelerated 40% in 12 months — independent vendors face approximately a two-year window before market structure changes materially</div>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <span class="pfl">MARKET SECTOR BRIEF</span>
+      <span class="pfc">1</span>
+      <span class="pfr">Caspr<em>.</em></span>
+    </div>
+  </div>
+</div>
+
+
+<!-- ─── PAGE 2: BODY SECTIONS 1–2 ─── -->
+<div class="page-label">Page 2 — Body (Sections 1–2)</div>
+<div class="page">
+  <div class="page-hd"><span class="page-hd-title">UK Logistics Technology Market</span></div>
+  <div class="page-body">
+
+    <div class="section">
+      <div class="sec-hd">
+        <span class="sec-num">01</span>
+        <span class="sec-finding">Three players control 58% of last-mile routing software — the market is more concentrated than it appears</span>
+      </div>
+      <div class="sec-rule"></div>
+      <p class="body-p">The UK logistics-tech market generated £4.2 billion in 2025, but headline market size obscures a structural reality: routing and dispatch software — the most commercially critical segment — is controlled by three vendors. Samsara, Trimble, and RouteMaster collectively hold 58% of UK active deployments across fleet sizes above 50 vehicles. The long tail of 200+ smaller vendors competes for the remaining 42%, primarily in niche verticals or geographies where the enterprise vendors have not yet moved aggressively.</p>
+      <table class="dt">
+        <thead>
+          <tr>
+            <th>VENDOR</th>
+            <th>PRIMARY SEGMENT</th>
+            <th>UK MARKET SHARE</th>
+            <th>BACKING</th>
+            <th>HQ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Samsara</strong></td>
+            <td>Fleet management / Routing</td>
+            <td class="td-red">24%</td>
+            <td>NYSE: IOT</td>
+            <td>San Francisco</td>
+          </tr>
+          <tr>
+            <td>Trimble</td>
+            <td>Fleet / ERP integration</td>
+            <td>19%</td>
+            <td>NASDAQ: TRMB</td>
+            <td>Westminster, CO</td>
+          </tr>
+          <tr>
+            <td>RouteMaster</td>
+            <td>Last-mile routing</td>
+            <td>15%</td>
+            <td>PE-backed (Bridgepoint)</td>
+            <td>London</td>
+          </tr>
+          <tr>
+            <td>Optio Systems</td>
+            <td>Warehouse management</td>
+            <td>9%</td>
+            <td>Private</td>
+            <td>Manchester</td>
+          </tr>
+          <tr>
+            <td>All others (200+)</td>
+            <td>Mixed</td>
+            <td>33%</td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="src-line">Source: Gartner Supply Chain Technology Survey, 2025; Transport Intelligence UK Logistics Market Report, Q1 2026. Caspr analysis.</p>
+    </div>
+
+    <div class="section">
+      <div class="sec-hd">
+        <span class="sec-num">02</span>
+        <span class="sec-finding">Warehouse automation is driven by labour cost pressure, not capability — and this changes the buyer conversation</span>
+      </div>
+      <div class="sec-rule"></div>
+      <p class="body-p">UK warehouse automation spend increased 34% year-on-year in 2025, reaching £1.1 billion. The primary driver is not technological maturity — automation capability in conveyance, picking, and sortation has existed for over a decade. The decisive change is a 22% increase in minimum wage costs since 2022, which has shifted automated picking from a 7.1-year payback to a 3.8-year payback for operations above 50,000 sq ft. Below that threshold, the economics remain marginal. Vendors that lead with capability messaging are solving the wrong problem — buyers in 2026 are purchasing a labour cost hedge, not a technology upgrade.</p>
+    </div>
+
+  </div>
+  <div class="page-ft">
+    <span class="ft-lbl">MARKET STRUCTURE</span>
+    <span class="ft-pg">2</span>
+    <span class="ft-wm">Caspr<em>.</em></span>
+  </div>
+</div>
+
+
+<!-- ─── PAGE 3: BODY SECTION 3 + KEY TAKEAWAYS ─── -->
+<div class="page-label">Page 3 — Section 3 + Key Takeaways</div>
+<div class="page">
+  <div class="page-hd"><span class="page-hd-title">UK Logistics Technology Market</span></div>
+  <div class="page-body">
+
+    <div class="section">
+      <div class="sec-hd">
+        <span class="sec-num">03</span>
+        <span class="sec-finding">PE-backed consolidation has accelerated 40% in 12 months — the window for independent positioning is closing</span>
+      </div>
+      <div class="sec-rule"></div>
+      <p class="body-p">Fourteen UK logistics-tech acquisitions were completed in the 12 months to June 2026, up from ten in the prior period. Eight of the fourteen were PE-backed roll-up transactions, clustering in two segments: last-mile routing (five deals) and warehouse management systems (four deals). Average EV/Revenue multiples compressed from 6.2× to 4.8× as deal volume increased — a growing seller pool giving acquirers pricing power. Two of the eight PE acquirers have made public statements of intent for further consolidation within 18 months. Independent vendors with revenue below £5 million are the primary acquisition targets; those with proprietary data assets command a 30–40% premium to the prevailing multiple.</p>
+    </div>
+
+    <div class="tk-block">
+      <div class="tk-label">KEY TAKEAWAYS</div>
+      <div class="tk-item">
+        <div class="tk-dot"></div>
+        <div class="tk-text">Three vendors control last-mile routing — any market entry or partnership strategy must account for a structurally concentrated buying environment where the top three set category expectations</div>
+      </div>
+      <div class="tk-item">
+        <div class="tk-dot"></div>
+        <div class="tk-text">Warehouse automation economics crossed the viability threshold in 2024; the growth window is now, not emerging — vendors entering in 2025–26 are entering at peak demand, not early</div>
+      </div>
+      <div class="tk-item">
+        <div class="tk-dot"></div>
+        <div class="tk-text">PE consolidation is active and accelerating — independent vendors face approximately a two-year window before market structure changes materially and competitive positioning resets</div>
+      </div>
+    </div>
+
+    <p class="upsell">A Study on UK logistics-tech would cover acquisition target mapping with financial benchmarks for the top 20 vendors, a competitive entry framework by segment, and modelled consolidation scenarios through 2028 — run it from your dashboard.</p>
+
+  </div>
+  <div class="page-ft">
+    <span class="ft-lbl">KEY TAKEAWAYS</span>
+    <span class="ft-pg">3</span>
+    <span class="ft-wm">Caspr<em>.</em></span>
+  </div>
+</div>
+
+
+<!-- ─── PAGE 4: LAST PAGE ─── -->
+<div class="page-label">Page 4 — Last page</div>
+<div class="page">
+  <div class="last-page-body">
+    <div class="last-caspr-mark">
+      <div class="last-dot"></div>
+      <div class="last-wordmark">Caspr<em>.</em></div>
+    </div>
+    <div class="last-rule"></div>
+    <div class="last-tagline">Analytical AI.<br>Built for business.</div>
+    <div class="last-sub">Every insight in this Brief is cited to a credible source. No web scraping. No hallucinations. Produced by Caspr's Thinking Brain and Learning Brain in under 15 minutes.</div>
+    <div class="last-meta">
+      <div class="last-meta-line">caspr.ai</div>
+      <div class="last-meta-line">For questions about this Brief, contact <a href="mailto:hello@caspr.ai">hello@caspr.ai</a></div>
+    </div>
+    <div class="disclaimer">
+      This Brief has been prepared by Caspr for informational purposes only. It does not constitute investment, legal, or professional advice. All market data is sourced from publicly available sources and Caspr's proprietary research database as at the date of publication. Caspr makes no representation as to the accuracy or completeness of third-party data. Reproduction or distribution without written consent is prohibited. © 2026 Caspr Technologies Ltd.
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

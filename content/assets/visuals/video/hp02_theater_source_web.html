@@ -1,0 +1,452 @@
+<title>Theater — Source Web</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Inter:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --ink:#1A1A17; --label:#5C5B58; --churn:#B0ACA3;
+  --star:#D1CFCC; --spoke:#D0CFCC; --node:#C2C1BB; --red:#E8453C;
+  --stage:#FFFFFF; --card:#0C0B09;
+  --serif:"Instrument Serif",Georgia,serif;
+  --sans:"Inter",-apple-system,Helvetica,Arial,sans-serif;
+  --mono:"DM Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--stage);color:var(--ink);font-family:var(--sans)}
+/* Matches the homepage measure (1200), not its own — the artefact must not be
+   narrower than the argument above it. 1200 − 48 − 300 list = 852 graph; 5:4 = 682. */
+.theater{max-width:1200px;margin:0 auto;padding:0 0 20px}
+
+/* masthead spans the container edge to edge — inset, it read as a card inside a card */
+.titlecard{background:var(--card);padding:12px 24px 15px}
+.inner{padding:0 24px;position:relative}
+.eyebrow{font-family:var(--sans);font-size:10.5px;font-weight:500;letter-spacing:.13em;
+  text-transform:uppercase;color:#fff;margin:0}
+.topic{font-family:var(--serif);font-size:22px;color:#fff;margin:2px 0 0;line-height:1.15}
+
+.count{font-family:var(--mono);font-weight:500;font-size:44px;color:var(--ink);
+  margin:0;font-variant-numeric:tabular-nums;line-height:1;letter-spacing:.01em}
+.countlab{font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--label);margin:10px 0 0}
+
+/* THE LEGEND — what the two dot colours mean, and the third number in the chain:
+   25M+ curated -> 11,486 reviewed -> n cited. Universe, effort, evidence.
+   Anchored to `.inner` rather than to either column, because the count sits 20px
+   below the inner edge on BOTH breakpoints — beside the number on desktop, beside
+   it again on mobile where the graph has dropped below the list. Height matches the
+   count's line-height so the two lines centre on the number with no magic offset. */
+.legend{position:absolute;top:20px;right:24px;height:44px;
+  display:flex;flex-direction:column;justify-content:center;align-items:flex-end;gap:8px}
+/* dots sit on the RIGHT: two labels of different length cannot both align to a
+   shared left edge, and a ragged dot column would read as a mistake */
+.lgline{display:flex;align-items:center;gap:9px;font-family:var(--sans);font-size:11px;
+  font-weight:500;letter-spacing:.13em;text-transform:uppercase;color:var(--label)}
+/* one flex item, not three — otherwise the gap opens between the words too */
+.lgtext{white-space:nowrap}
+.lgdot{width:6px;height:6px;border-radius:50%;flex:none}
+/* labels stay grey — the dots carry the only colour, as everywhere else here */
+.lgdot.grey{background:#BAB8B2}
+.lgdot.red{background:var(--red)}
+
+/* graph starts level with the count, 20px under the banner, 20px above the fold edge */
+.body{display:grid;grid-template-columns:300px minmax(0,1fr);margin-top:20px;align-items:start}
+.leftcol{min-width:0}
+
+/* §12.2 — desktop fade is HORIZONTAL, so long source names read as sliding behind
+   the graph. It has to begin well inside the column or no name is long enough to
+   reach it: at 300px wide, a 66% start (198px) left almost everything unfaded. */
+.listcol{position:relative;margin-top:22px;height:591px;overflow:hidden;
+  -webkit-mask-image:linear-gradient(to right,#000 0%,#000 46%,transparent 100%);
+  mask-image:linear-gradient(to right,#000 0%,#000 46%,transparent 100%)}
+/* THREE-STATE DECODE
+   1 churn  — Caspr script, fixed cells
+   2 flip   — Inter Regular 14, SAME cell and SAME optical size: a letter-for-letter
+              decode with nothing moving. Cell pitch is the NAME'S measured width
+              divided by its character count — Inter is proportional, so there is no
+              single advance to key the row to, and the average is what makes the two
+              rows the same length (187px against 186px).
+   3 slide  — into the list, same typeface and size. The move is the transformation
+              now; the typeface stopped being part of it when §Font was corrected. */
+/* ONE CAP HEIGHT THROUGHOUT — 9.45px, which is Inter 13's cap height.
+   Script ink, resolved mono caps and list caps are all that height, so nothing
+   resizes at any point: the flip changes the glyph, the slide changes the typeface.
+   Cell pitch is set by the GLYPH (mono's natural advance is only 0.857 x cap
+   height), so the resolved caps sit centred and tracked out — a machine readout. */
+.flap{height:26px;display:flex;align-items:center;gap:0;white-space:nowrap}
+.flap .cd{width:5px;height:5px;border-radius:50%;background:var(--red);flex:none;margin-right:9px}
+/* No constant width: the pitch is the name's own measured advance, set per cell at
+   runtime. `overflow:visible` because the 7.304 glyph box is wider than the pitch
+   and the boxes are meant to overlap — see `glyph()`. */
+.cell{display:inline-flex;align-items:center;justify-content:center;
+  height:26px;flex:none;overflow:visible}
+.cell svg{fill:none;stroke:var(--ink);stroke-linecap:round;stroke-linejoin:round}
+/* Inter Regular 14, not DM Mono 13.5 — THEATER-SOURCE-DECODE-MOTION §Font was
+   corrected on 2026-09-01 (DEV-PROMPT-ROUND-5 §4) and now specifies Inter for the
+   flap cells as well as the resolved rows. This file had already argued the point
+   in the other direction for the list; the correction settles both the same way. */
+.cell .ch{font-family:var(--sans);font-weight:400;font-size:14px;color:var(--red);
+  text-transform:uppercase;transition:color .3s ease-out}
+.cell .ch.set{color:var(--ink)}
+.rows{overflow:hidden}
+/* Inter Regular 14 / #1a1a17 — read from frame 1177:2860. The list is the content;
+   the flap is the effect, so the flap matches the list, not the other way round.
+   (THEATER-SOURCE-DECODE-MOTION §Font says DM Mono for both — the frame supersedes.) */
+/* caps carry through from the flip — only the typeface and size change on the slide,
+   never the casing, so the line reads as one thing being restated rather than replaced */
+.row{display:flex;align-items:center;gap:9px;height:26px;font-family:var(--sans);
+  font-size:13px;color:var(--ink);white-space:nowrap;
+  text-transform:uppercase;letter-spacing:.02em}
+.row .cd{width:5px;height:5px;border-radius:50%;background:var(--red);flex:none}
+/* no scale on arrival — the mono and the list share a cap height, so the line only
+   changes typeface as it lands. Scaling it would invent a size change that isn't there */
+.row.arrive{animation:arrive .3s cubic-bezier(.2,.7,.2,1) both}
+@keyframes arrive{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+canvas{display:block;width:100%;height:682px}
+
+@media (max-width:860px){
+  /* mobile immersive (frame 724:2) — the block takes the full viewport */
+  /* height, not min-height — min-height is a floor, so the list had nothing to
+     shrink against and grew the block past the viewport instead of clipping. */
+  .theater{padding:0 0 20px;max-width:430px;height:100svh;overflow:hidden;
+    display:flex;flex-direction:column}
+  .inner{padding:0 20px;display:flex;flex-direction:column;flex:1;min-height:0}
+  .titlecard{padding:11px 18px 13px}
+  .topic{font-size:20px}
+  .count{font-size:36px;margin-top:20px;flex:none}
+  .countlab{flex:none}
+  /* 302px of content cannot carry a 132px number and the full labels — it leaves 4px
+     of clearance. The tails drop and the nouns are supplied by SOURCES REVIEWED
+     directly beneath, which is the line the legend is read against anyway. */
+  .legend{right:20px;height:36px;gap:7px}
+  .lgline{font-size:10px;letter-spacing:.125em;gap:8px}
+  .lgtail{display:none}
+  .titlecard{flex:none}
+  .body{display:flex;flex-direction:column;flex:1;margin-top:0;min-height:0}
+  .leftcol{display:flex;flex-direction:column;flex:1;min-height:0}
+  /* §2 — mobile fade is VERTICAL: the list sinks into the graph below it */
+  .listcol{flex:1 1 0;height:auto;min-height:0;margin-top:14px;overflow:hidden;
+    -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 52%,transparent 100%);
+    mask-image:linear-gradient(to bottom,#000 0%,#000 52%,transparent 100%)}
+  canvas{height:52svh;min-height:320px;margin-top:6px;flex:none}
+}
+</style>
+
+<div class="theater">
+  <div class="titlecard">
+    <p class="eyebrow">Market analysis · Study · Sourcing</p>
+    <p class="topic">Premium ready meals, Southeast England</p>
+  </div>
+
+  <div class="inner">
+  <div class="legend">
+    <span class="lgline"><span class="lgtext">25M+ curated<span class="lgtail"> sources</span></span><i class="lgdot grey"></i></span>
+    <span class="lgline"><span class="lgtext"><span id="cited">0</span> cited<span class="lgtail"> so far</span></span><i class="lgdot red"></i></span>
+  </div>
+  <div class="body">
+    <div class="leftcol">
+      <p class="count" id="count">0</p>
+      <p class="countlab">Sources reviewed</p>
+      <div class="listcol">
+        <div class="flap" id="flap" aria-hidden="true"></div>
+        <div class="rows" id="rows"></div>
+      </div>
+      <div class="sr" aria-live="polite" id="live"></div>
+    </div>
+    <canvas id="web" aria-label="Source web: candidate sources around the topic, resolving to red as each yields a citable claim."></canvas>
+  </div>
+  </div>
+</div>
+
+<script>
+(function(){
+/* Caspr alphabet v2 — exported from Figma `caspr-alpha-v2/*` (node 2658:178).
+   Same 36-glyph cipher, redrawn on a 24 x 46 box: ink 16 x 32, stroke 3.45 unchanged.
+   viewBox "0 0 24 46" · stroke-width 3.45 · round caps and joins · fill none.
+
+   WHY v2 REPLACED v1 HERE. This file kept v1 on the reasoning that "v1 is the right
+   set once the flip resolves into DM Mono 18: the cell is then the mono advance
+   (10.8px), and v1's square ink lands at ~11px." That premise is gone —
+   THEATER-SOURCE-DECODE-MOTION §Font was corrected on 2026-09-01 (DEV-PROMPT-ROUND-5
+   §4): the flap cells AND the resolved rows are Inter Regular 14 #1a1a17, not DM Mono.
+   With an Inter-14 cell the pitch is ~7.19px, which is the cell v2 was drawn for.
+
+   v1 46x46 is the lineage reference and lives at node 2104:168. Do not build from it. */
+var G={
+A:"M12 7V39M20 15L12 7L4 15",
+B:"M4 7V39L20 31.7L4 24.2M4 11.9L20 19.3L4 26.7",
+C:"M20 23L12 7L4 23L12 39L20 23Z",
+D:"M12 39L4 23L12 7L20 23L12 39ZM12 7V39",
+E:"M4 23L12 39L20 23L12 7L4 23ZM20 23H4",
+F:"M20 39L12 7L4 39H20Z",
+G:"M20 7H4L12 39L20 7Z",
+H:"M4 36L12 10L20 36",
+I:"M4 9L12 21L20 9M4 25L12 37L20 25",
+J:"M20 7L4 23L20 39",
+K:"M4 7L20 23L4 39",
+L:"M12 7V39M4 23H20M9 7H15M9 39H15",
+M:"M4 7L20 39M20 7L4 39",
+N:"M4 7H20L4 39H20L4 7Z",
+O:"M20 7H4V39H20V7Z",
+P:"M20 39H4V7H20V39ZM4 7L20 39",
+Q:"M8.2 7L4 23L8.2 39M15.8 7L20 23L15.8 39",
+R:"M4 35L12 11L20 35M7.4 35L12 24L16.6 35",
+S:"M4 35L7.2 19L11.4 32L15.8 11L20 21.7",
+T:"M20 39L4 23L20 7M4 23L14.1 19M4 23L14.1 27",
+U:"M12 7V39M4 9L20 37M20 9L4 37",
+V:"M20 7V39M20 13.8H4M20 23H7.8M20 32.2H4",
+W:"M12 7V39M12 16.2L20 23L12 29.8L4 23L12 16.2Z",
+X:"M12 7V39M5.7 26L18.3 35M18.3 26L5.7 35",
+Y:"M4 7V39M20 7V39M4 13.8L20 32.2",
+Z:"M4 39V7L20 13.8L4 20.7",
+"0":"M4 11L12 35L20 11",
+"1":"M7 31H17M12 7L20 39H4L12 7Z",
+"2":"M4 7H20M12 7V39",
+"3":"M20 18.5L12 7L4 18.5H20Z M20 27.5L12 39L4 27.5H20Z",
+"4":"M12 20V39M12 20L4 7M12 20L20 7",
+"5":"M4 26L12 10L20 26M6.5 36H17.5",
+"6":"M12 7V39M20 13.8H4M20 27.5H4",
+"7":"M12 23L20 15L12 7L4 15L12 23ZM12 23V39",
+"8":"M4 7L7.4 39L12 17L16.6 39L20 7",
+"9":"M4 7L11.6 23L4 39M12.4 7L20 23L12.4 39"
+};var KEYS=Object.keys(G);
+var SOURCES=["Office for National Statistics","Kantar","AHDB","NielsenIQ","Mintel",
+  "Bank of England","Food Standards Agency","Marks & Spencer","Ocado Retail","Morrisons",
+  "Sainsbury's","John Lewis Partnership","GOV.UK","The Grocer","Waitrose","Food Foundation",
+  "Field Doctor","COOK","Chilled Food Association","Institute of Grocery Distribution",
+  "Defra","Nielsen Homescan","Assosia","Circana","Which?"];
+var reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var flap=document.getElementById("flap"),rowsEl=document.getElementById("rows"),
+    live=document.getElementById("live"),countEl=document.getElementById("count"),
+    citedEl=document.getElementById("cited");
+var cv=document.getElementById("web"),ctx=cv.getContext("2d");
+var mctx=document.createElement("canvas").getContext("2d");   /* text measurement only */
+/* one source of truth for the breakpoint. Keying JS off canvas width put it out of
+   step with the CSS media query — between ~861 and ~1010px viewport the layout was
+   desktop while the graph was still drawing its mobile spoke count. */
+var MOBQ=window.matchMedia("(max-width:860px)");
+function isMobile(){return MOBQ.matches;}
+var W=0,H=0,DPR=Math.min(window.devicePixelRatio||1,2),stars=[],spokes=[],t0=performance.now();
+var reviewed=1240,si=0,lockPtr=0,lockCap=20,starsBuilt=false,builtN=0;
+
+/* NO OPTICAL PASS — v2 is drawn to the cell, so there is nothing to correct.
+
+   v1 needed one, and the machinery is worth recording so nobody rebuilds it: its
+   FRAME was 46x46 but the ink inside it was not, spanning 37.5% of the frame (`0`)
+   to 58.3% (`C`). Sizing the frame therefore sized nothing consistently, so each
+   glyph got a tight viewBox around its own ink, a uniform ink height and a
+   per-glyph stroke-width to hold the on-screen weight. That was an optical pass
+   compensating for an asset drawn at the wrong aspect.
+
+   v2 is drawn at the right aspect: one 24 x 46 box, ink 16 x 32, one stroke of
+   3.45 for every glyph. The box goes on screen as drawn. */
+var BOX_W=24, BOX_H=46, STROKE=3.45;
+
+/* Cell height, and the box width that follows from it. 14px is the Inter-14 line
+   the flap now resolves into; 14 * 24/46 = 7.304, which is the box the acceptance
+   test in `2658:178` draws. */
+var CELL_H=14, BOX_PX=CELL_H*BOX_W/BOX_H;
+
+/* Inter's average advance at 14px — 7.19px, measured across 16 real source names.
+   Only a fallback: the pitch is per name, from `pitchFor` below. */
+var AVG_PITCH=7.19;
+
+/* THE CELL PITCH IS THE NAME'S OWN.
+   Inter is proportional, so there is no single advance to key the row to — the
+   per-name figure ranges 0.44 to 0.59 of the font size. Measured width divided by
+   character count is what makes the glyph row and the resolved row the same length
+   (187px against 186px in the acceptance test), which is what lets the word turn in
+   place instead of the line changing width under the reader.
+   A consequence, and it is deliberate: glyph positions do not correspond to
+   individual letters. It is also what stops the churn spelling the name early. */
+function pitchFor(name){
+  mctx.font='14px "Inter",-apple-system,Helvetica,Arial,sans-serif';
+  var w=mctx.measureText(name).width;
+  return name.length&&w>0 ? w/name.length : AVG_PITCH;
+}
+
+/* The box is WIDER than the pitch, and they overlap — as `2659:178` draws them:
+   30 boxes of 7.304 at a pitch of 6.2. Shrinking the box to the pitch would shrink
+   the ink with it and the churn would read lighter than the text it stands in for.
+   With the 3.45 round-cap stroke the ink occupies 19.45 of the 24 box, so at this
+   size it is 5.92px inside a 6.2px pitch — neighbours never touch. */
+function glyph(pitch){
+  var k=KEYS[(Math.random()*KEYS.length)|0];
+  return '<svg viewBox="0 0 '+BOX_W+' '+BOX_H+'" width="'+BOX_PX.toFixed(3)+
+    '" height="'+CELL_H+'" style="stroke-width:'+STROKE+';margin-left:'+
+    ((pitch-BOX_PX)/2).toFixed(3)+'px"><path d="'+G[k]+'"/></svg>';
+}
+
+/* lock-in colour ramp: idle line, idle node, accent */
+var LG=[208,207,204], NG=[194,193,187], RD=[232,69,60];
+function mix(a,b,t){return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t];}
+function rgba(c,a){return "rgba("+Math.round(c[0])+","+Math.round(c[1])+","+Math.round(c[2])+","+a+")";}
+
+/* ---------- graph ---------- */
+function sizeCanvas(){var r=cv.getBoundingClientRect();W=r.width;H=r.height;
+  cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);build();}
+/* 0.40 rather than 0.34 — at 0.34 the lower hemisphere had far more room than it used */
+function hub(){return {x:W*0.5,y:H*0.40};}
+/* The field is generated ONCE and stored in normalised (0–1) coordinates. Resize
+   only remaps it to the new pixel box — nothing is re-randomised, so dragging the
+   viewport moves the composition instead of dealing a new one. Spokes regenerate
+   only when the breakpoint actually changes their count. */
+function build(){
+  var h=hub(),cols=11,rws=9,mob=isMobile(),N=mob?18:32;
+  if(!starsBuilt){
+    /* §11 — grid + jitter over ~11x9 cells. Stored as u,v fractions of the box. */
+    stars=[];
+    for(var c=0;c<cols;c++)for(var r=0;r<rws;r++){
+      /* §3 drift. The spec's f 0.1–0.3 is per-FRAME in the prototype, not per-second —
+         read as rad/s it gives a 21–63s period, i.e. a static field. Stored here as
+         angular velocity for a 2.4–5.4s wander, with x and y independent per §3. */
+      stars.push({u:(c+0.15+Math.random()*0.7)/cols, v:(r+0.15+Math.random()*0.7)/rws,
+        r:0.7+Math.random()*1.3,
+        phx:Math.random()*6.283, wx:2*Math.PI/(2.4+Math.random()*3),
+        phy:Math.random()*6.283, wy:2*Math.PI/(2.4+Math.random()*3),
+        amp:1+Math.random()*1.2,
+        tph:Math.random()*6.283,tf:2*Math.PI/(2.5+Math.random()*1.3),td:Math.random()*2.2});
+    }
+    starsBuilt=true;
+  }
+  if(builtN!==N){
+    var keep=spokes.map(function(s){return s.on;});
+    spokes=[];
+    for(var i=0;i<N;i++){
+      spokes.push({a:((180/N)+i*(360/N))*Math.PI/180, frac:0.34+Math.random()*0.62,
+        on:keep[i]||false,lit:keep[i]?1:0,
+        phx:Math.random()*6.283, wx:2*Math.PI/(3+Math.random()*3),
+        phy:Math.random()*6.283, wy:2*Math.PI/(3+Math.random()*3), amp:1.6,
+        tph:Math.random()*6.283,tf:2*Math.PI/(2.4+Math.random()*0.9),td:Math.random()*1.7});
+    }
+    builtN=N; lockCap=mob?13:20;
+    lockPtr=spokes.filter(function(s){return s.on;}).length;
+    setCited();
+  }
+}
+/* The legend counts LOCKED SPOKES, not resolved sources. Tying it to the source
+   loop would let it run past lockCap and claim more citations than the graph shows;
+   bound to lockPtr the number is a caption on the picture, and survives the
+   breakpoint change that rebuilds the spokes with a different cap. */
+function setCited(){citedEl.textContent=lockPtr;}
+/* Reach is derived at draw time, not stored — supersedes §11's scaleX/scaleY, which
+   stretch a circle and so meet the box only at four mid-edges, leaving corners empty.
+   Measuring against the RECTANGLE along each spoke's own angle fills them. */
+function spokePos(p,t){var h=hub();
+  var ca=Math.abs(Math.cos(p.a))||1e-6, sa=Math.abs(Math.sin(p.a))||1e-6;
+  var room=Math.sin(p.a)>=0?(H-h.y):h.y;
+  var r=Math.min(((W/2)*0.94)/ca,(room*0.94)/sa)*p.frac;
+  return {x:h.x+Math.cos(p.a)*r+Math.sin(t*p.wx+p.phx)*p.amp,
+          y:h.y+Math.sin(p.a)*r+Math.sin(t*p.wy+p.phy)*p.amp};}
+function draw(now){
+  var t=(now-t0)/1000,h=hub();
+  var hx=h.x+Math.sin(t*0.17)*1.1,hy=h.y+Math.cos(t*0.14)*1.1;
+  ctx.clearRect(0,0,W,H);
+  for(var i=0;i<stars.length;i++){var s=stars[i];
+    var x=s.u*W+Math.sin(t*s.wx+s.phx)*s.amp,y=s.v*H+Math.sin(t*s.wy+s.phy)*s.amp;
+    if(Math.hypot(x-h.x,y-h.y)<52)continue;   /* §3 hub clearance, checked live */
+    ctx.globalAlpha=reduce?0.42:0.16+(Math.sin((t-s.td)*s.tf+s.tph)*0.5+0.5)*0.46;
+    ctx.fillStyle="#D1CFCC";ctx.beginPath();ctx.arc(x,y,s.r,0,6.283);ctx.fill();}
+  ctx.globalAlpha=1;
+  for(var k=0;k<spokes.length;k++){var p=spokes[k],q=spokePos(p,t);
+    /* §5 — colour itself transitions grey→red over ~0.55s ease-out, not a hard swap.
+       Opacity eases from wherever the twinkle sat, so there is no pop on lock. */
+    if(p.on&&p.lit<1)p.lit=Math.min(1,p.lit+0.03);
+    var e=p.lit<1?1-Math.pow(1-p.lit,3):1;
+    var lc=p.on?mix(LG,RD,e):LG, la=p.on?0.6+0.25*e:0.6;
+    ctx.strokeStyle=rgba(lc,la);
+    ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(hx,hy);ctx.lineTo(q.x,q.y);ctx.stroke();
+    var tw=reduce?0.8:0.55+(Math.sin((t-p.td)*p.tf+p.tph)*0.5+0.5)*0.4;
+    var over=p.lit<1?Math.sin(e*Math.PI)*0.6:0;
+    var nr=p.on?2.8+2.2*e+over:2.8;
+    var nc=p.on?mix(NG,RD,e):NG, na=p.on?tw+(1-tw)*e:tw;
+    ctx.fillStyle=rgba(nc,na);
+    ctx.beginPath();ctx.arc(q.x,q.y,nr,0,6.283);ctx.fill();
+    if(p.ring!==undefined&&p.ring<1){p.ring+=0.028;
+      ctx.strokeStyle=rgba(RD,0.20*(1-p.ring)*(1-p.ring));ctx.lineWidth=1;
+      ctx.beginPath();ctx.arc(q.x,q.y,5+p.ring*15,0,6.283);ctx.stroke();}
+  }
+  /* §6 base radius is 11px at the 260px Compact reference. Scaling it by min(W,H)
+     collapsed it to ~7px on mobile — barely larger than a 5px locked node. The hub
+     gets its own scale so it stays dominant; spoke geometry keeps k untouched. */
+  var hubBase=isMobile()?11.5:(Math.min(W,H)/620)*13;
+  var hr=hubBase*(reduce?1:1+0.06+Math.sin(t*(2*Math.PI/2.1))*0.06);
+  ctx.fillStyle="#E8453C";ctx.beginPath();ctx.arc(hx,hy,hr,0,6.283);ctx.fill();
+  requestAnimationFrame(draw);
+}
+/* the FIRST citation locks a spoke immediately — the reader needs to see the
+   mechanism once to read the rest. After that, one lock every 2–5 sources, so the
+   finished picture arrives well after the fold has been read. */
+var untilLock=1;
+function maybeLock(){ if(--untilLock>0)return; untilLock=2+((Math.random()*4)|0); lockNext(); }
+function lockNext(){
+  if(lockPtr>=lockCap)return;
+  var tries=0;
+  while(tries<80){var i=(Math.random()*spokes.length)|0;
+    if(!spokes[i].on){spokes[i].on=true;spokes[i].ring=0;lockPtr++;setCited();return;}tries++;}
+}
+
+/* ---------- list + flap ---------- */
+function addRow(name){
+  var d=document.createElement("div");d.className="row"+(reduce?"":" arrive");
+  d.innerHTML='<span class="cd"></span><span>'+name+'</span>';
+  rowsEl.insertBefore(d,rowsEl.firstChild);
+  /* rows are capped to the column the fade actually covers, so the list can never
+     grow the container — clamped in case this fires before layout settles */
+  var box=rowsEl.parentNode.clientHeight||0;
+  var cap=Math.min(16,Math.max(5,Math.floor((box-26)/26)));
+  while(rowsEl.children.length>cap)rowsEl.removeChild(rowsEl.lastChild);
+  if(!reduce){
+    rowsEl.style.transition="none";rowsEl.style.transform="translateY(-26px)";
+    requestAnimationFrame(function(){
+      rowsEl.style.transition="transform .38s cubic-bezier(.2,.7,.2,1)";
+      rowsEl.style.transform="translateY(0)";});
+  }
+  live.textContent="Reading source: "+name;
+}
+function bump(n){reviewed+=n;countEl.textContent=reviewed.toLocaleString("en-GB");}
+
+function runSource(){
+  var name=SOURCES[si%SOURCES.length];si++;
+  var chars=name.split(""),cells=[],pitch=pitchFor(name);
+  flap.innerHTML='<span class="cd"></span>';flap.style.transition="";flap.style.opacity=1;
+  chars.forEach(function(ch){
+    var el=document.createElement("span");el.className="cell";
+    el.style.width=pitch.toFixed(3)+"px";
+    if(ch!==" ")el.innerHTML=glyph(pitch);
+    flap.appendChild(el);cells.push(el);});
+  if(reduce){flap.innerHTML='<span class="cd"></span>';addRow(name);bump(110+((Math.random()*80)|0));
+    maybeLock();setTimeout(runSource,650);return;}
+  var timers=cells.map(function(el,i){ if(chars[i]===" ")return null;
+    return setInterval(function(){el.innerHTML=glyph(pitch);},112+Math.random()*58);});
+  setTimeout(function(){                                  /* HOLD — 1340ms */
+    timers.forEach(function(t){if(t)clearInterval(t);});
+    /* FLIP — single shot. Every cell swaps its glyph for the Latin letter in the
+       SAME box at the SAME size, flashes red, settles to ink over 300ms.
+       UPPERCASE: the cipher has no case, so every glyph fills one 32-unit band.
+       A mixed-case resolve would introduce ascenders, descenders and x-height the
+       glyphs never had — the line would change silhouette at the moment it is
+       meant to be decoding in place. Caps hold the band and keep the flip pure. */
+    cells.forEach(function(el,i){
+      if(chars[i]===" "){el.innerHTML="";return;}
+      el.innerHTML='<span class="ch">'+chars[i].toUpperCase()+'</span>';
+    });
+    requestAnimationFrame(function(){
+      flap.querySelectorAll(".ch").forEach(function(s){s.classList.add("set");});});
+    setTimeout(function(){                                /* REGISTER — 220ms */
+      flap.style.transition="opacity .2s";flap.style.opacity=0;
+      addRow(name);bump(130+((Math.random()*120)|0));maybeLock();
+      setTimeout(runSource,400+70);                       /* SLIDE + GAP */
+    },220);
+  },1340);
+}
+
+window.addEventListener("resize",sizeCanvas);
+sizeCanvas();countEl.textContent=reviewed.toLocaleString("en-GB");
+requestAnimationFrame(draw);
+setInterval(function(){if(!reduce)bump(1+((Math.random()*3)|0));},380);
+runSource();
+})();
+</script>

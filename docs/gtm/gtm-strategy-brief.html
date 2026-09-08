@@ -1,0 +1,406 @@
+<title>Cited, Or It Does Not Ship</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+
+<style>
+  /* A4 print artefact — deliberately single-theme. Always white paper.
+     TYPE: Inter only. This follows the PRINT convention, not the app's:
+     visual-design-language.md — "the PDF uses Inter because Puppeteer/print
+     rendering benefits from a single-family document." Instrument Serif and
+     DM Mono are the SCREEN register; a printed sheet stays single-family.
+     WORDMARK: the outlined vector master from assets/logo/ — never typeset.
+     Being paths, it carries no font dependency into the Inter-only document.
+     PDF: Print → Save as PDF → A4 → Margins: None → Background graphics ON. */
+  :root{
+    --paper:#FFFFFF;
+    --desk:#E6E5E1;
+    --ink:#0B0B09;
+    --red:#E8453C;
+    --slab:#1A1A18;
+    --mid:#6B6B66;
+    --tint:#F2F1EF;
+    --rule:#D6D4CF;
+    --sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  }
+
+  *{box-sizing:border-box}
+
+  body{
+    margin:0;
+    background:var(--desk);
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    padding:24px 16px;
+  }
+
+  .sheet{
+    width:210mm;
+    max-width:100%;
+    min-height:297mm;
+    margin:0 auto;
+    background:var(--paper);
+    color:var(--ink);
+    padding:14mm 17mm 10mm;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .masthead{display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding-bottom:6px;border-bottom:1px solid var(--rule)}
+  .eyebrow{font-size:6.5pt;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--mid)}
+
+  .mark{display:block;color:var(--ink);width:20mm;aspect-ratio:2189/1055;height:auto}
+  .mark--sm{width:14mm}
+
+  h1{
+    font-family:var(--sans);font-weight:700;
+    font-size:25pt;line-height:1.1;letter-spacing:-.022em;
+    margin:7mm 0 0;text-wrap:balance;color:var(--ink);
+  }
+  .stand{font-size:9.5pt;line-height:1.48;color:var(--mid);margin:3.5mm 0 0;max-width:150mm;text-wrap:pretty}
+
+  .finding{margin-top:5.5mm}
+  .finding h2{font-size:10.5pt;font-weight:600;line-height:1.28;margin:0;color:var(--ink);text-wrap:balance}
+  .finding h2::after{content:"";display:block;width:24px;height:2px;background:var(--red);margin:4px 0 5px}
+  .finding p{margin:0;font-size:9pt;line-height:1.48;color:var(--ink)}
+  .finding p b{font-weight:600}
+
+  .fig{font-weight:600;font-variant-numeric:tabular-nums}
+
+  .slab{background:var(--slab);color:#FFFFFF;margin:6mm 0 0;padding:5.5mm 7mm 5mm}
+  .slab .eyebrow{color:rgba(255,255,255,.40)}
+  .slab h2{font-weight:700;font-size:14pt;
+    line-height:1.18;letter-spacing:-.018em;margin:2mm 0 3.5mm;color:#FFFFFF}
+  .layers{display:grid;margin:0;padding:0;list-style:none}
+  .layers li{display:grid;grid-template-columns:22mm 1fr;gap:5mm;align-items:baseline;
+    padding:1.9mm 0;border-top:1px solid rgba(255,255,255,.15)}
+  .layers li:last-child{border-bottom:1px solid rgba(255,255,255,.15)}
+  .lname{font-size:6.5pt;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--red)}
+  .ldesc{font-size:8pt;line-height:1.4;color:rgba(255,255,255,.80)}
+  .ldesc b{color:#FFFFFF;font-weight:600}
+  .slab .note{font-size:7.5pt;line-height:1.4;color:rgba(255,255,255,.50);margin:3mm 0 0}
+
+  .pull{border-left:3px solid var(--red);background:var(--tint);padding:3.5mm 5mm;margin:5.5mm 0 0}
+  .pull p{margin:0;font-size:9.5pt;font-weight:500;line-height:1.42;color:var(--ink);text-wrap:pretty}
+
+  .close{margin-top:auto;padding-top:4mm;border-top:1px solid var(--rule);
+    display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .who{font-size:7pt;color:var(--mid)}
+  .who code{font-family:inherit;font-weight:500}
+
+  @media print{
+    @page{size:A4;margin:0}
+    body{background:var(--paper);padding:0}
+    .sheet{width:210mm;min-height:297mm;max-width:none;margin:0}
+    .slab,.pull{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+
+<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true" focusable="false">
+  <symbol id="caspr-wordmark" viewBox="0 0 2189 1055">
+    <g transform="translate(20.00 790.00) scale(1 -1)">
+      <g fill="currentColor" stroke="currentColor" stroke-width="16.00" stroke-linejoin="round" stroke-linecap="round" paint-order="stroke">
+        <path d="M286 -9Q212 -9 156.5 37.0Q101 83 70.5 166.5Q40 250 40 364Q40 474 73.5 556.5Q107 639 163.5 684.5Q220 730 289 730Q330 730 361.0 722.5Q392 715 416 703Q428 696 428 682L431 530Q431 513 419 513Q408 513 405 526L395 563Q374 641 346.5 671.0Q319 701 281 701Q211 701 164.5 614.5Q118 528 118 364Q118 252 141.5 175.0Q165 98 202.5 59.0Q240 20 282 20Q327 20 354.5 48.0Q382 76 401 156L413 205Q416 220 429 218Q440 216 440 201L436 39Q436 25 423 18Q399 6 366.5 -1.5Q334 -9 286 -9Z" transform="translate(0.00 0.00)"/>
+        <path d="M120 -9Q78 -9 51.0 17.5Q24 44 24 88Q24 131 51.0 169.5Q78 208 125.0 239.0Q172 270 232 289Q245 293 245 306V397Q245 445 230.0 465.5Q215 486 189 486Q164 486 143.5 463.5Q123 441 114 388Q109 356 92.5 341.5Q76 327 59 327Q31 327 31 355Q31 384 47.5 412.5Q64 441 91.0 464.5Q118 488 150.0 502.0Q182 516 214 516Q313 516 313 401V95Q313 53 334 53Q347 53 358.0 70.5Q369 88 369 130Q369 146 382 146Q394 146 394 129Q394 56 368.5 23.5Q343 -9 311 -9Q287 -9 273.0 10.5Q259 30 254 57Q253 67 245.5 67.5Q238 68 231 58Q207 25 182.0 8.0Q157 -9 120 -9ZM147 37Q173 37 195.0 55.5Q217 74 231.0 105.0Q245 136 245 175V248Q245 267 224 259Q163 237 129.5 198.5Q96 160 96 106Q96 37 147 37Z" transform="translate(480.00 0.00)"/>
+        <path d="M131 -9Q108 -9 82.0 -3.5Q56 2 40 10Q31 15 31 27L28 139Q28 156 41 156Q52 156 56 140Q73 69 97.5 43.0Q122 17 157 17Q186 17 205.0 39.5Q224 62 224 102Q224 142 202.0 173.0Q180 204 128 241Q76 276 52.0 311.5Q28 347 28 389Q28 446 68.0 481.0Q108 516 174 516Q194 516 213.0 511.5Q232 507 247 497Q256 491 256 481L258 371Q258 356 246 356Q239 356 236.0 360.5Q233 365 231 372Q211 437 191.0 462.5Q171 488 142 488Q116 488 99.0 470.0Q82 452 82 425Q82 390 103.0 364.0Q124 338 179 300Q229 264 254.5 222.5Q280 181 280 132Q280 68 239.0 29.5Q198 -9 131 -9Z" transform="translate(879.00 0.00)"/>
+        <path d="M27 -205Q12 -205 12 -194Q12 -183 25 -182L39 -180Q60 -177 66.5 -168.0Q73 -159 73 -138V403Q73 421 67.5 427.5Q62 434 48 436L27 439Q14 440 14 450Q14 458 30 461Q61 466 77.5 477.0Q94 488 112 504Q121 513 127 513Q136 513 136 501V470Q136 463 142.0 460.5Q148 458 156 466L167 477Q187 497 208.0 506.5Q229 516 256 516Q302 516 337.5 485.5Q373 455 393.5 401.0Q414 347 414 274Q414 191 388.0 127.0Q362 63 316.5 27.0Q271 -9 212 -9Q182 -9 159 2Q141 10 141 -9V-138Q141 -159 147.5 -166.5Q154 -174 175 -177L212 -182Q223 -184 223 -193Q223 -205 208 -205ZM215 16Q271 16 305.5 82.0Q340 148 340 260Q340 363 310.0 417.0Q280 471 225 471Q191 471 166.0 443.0Q141 415 141 365V113Q141 68 161.5 42.0Q182 16 215 16Z" transform="translate(1187.00 0.00)"/>
+        <path d="M154 446Q195 516 253 516Q286 516 302.0 496.5Q318 477 318 453Q318 434 308.5 422.0Q299 410 279 410Q263 410 255.5 417.5Q248 425 243.5 435.0Q239 445 233.0 452.5Q227 460 213 460Q195 460 179.0 438.5Q163 417 152.5 381.0Q142 345 142 299V67Q142 46 148.5 37.0Q155 28 176 26L203 23Q214 21 214 12Q214 0 199 0H30Q15 0 15 11Q15 20 28 23L40 25Q61 29 67.5 37.5Q74 46 74 67V403Q74 421 68.5 427.5Q63 434 49 436L28 439Q15 440 15 450Q15 458 31 461Q62 466 78.5 477.0Q95 488 113 504Q122 513 128 513Q137 513 137 501V447Q137 440 143.0 438.5Q149 437 154 446Z" transform="translate(1631.00 0.00)"/>
+      </g>
+      <circle cx="2049.00" cy="60.00" r="60.00" fill="#E8453C" stroke="none"/>
+    </g>
+  </symbol>
+</svg>
+<style>
+  /* Four-sheet variant of the house sheet. Same palette, same faces, same
+     structural vocabulary as one-pager-output-strategy.html — set denser,
+     because this runs to four pages of substance where that ran to one of
+     principle. Adds two things the house sheet had no need for: a data
+     table, and a stepped sequence for the funnel. */
+  .sheet{padding:11mm 15mm 7mm}
+  .sheet + .sheet{margin-top:24px}
+
+  h1{font-size:20.5pt;margin-top:5.5mm}
+  .sheet--n h1{font-size:18.5pt}
+  .stand{font-size:8.7pt;line-height:1.44;margin-top:3mm;max-width:none}
+
+  .finding{margin-top:4.2mm}
+  .finding h2{font-size:9.7pt}
+  .finding h2::after{margin:3px 0 4px}
+  .finding p{font-size:8.3pt;line-height:1.43}
+
+  .slab{margin-top:4.8mm;padding:4.6mm 6mm 4.2mm}
+  .slab h2{font-size:12.2pt;margin:1.6mm 0 2.8mm}
+  .layers li,.seq li{padding:1.5mm 0}
+  .ldesc{font-size:7.5pt;line-height:1.36}
+  .slab .note{font-size:7.1pt;line-height:1.38;margin-top:2.6mm}
+
+  .pull{margin-top:4.6mm;padding:3.2mm 5mm}
+  .pull p{font-size:8.9pt;line-height:1.4}
+
+  .close{padding-top:3mm}
+  .who{font-size:6.6pt}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:4.2mm 7.5mm;margin-top:4.2mm}
+  .grid2 .finding{margin-top:0}
+
+  /* The funnel is a sequence, so its labels are wider than a layer list. */
+  .seq{display:grid;margin:0;padding:0;list-style:none}
+  .seq li{display:grid;grid-template-columns:23mm 1fr 34mm;gap:4mm;align-items:baseline;
+    border-top:1px solid rgba(255,255,255,.15)}
+  .seq li:last-child{border-bottom:1px solid rgba(255,255,255,.15)}
+  .smeas{font-size:6.7pt;line-height:1.32;color:var(--red);font-weight:500;
+    font-variant-numeric:tabular-nums}
+
+  /* Tables. Hairline rules only — the house sheet uses no boxes anywhere. */
+  .tbl{width:100%;border-collapse:collapse;margin-top:3.2mm}
+  .tbl th{font-size:6.2pt;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--mid);text-align:left;padding:0 0 1.5mm;border-bottom:1px solid var(--ink)}
+  .tbl td{font-size:7.8pt;line-height:1.36;padding:1.55mm 0;
+    border-bottom:1px solid var(--rule);vertical-align:top}
+  .tbl td + td,.tbl th + th{padding-left:4mm}
+  .tbl tr:last-child td{border-bottom:none}
+  .tbl .num{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+  .tbl .lead td{font-weight:600}
+  /* A row opening a rowspan group carries no rule, so the hairline lands
+     under the whole movement rather than through the middle of it. */
+  .tbl tr.grp td{border-bottom:none}
+  .tbl .nw{white-space:nowrap}
+  .tbl .dim td{color:var(--mid)}
+  .cap{font-size:6.9pt;line-height:1.4;color:var(--mid);margin:2.1mm 0 0}
+
+  @media print{
+    .sheet + .sheet{margin-top:0;page-break-before:always;break-before:page}
+  }
+</style>
+<div class="sheet ">
+<header class="masthead"><span class="eyebrow">Go-to-market · Position and funnel · Internal</span><svg class="mark" role="img" aria-label="Caspr"><use href="#caspr-wordmark"></use></svg></header>
+
+<h1>We do not describe the work. We publish it.</h1>
+
+<p class="stand">Caspr is sold on one standard: every source credible, every alternative weighed, every conclusion defensible. The marketing is built to the same standard. What follows is the whole chain — the position, the buyer, the channels, what we publish and why, and the twelve weeks that carry a stranger to a paying account.</p>
+
+<div class="grid2">
+  <section class="finding">
+    <h2>The position: not an assistant, an analyst.</h2>
+    <p>Caspr is <b>Analytical AI</b> — purpose-built for business analysis, not conversation. The promise is <b>Arrive certain</b>. Three rules follow, and they are absolute: never name a competitor in lead copy; never frame proof as work for the reader; cost is the third act, never the hook.</p>
+  </section>
+  <section class="finding">
+    <h2>The purpose is revenue, not attention.</h2>
+    <p>Carry a defined buyer from first contact to paid, repeatably. Not awareness, not reach. <b>One number decides whether we scale: x</b> — revenue earned per $1 of total spend, by signup cohort, read at three months and six. Below <span class="fig">2</span> it does not pay for itself; above it we scale while it holds.</p>
+  </section>
+</div>
+
+<div class="slab">
+  <span class="eyebrow">The funnel — and where each step is measured</span>
+  <h2>Two thirds of it happens before an account exists.</h2>
+  <ul class="seq">
+    <li><span class="lname">Channel</span><span class="ldesc">Content carrying one buyer's specific problem, in a place they already are</span><span class="smeas">first-touch source · icp_hint</span></li>
+    <li><span class="lname">Landing</span><span class="ldesc">An ICP page. The call to action pre-fills a question that buyer would actually ask</span><span class="smeas">utm_* · landing_path</span></li>
+    <li><span class="lname">Prompt</span><span class="ldesc"><b>They use Caspr. No account, no card, no email</b></span><span class="smeas">prompt_submitted</span></li>
+    <li><span class="lname">Conversation</span><span class="ldesc">Caspr asks its clarifying questions back</span><span class="smeas">conversation_turn</span></li>
+    <li><span class="lname">Layout</span><span class="ldesc">The structure of the analysis is proposed — sections, sources, scope</span><span class="smeas">layout_rendered</span></li>
+    <li><span class="lname">Theater</span><span class="ldesc">Generation starts, visibly. The value is seen before it is bought</span><span class="smeas">theater_started</span></li>
+    <li><span class="lname">The wall</span><span class="ldesc">Signup fires at peak intent. <b>This is where the $100 is offered — not before</b></span><span class="smeas">signup_wall_shown · abandoned</span></li>
+    <li><span class="lname">Account</span><span class="ldesc">Every anonymous event above is retroactively attributed to the new user</span><span class="smeas">signup_completed + alias</span></li>
+    <li><span class="lname">Activation</span><span class="ldesc"><b>First completed analysis.</b> The only event that means the product worked</span><span class="smeas">analysis_completed · target 40%</span></li>
+    <li><span class="lname">Paid</span><span class="ldesc">A Research Budget authorised, and charges actually taken against it</span><span class="smeas">payment_succeeded → x</span></li>
+  </ul>
+  <p class="note">A funnel measured from signup would report an activation rate that means nothing. The alias at step eight is the single most important call in the tracking spec: without it, everything a visitor did before signing up is orphaned.</p>
+</div>
+
+<section class="finding">
+  <h2>The 1,600 people already signed up are a bonus, not the plan.</h2>
+  <p>That cohort arrived through positioning we have retired, pricing we have replaced and a website that contradicted the product. Fewer than two of them ever paid — but <b>that number describes the acquisition, not the product</b>, and using it to forecast anything would be forecasting the wrong company. We re-engage them in week five, once the new funnel has shown us where it leaks, and we report them as a separate series so they can never flatter the number that matters.</p>
+</section>
+
+<div class="pull">
+  <p>Roughly 150 signups a month. <b>40%</b> reach a first analysis. <b>3–5%</b> convert to paid on today's assumption — and the bet of this whole plan is that the right buyer, correctly addressed, takes that to <b>10%</b>. Doubling conversion is worth more than doubling reach, and costs far less.</p>
+</div>
+
+<footer class="close"><span class="who">Sheet 1 of 5 · The position, and how a stranger becomes a customer</span><svg class="mark mark--sm" role="img" aria-label="Caspr"><use href="#caspr-wordmark"></use></svg></footer>
+</div>
+<div class="sheet sheet--n">
+<header class="masthead"><span class="eyebrow">Go-to-market · Buyers and channels · Internal</span><svg class="mark" role="img" aria-label="Caspr"><use href="#caspr-wordmark"></use></svg></header>
+
+<h1>Two buyers. Six channels. One of them compounds.</h1>
+
+<p class="stand">Eight buyer profiles exist and all eight have pages. Two get active content for the first twelve weeks, chosen on a single criterion: <b>an approved budget, and a decision-maker we can reach without procurement, IT review or an approval chain.</b></p>
+
+<table class="tbl">
+  <tr><th>Buyer</th><th>MRR</th><th>Whose money they spend</th><th class="nw">Opens</th></tr>
+  <tr class="lead"><td>Investors — PE, VC, hedge fund analysts</td><td class="num">$520</td><td>The fund's research budget. A deal clock makes speed worth paying for</td><td class="nw">Week 1</td></tr>
+  <tr class="lead"><td>Consultants — associates, EMs</td><td class="num">$185</td><td><b>Client-funded</b>, against a $200/hour billing rate. An $80 study needs no justifying</td><td class="nw">Week 1</td></tr>
+  <tr><td>Agency strategists</td><td class="num">$480</td><td>Their own margin — pitch research is unrecoverable cost</td><td class="nw">Week 6</td></tr>
+  <tr><td>Strategy — VP Strategy, chief of staff</td><td class="num">$480</td><td>Discretionary tooling budget, $1–3k a month. Longest cycle, highest bar</td><td class="nw">Week 8</td></tr>
+  <tr class="dim"><td>Market research professionals</td><td class="num">$250</td><td>Own margin, price-sensitive, and the most exposed to AI displacement</td><td class="nw">Not yet</td></tr>
+  <tr class="dim"><td>Founders · category managers · students</td><td class="num">$8–160</td><td>Little or no research budget. Students would distort the first reading of x</td><td class="nw">Not yet</td></tr>
+</table>
+<p class="cap">Investors and consultants also <b>cluster by company domain</b> — three active accounts on one domain is the trigger for a direct approach. That is how one user becomes a firm, and it is why the lower of the two average values is an entry price rather than a ceiling.</p>
+
+<section class="finding">
+  <h2>Search is the only channel that grows without more people.</h2>
+  <p>Every other line below costs hours, every week, permanently — and stops the moment the hours stop. Search is the one that accumulates. It is also the slowest, which is why it starts on day one and is judged at six months, not at six weeks.</p>
+</section>
+
+<table class="tbl">
+  <tr><th>Channel</th><th>Signups / mo</th><th>Why it works, and what it costs</th><th>We stop it when</th></tr>
+  <tr class="lead"><td>Organic search</td><td class="num">10 → 100+</td><td>Buyers search the job — <i>market size of…</i>, <i>IBISWorld alternatives</i> — never the category. Compounds</td><td>Nothing in the top 20 after 6 months</td></tr>
+  <tr><td>LinkedIn — 7 accounts</td><td class="num">20–50</td><td>Best-performing posts to date were both real analysis with the document attached</td><td>Median reach falls 4 weeks running</td></tr>
+  <tr><td>Communities</td><td class="num">20–50</td><td>Finance X, VC/PE networks, Management Consulted, Wall Street Oasis. <b>A person posts, always</b></td><td>Any account warned or removed</td></tr>
+  <tr><td>Founder outreach</td><td class="num">15–25</td><td>The highest-converting channel in the research. Engine drafts, team checks, Joy sends</td><td>Cold reply rate under 10% of 100</td></tr>
+  <tr><td>Trade press, guest posts</td><td class="num">10–25</td><td>Also the only legitimate route to backlinks. Two placements a month</td><td>Under 1 placement per 15 approaches</td></tr>
+  <tr><td>Paid — Google Search</td><td class="num">10–15</td><td><b>A validation instrument, not the funnel.</b> Its job is to find which message converts</td><td>CAC over $300, or CTR under 1%</td></tr>
+</table>
+<p class="cap">Deliberately not doing: brand awareness, category thought-leadership, paid link-building, conference sponsorship, and cold email at volume — which would put the founders' sending domain at risk for a buyer who is the wrong fit for it anyway.</p>
+
+<div class="pull">
+  <p>Product Hunt and Show HN are worth several hundred signups each and cost nothing but the shot — <b>and they fire once, ever.</b> They are held until the funnel above is proven, then spent deliberately.</p>
+</div>
+
+<footer class="close"><span class="who">Sheet 2 of 5 · Who we sell to, and where we meet them</span><svg class="mark mark--sm" role="img" aria-label="Caspr"><use href="#caspr-wordmark"></use></svg></footer>
+</div>
+<div class="sheet sheet--n">
+<header class="masthead"><span class="eyebrow">Go-to-market · What we publish · Internal</span><svg class="mark" role="img" aria-label="Caspr"><use href="#caspr-wordmark"></use></svg></header>
+
+<h1>Four things get made. The research decides which.</h1>
+
+<p class="stand">Every choice on this page was taken from the buyer research rather than invented over it — eight day-in-the-life profiles, with the pain and the objections in the buyers' own words.</p>
+
+<div class="grid2">
+  <section class="finding">
+    <h2>Six of eight buyers describe the same scene.</h2>
+    <p>Not the same pain — the same <i>moment</i>. <b>Someone senior asks where the number came from.</b> A partner, a board, a general partner, an investor, an interviewer. Six different rooms, one question. That is the spine of everything we publish.</p>
+  </section>
+  <section class="finding">
+    <h2>The biggest objection has an answer nobody has written.</h2>
+    <p><i>Is this allowed at my firm?</i> appears in <b>every one of the six objection tables</b> — as AI policy, procurement, compliance review, agency IT, client confidentiality, a dissertation supervisor. Nothing on the site addresses it. Ten evergreen pieces do.</p>
+  </section>
+</div>
+
+<table class="tbl">
+  <tr><th>What we make</th><th>Rate</th><th>Why this exists</th></tr>
+  <tr class="lead"><td>A published analysis</td><td class="num">1 / 3 weeks</td><td>A real Caspr study, free and fully sourced. <b>Five of six objection tables answer the credibility question the same way — show them the output.</b> It is the proof, the demonstration, the press hook and the backlink asset in one artefact, for the cost of one report</td></tr>
+  <tr class="lead"><td>Search answers</td><td class="num">2 / week</td><td>The job-shaped queries, plus the market-size pages generated straight from the product. This is the compounding layer</td></tr>
+  <tr class="lead"><td>The permission layer</td><td class="num">10, once</td><td>The <i>is this allowed</i> objection, answered for each gatekeeper. Written once, never regenerated, linked from every page</td></tr>
+  <tr class="lead"><td>Derivatives</td><td class="num">~20 / week</td><td>Every post, thread, email and outreach message is derived from the three above. <b>Nothing is ever originated on a channel</b></td></tr>
+</table>
+<p class="cap">Only <b>two and a half items a week are written from scratch.</b> That is what makes the volume affordable: reviewing a derivative of already-approved material takes a minute or two; reviewing origination takes ten to fifteen. <b>Twenty-three items a week costs 62–77 minutes against 450 available.</b></p>
+
+<div class="slab">
+  <span class="eyebrow">The pillars, and the weight each carries</span>
+  <h2>Five pillars. The share is a decision, not an outcome.</h2>
+  <ul class="layers">
+    <li><span class="lname">42% · Analyst</span><span class="ldesc"><b>An analyst, not an assistant.</b> The identity, and the spine of the twelve weeks</span></li>
+    <li><span class="lname">18% · Category</span><span class="ldesc"><b>Analytical AI.</b> Category education only — comparison pages, social, founder writing. Never a headline or an ad</span></li>
+    <li><span class="lname">20% · Cost</span><span class="ldesc"><b>A fraction of the cost.</b> Two weeks of twelve, and the only place it leads</span></li>
+    <li><span class="lname">12% · Trust</span><span class="ldesc"><b>Your data is your data.</b> Raised from 5% — it answers our primary buyer's leading objection, and had no home in the plan until we counted</span></li>
+    <li><span class="lname">8% · Speed</span><span class="ldesc"><b>Weeks to minutes.</b> Deliberately demoted — speed commoditises and cannot carry the position</span></li>
+  </ul>
+  <p class="note">The trust correction is the kind of thing that only surfaces when the calendar is laid out and the shares are added up. On principle it looked balanced; on arithmetic it was not.</p>
+</div>
+
+<div class="pull">
+  <p><b>Cited, or it does not ship.</b> Every item carries a finding traceable to a real Caspr analysis, or an attributed opinion from a named person. An item with neither is not generated — for a company whose position is that it is not the machine producing confident unsourced text, anything less would be self-defeating.</p>
+</div>
+
+<footer class="close"><span class="who">Sheet 3 of 5 · The content model, and the research behind it</span><svg class="mark mark--sm" role="img" aria-label="Caspr"><use href="#caspr-wordmark"></use></svg></footer>
+</div>
+<div class="sheet sheet--n">
+<header class="masthead"><span class="eyebrow">Go-to-market · The twelve weeks · Internal</span><svg class="mark" role="img" aria-label="Caspr"><use href="#caspr-wordmark"></use></svg></header>
+
+<h1>Twelve weeks. One argument, in three movements.</h1>
+
+<p class="stand">The calendar fixes the <b>slots</b> — which week, which type, which buyer, which pillar. It never fixes the topics: those come from what buyers are actually asking us that month, ranked by demand and chosen by a person.</p>
+
+<table class="tbl">
+  <tr><th>Week</th><th>The movement</th><th>Published analysis</th><th>Search answers</th><th>Buyer</th></tr>
+  <tr class="grp"><td class="num">1–2</td><td rowspan="2"><b>The question after the number.</b> Every serious figure gets challenged — here is ours, and here is where each one came from</td><td>—</td><td>Market-size pages live</td><td>Investors</td></tr>
+  <tr><td class="num">3–4</td><td><b>Analysis 1</b>, then its fan-out</td><td>Alternatives pages</td><td>Investors · Consultants</td></tr>
+  <tr class="grp"><td class="num">5–6</td><td rowspan="2"><b>Where numbers actually come from.</b> Curated sources against scraped ones; why the real comparison set is IBISWorld and Mintel</td><td><b>Analysis 2</b> lands week 6</td><td>Alternatives · job-shaped</td><td>Investors · <b>Agencies open</b></td></tr>
+  <tr><td class="num">7–8</td><td>Fan-out</td><td>Comparison pages refreshed</td><td>Agencies · <b>Strategy opens</b></td></tr>
+  <tr><td class="num">9–10</td><td><b>What research costs.</b> The only two weeks where cost leads</td><td><b>Analysis 3</b> lands week 9</td><td><i>How much does research cost</i></td><td>Strategy · Consultants</td></tr>
+  <tr><td class="num">11–12</td><td><b>Back to the analyst</b> — the argument closed, with three published analyses now standing behind it</td><td><b>Analysis 4</b> lands week 12</td><td>Alternatives · job-shaped</td><td>Agencies · Investors</td></tr>
+</table>
+<p class="cap">Cost occupies two weeks, not four. Four cost-led weeks would land exactly as the first reading of x arrives — and a soft number meeting a month of price-led content invites the wrong instinct.</p>
+
+<section class="finding">
+  <h2>We attack the format, never the firms.</h2>
+  <p>The incumbent research model is slow, expensive, generic, and dated the day it publishes — and all four are structural rather than fixable. <b>But we cite those same publishers as our sources</b>, so attacking their credibility would attack our own. The line we can defend instead: <i>that report is excellent, it cost $12,000, it was published fourteen months ago, and it does not answer your question.</i> Unarguable — and it leaves every source intact to cite.</p>
+</section>
+
+<div class="slab">
+  <span class="eyebrow">What makes an issue an event rather than a blog post</span>
+  <h2>Four formats. Each one is arguable by construction.</h2>
+  <ul class="layers">
+    <li><span class="lname">Correct it</span><span class="ldesc"><b>Take a number everybody cites and show what it rests on.</b> That the sources disagree threefold; that the canonical figure traces to a press release. The flagship</span></li>
+    <li><span class="lname">The room</span><span class="ldesc"><b>A full sector analysis, free</b>, on a question a board or an investment committee is asking this quarter</span></li>
+    <li><span class="lname">Theirs</span><span class="ldesc"><b>The audience picks the question.</b> Readers become participants, and the vote is itself a demand signal</span></li>
+    <li><span class="lname">Wrong</span><span class="ldesc"><b>We publish our own corrections.</b> Rare, and disproportionately powerful for a company selling defensibility</span></li>
+  </ul>
+  <p class="note">One rule across all four: every issue takes a position. A summary gets read and forgotten; a conclusion gets argued with — and the argument is the engagement we are actually after.</p>
+</div>
+
+<div class="pull">
+  <p>Topics are not chosen in a planning meeting. <b>A four-source demand pipeline</b> — what buyers prompt Caspr for, search trend, the questions recurring in their communities, and sector event flow — ranks the candidates with the evidence attached. <b>A person picks from the top of that list.</b> Not an assumption, and not an automaton.</p>
+</div>
+
+<footer class="close"><span class="who">Sheet 4 of 5 · The calendar, and what we attack</span><svg class="mark mark--sm" role="img" aria-label="Caspr"><use href="#caspr-wordmark"></use></svg></footer>
+</div>
+<div class="sheet sheet--n">
+<header class="masthead"><span class="eyebrow">Go-to-market · The launch · Internal</span><svg class="mark" role="img" aria-label="Caspr"><use href="#caspr-wordmark"></use></svg></header>
+
+<h1>The launch is a publication, not an announcement.</h1>
+
+<p class="stand"><b>The Record</b> — an analyst house that publishes, rather than a product that shipped. <b>Issue one is Caspr run on the market research industry itself</b>: the instrument turned on the incumbents without a word said against them, demonstrated on the one subject this audience knows well enough to judge.</p>
+
+<div class="grid2">
+  <section class="finding">
+    <h2>Build-up, peak, and fourteen weeks that do not flatten.</h2>
+    <p>Issues run <i>before</i> the announcement, so launch day arrives with a body of work rather than a promise. <b>The peak launches a recurring feature, not a one-off</b> — a single issue gives peak attention something to read; a standing monthly index gives it a reason to subscribe. Most launches die in the weeks after; a rhythm is what survives them.</p>
+  </section>
+  <section class="finding">
+    <h2>Sustained does not mean constant.</h2>
+    <p>Spreading a campaign evenly across fourteen weeks turns it into a drip, and a drip is indistinguishable from business as usual. <b>It means repeated peaks</b> — and three of the four mechanics that produce them are work already in the plan, not work added to it.</p>
+  </section>
+</div>
+
+<div class="slab">
+  <span class="eyebrow">How an issue actually travels</span>
+  <h2>Sharing it has to make the sharer look good.</h2>
+  <ul class="layers">
+    <li><span class="lname">The atom</span><span class="ldesc"><b>A hundred pages do not move. One chart with a source line does.</b> Every issue produces one, deliberately — legible in two seconds, standing alone</span></li>
+    <li><span class="lname">Provenance</span><span class="ldesc"><b>Our citation line is the distribution mechanism.</b> A chart pasted into someone else's deck arrives with its source printed on it. No competitor's chart tells the third reader where it came from</span></li>
+    <li><span class="lname">Per sector</span><span class="ldesc">A general index is interesting; <b>"here is yours" is shareable.</b> Each sector's practitioners share their own row</span></li>
+    <li><span class="lname">Credit</span><span class="ldesc"><b>If a reader adds what we could not see, we name them.</b> A better source, local knowledge no publication holds, an alternative we missed — most of which needs us to be <i>right</i>, not wrong. Professional credit costs nothing and is worth more than money here</span></li>
+    <li><span class="lname">Same day</span><span class="ldesc">When something material happens, <b>the full cited analysis publishes while the news is live.</b> Nobody else can</span></li>
+  </ul>
+  <p class="note">Ruled out: asking to be shared, engagement bait, coordinated amplification, and gating anything — a gate stops a forward dead, and the forward is the whole mechanism.</p>
+</div>
+
+<div class="grid2">
+  <section class="finding">
+    <h2>The honest ceiling.</h2>
+    <p>B2B research does not go viral, and planning as though it might is the mistake. <b>A good issue is a few hundred invisible forwards inside firms, twenty to fifty substantive comments, two or three trade pickups, and one or two people citing it.</b> That compounds — planning for a spike produces tactics that spend the brand for one week of attention.</p>
+  </section>
+  <section class="finding">
+    <h2>The asset that survives a weak result.</h2>
+    <p>People who will not open an account <b>will subscribe to research.</b> The publication builds an email list that is not a signup list — a larger, earlier audience, and the one thing here that keeps compounding even if the numbers disappoint.</p>
+  </section>
+</div>
+
+<div class="slab">
+  <span class="eyebrow">Four gates — each one a number, agreed before it is needed</span>
+  <h2>Nothing opens early, and nothing opens on an argument.</h2>
+  <ul class="layers">
+    <li><span class="lname">Launch</span><span class="ldesc"><b>Website and app both live.</b> A first impression cannot be re-spent</span></li>
+    <li><span class="lname">Proof</span><span class="ldesc"><b>Testimonials published, three real reports on the site.</b> Gates every dollar of paid</span></li>
+    <li><span class="lname">Funnel</span><span class="ldesc"><b>Week four: activation trending to 40%, attribution resolving, 300+ signups.</b> Gates the campaign spend — roughly $8k, one-time</span></li>
+    <li><span class="lname">Scale</span><span class="ldesc"><b>x above 2 at six months.</b> Gates every increase in budget. Nothing else does</span></li>
+  </ul>
+  <p class="note">Agreeing each number in advance is the point. It turns a judgement call made under pressure into a reading — and it means a launch we can decline to fire, which is the only kind worth preparing.</p>
+</div>
+
+<footer class="close"><span class="who">Sheet 5 of 5 · Go-to-market strategy · <code>docs/gtm/</code> · Owner: Joy</span><svg class="mark mark--sm" role="img" aria-label="Caspr"><use href="#caspr-wordmark"></use></svg></footer>
+</div>

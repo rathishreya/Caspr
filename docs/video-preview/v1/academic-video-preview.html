@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caspr — Climate Tech Investment Flows in Emerging Markets · Animation Preview</title>
+<style>
+  :root {
+    --black: #0B0B09;
+    --red: #E8453C;
+    --grey-dark: #1A1A18;
+    --grey-mid: #6B6B66;
+    --grey-light: #F2F1EF;
+    --rule: #D6D4CF;
+    --white: #FFFFFF;
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: #000;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* ── STAGE ── */
+  #stage {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background: #000;
+  }
+
+  /* ── SCENES ── */
+  .scene {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease;
+  }
+  .scene.active { opacity: 1; pointer-events: auto; }
+
+  /* ── PLAY SCREEN ── */
+  #play-screen {
+    position: absolute;
+    inset: 0;
+    background: var(--black);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    cursor: pointer;
+    transition: opacity 0.8s ease;
+  }
+  #play-screen.hidden { opacity: 0; pointer-events: none; }
+  .play-logo { display: flex; align-items: center; gap: 14px; margin-bottom: 56px; }
+  .play-dot { width: 24px; height: 24px; border-radius: 50%; background: var(--red); }
+  .play-brand { color: white; font-size: 22px; font-weight: 700; letter-spacing: 0.06em; }
+  .play-title { color: rgba(255,255,255,0.5); font-size: 13px; letter-spacing: 0.04em; margin-bottom: 56px; text-align: center; }
+  .play-btn {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: var(--red);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .play-btn:hover { transform: scale(1.08); background: #f05550; }
+  .play-btn svg { margin-left: 4px; }
+  .play-hint { color: rgba(255,255,255,0.3); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* ── HUD (progress + timer) ── */
+  #hud {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 50;
+    padding: 0 0 20px;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  #hud.visible { opacity: 1; }
+  #progress-track {
+    width: 100%;
+    height: 2px;
+    background: rgba(255,255,255,0.1);
+    position: relative;
+    margin-bottom: 14px;
+  }
+  #progress-fill {
+    height: 100%;
+    background: var(--red);
+    width: 0%;
+    transition: width 0.1s linear;
+  }
+  #hud-info {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 28px;
+    align-items: center;
+  }
+  .hud-label { color: rgba(255,255,255,0.35); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .hud-time { color: rgba(255,255,255,0.35); font-size: 10px; font-variant-numeric: tabular-nums; }
+  #scene-dots { display: flex; gap: 6px; }
+  .s-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.2); transition: background 0.3s; }
+  .s-dot.active { background: var(--red); }
+
+  /* ── REPLAY ── */
+  #replay-btn {
+    position: fixed;
+    top: 24px; right: 24px;
+    z-index: 60;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.5);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    cursor: pointer;
+    display: none;
+    font-family: inherit;
+    transition: background 0.2s, color 0.2s;
+  }
+  #replay-btn:hover { background: rgba(255,255,255,0.14); color: white; }
+  #replay-btn.visible { display: block; }
+
+  /* ═══════════════════════════════════════════
+     SCENE 1 — COVER
+  ═══════════════════════════════════════════ */
+  #scene-1 { background: var(--black); }
+
+  .cover-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 120% 80% at 70% 40%, rgba(30,28,24,0.9) 0%, transparent 60%),
+      radial-gradient(ellipse 80% 100% at 20% 60%, rgba(15,14,10,0.95) 0%, transparent 70%),
+      #0F0E0C;
+    animation: coverPan 5s ease-out forwards;
+  }
+  /* Industrial texture overlay */
+  .cover-texture {
+    position: absolute;
+    inset: 0;
+    opacity: 0.18;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(232,69,60,0.04) 40px, rgba(232,69,60,0.04) 41px),
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(255,255,255,0.02) 60px, rgba(255,255,255,0.02) 61px);
+  }
+  .cover-glow {
+    position: absolute;
+    top: -20%; right: -10%;
+    width: 60%; height: 80%;
+    background: radial-gradient(ellipse, rgba(232,69,60,0.06) 0%, transparent 70%);
+    animation: glowPulse 4s ease-in-out infinite alternate;
+  }
+
+  @keyframes coverPan {
+    0%   { transform: scale(1.06) translateY(8px); }
+    100% { transform: scale(1) translateY(0); }
+  }
+  @keyframes glowPulse {
+    0%   { opacity: 0.6; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1.05); }
+  }
+
+  .cover-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 6% 8%;
+  }
+  .cover-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .c-logo { display: flex; align-items: center; gap: 10px; opacity: 0; animation: fadeUp 0.7s 0.4s forwards; }
+  .c-dot { width: 22px; height: 22px; border-radius: 50%; background: var(--red); }
+  .c-brand { color: white; font-size: 16px; font-weight: 700; letter-spacing: 0.08em; }
+  .c-badge {
+    opacity: 0;
+    animation: fadeDown 0.6s 0.6s forwards;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.7);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+  }
+
+  .cover-title-block { opacity: 0; animation: fadeUp 0.9s 0.3s forwards; }
+  .c-report-type { color: var(--red); font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 16px; }
+  .c-title {
+    color: white;
+    font-size: clamp(36px, 5.5vw, 76px);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+  .c-subtitle {
+    color: rgba(255,255,255,0.45);
+    font-size: clamp(11px, 1.1vw, 15px);
+    font-weight: 400;
+    line-height: 1.6;
+    max-width: 520px;
+    margin-bottom: 28px;
+  }
+  .c-meta { display: flex; align-items: center; gap: 16px; }
+  .c-pill {
+    background: var(--red);
+    color: white;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+  }
+  .c-date { color: rgba(255,255,255,0.3); font-size: 10px; }
+
+  .cover-right-stat {
+    position: absolute;
+    right: 8%;
+    bottom: 18%;
+    text-align: right;
+    opacity: 0;
+    animation: fadeLeft 0.8s 1.0s forwards;
+  }
+  .crs-num { font-size: clamp(48px, 6vw, 88px); font-weight: 800; color: var(--red); line-height: 1; }
+  .crs-label { font-size: clamp(10px, 0.9vw, 12px); color: rgba(255,255,255,0.35); margin-top: 6px; line-height: 1.5; }
+
+  @keyframes fadeUp   { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeDown { from { opacity:0; transform:translateY(-14px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeLeft { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
+  @keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
+
+  /* ═══════════════════════════════════════════
+     SCENE 2 — SECTION OPENER (dark page)
+  ═══════════════════════════════════════════ */
+  #scene-2 { background: var(--grey-dark); display: flex; align-items: center; justify-content: center; }
+
+  .opener-wrap {
+    width: min(860px, 88vw);
+    padding: 0 40px;
+  }
+  .op-section-num {
+    font-size: clamp(56px, 8vw, 108px);
+    font-weight: 800;
+    color: var(--red);
+    line-height: 1;
+    opacity: 0;
+    animation: none;
+  }
+  .op-rule {
+    width: 0;
+    height: 3px;
+    background: var(--red);
+    margin: 20px 0 28px;
+  }
+  .op-finding {
+    color: white;
+    font-size: clamp(18px, 2.4vw, 34px);
+    font-weight: 600;
+    line-height: 1.3;
+    max-width: 680px;
+    opacity: 0;
+  }
+  .op-stat {
+    margin-top: 20px;
+    color: rgba(232,69,60,0.7);
+    font-size: clamp(11px, 1.1vw, 15px);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    opacity: 0;
+  }
+
+  /* triggered by JS class */
+  .scene.active .op-section-num  { animation: fadeUp 0.5s 0.1s forwards; }
+  .scene.active .op-rule         { animation: ruleExpand 0.5s 0.4s forwards; }
+  .scene.active .op-finding      { animation: fadeUp 0.7s 0.5s forwards; }
+  .scene.active .op-stat         { animation: fadeUp 0.6s 0.9s forwards; }
+
+  @keyframes ruleExpand { from { width:0; } to { width:80px; } }
+
+  /* ═══════════════════════════════════════════
+     SCENE 3 — EXECUTIVE SUMMARY
+  ═══════════════════════════════════════════ */
+  #scene-3 { background: white; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+
+  .es-page {
+    width: min(760px, 90vw);
+    padding: 40px 52px 48px;
+    background: white;
+    box-shadow: 0 8px 60px rgba(0,0,0,0.15);
+    position: relative;
+    animation: pageLift 0.7s ease-out forwards;
+  }
+  @keyframes pageLift { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+
+  .es-page-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 20px;
+  }
+  .es-ph-text { font-size: 8px; color: var(--grey-mid); letter-spacing: 0.06em; }
+
+  .es-open {
+    font-size: clamp(10px, 1vw, 12px);
+    color: var(--grey-mid);
+    font-style: italic;
+    line-height: 1.6;
+    border-left: 3px solid var(--red);
+    padding-left: 14px;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: none;
+  }
+  .scene.active .es-open { animation: fadeUp 0.5s 0.3s forwards; }
+
+  .finding-row {
+    display: grid;
+    grid-template-columns: 1fr 90px;
+    gap: 20px;
+    padding: 14px 0;
+    border-top: 1px solid var(--rule);
+    opacity: 0;
+  }
+  .fr-label { font-size: clamp(9px, 0.85vw, 11px); font-weight: 600; color: var(--black); margin-bottom: 5px; }
+  .fr-body  { font-size: clamp(8px, 0.75vw, 10px); color: var(--grey-mid); line-height: 1.6; }
+  .fr-num   { font-size: clamp(20px, 2.2vw, 30px); font-weight: 700; color: var(--red); text-align: right; line-height: 1.1; }
+  .fr-unit  { font-size: 7.5px; color: var(--grey-mid); text-align: right; margin-top: 3px; line-height: 1.4; }
+
+  .scene.active .finding-row:nth-child(1) { animation: fadeUp 0.45s 0.4s forwards; }
+  .scene.active .finding-row:nth-child(2) { animation: fadeUp 0.45s 0.55s forwards; }
+  .scene.active .finding-row:nth-child(3) { animation: fadeUp 0.45s 0.70s forwards; }
+  .scene.active .finding-row:nth-child(4) { animation: fadeUp 0.45s 0.85s forwards; }
+
+  .es-close {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule);
+    font-size: clamp(9px, 0.85vw, 11px);
+    font-weight: 500;
+    color: var(--black);
+    line-height: 1.6;
+    opacity: 0;
+  }
+  .scene.active .es-close { animation: fadeUp 0.5s 1.0s forwards; }
+
+  .es-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid var(--rule);
+  }
+  .es-ft { font-size: 7.5px; color: var(--grey-mid); letter-spacing: 0.04em; }
+  .es-brand { display: flex; align-items: center; gap: 4px; }
+  .es-brand span { font-size: 8px; font-weight: 600; color: var(--grey-mid); }
+  .es-brand-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--red); }
+
+  /* ═══════════════════════════════════════════
+     SCENE 4 — DATA TABLE
+  ═══════════════════════════════════════════ */
+  #scene-4 { background: #F5F4F1; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+
+  .table-page {
+    width: min(820px, 92vw);
+    background: white;
+    box-shadow: 0 8px 60px rgba(0,0,0,0.12);
+    padding: 40px 52px 52px;
+    animation: pageLift 0.7s ease-out forwards;
+  }
+  .tp-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: 10px; border-bottom: 1px solid var(--rule); margin-bottom: 20px;
+  }
+  .tp-hn { font-size: 8px; color: var(--grey-mid); letter-spacing: 0.06em; }
+
+  .tp-section-label { color: var(--red); font-size: 9px; font-weight: 600; letter-spacing: 0.1em; margin-bottom: 6px; opacity:0; }
+  .tp-title { font-size: clamp(13px, 1.4vw, 18px); font-weight: 600; color: var(--black); margin-bottom: 20px; opacity:0; }
+
+  .scene.active .tp-section-label { animation: fadeUp 0.4s 0.2s forwards; }
+  .scene.active .tp-title         { animation: fadeUp 0.5s 0.35s forwards; }
+
+  .data-tbl { width: 100%; border-collapse: collapse; font-size: clamp(8px, 0.75vw, 10px); }
+  .data-tbl thead tr { background: var(--black); }
+  .data-tbl th {
+    color: white; font-weight: 600; font-size: clamp(7px, 0.65vw, 8.5px);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: clamp(6px, 0.8vw, 9px) clamp(8px, 1vw, 12px);
+    text-align: left;
+  }
+  .data-tbl th:not(:first-child) { text-align: right; }
+  .data-tbl td { padding: clamp(5px, 0.7vw, 8px) clamp(8px, 1vw, 12px); }
+  .data-tbl td:not(:first-child) { text-align: right; }
+  .data-tbl tr:nth-child(even) td { background: var(--grey-light); }
+  .data-tbl .key-row td { color: var(--red); font-weight: 700; }
+  .data-tbl .total-row td { font-weight: 600; border-top: 1px solid var(--rule); }
+  .table-source-line { font-size: 7px; color: var(--grey-mid); font-style: italic; text-align: right; margin-top: 8px; }
+
+  /* Table rows stagger in */
+  .tbl-row { opacity: 0; }
+  .scene.active .tbl-row:nth-child(1) { animation: fadeUp 0.3s 0.5s forwards; }
+  .scene.active .tbl-row:nth-child(2) { animation: fadeUp 0.3s 0.6s forwards; }
+  .scene.active .tbl-row:nth-child(3) { animation: fadeUp 0.3s 0.7s forwards; }
+  .scene.active .tbl-row:nth-child(4) { animation: fadeUp 0.3s 0.8s forwards; }
+  .scene.active .tbl-row:nth-child(5) { animation: fadeUp 0.3s 0.9s forwards; }
+  .scene.active .tbl-row:nth-child(6) { animation: fadeUp 0.3s 1.0s forwards; }
+
+  .scene.active .table-source-line { animation: fadeIn 0.4s 1.1s forwards; opacity:0; }
+
+  /* Two-col layout with callout */
+  .tp-two-col { display: grid; grid-template-columns: 1fr 110px; gap: 24px; align-items: start; margin-top: 20px; }
+  .tp-body { opacity:0; }
+  .tp-lead { font-size: clamp(9px, 0.85vw, 11px); font-weight: 500; color: var(--black); line-height: 1.6; margin-bottom: 8px; }
+  .tp-copy { font-size: clamp(8px, 0.72vw, 9.5px); color: var(--grey-mid); line-height: 1.7; }
+  .scene.active .tp-body { animation: fadeUp 0.5s 0.9s forwards; }
+
+  .tp-callout { text-align: right; opacity:0; }
+  .tpc-num { font-size: clamp(32px, 3.8vw, 52px); font-weight: 800; color: var(--red); line-height: 1; display: block; }
+  .tpc-lbl { font-size: clamp(7px, 0.65vw, 8.5px); color: var(--grey-mid); line-height: 1.5; display: block; margin-top: 4px; }
+  .scene.active .tp-callout { animation: fadeLeft 0.6s 1.0s forwards; }
+
+  /* ═══════════════════════════════════════════
+     SCENE 5 — FINANCIAL / CAPITAL STRUCTURES PAGE
+  ═══════════════════════════════════════════ */
+  #scene-5 { background: #F5F4F1; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+
+  .fin-page {
+    width: min(820px, 92vw);
+    background: white;
+    box-shadow: 0 8px 60px rgba(0,0,0,0.12);
+    padding: 40px 52px 52px;
+    animation: pageLift 0.7s ease-out forwards;
+  }
+  .fin-hdr { display:flex; justify-content:space-between; padding-bottom:10px; border-bottom:1px solid var(--rule); margin-bottom:20px; }
+  .fin-hn { font-size:8px; color:var(--grey-mid); letter-spacing:0.06em; }
+
+  .fin-sec { color: var(--red); font-size: 9px; font-weight: 600; letter-spacing: 0.1em; margin-bottom: 5px; opacity:0; }
+  .fin-title { font-size: clamp(13px, 1.4vw, 18px); font-weight: 600; color: var(--black); margin-bottom: 6px; line-height: 1.3; opacity:0; }
+  .fin-lead  { font-size: clamp(9px, 0.85vw, 11px); font-weight: 500; color: var(--black); line-height: 1.6; margin-bottom: 18px; opacity:0; }
+
+  .scene.active .fin-sec   { animation: fadeUp 0.4s 0.2s forwards; }
+  .scene.active .fin-title { animation: fadeUp 0.5s 0.35s forwards; }
+  .scene.active .fin-lead  { animation: fadeUp 0.5s 0.5s forwards; }
+
+  .scenario-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .scen-card {
+    border: 1px solid var(--rule);
+    padding: clamp(12px, 1.5vw, 18px);
+    opacity: 0;
+  }
+  .scen-card.highlight { border-color: var(--red); background: #FFF8F7; }
+  .scen-label { font-size: 8px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--grey-mid); margin-bottom: 8px; }
+  .scen-label.red { color: var(--red); }
+  .scen-irr { font-size: clamp(24px, 2.8vw, 38px); font-weight: 800; color: var(--black); line-height: 1; margin-bottom: 4px; }
+  .scen-card.highlight .scen-irr { color: var(--red); }
+  .scen-irr-label { font-size: 8px; color: var(--grey-mid); }
+  .scen-rule { border: none; border-top: 1px solid var(--rule); margin: 10px 0; }
+  .scen-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+  .scen-k { font-size: clamp(7.5px, 0.7vw, 9px); color: var(--grey-mid); }
+  .scen-v { font-size: clamp(7.5px, 0.7vw, 9px); font-weight: 600; color: var(--black); }
+  .scen-condition { font-size: 7.5px; color: var(--grey-mid); line-height: 1.5; margin-top: 8px; font-style: italic; }
+
+  .scene.active .scen-card:nth-child(1) { animation: fadeUp 0.4s 0.65s forwards; }
+  .scene.active .scen-card:nth-child(2) { animation: fadeUp 0.4s 0.8s forwards; }
+  .scene.active .scen-card:nth-child(3) { animation: fadeUp 0.4s 0.95s forwards; }
+
+  .fin-footer { display:flex; justify-content:space-between; align-items:center; margin-top:20px; padding-top:10px; border-top:1px solid var(--rule); }
+  .fin-ft { font-size:7.5px; color:var(--grey-mid); }
+  .fin-brand { display:flex; align-items:center; gap:4px; }
+  .fin-brand span { font-size:8px; font-weight:600; color:var(--grey-mid); }
+  .fin-brand-dot { width:5px; height:5px; border-radius:50%; background:var(--red); }
+
+  /* ═══════════════════════════════════════════
+     SCENE 6 — CALLOUT STATS MONTAGE
+  ═══════════════════════════════════════════ */
+  #scene-6 { background: var(--black); display: flex; align-items: center; justify-content: center; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    width: min(900px, 94vw);
+    background: #1A1A18;
+  }
+  .stat-cell {
+    background: var(--black);
+    padding: clamp(28px, 4vw, 52px) clamp(20px, 3vw, 40px);
+    text-align: center;
+    opacity: 0;
+  }
+  .st-num { font-size: clamp(36px, 5vw, 68px); font-weight: 800; color: var(--red); line-height: 1; display: block; margin-bottom: 8px; }
+  .st-lbl { font-size: clamp(9px, 0.85vw, 11px); color: rgba(255,255,255,0.4); line-height: 1.5; display: block; }
+
+  .scene.active .stat-cell:nth-child(1) { animation: fadeUp 0.5s 0.1s forwards; }
+  .scene.active .stat-cell:nth-child(2) { animation: fadeUp 0.5s 0.25s forwards; }
+  .scene.active .stat-cell:nth-child(3) { animation: fadeUp 0.5s 0.4s forwards; }
+  .scene.active .stat-cell:nth-child(4) { animation: fadeUp 0.5s 0.55s forwards; }
+  .scene.active .stat-cell:nth-child(5) { animation: fadeUp 0.5s 0.7s forwards; }
+  .scene.active .stat-cell:nth-child(6) { animation: fadeUp 0.5s 0.85s forwards; }
+
+  /* ═══════════════════════════════════════════
+     SCENE 7 — CASPR OUTRO
+  ═══════════════════════════════════════════ */
+  #scene-7 { background: var(--black); display: flex; align-items: center; justify-content: center; flex-direction: column; }
+
+  .outro-wrap { text-align: center; }
+  .outro-dot {
+    width: clamp(32px, 4vw, 52px);
+    height: clamp(32px, 4vw, 52px);
+    border-radius: 50%;
+    background: var(--red);
+    margin: 0 auto 20px;
+    opacity: 0;
+    animation: none;
+  }
+  .outro-brand {
+    color: white;
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    opacity: 0;
+    animation: none;
+  }
+  .outro-line {
+    width: 0;
+    height: 1px;
+    background: rgba(255,255,255,0.15);
+    margin: 24px auto;
+  }
+  .outro-tagline {
+    color: rgba(255,255,255,0.35);
+    font-size: clamp(11px, 1.1vw, 15px);
+    letter-spacing: 0.04em;
+    opacity: 0;
+    animation: none;
+  }
+  .outro-sub {
+    color: rgba(232,69,60,0.6);
+    font-size: clamp(9px, 0.9vw, 12px);
+    letter-spacing: 0.08em;
+    margin-top: 12px;
+    opacity: 0;
+    animation: none;
+  }
+
+  .scene.active .outro-dot     { animation: fadeIn 0.6s 0.2s forwards; }
+  .scene.active .outro-brand   { animation: fadeUp 0.7s 0.4s forwards; }
+  .scene.active .outro-line    { animation: outroLine 0.6s 0.8s forwards; }
+  .scene.active .outro-tagline { animation: fadeIn 0.6s 1.0s forwards; }
+  .scene.active .outro-sub     { animation: fadeIn 0.6s 1.3s forwards; }
+
+  @keyframes outroLine { from { width:0; } to { width:min(280px, 50vw); } }
+
+  /* ═══════════════════════════════════════════
+     RECORD HINT (top left)
+  ═══════════════════════════════════════════ */
+  #record-hint {
+    position: fixed;
+    top: 24px; left: 24px;
+    z-index: 60;
+    background: rgba(232,69,60,0.12);
+    border: 1px solid rgba(232,69,60,0.25);
+    color: rgba(232,69,60,0.7);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    display: none;
+    font-family: inherit;
+  }
+  #record-hint.visible { display: block; }
+
+</style>
+</head>
+<body>
+
+<!-- PLAY SCREEN -->
+<div id="play-screen">
+  <div class="play-logo">
+    <div class="play-dot"></div>
+    <span class="play-brand">CASPR</span>
+  </div>
+  <div class="play-title">Climate Tech Investment Flows in Emerging Markets<br><span style="color:rgba(255,255,255,0.3);font-size:11px;">Study Report · Animation Preview</span></div>
+  <div class="play-btn" id="play-btn">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <polygon points="6,3 19,11 6,19" fill="white"/>
+    </svg>
+  </div>
+  <div class="play-hint">Click to play · ~27 seconds</div>
+  <div style="position:absolute;bottom:28px;left:0;right:0;text-align:center;color:rgba(255,255,255,0.15);font-size:9px;letter-spacing:0.08em;">For video production: record screen at 1920×1080 · 60fps</div>
+</div>
+
+<!-- STAGE -->
+<div id="stage">
+
+  <!-- Scene 1: Cover -->
+  <div class="scene" id="scene-1">
+    <div class="cover-bg"></div>
+    <div class="cover-texture"></div>
+    <div class="cover-glow"></div>
+    <div class="cover-content">
+      <div class="cover-top-row">
+        <div class="c-logo">
+          <div class="c-dot"></div>
+          <span class="c-brand">CASPR</span>
+        </div>
+        <div class="c-badge">Study Report</div>
+      </div>
+      <div>
+        <div class="cover-title-block">
+          <div class="c-report-type">Study · Analytical AI</div>
+          <div class="c-title">Climate Tech<br>Investment Flows<br>in Emerging Markets</div>
+          <div class="c-subtitle">Capital deployment analysis by geography, technology subsector, and investment vehicle — structured for academic researchers, MBA candidates, and policy analysts.</div>
+          <div class="c-meta">
+            <div class="c-pill">Study</div>
+            <div class="c-date">2024</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cover-right-stat">
+      <div class="crs-num">89</div>
+      <div class="crs-label">pages · fully cited<br>delivered in under 15 min</div>
+    </div>
+  </div>
+
+  <!-- Scene 2: Section Opener -->
+  <div class="scene" id="scene-2">
+    <div style="position:absolute;inset:0;background:var(--grey-dark);"></div>
+    <div style="position:absolute;top:0;left:0;bottom:0;width:3px;background:var(--red);opacity:0.4;"></div>
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+      <div class="opener-wrap">
+        <div class="op-section-num">02</div>
+        <div class="op-rule"></div>
+        <div class="op-finding">Climate tech investment in emerging markets reached USD 42bn in 2023 — but 67% concentrated in three countries: China, India, and Brazil</div>
+        <div class="op-stat">Total investment: USD 42bn (2023) · Geographic concentration: 67% in 3 markets · Solar: 44% of total deployment</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 3: Executive Summary -->
+  <div class="scene" id="scene-3">
+    <div style="position:absolute;inset:0;background:#ECEAE5;"></div>
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;">
+      <div class="es-page">
+        <div class="es-page-header">
+          <span class="es-ph-text">EXECUTIVE SUMMARY — DECISION BRIEF</span>
+          <span class="es-ph-text">Page 4</span>
+        </div>
+        <div class="es-open">This report maps climate tech capital flows across emerging market geographies — providing the investment data, subsector breakdown, and policy landscape analysis that researchers need as a structured starting point.</div>
+        <div class="finding-row">
+          <div>
+            <div class="fr-label">Finding 1 — Solar dominates but storage is the emerging priority</div>
+            <div class="fr-body">Solar PV accounts for 44% of total climate tech investment in emerging markets — driven by cost deflation and scalable deployment models. Battery storage investment grew 89% in 2023 as grid instability creates structural demand.</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="fr-num">USD 42bn</div>
+            <div class="fr-unit">total climate tech investment, emerging markets 2023</div>
+          </div>
+        </div>
+        <div class="finding-row">
+          <div>
+            <div class="fr-label">Finding 2 — Blended finance is unlocking sub-investment-grade markets</div>
+            <div class="fr-body">In markets rated below BB by S&amp;P, blended finance structures (DFI first-loss, concessional debt) accounted for 78% of renewable energy project finance in 2023. Without blending, private capital does not flow at scale.</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="fr-num">78%</div>
+            <div class="fr-unit">project finance using blended structures in BB- markets</div>
+          </div>
+        </div>
+        <div class="finding-row">
+          <div>
+            <div class="fr-label">Finding 3 — Africa is systematically underweighted relative to opportunity</div>
+            <div class="fr-body">Sub-Saharan Africa received USD 3.1bn in climate tech investment in 2023 — 7.4% of the emerging market total — despite representing 14% of global energy access deficit. The funding gap is structural, not driven by project quality.</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="fr-num" style="font-size:clamp(14px,1.5vw,20px);">7.4%<br>vs 14%</div>
+            <div class="fr-unit">Africa: climate investment share vs. energy access deficit</div>
+          </div>
+        </div>
+        <div class="es-close">The investment data is structured for direct citation, with primary sources identified for each dataset. All figures are reconciled across three independent data sources.</div>
+        <div class="es-footer">
+          <span class="es-ft">Executive Summary</span>
+          <span class="es-ft">Page 4</span>
+          <div class="es-brand"><span>Caspr</span><div class="es-brand-dot"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 4: Data Table -->
+  <div class="scene" id="scene-4">
+    <div style="position:absolute;inset:0;background:#ECEAE5;"></div>
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;">
+      <div class="table-page">
+        <div class="tp-header">
+          <span class="tp-hn">SECTION 3.1 · INVESTMENT BY GEOGRAPHY</span>
+          <span class="tp-hn">Page 22</span>
+        </div>
+        <div class="tp-section-label">TABLE 3.1</div>
+        <div class="tp-title">Climate tech investment flows: emerging markets by region, 2023 (USD billions)</div>
+        <table class="data-tbl">
+          <thead>
+            <tr>
+              <th>Region</th>
+              <th>Investment (USD bn)</th>
+              <th>Share of Total</th>
+              <th>YoY Growth</th>
+              <th>Primary Subsector</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="tbl-row key-row">
+              <td><strong>China</strong></td>
+              <td>18.4</td>
+              <td>43.8%</td>
+              <td>+12%</td>
+              <td>Solar + Storage</td>
+            </tr>
+            <tr class="tbl-row">
+              <td>India</td>
+              <td>7.2</td>
+              <td>17.1%</td>
+              <td>+31%</td>
+              <td>Solar PV</td>
+            </tr>
+            <tr class="tbl-row">
+              <td>Brazil</td>
+              <td>2.6</td>
+              <td>6.2%</td>
+              <td>+18%</td>
+              <td>Wind + Bioenergy</td>
+            </tr>
+            <tr class="tbl-row">
+              <td>Southeast Asia</td>
+              <td>5.8</td>
+              <td>13.8%</td>
+              <td>+24%</td>
+              <td>Solar + Grid</td>
+            </tr>
+            <tr class="tbl-row">
+              <td>Sub-Saharan Africa</td>
+              <td>3.1</td>
+              <td>7.4%</td>
+              <td>+9%</td>
+              <td>Off-grid Solar</td>
+            </tr>
+            <tr class="tbl-row total-row">
+              <td><strong>All Emerging Markets</strong></td>
+              <td><strong>42.0</strong></td>
+              <td><strong>100%</strong></td>
+              <td><strong>+17%</strong></td>
+              <td>Solar dominant</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="table-source-line">Source: BloombergNEF; IEA World Energy Investment Report 2023; Caspr reconciliation across three primary sources.</div>
+        <div class="tp-two-col" style="margin-top:18px;">
+          <div class="tp-body">
+            <div class="tp-lead">India's 31% YoY growth rate is the most significant signal in the dataset — driven by the Production Linked Incentive scheme and grid-scale solar auctions. India is the highest-growth large market by a substantial margin.</div>
+            <div class="tp-copy">The Sub-Saharan Africa figure (USD 3.1bn) understates project pipeline significantly. Caspr identifies USD 8.4bn in projects at advanced development stage that have not yet reached financial close — primarily blocked by currency risk and first-loss gap.</div>
+          </div>
+          <div class="tp-callout">
+            <span class="tpc-num">+31%</span>
+            <span class="tpc-lbl">India climate tech investment growth — highest large market</span>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:10px;border-top:1px solid var(--rule);">
+          <span style="font-size:7.5px;color:var(--grey-mid);">Investment by Geography</span>
+          <span style="font-size:7.5px;color:var(--grey-mid);">22</span>
+          <div style="display:flex;align-items:center;gap:4px;"><span style="font-size:8px;font-weight:600;color:var(--grey-mid);">Caspr</span><div style="width:5px;height:5px;border-radius:50%;background:var(--red);"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 5: Capital Structures -->
+  <div class="scene" id="scene-5">
+    <div style="position:absolute;inset:0;background:#ECEAE5;"></div>
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;">
+      <div class="fin-page">
+        <div class="fin-hdr">
+          <span class="fin-hn">SECTION 6.2 · CAPITAL STRUCTURE MODELS</span>
+          <span class="fin-hn">Page 54</span>
+        </div>
+        <div class="fin-sec">6.2</div>
+        <div class="fin-title">Three capital structure models: risk-return profiles for emerging market climate investment</div>
+        <div class="fin-lead">Modelled on a USD 50M solar-plus-storage project in a sub-investment-grade emerging market. Return profile varies substantially by capital structure and DFI involvement.</div>
+        <div class="scenario-grid">
+          <div class="scen-card">
+            <div class="scen-label">Pure Private Capital</div>
+            <div class="scen-irr">8.2%</div>
+            <div class="scen-irr-label">equity IRR</div>
+            <hr class="scen-rule">
+            <div class="scen-row"><span class="scen-k">Structure</span><span class="scen-v">All-private</span></div>
+            <div class="scen-row"><span class="scen-k">Currency risk</span><span class="scen-v">Unhedged</span></div>
+            <div class="scen-row"><span class="scen-k">DFI</span><span class="scen-v">None</span></div>
+            <div class="scen-condition">IRR below most LP hurdle rates. Currency risk and offtaker credit make this structure unviable in most markets below BB.</div>
+          </div>
+          <div class="scen-card highlight">
+            <div class="scen-label red">Blended Finance ✦ Most Common</div>
+            <div class="scen-irr">14.6%</div>
+            <div class="scen-irr-label">equity IRR</div>
+            <hr class="scen-rule">
+            <div class="scen-row"><span class="scen-k">Structure</span><span class="scen-v">DFI first-loss + private</span></div>
+            <div class="scen-row"><span class="scen-k">Currency risk</span><span class="scen-v">Partial hedge</span></div>
+            <div class="scen-row"><span class="scen-k">DFI</span><span class="scen-v">20–30%</span></div>
+            <div class="scen-condition">First-loss tranche from DFI de-risks private capital. Achieves LP-viable returns in B+ to BB- markets.</div>
+          </div>
+          <div class="scen-card">
+            <div class="scen-label">Concessional Debt</div>
+            <div class="scen-irr">19.1%</div>
+            <div class="scen-irr-label">equity IRR</div>
+            <hr class="scen-rule">
+            <div class="scen-row"><span class="scen-k">Structure</span><span class="scen-v">Below-market DFI debt</span></div>
+            <div class="scen-row"><span class="scen-k">Currency risk</span><span class="scen-v">Hedged</span></div>
+            <div class="scen-row"><span class="scen-k">DFI</span><span class="scen-v">40%+</span></div>
+            <div class="scen-condition">Maximises equity return but DFI allocation is constrained. Not replicable at scale.</div>
+          </div>
+        </div>
+        <div class="fin-footer">
+          <span class="fin-ft">Capital Structure Models</span>
+          <span class="fin-ft">Source: Caspr financial model. Assumptions in Appendix B.</span>
+          <div class="fin-brand"><span>Caspr</span><div class="fin-brand-dot"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 6: Stats montage -->
+  <div class="scene" id="scene-6">
+    <div style="position:absolute;inset:0;background:var(--black);"></div>
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;">
+      <div class="stats-grid">
+        <div class="stat-cell">
+          <span class="st-num">USD 42bn</span>
+          <span class="st-lbl">climate tech investment in emerging markets, 2023</span>
+        </div>
+        <div class="stat-cell">
+          <span class="st-num">67%</span>
+          <span class="st-lbl">concentrated in 3 countries: China, India, Brazil</span>
+        </div>
+        <div class="stat-cell">
+          <span class="st-num">+31%</span>
+          <span class="st-lbl">India investment growth rate — fastest large market</span>
+        </div>
+        <div class="stat-cell">
+          <span class="st-num">78%</span>
+          <span class="st-lbl">project finance using blended structures in BB- markets</span>
+        </div>
+        <div class="stat-cell">
+          <span class="st-num">7.4%</span>
+          <span class="st-lbl">Africa's share of investment vs. 14% of energy access deficit</span>
+        </div>
+        <div class="stat-cell">
+          <span class="st-num">89%</span>
+          <span class="st-lbl">battery storage investment growth — fastest subsector</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 7: Outro -->
+  <div class="scene" id="scene-7">
+    <div style="position:absolute;inset:0;background:var(--black);"></div>
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+      <div class="outro-wrap">
+        <div class="outro-dot"></div>
+        <div class="outro-brand">Caspr</div>
+        <div class="outro-line"></div>
+        <div class="outro-tagline">Analyst-grade intelligence. In 15 minutes.</div>
+        <div class="outro-sub">caspr.ai · Your first $100 on Caspr</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /stage -->
+
+<!-- HUD -->
+<div id="hud">
+  <div id="progress-track"><div id="progress-fill"></div></div>
+  <div id="hud-info">
+    <span class="hud-label" id="hud-scene-label">Cover</span>
+    <div id="scene-dots"></div>
+    <span class="hud-time" id="hud-timer">0:00</span>
+  </div>
+</div>
+
+<div id="record-hint">● REC — screen record to export</div>
+<button id="replay-btn" onclick="startAnimation()">↺ Replay</button>
+
+<script>
+  const SCENES = [
+    { id: 'scene-1', label: 'Cover',              duration: 4200 },
+    { id: 'scene-2', label: 'Investment Context', duration: 3800 },
+    { id: 'scene-3', label: 'Executive Summary',  duration: 5200 },
+    { id: 'scene-4', label: 'Geographic Data',    duration: 5000 },
+    { id: 'scene-5', label: 'Capital Structures', duration: 5000 },
+    { id: 'scene-6', label: 'Key Metrics',        duration: 3800 },
+    { id: 'scene-7', label: 'Caspr',              duration: 3500 },
+  ];
+
+  const TOTAL_DURATION = SCENES.reduce((s, sc) => s + sc.duration, 0);
+
+  let currentScene = -1;
+  let animStart = null;
+  let rafId = null;
+  let sceneTimeout = null;
+
+  // Build dots
+  const dotsEl = document.getElementById('scene-dots');
+  SCENES.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 's-dot';
+    d.id = 'dot-' + i;
+    dotsEl.appendChild(d);
+  });
+
+  function showScene(idx) {
+    SCENES.forEach((sc, i) => {
+      const el = document.getElementById(sc.id);
+      const dot = document.getElementById('dot-' + i);
+      if (i === idx) {
+        el.classList.add('active');
+        dot.classList.add('active');
+        document.getElementById('hud-scene-label').textContent = sc.label;
+      } else {
+        el.classList.remove('active');
+        dot.classList.remove('active');
+      }
+    });
+    currentScene = idx;
+  }
+
+  function tick(ts) {
+    if (!animStart) animStart = ts;
+    const elapsed = ts - animStart;
+    const pct = Math.min(elapsed / TOTAL_DURATION * 100, 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+
+    const secs = Math.floor(elapsed / 1000);
+    const mins = Math.floor(secs / 60);
+    const s = secs % 60;
+    document.getElementById('hud-timer').textContent = mins + ':' + String(s).padStart(2,'0');
+
+    if (elapsed < TOTAL_DURATION) {
+      rafId = requestAnimationFrame(tick);
+    } else {
+      // End
+      document.getElementById('replay-btn').classList.add('visible');
+      document.getElementById('record-hint').classList.remove('visible');
+    }
+  }
+
+  function advanceScenes(idx) {
+    if (idx >= SCENES.length) return;
+    showScene(idx);
+    sceneTimeout = setTimeout(() => advanceScenes(idx + 1), SCENES[idx].duration);
+  }
+
+  function startAnimation() {
+    // Reset
+    if (rafId) cancelAnimationFrame(rafId);
+    if (sceneTimeout) clearTimeout(sceneTimeout);
+    animStart = null;
+    currentScene = -1;
+    document.getElementById('progress-fill').style.width = '0%';
+    document.getElementById('hud-timer').textContent = '0:00';
+    document.getElementById('replay-btn').classList.remove('visible');
+    document.getElementById('record-hint').classList.add('visible');
+
+    SCENES.forEach((sc) => {
+      const el = document.getElementById(sc.id);
+      el.classList.remove('active');
+      // Reset animations by clone trick
+      const clone = el.cloneNode(true);
+      el.parentNode.replaceChild(clone, el);
+    });
+
+    document.getElementById('hud').classList.add('visible');
+    document.getElementById('play-screen').classList.add('hidden');
+
+    requestAnimationFrame((ts) => {
+      animStart = ts;
+      rafId = requestAnimationFrame(tick);
+    });
+
+    advanceScenes(0);
+  }
+
+  document.getElementById('play-btn').addEventListener('click', startAnimation);
+  document.getElementById('play-screen').addEventListener('click', startAnimation);
+</script>
+
+</body>
+</html>

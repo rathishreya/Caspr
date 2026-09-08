@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350">
+<rect x="0" y="0" width="1080" height="1350" rx="0" fill="#ffffff"/>
+<rect x="0" y="0" width="1080" height="320" rx="0" fill="#0b0b09"/>
+<text x="96" y="116" font-family="Inter, Helvetica, Arial, sans-serif" font-size="20" font-weight="600" fill="#cfcecb" text-anchor="start" letter-spacing="3" style="">PRICING</text>
+<line x1="96" y1="132" x2="160" y2="132" stroke="#e8453c" stroke-width="3"/>
+<text x="96" y="196" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="72" font-weight="400" fill="#ffffff" text-anchor="start" style="">What each analysis costs</text>
+<text x="96" y="430" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="34" font-weight="400" fill="#111111" text-anchor="start" style="">Brief</text>
+<text x="96" y="464" font-family="Inter, Helvetica, Arial, sans-serif" font-size="22" font-weight="400" fill="#6b6b66" text-anchor="start" style="">Quick sourced answer</text>
+<text x="984" y="430" font-family="'DM Mono', Menlo, Consolas, monospace" font-size="34" font-weight="400" fill="#111111" text-anchor="end" style="">$15</text>
+<line x1="96" y1="484" x2="984" y2="484" stroke="#e5e4e1" stroke-width="1"/>
+<text x="96" y="550" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="34" font-weight="400" fill="#111111" text-anchor="start" style="">Study</text>
+<text x="96" y="584" font-family="Inter, Helvetica, Arial, sans-serif" font-size="22" font-weight="400" fill="#6b6b66" text-anchor="start" style="">Full analysis</text>
+<text x="984" y="550" font-family="'DM Mono', Menlo, Consolas, monospace" font-size="34" font-weight="400" fill="#111111" text-anchor="end" style="">$80</text>
+<line x1="96" y1="604" x2="984" y2="604" stroke="#e5e4e1" stroke-width="1"/>
+<text x="96" y="670" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="34" font-weight="400" fill="#111111" text-anchor="start" style="">Intelligence</text>
+<text x="96" y="704" font-family="Inter, Helvetica, Arial, sans-serif" font-size="22" font-weight="400" fill="#6b6b66" text-anchor="start" style="">In-budget / à la carte</text>
+<text x="984" y="670" font-family="'DM Mono', Menlo, Consolas, monospace" font-size="34" font-weight="400" fill="#111111" text-anchor="end" style="">$300 / $399</text>
+<line x1="96" y1="724" x2="984" y2="724" stroke="#e5e4e1" stroke-width="1"/>
+<text x="96" y="790" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="34" font-weight="400" fill="#111111" text-anchor="start" style="">Premium Data Add-on</text>
+<text x="96" y="824" font-family="Inter, Helvetica, Arial, sans-serif" font-size="22" font-weight="400" fill="#6b6b66" text-anchor="start" style="">Opt-in, priced before the run</text>
+<text x="984" y="790" font-family="'DM Mono', Menlo, Consolas, monospace" font-size="34" font-weight="400" fill="#111111" text-anchor="end" style="">$20–60</text>
+<line x1="96" y1="844" x2="984" y2="844" stroke="#e5e4e1" stroke-width="1"/>
+<text x="96" y="940" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="50" font-weight="400" fill="#111111" text-anchor="start" style="">The $200,000 question.</text>
+<text x="96" y="1006" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="50" font-weight="400" fill="#e8453c" text-anchor="start" style="">For $80</text>
+<circle cx="292" cy="997" r="9" fill="#e8453c"/>
+<line x1="96" y1="1252" x2="984" y2="1252" stroke="#e5e4e1" stroke-width="1"/>
+<text x="96" y="1280" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="34" font-weight="400" fill="#111111" text-anchor="start" style="">Caspr</text>
+<circle cx="192" cy="1271" r="6" fill="#e8453c"/>
+<text x="984" y="1280" font-family="Inter, Helvetica, Arial, sans-serif" font-size="22" font-weight="400" fill="#6b6b66" text-anchor="end" style="">caspr.ai</text>
+</svg>

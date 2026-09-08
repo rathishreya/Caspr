@@ -1,0 +1,71 @@
+LINKEDIN COMPANY PAGE - FIELD VALUES
+Paste these exactly. Do not rephrase.
+Page: linkedin.com/company/caspr-for-market-research/  (ID 108139853)
+
+------------------------------------------------------------
+NAME
+Caspr
+
+------------------------------------------------------------
+TAGLINE  (max 120 chars)
+Analytical AI - purpose-built for business analysis, not conversation.
+
+------------------------------------------------------------
+WEBSITE
+https://caspr.ai
+
+------------------------------------------------------------
+INDUSTRY
+Software Development
+  (currently set to "Market Research" - change it)
+
+------------------------------------------------------------
+COMPANY SIZE
+2-10 employees
+
+------------------------------------------------------------
+COMPANY TYPE
+Privately Held
+
+------------------------------------------------------------
+FOUNDED
+2025          <- CONFIRM WITH JOY BEFORE ENTERING
+
+------------------------------------------------------------
+HEADQUARTERS / PRIMARY LOCATION
+Singapore
+Legal entity: Caspr Holding Pte. Ltd.
+Registered address: ASK JOY - required field, do not guess
+Second location: Gurugram, India
+
+------------------------------------------------------------
+CUSTOM BUTTON
+Button type:  Visit website
+URL:
+https://caspr.ai/?utm_source=linkedin&utm_medium=organic&utm_campaign=company_page&icp_hint=general
+
+  The utm parameters are how we attribute signups to the page.
+  Copy the URL exactly, including everything after the "?".
+
+------------------------------------------------------------
+SPECIALTIES  (add all ten - free keyword surface for LinkedIn search)
+market research
+competitive analysis
+due diligence
+investment research
+business cases
+market sizing
+strategic analysis
+analytical AI
+cited research
+market intelligence
+
+------------------------------------------------------------
+VANITY URL
+Change from:  caspr-for-market-research
+Change to:    caspr-ai        (fall back to "casprai" if taken)
+
+  IMPORTANT - do this BEFORE the marketing portal's LinkedIn app is
+  created, so the app binds to the final URL.
+  LinkedIn does not redirect the old address. Update any existing links
+  in the same session: website footer, email signatures, the app.

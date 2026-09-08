@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+<rect x="0" y="0" width="1200" height="760" rx="0" fill="#ffffff"/>
+<text x="80" y="66" font-family="Inter, Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#e8453c" text-anchor="start" letter-spacing="2.5">SCOPE</text>
+<text x="80" y="116" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="46" font-weight="400" fill="#111111" text-anchor="start">What Caspr can analyze</text>
+<rect x="480.0" y="340" width="240" height="140" rx="2" fill="#0b0b09"/>
+<text x="600.0" y="404" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="34" font-weight="400" fill="#ffffff" text-anchor="middle">Caspr</text>
+<circle cx="682.0" cy="394" r="5" fill="#e8453c"/>
+<text x="600.0" y="440" font-family="Inter, Helvetica, Arial, sans-serif" font-size="17" font-weight="400" fill="#cfcecb" text-anchor="middle">one prompt</text>
+<rect x="140.0" y="260" width="200" height="74" rx="2" fill="#ffffff" stroke="#d9d8d4" stroke-width="1.5"/>
+<text x="240.0" y="306" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="24" font-weight="400" fill="#111111" text-anchor="middle">Markets</text>
+<line x1="600.0" y1="410" x2="240.0" y2="297" stroke="#d9d8d4" stroke-width="1.2" stroke-dasharray="3 5"/>
+<rect x="900.0" y="260" width="200" height="74" rx="2" fill="#ffffff" stroke="#d9d8d4" stroke-width="1.5"/>
+<text x="1000.0" y="306" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="24" font-weight="400" fill="#111111" text-anchor="middle">Industries</text>
+<line x1="600.0" y1="410" x2="1000.0" y2="297" stroke="#d9d8d4" stroke-width="1.2" stroke-dasharray="3 5"/>
+<rect x="100.0" y="450" width="200" height="74" rx="2" fill="#ffffff" stroke="#d9d8d4" stroke-width="1.5"/>
+<text x="200.0" y="496" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="24" font-weight="400" fill="#111111" text-anchor="middle">Companies</text>
+<line x1="600.0" y1="410" x2="200.0" y2="487" stroke="#d9d8d4" stroke-width="1.2" stroke-dasharray="3 5"/>
+<rect x="920.0" y="450" width="200" height="74" rx="2" fill="#ffffff" stroke="#d9d8d4" stroke-width="1.5"/>
+<text x="1020.0" y="496" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="24" font-weight="400" fill="#111111" text-anchor="middle">Competitors</text>
+<line x1="600.0" y1="410" x2="1020.0" y2="487" stroke="#d9d8d4" stroke-width="1.2" stroke-dasharray="3 5"/>
+<rect x="460.0" y="640" width="200" height="74" rx="2" fill="#ffffff" stroke="#d9d8d4" stroke-width="1.5"/>
+<text x="560.0" y="686" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="24" font-weight="400" fill="#111111" text-anchor="middle">Geographies</text>
+<line x1="600.0" y1="410" x2="560.0" y2="677" stroke="#d9d8d4" stroke-width="1.2" stroke-dasharray="3 5"/>
+<text x="600.0" y="710" font-family="Inter, Helvetica, Arial, sans-serif" font-size="19" font-weight="400" fill="#6b6b66" text-anchor="middle">Market sizing · competitive landscape · due diligence</text>
+<line x1="80" y1="688" x2="1120" y2="688" stroke="#d9d8d4" stroke-width="1.5"/>
+<text x="80" y="714" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="28" font-weight="400" fill="#111111" text-anchor="start">Caspr</text>
+<circle cx="158" cy="706" r="5" fill="#e8453c"/>
+<text x="1120" y="714" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" font-weight="400" fill="#6b6b66" text-anchor="end">caspr.ai</text>
+</svg>

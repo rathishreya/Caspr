@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caspr — Report Last Page · Design Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+
+  /* ── Design tokens ── */
+  :root {
+    --black:      #0B0B09;
+    --white:      #FFFFFF;
+    --red:        #E8453C;
+    --grey-dark:  #1A1A18;
+    --grey-mid:   #6B6B66;
+    --grey-light: #F2F1EF;
+    --rule:       #D6D4CF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #141412;
+    font-family: 'Inter', -apple-system, sans-serif;
+    padding: 48px 48px 72px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  /* ── Page heading ── */
+  .page-heading {
+    width: 595px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .ph-text {
+    font-size: 8px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.22);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .ph-rule { flex: 1; height: 1px; background: rgba(255,255,255,0.07); }
+
+  /* ═══════════════════════════════════════
+     LAST PAGE — A4 proportions
+     595 × 842 px (72dpi equivalent)
+  ════════════════════════════════════════ */
+  .page {
+    width: 595px;
+    height: 842px;
+    background: var(--grey-dark);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    /* Paper shadow */
+    box-shadow:
+      0 8px 48px rgba(0,0,0,0.7),
+      0 2px 6px rgba(0,0,0,0.5),
+      inset 0 0 0 1px rgba(255,255,255,0.04);
+  }
+
+  /* ─────────────────────────────────────────
+     ZONE 1 — TOP MARK + WORDMARK
+  ───────────────────────────────────────── */
+  .zone-top {
+    padding: 44px 52px 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .top-mark {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .caspr-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--red);
+    flex-shrink: 0;
+  }
+
+  .depth-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .dl { height: 1px; background: var(--red); }
+
+  .wordmark-large {
+    display: inline-flex;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .wm-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.88);
+    letter-spacing: 0.01em;
+    line-height: 1;
+  }
+  .wm-period {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--red);
+    line-height: 1;
+  }
+
+  .tagline {
+    font-size: 9.5px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.28);
+    margin-top: 4px;
+  }
+
+  /* Red rule below top zone */
+  .top-divider {
+    height: 1px;
+    background: rgba(232,69,60,0.35);
+    margin: 0 52px;
+  }
+
+  /* ─────────────────────────────────────────
+     ZONE 2 — MAIN CONTENT (two columns)
+  ───────────────────────────────────────── */
+  .zone-main {
+    flex: 1;
+    display: flex;
+    gap: 0;
+    padding: 40px 52px 0;
+  }
+
+  /* Left column: About + Contact */
+  .col-left {
+    flex: 0 0 52%;
+    padding-right: 32px;
+    border-right: 1px solid rgba(214,212,207,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  /* Right column: Disclaimer */
+  .col-right {
+    flex: 0 0 48%;
+    padding-left: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .section-label {
+    font-size: 6.5px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 10px;
+  }
+
+  .about-text {
+    font-size: 9px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.75;
+  }
+
+  .about-text strong {
+    color: rgba(255,255,255,0.8);
+    font-weight: 500;
+  }
+
+  /* Contact block */
+  .contact-block {
+    margin-top: 4px;
+  }
+
+  .contact-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 7px;
+  }
+  .contact-label {
+    font-size: 6.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.22);
+    width: 44px;
+    flex-shrink: 0;
+  }
+  .contact-value {
+    font-size: 9px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.02em;
+  }
+  .contact-value a {
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+  }
+
+  /* Disclaimer text */
+  .disclaimer-text {
+    font-size: 7.5px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.8;
+  }
+
+  .disclaimer-text p + p {
+    margin-top: 10px;
+  }
+
+  /* ─────────────────────────────────────────
+     ZONE 3 — FOOTER
+  ───────────────────────────────────────── */
+  .zone-footer {
+    padding: 0 52px 36px;
+  }
+
+  /* Social row */
+  .rule-above-footer {
+    height: 1px;
+    background: rgba(214,212,207,0.1);
+    margin-bottom: 20px;
+  }
+
+  .social-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 16px;
+  }
+
+  .social-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding-right: 20px;
+    margin-right: 20px;
+    border-right: 1px solid rgba(214,212,207,0.12);
+  }
+  .social-item:last-child {
+    border-right: none;
+    margin-right: 0;
+    padding-right: 0;
+  }
+
+  .social-icon {
+    width: 14px;
+    height: 14px;
+    fill: rgba(255,255,255,0.22);
+    flex-shrink: 0;
+  }
+
+  .social-text {
+    font-size: 7.5px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.28);
+    letter-spacing: 0.04em;
+  }
+
+  /* Copyright / final line */
+  .copyright-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .copyright-text {
+    font-size: 7px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.16);
+    letter-spacing: 0.04em;
+  }
+
+  /* Footer wordmark (small) */
+  .wordmark-small {
+    display: inline-flex;
+    align-items: baseline;
+  }
+  .wm-sm-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.3);
+  }
+  .wm-sm-period {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(232,69,60,0.6);
+  }
+
+</style>
+</head>
+<body>
+
+<div class="page-heading">
+  <span class="ph-text">Caspr · Report Last Page · Design Preview</span>
+  <div class="ph-rule"></div>
+</div>
+
+<div class="page">
+
+  <!-- ══ ZONE 1: Top mark + Wordmark ══ -->
+  <div class="zone-top">
+    <div class="top-mark">
+      <div class="caspr-dot"></div>
+      <div class="depth-lines">
+        <div class="dl" style="width:25px;"></div>
+        <div class="dl" style="width:17px;"></div>
+        <div class="dl" style="width:9px;"></div>
+      </div>
+    </div>
+
+    <div class="wordmark-large">
+      <span class="wm-name">Caspr</span><span class="wm-period">.</span>
+    </div>
+    <div class="tagline">Analytical AI — built for business analysis, not conversation.</div>
+  </div>
+
+  <div class="top-divider"></div>
+
+  <!-- ══ ZONE 2: Main content ══ -->
+  <div class="zone-main">
+
+    <!-- Left column -->
+    <div class="col-left">
+
+      <div>
+        <div class="section-label">About Caspr.</div>
+        <div class="about-text">
+          Caspr is <strong>Analytical AI</strong> — purpose-built for business analysis, not conversation.
+          A single prompt delivers a boardroom-ready report in under fifteen minutes,
+          citing every insight to a credible, verifiable source.<br><br>
+          Powered by <strong>Source · Assess · Conclude</strong> — a curated corpus kept
+          current by live data feeds, every claim triangulated across independent sources,
+          and a position that survives the room.
+          Over one million curated sources: government databases, industry filings,
+          news feeds, and published research. Not web-scraped noise.<br><br>
+          Every claim cited. Every conclusion traceable. Built for the boardroom.
+        </div>
+      </div>
+
+      <div class="contact-block">
+        <div class="section-label">Contact</div>
+        <div class="contact-row">
+          <span class="contact-label">Web</span>
+          <span class="contact-value">caspr.ai</span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-label">Email</span>
+          <span class="contact-value">hello@caspr.ai</span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-label">Support</span>
+          <span class="contact-value">support@caspr.ai</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right column -->
+    <div class="col-right">
+
+      <div>
+        <div class="section-label">Disclaimer</div>
+        <div class="disclaimer-text">
+          <p>This report has been prepared by Caspr for informational purposes only.
+          The analysis, data, and conclusions contained herein are based on sources
+          believed to be reliable at the time of preparation. Caspr makes no representation
+          or warranty, express or implied, as to the accuracy, completeness, or fitness
+          for purpose of any information in this report.</p>
+
+          <p>This report does not constitute investment, legal, financial, or professional
+          advice of any kind. Recipients should seek independent professional advice
+          before acting on any information or analysis contained in this report.</p>
+
+          <p>Caspr accepts no liability for any direct, indirect, or consequential
+          loss or damage arising from the use of this report or reliance on its contents.
+          The views and analysis expressed are those derived from Caspr's research
+          methodology and do not represent the views of any third party whose data
+          has been referenced.</p>
+
+          <p>All third-party source material is referenced for informational purposes.
+          Reproduction of this report in whole or in part requires prior written
+          permission from Caspr.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">Methodology</div>
+        <div class="disclaimer-text">
+          <p>Analysis is generated using Caspr's <strong>Source · Assess · Conclude</strong> methodology, drawing
+          on a curated database of over one million verified sources. Every factual
+          claim in this report is cited to a primary source. Where calculations or
+          derivations are Caspr's own, this is indicated as "Caspr analysis" alongside
+          the underlying source data.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ ZONE 3: Footer ══ -->
+  <div class="zone-footer">
+    <div class="rule-above-footer"></div>
+
+    <!-- Social row -->
+    <div class="social-row">
+
+      <!-- LinkedIn -->
+      <div class="social-item">
+        <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        </svg>
+        <span class="social-text">linkedin.com/company/caspr-research</span>
+      </div>
+
+      <!-- X / Twitter -->
+      <div class="social-item">
+        <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.736-8.851L1.254 2.25H8.08l4.261 5.632 5.903-5.632zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+        <span class="social-text">x.com/casprresearch</span>
+      </div>
+
+      <!-- Instagram -->
+      <div class="social-item">
+        <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+        </svg>
+        <span class="social-text">instagram.com/casprresearch</span>
+      </div>
+
+      <!-- Website -->
+      <div class="social-item">
+        <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+        </svg>
+        <span class="social-text">caspr.ai</span>
+      </div>
+
+    </div>
+
+    <!-- Copyright row -->
+    <div class="copyright-row">
+      <span class="copyright-text">© 2026 Caspr. All rights reserved. Unauthorised reproduction prohibited.</span>
+      <div class="wordmark-small">
+        <span class="wm-sm-name">Caspr</span><span class="wm-sm-period">.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

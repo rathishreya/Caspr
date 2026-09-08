@@ -1,0 +1,254 @@
+<title>How It Works — Caspr homepage fold</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --paper:#F6F5F3; --stage:#FFFFFF;
+  --ink:#0A0A0A; --body:#54534F; --mute:#6F6D67; --ghost:#B4B2AC;
+  --rule:#E2E1DE; --rule-2:#CFCDC8;
+  --red:#E8453C; --red-text:#C0342C;
+  --star:#C7C5BF;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gut:clamp(20px,5vw,60px);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.fold{max-width:1200px;margin:0 auto;padding:clamp(48px,8vw,96px) var(--gut) clamp(40px,6vw,72px)}
+.kicker{font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--red-text);margin:0;text-align:center}
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(31px,4.6vw,52px);line-height:1.05;
+  letter-spacing:-.005em;margin:16px 0 0;text-align:center;text-wrap:balance}
+.stand{color:var(--body);font-size:clamp(15px,1.5vw,17px);margin:16px auto 0;text-align:center;max-width:46ch}
+
+/* ---------- spine ---------- */
+.spine{margin-top:clamp(40px,6vw,64px)}
+.heads{display:grid;grid-template-columns:1fr 168px 1fr;font-size:10.5px;font-weight:600;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--mute);margin-bottom:6px}
+.heads .a{text-align:right}
+.heads .b{color:var(--red-text)}
+.rung{display:grid;grid-template-columns:1fr 168px 1fr;align-items:center}
+.rung .l{text-align:right;font-size:14.5px;line-height:1.55;color:var(--body);padding:22px 0}
+.rung .r{font-size:14.5px;line-height:1.55;color:var(--ink);padding:22px 0}
+.rung .r .sys{font-family:var(--serif);font-size:19px;display:block;margin-bottom:3px}
+.rung .r .sys em{font-style:normal;color:var(--red)}
+.axis{position:relative;display:flex;align-items:center;justify-content:center;min-height:100%;align-self:stretch}
+.axis::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;
+  background:var(--rule-2);transform:translateX(-50%)}
+.tag{position:relative;background:var(--paper);padding:0 12px;font-size:10.5px;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--mute);white-space:nowrap}
+.closer{position:relative;display:flex;justify-content:center;padding:6px 0 0}
+.closer::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;background:var(--rule-2)}
+.closer span{position:relative;background:var(--paper);padding:14px 22px;font-family:var(--serif);
+  font-size:clamp(19px,2.3vw,26px);line-height:1.3;text-align:center;max-width:24ch}
+.drop{height:52px;position:relative}
+.drop::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;background:var(--rule-2)}
+
+/* ---------- theater ---------- */
+.theater{background:var(--stage);border:1px solid var(--rule);position:relative;
+  padding:clamp(22px,3vw,34px) clamp(18px,3vw,32px) clamp(26px,3.5vw,38px)}
+.theater::before{content:"";position:absolute;top:-1px;left:50%;width:1px;height:26px;
+  background:var(--red);transform:translateX(-50%)}
+.q{font-family:var(--serif);font-size:clamp(17px,2vw,22px);line-height:1.35;text-align:center;
+  margin:14px auto 0;max-width:34ch}
+.qlab{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--mute);text-align:center;margin:0}
+.count{font-family:var(--mono);font-weight:500;font-size:clamp(38px,6vw,64px);text-align:center;
+  margin:22px 0 2px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.countlab{font-family:var(--sans);font-size:10.5px;font-weight:600;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--mute);text-align:center;margin:0}
+.queue{height:132px;overflow:hidden;margin:20px auto 0;max-width:560px;position:relative;
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 58%,transparent 96%);
+  mask-image:linear-gradient(to bottom,#000 0%,#000 58%,transparent 96%)}
+.row{display:flex;align-items:baseline;gap:10px;padding:5px 0;font-size:13px;
+  animation:lift .5s cubic-bezier(.16,1,.3,1) both}
+.row .dot{width:6px;height:6px;border-radius:50%;flex:none;position:relative;top:-1px}
+.row.keep .dot{background:var(--red)}
+.row.skip .dot{background:transparent;border:1px solid var(--ghost)}
+.row .nm{color:var(--ink);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row.skip .nm{color:var(--ghost)}
+.row .ts{font-family:var(--mono);font-size:10.5px;color:var(--mute);flex:none}
+.row.skip .ts{color:var(--ghost)}
+@keyframes lift{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+canvas{display:block;width:100%;height:300px;margin-top:6px}
+.legend{display:flex;justify-content:center;gap:26px;margin-top:14px;font-size:11.5px;color:var(--mute)}
+.legend i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px}
+.legend .k i{background:var(--red)}
+.legend .s i{border:1px solid var(--ghost)}
+.foot{text-align:center;font-family:var(--mono);font-size:11px;color:var(--mute);margin:22px 0 0}
+
+@media (max-width:760px){
+  .heads,.rung{grid-template-columns:1fr}
+  .heads{display:none}
+  .rung{padding:18px 0;border-top:1px solid var(--rule)}
+  .rung .l,.rung .r{text-align:left;padding:0}
+  .rung .l{color:var(--mute);font-size:13.5px}
+  .rung .l::before{content:"A research team — ";color:var(--ghost)}
+  .rung .r{margin-top:9px;font-size:14px}
+  .axis{min-height:0;align-self:auto;justify-content:flex-start;padding:0 0 9px}
+  .axis::before{display:none}
+  .tag{padding:0;font-weight:600;color:var(--red-text)}
+  canvas{height:230px}
+  .queue{height:110px}
+}
+@media (prefers-reduced-motion:reduce){.row{animation:none}}
+</style>
+
+<div class="fold">
+  <p class="kicker">How it works</p>
+  <h1>Research is expensive for three good reasons.</h1>
+  <p class="stand">All three are now doable by one system.</p>
+
+  <div class="spine">
+    <div class="heads"><span class="a">A research team</span><span></span><span class="b">Analytical AI</span></div>
+
+    <div class="rung">
+      <p class="l">People who know which sources are credible, and which one answers which question.</p>
+      <div class="axis"><span class="tag">Knowing where to look</span></div>
+      <p class="r"><span class="sys">Caspr<em>.</em> Sourcing<em>.</em></span>
+        25 million curated sources, read live, chosen the same way.</p>
+    </div>
+
+    <div class="rung">
+      <p class="l">Time-proven models, built to weigh a handful of inputs.</p>
+      <div class="axis"><span class="tag">Reconciling what they find</span></div>
+      <p class="r"><span class="sys">Caspr<em>.</em> Assessment<em>.</em></span>
+        The same reconciliation, run across thousands.</p>
+    </div>
+
+    <div class="rung">
+      <p class="l">A structured report, with the charts drawn.</p>
+      <div class="axis"><span class="tag">Writing it up</span></div>
+      <p class="r">Structured, charted, cited — and yours to change afterwards.</p>
+    </div>
+
+    <div class="closer"><span>The third part is the one everyone assumes AI does. It matters least.</span></div>
+    <div class="drop"></div>
+  </div>
+
+  <div class="theater">
+    <p class="qlab">The question</p>
+    <p class="q">“How big is the premium ready-meals opportunity in south-east England, and who already owns it?”</p>
+
+    <p class="count" id="count">0</p>
+    <p class="countlab">Sources investigated</p>
+
+    <div class="queue" id="queue"></div>
+    <canvas id="web" aria-label="Source web: a field of candidate sources around the topic, resolving to red as each one yields a citable claim."></canvas>
+
+    <div class="legend">
+      <span class="k"><i></i>Kept — yielded a citable claim</span>
+      <span class="s"><i></i>Checked, nothing kept</span>
+    </div>
+    <p class="foot">Live run · Premium Ready Meals, Southeast England · 355 claims cited across 49 sources</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  var SOURCES = [
+    ["Office for National Statistics","ons.gov.uk",1],["Kantar","kantar.com",1],
+    ["AHDB","ahdb.org.uk",1],["NielsenIQ","nielseniq.com",1],["Mintel","store.mintel.com",1],
+    ["Bank of England","bankofengland.co.uk",1],["Food Standards Agency","food.gov.uk",1],
+    ["Marks & Spencer Corporate","corporate.marksandspencer.com",1],["Ocado Retail","ocadoretail.com",1],
+    ["Morrisons Corporate","morrisons-corporate.com",1],["Sainsbury's Corporate","corporate.sainsburys.co.uk",1],
+    ["John Lewis Partnership","johnlewispartnership.co.uk",1],["arXiv","arxiv.org",1],
+    ["GOV.UK","assets.publishing.service.gov.uk",1],["The Grocer","thegrocer.co.uk",1],
+    ["Chilled Food Association","chilledfood.org",0],["Food Foundation","foodfoundation.org.uk",1],
+    ["Waitrose","waitrose.com",1],["Statista","statista.com",0],["Field Doctor","fielddoctor.co.uk",1],
+    ["COOK","cookfood.net",1],["Frozen Food Biz","frozenfoodsbiz.com",0],
+    ["Synergy Taste","uk.synergytaste.com",0],["Ocado Sustainability","sustainability.ocadoretail.com",1]
+  ];
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var queue = document.getElementById("queue"), countEl = document.getElementById("count");
+  var cv = document.getElementById("web"), ctx = cv.getContext("2d");
+  var W=0,H=0,DPR=Math.min(window.devicePixelRatio||1,2), stars=[], spokes=[], t0=performance.now();
+
+  function sizeCanvas(){
+    var r = cv.getBoundingClientRect();
+    W = r.width; H = r.height;
+    cv.width = W*DPR; cv.height = H*DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    build();
+  }
+  function build(){
+    var n = W < 620 ? 42 : Math.round(W/9);
+    stars = [];
+    for (var i=0;i<n;i++){
+      var a = Math.random()*Math.PI*2, rad = 24 + Math.random()*(Math.min(W,H)*0.62);
+      var x = W/2 + Math.cos(a)*rad*(W/Math.min(W,H)) , y = H/2 + Math.sin(a)*rad;
+      if (x<4||x>W-4||y<4||y>H-4){ i--; continue; }
+      stars.push({x:x,y:y,r:0.7+Math.random()*1.3,ph:Math.random()*6.28,
+        f:0.1+Math.random()*0.2,amp:1+Math.random()*1.2,
+        tph:Math.random()*6.28,tf:0.25+Math.random()*0.2});
+    }
+    var N = W < 620 ? 10 : 14, base = Math.min(W,H)*0.5;
+    spokes = [];
+    for (var k=0;k<N;k++){
+      var ang = (Math.PI*2/N)*k + 0.314;
+      var rr = base*(0.32 + Math.random()*0.62);
+      spokes.push({a:ang, r:rr, x:W/2+Math.cos(ang)*rr*(W/Math.min(W,H))*0.62,
+        y:H/2+Math.sin(ang)*rr, on:false, lit:0, src:SOURCES[k % SOURCES.length]});
+    }
+  }
+  function draw(now){
+    var t = (now - t0)/1000;
+    ctx.clearRect(0,0,W,H);
+    var cx = W/2, cy = H/2;
+    for (var i=0;i<stars.length;i++){
+      var s = stars[i];
+      var x = s.x + Math.sin(t*s.f + s.ph)*s.amp, y = s.y + Math.cos(t*s.f*0.9 + s.ph)*s.amp;
+      var o = 0.16 + (Math.sin(t*s.tf + s.tph)*0.5+0.5)*0.46;
+      ctx.globalAlpha = reduce ? 0.4 : o;
+      ctx.fillStyle = "#C7C5BF";
+      ctx.beginPath(); ctx.arc(x,y,s.r,0,6.284); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    for (var k=0;k<spokes.length;k++){
+      var p = spokes[k];
+      if (p.on && p.lit < 1) p.lit = Math.min(1, p.lit + 0.05);
+      var col = p.on ? "232,69,60" : "180,178,172";
+      var jx = Math.sin(t*0.18 + k)*1.4, jy = Math.cos(t*0.15 + k)*1.4;
+      ctx.strokeStyle = "rgba("+col+","+(p.on?0.28+0.42*p.lit:0.22)+")";
+      ctx.lineWidth = p.on ? 1.1 : 0.9;
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(p.x+jx,p.y+jy); ctx.stroke();
+      var tw = p.on ? 1 : 0.45 + (Math.sin(t*0.6 + k*1.7)*0.5+0.5)*0.4;
+      ctx.fillStyle = "rgba("+col+","+tw+")";
+      ctx.beginPath(); ctx.arc(p.x+jx,p.y+jy, p.on ? 3.6 : 2.6, 0, 6.284); ctx.fill();
+    }
+    var pulse = 5.5 + Math.sin(t*1.4)*0.7;
+    ctx.fillStyle = "#0A0A0A";
+    ctx.beginPath(); ctx.arc(cx,cy,reduce?5.5:pulse,0,6.284); ctx.fill();
+    ctx.strokeStyle = "rgba(10,10,10,0.14)"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(cx,cy,(reduce?5.5:pulse)+7,0,6.284); ctx.stroke();
+    requestAnimationFrame(draw);
+  }
+
+  var idx = 0, kept = 0, checked = 0;
+  function step(){
+    var s = SOURCES[idx % SOURCES.length];
+    var keepIt = s[2] === 1;
+    checked++; if (keepIt) kept++;
+    countEl.textContent = checked;
+    var row = document.createElement("div");
+    row.className = "row " + (keepIt ? "keep" : "skip");
+    row.innerHTML = '<span class="dot"></span><span class="nm">' + s[0] +
+      '</span><span class="ts">' + (keepIt ? "kept" : "nothing kept") + '</span>';
+    queue.insertBefore(row, queue.firstChild);
+    while (queue.children.length > 9) queue.removeChild(queue.lastChild);
+    var sp = spokes[idx % spokes.length];
+    if (sp) sp.on = keepIt;
+    idx++;
+    setTimeout(step, keepIt ? 1100 + Math.random()*700 : 750 + Math.random()*400);
+  }
+
+  window.addEventListener("resize", sizeCanvas);
+  sizeCanvas();
+  requestAnimationFrame(draw);
+  setTimeout(step, 400);
+})();
+</script>

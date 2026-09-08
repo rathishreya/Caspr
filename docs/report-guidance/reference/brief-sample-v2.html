@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Caspr Brief v2 — US Digital Payments Benchmarking [Sample]</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+* { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+@page { size: 210mm 297mm; margin: 0; }
+
+body {
+  background: #D0CECC;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  padding: 28px;
+}
+
+.print-note {
+  width: 794px;
+  background: #fff;
+  border-left: 3px solid #E8453C;
+  padding: 12px 16px;
+  font-size: 12px;
+  color: #333;
+  line-height: 1.6;
+}
+.print-note strong { font-weight: 600; }
+
+.page-label {
+  width: 794px;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: #888;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.page {
+  width: 794px;
+  height: 1123px;
+  overflow: hidden;
+  background: #fff;
+  position: relative;
+  break-after: page;
+  page-break-after: always;
+}
+
+@media print {
+  body { background: #fff; padding: 0; gap: 0; }
+  .print-note, .page-label { display: none; }
+}
+
+
+/* ─── COVER ─── */
+
+.cover-photo {
+  width: 794px;
+  height: 449px;
+  background: #0D1219;
+  position: relative;
+  overflow: hidden;
+}
+
+.photo-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 45%;
+  background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%);
+}
+
+.photo-hint {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: rgba(255,255,255,0.1);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.depth-mark {
+  position: absolute;
+  top: 22px; left: 26px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  z-index: 2;
+}
+.d-dot { width: 9px; height: 9px; border-radius: 50%; background: #E8453C; }
+.d-line { height: 2px; width: 17px; background: rgba(255,255,255,0.55); }
+
+.cover-bottom-left {
+  position: absolute;
+  bottom: 24px; left: 26px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+.brief-badge {
+  background: #fff;
+  color: #E8453C;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  padding: 4px 11px;
+  border-radius: 3px;
+}
+.cover-title {
+  color: #fff;
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1.15;
+  max-width: 440px;
+  letter-spacing: -0.02em;
+}
+.cover-date {
+  color: rgba(255,255,255,0.28);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.cover-wordmark {
+  position: absolute;
+  bottom: 24px; right: 26px;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.45);
+  z-index: 2;
+}
+.cover-wordmark em { color: #E8453C; font-style: normal; }
+
+
+/* ─── COVER PANEL (simplified) ─── */
+
+.cover-panel {
+  width: 794px;
+  height: 674px;
+  background: #1A1A18;
+  padding: 28px 26px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.topic-label {
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.24);
+  margin-bottom: 0;
+}
+
+.panel-single-stat {
+  margin-top: 36px;
+}
+.panel-stat-num {
+  color: #E8453C;
+  font-size: 68px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin-bottom: 10px;
+}
+.panel-stat-lbl {
+  color: #6B6B66;
+  font-size: 11px;
+  line-height: 1.45;
+  font-weight: 400;
+}
+
+.panel-mid-rule {
+  height: 1px;
+  background: rgba(214,212,207,0.12);
+  margin: 36px 0;
+}
+
+.panel-single-finding {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.78);
+  line-height: 1.65;
+  max-width: 620px;
+}
+
+.cover-footer {
+  margin-top: auto;
+  border-top: 1px solid rgba(214,212,207,0.12);
+  padding: 9px 0 0;
+}
+.cover-footer-row1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 7px;
+}
+.cf-lbl { font-size: 7.5px; letter-spacing: 0.1em; color: #6B6B66; }
+.cf-pg { font-size: 8.5px; color: #6B6B66; font-weight: 500; }
+.cf-wm { font-size: 10px; font-weight: 700; color: #6B6B66; }
+.cf-wm em { color: #E8453C; font-style: normal; }
+.cover-footer-row2 {
+  font-size: 6.5px;
+  color: rgba(255,255,255,0.2);
+  line-height: 1.5;
+  padding-bottom: 12px;
+  letter-spacing: 0.01em;
+}
+
+
+/* ─── INFOGRAPHIC PAGE (centrepiece) ─── */
+
+.infographic-page {
+  border-left: 4px solid #E8453C;
+}
+
+.infographic-hd {
+  padding: 30px 30px 0 26px;
+}
+
+.infographic-finding {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1A1A18;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  max-width: 640px;
+  margin-bottom: 14px;
+}
+
+.infographic-rule {
+  height: 1px;
+  background: #E9E7E2;
+  margin-bottom: 20px;
+}
+
+.infographic-body {
+  padding: 0 26px 0 26px;
+}
+
+.ig-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.ig-card {
+  padding: 20px 20px 16px;
+  border: 0.5px solid #E9E7E2;
+}
+.ig-card.red { background: #E8453C; border-color: #E8453C; }
+.ig-card.dark { background: #1A1A18; border-color: #1A1A18; }
+
+.ig-cat {
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  margin-bottom: 14px;
+}
+.ig-card.red .ig-cat { color: rgba(255,255,255,0.65); }
+.ig-card.dark .ig-cat { color: rgba(255,255,255,0.45); }
+.ig-card.light .ig-cat { color: #6B6B66; }
+
+.ig-num {
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  margin-bottom: 6px;
+}
+.ig-card.red .ig-num { color: #fff; }
+.ig-card.dark .ig-num { color: #E8453C; }
+.ig-card.light .ig-num { color: #E8453C; }
+
+.ig-num-sub {
+  font-size: 13px;
+  font-weight: 400;
+  margin-left: 4px;
+  letter-spacing: 0;
+}
+.ig-card.red .ig-num-sub { color: rgba(255,255,255,0.55); }
+.ig-card.dark .ig-num-sub { color: rgba(255,255,255,0.35); }
+.ig-card.light .ig-num-sub { color: #6B6B66; }
+
+.ig-lbl {
+  font-size: 9px;
+  line-height: 1.45;
+  margin-bottom: 14px;
+}
+.ig-card.red .ig-lbl { color: rgba(255,255,255,0.75); }
+.ig-card.dark .ig-lbl { color: rgba(255,255,255,0.6); }
+.ig-card.light .ig-lbl { color: #4A4A46; }
+
+.ig-bullets { display: flex; flex-direction: column; gap: 7px; }
+.ig-bullet { display: flex; gap: 8px; align-items: flex-start; }
+.ig-bdot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.ig-card.red .ig-bdot { background: rgba(255,255,255,0.6); }
+.ig-card.dark .ig-bdot { background: #E8453C; }
+.ig-card.light .ig-bdot { background: #E8453C; }
+
+.ig-btext { font-size: 8.5px; line-height: 1.5; }
+.ig-card.red .ig-btext { color: rgba(255,255,255,0.82); }
+.ig-card.dark .ig-btext { color: rgba(255,255,255,0.7); }
+.ig-card.light .ig-btext { color: #3A3A36; }
+
+.ig-signal {
+  margin-top: 14px;
+  padding-top: 10px;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ig-signal-arrow {
+  font-size: 8px;
+}
+.ig-card.red .ig-signal { border-top: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); }
+.ig-card.dark .ig-signal { border-top: 1px solid rgba(214,212,207,0.12); color: rgba(255,255,255,0.4); }
+.ig-card.light .ig-signal { border-top: 1px solid #E9E7E2; color: #888880; }
+
+.ig-callouts {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-top: 0;
+}
+.ig-callout {
+  padding: 12px 14px;
+  background: #F2F1EF;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.ig-callout-dot {
+  width: 5px; height: 5px;
+  background: #E8453C;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.ig-callout-text {
+  font-size: 8px;
+  color: #3A3A36;
+  line-height: 1.55;
+}
+
+
+/* ─── INTERIOR PAGES ─── */
+
+.page-hd {
+  height: 36px;
+  border-bottom: 1px solid #E9E7E2;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 26px;
+}
+.page-hd-title { font-size: 9px; color: #909088; }
+
+.page-body { padding: 30px 83px 0; }
+
+.section { margin-bottom: 28px; }
+
+.sec-hd { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 5px; }
+.sec-num { color: #E8453C; font-size: 13.5px; font-weight: 800; flex-shrink: 0; line-height: 1.45; }
+.sec-finding { font-size: 13.5px; font-weight: 600; color: #1A1A18; line-height: 1.45; letter-spacing: -0.01em; }
+.sec-rule { height: 3px; background: #E8453C; margin-bottom: 14px; }
+
+.body-p { font-size: 11px; line-height: 1.7; color: #2A2A26; margin-bottom: 14px; }
+
+table.dt { width: 100%; border-collapse: collapse; margin-bottom: 7px; }
+table.dt th { background: #1A1A18; color: #fff; font-size: 8.5px; font-weight: 700; letter-spacing: 0.1em; padding: 7px 11px; text-align: left; }
+table.dt td { padding: 7px 11px; font-size: 10px; color: #2A2A26; border-bottom: 0.5px solid #E9E7E2; }
+table.dt tr:nth-child(even) td { background: #F2F1EF; }
+.td-red { color: #E8453C; font-weight: 700; }
+
+.src-line { font-size: 8.5px; color: #909088; font-style: italic; }
+
+/* ─── CLOSING TREATMENT ─── */
+
+.tk-block {
+  background: #F2F1EF;
+  padding: 18px 20px;
+  margin-bottom: 28px;
+}
+.tk-label { font-size: 8.5px; font-weight: 700; letter-spacing: 0.16em; color: #1A1A18; margin-bottom: 14px; }
+.tk-item { display: flex; gap: 13px; align-items: flex-start; margin-bottom: 11px; }
+.tk-item:last-child { margin-bottom: 0; }
+.tk-dot { width: 5px; height: 5px; background: #E8453C; flex-shrink: 0; margin-top: 5px; }
+.tk-text { font-size: 11px; font-weight: 600; color: #1A1A18; line-height: 1.55; }
+
+.brief-close {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 0 83px;
+  margin-bottom: 0;
+}
+.close-rule {
+  width: 66.666%;
+  height: 2px;
+  background: #E8453C;
+}
+.close-upsell {
+  font-size: 9.5px;
+  color: #909088;
+  font-style: italic;
+  line-height: 1.65;
+  text-align: center;
+  max-width: 480px;
+}
+
+/* ─── STANDARD FOOTER ─── */
+
+.page-ft {
+  height: auto;
+  border-top: 1px solid #E9E7E2;
+  padding: 8px 26px 10px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.page-ft-row1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.ft-lbl { font-size: 7.5px; letter-spacing: 0.1em; color: #909088; }
+.ft-pg { font-size: 8.5px; color: #909088; font-weight: 500; }
+.ft-wm { font-size: 10px; font-weight: 700; color: #909088; }
+.ft-wm em { color: #E8453C; font-style: normal; }
+.page-ft-disclaimer {
+  font-size: 6.5px;
+  color: #B8B6B0;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+
+/* Infographic page footer sits within white content */
+.ig-footer {
+  border-top: 1px solid #E9E7E2;
+  padding: 8px 26px 10px;
+  margin-top: auto;
+  position: absolute;
+  bottom: 0;
+  left: 4px;
+  right: 0;
+}
+</style>
+</head>
+<body>
+
+<div class="print-note">
+  <strong>Brief v2 Sample — Illustrative content only.</strong> Key changes from v1: cover panel simplified to 1 stat + 1 finding; disclaimer moves to footer (all pages); infographic elevated as centrepiece with finding heading + red left rule; last page eliminated; body closes with red rule + upsell. Print: File → Print → Save as PDF → A4 → No margins.
+</div>
+
+
+<!-- ─── PAGE 1: COVER (simplified panel) ─── -->
+<div class="page-label">Page 1 — Cover (simplified dark panel)</div>
+<div class="page">
+  <div class="cover-photo">
+    <div class="photo-overlay"></div>
+    <div class="photo-hint">AI-generated sector photograph · fintech / payments · dark treated</div>
+    <div class="depth-mark"><div class="d-dot"></div><div class="d-line"></div></div>
+    <div class="cover-bottom-left">
+      <div class="brief-badge">BRIEF</div>
+      <h1 class="cover-title">US Digital Payments Benchmarking</h1>
+      <div class="cover-date">July 2026 &nbsp;·&nbsp; Caspr Analysis</div>
+    </div>
+    <div class="cover-wordmark">Caspr<em>.</em></div>
+  </div>
+  <div class="cover-panel">
+    <div class="topic-label">PAYMENTS SECTOR BRIEF &nbsp;—&nbsp; US DIGITAL PAYMENTS BENCHMARKING</div>
+    <div class="panel-single-stat">
+      <div class="panel-stat-num">$10.86<span style="font-size:36px;font-weight:700;letter-spacing:-0.01em;color:#E8453C;opacity:0.75"> trillion</span></div>
+      <div class="panel-stat-lbl">Projected U.S. digital-payments market size, 2026 — up from $10.0 trillion in 2025</div>
+    </div>
+    <div class="panel-mid-rule"></div>
+    <div class="panel-single-finding">No single player dominates all layers of U.S. digital payments. PayPal and Stripe lead online, Visa and Mastercard own in-store rails, and Apple Pay leads mobile wallets — multi-rail strategy is the only rational response to a structurally fragmented market.</div>
+    <div class="cover-footer">
+      <div class="cover-footer-row1">
+        <span class="cf-lbl">PAYMENTS SECTOR BRIEF</span>
+        <span class="cf-pg">1</span>
+        <span class="cf-wm">Caspr<em>.</em></span>
+      </div>
+      <div class="cover-footer-row2">Informational purposes only. Not investment or professional advice. Data as at July 2026. Sourced, assessed and concluded by Caspr; every claim cited to source. © 2026 Caspr.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ─── PAGE 2: INFOGRAPHIC (centrepiece) ─── -->
+<div class="page-label">Page 2 — Infographic (centrepiece, red left rule, finding heading)</div>
+<div class="page infographic-page">
+  <div class="infographic-hd">
+    <div class="infographic-finding">Three structural realities define the U.S. digital payments market — and they point in different strategic directions</div>
+    <div class="infographic-rule"></div>
+  </div>
+  <div class="infographic-body">
+    <div class="ig-grid">
+
+      <div class="ig-card red">
+        <div class="ig-cat">MARKET OVERVIEW &amp; GROWTH</div>
+        <div class="ig-num">$10.86<span class="ig-num-sub">T</span></div>
+        <div class="ig-lbl">Projected U.S. digital payments, 2026</div>
+        <div class="ig-bullets">
+          <div class="ig-bullet"><div class="ig-bdot"></div><div class="ig-btext">Up from $10.0T in 2025 — high-single-digit YoY growth</div></div>
+          <div class="ig-bullet"><div class="ig-bdot"></div><div class="ig-btext">Wallets and BNPL accelerating fastest among segments</div></div>
+        </div>
+        <div class="ig-signal"><span class="ig-signal-arrow">▲</span> RISING</div>
+      </div>
+
+      <div class="ig-card dark">
+        <div class="ig-cat">COMPETITIVE LANDSCAPE</div>
+        <div class="ig-num">41.6<span class="ig-num-sub">% vs 22.7%</span></div>
+        <div class="ig-lbl">PayPal vs Stripe global online payment share, 2026</div>
+        <div class="ig-bullets">
+          <div class="ig-bullet"><div class="ig-bdot"></div><div class="ig-btext">No single player dominates all layers — PayPal leads online, Visa/MC in-store</div></div>
+          <div class="ig-bullet"><div class="ig-bdot"></div><div class="ig-btext">Fragmented leadership across online, POS, and P2P layers</div></div>
+        </div>
+        <div class="ig-signal"><span class="ig-signal-arrow">◆</span> MIXED — FRAGMENTED</div>
+      </div>
+
+      <div class="ig-card light">
+        <div class="ig-cat">FINANCIAL &amp; OPERATIONAL KPIS</div>
+        <div class="ig-num">$4.61</div>
+        <div class="ig-lbl">Lost per $1 of fraud — U.S. merchant fraud cost multiplier</div>
+        <div class="ig-bullets">
+          <div class="ig-bullet"><div class="ig-bdot"></div><div class="ig-btext">Visa 2025 revenue $40.0B &nbsp;·&nbsp; PayPal 2025 revenue $33.2B</div></div>
+          <div class="ig-bullet"><div class="ig-bdot"></div><div class="ig-btext">PayPal implied take rate 1.85% &nbsp;·&nbsp; Adyen net yield 17 bps</div></div>
+        </div>
+        <div class="ig-signal"><span class="ig-signal-arrow">▲</span> FRAUD COSTS A TOP MARGIN DRAG</div>
+      </div>
+
+      <div class="ig-card dark">
+        <div class="ig-cat">EMERGING TRENDS &amp; STRATEGY</div>
+        <div class="ig-num">1,400<span class="ig-num-sub">+</span></div>
+        <div class="ig-lbl">FedNow participating institutions by July 2025</div>
+        <div class="ig-bullets">
+          <div class="ig-bullet"><div class="ig-bdot"></div><div class="ig-btext">RTP processed 98M transactions worth $80B in Q4 2024</div></div>
+          <div class="ig-bullet"><div class="ig-bdot"></div><div class="ig-btext">72% of leaders expect AI-generated fraud as a major challenge by 2026</div></div>
+        </div>
+        <div class="ig-signal"><span class="ig-signal-arrow">▲</span> INSTANT PAYMENTS, BNPL, STABLECOINS SCALING</div>
+      </div>
+
+    </div>
+
+    <div class="ig-callouts">
+      <div class="ig-callout"><div class="ig-callout-dot"></div><div class="ig-callout-text">Average chargeback rate 0.17% in Q1 2025 — a persistent cost headwind for merchants</div></div>
+      <div class="ig-callout"><div class="ig-callout-dot"></div><div class="ig-callout-text">Stablecoins moving into production settlement — Stripe, Visa, and Mastercard all active in 2025</div></div>
+      <div class="ig-callout"><div class="ig-callout-dot"></div><div class="ig-callout-text">Block gross profit $10.2B combines Cash App ($6.3B) and Square ($3.9B) ecosystems</div></div>
+    </div>
+
+  </div>
+  <div class="ig-footer">
+    <div class="page-ft-row1">
+      <span class="ft-lbl">MARKET LANDSCAPE</span>
+      <span class="ft-pg">2</span>
+      <span class="ft-wm">Caspr<em>.</em></span>
+    </div>
+    <div class="page-ft-disclaimer">Informational purposes only. Not investment or professional advice. Data as at July 2026. © 2026 Caspr.</div>
+  </div>
+</div>
+
+
+<!-- ─── PAGE 3: BODY SECTIONS 1–2 ─── -->
+<div class="page-label">Page 3 — Body (Sections 1–2)</div>
+<div class="page">
+  <div class="page-hd"><span class="page-hd-title">US Digital Payments Benchmarking</span></div>
+  <div class="page-body">
+
+    <div class="section">
+      <div class="sec-hd">
+        <span class="sec-num">01</span>
+        <span class="sec-finding">Card rails still dominate spend, but wallets, BNPL, and instant payments are the growth layers</span>
+      </div>
+      <div class="sec-rule"></div>
+      <p class="body-p">The U.S. digital-payments market reached $10.0 trillion in 2025 and is projected to reach $10.86 trillion by 2026, implying high-single-digit growth. Card rails remain the largest absolute volume, but the strategic growth benchmarks have shifted: digital wallets are the fastest consumer-adoption layer, BNPL continues to outgrow core card spend, and FedNow/RTP are the infrastructure modernisation benchmark. For 2025–2026 planning, treat cards as the scale baseline, wallets as the consumer growth indicator, and real-time payments as the infrastructure readiness signal.</p>
+      <table class="dt">
+        <thead>
+          <tr><th>SEGMENT</th><th>2025–2026 BENCHMARK VIEW</th><th>HEADLINE SIGNAL</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Credit / debit cards</strong></td><td>Largest share of U.S. noncash spend</td><td class="td-red">Mature, lower-growth core</td></tr>
+          <tr><td>Digital wallets</td><td>High-single to low-double-digit growth</td><td>Fastest consumer adoption</td></tr>
+          <tr><td>BNPL</td><td>Double-digit growth from smaller base</td><td>Conversion-led expansion</td></tr>
+          <tr><td>Real-time payments</td><td>Triple-digit early-stage growth in pockets</td><td>Infrastructure catch-up</td></tr>
+        </tbody>
+      </table>
+      <p class="src-line">Source: Federal Reserve Payments Study, 2025; Caspr analysis.</p>
+    </div>
+
+    <div class="section">
+      <div class="sec-hd">
+        <span class="sec-num">02</span>
+        <span class="sec-finding">No single player leads every layer — strategic implication is multi-rail, not winner-takes-all</span>
+      </div>
+      <div class="sec-rule"></div>
+      <p class="body-p">PayPal holds approximately 41.6% of global online payment share versus Stripe at 22.7%, but online share does not translate to in-store or P2P dominance. Visa and Mastercard control the in-store acceptance rails. Apple Pay leads proximity wallets. Zelle leads P2P by volume. Block leads SMB POS. No single player's positioning survives across all layers — the market requires partnership and multi-rail strategy rather than competitive consolidation around one provider.</p>
+    </div>
+
+  </div>
+  <div class="page-ft">
+    <div class="page-ft-row1">
+      <span class="ft-lbl">MARKET STRUCTURE</span>
+      <span class="ft-pg">3</span>
+      <span class="ft-wm">Caspr<em>.</em></span>
+    </div>
+    <div class="page-ft-disclaimer">Informational purposes only. Not investment or professional advice. Data as at July 2026. © 2026 Caspr.</div>
+  </div>
+</div>
+
+
+<!-- ─── PAGE 4: BODY SECTION 3 + KEY TAKEAWAYS + CLOSE ─── -->
+<div class="page-label">Page 4 — Final body page + Key Takeaways + Closing treatment (no last page follows)</div>
+<div class="page">
+  <div class="page-hd"><span class="page-hd-title">US Digital Payments Benchmarking</span></div>
+  <div class="page-body">
+
+    <div class="section">
+      <div class="sec-hd">
+        <span class="sec-num">03</span>
+        <span class="sec-finding">Fraud containment and API performance are becoming primary differentiators — AI-driven risk is next</span>
+      </div>
+      <div class="sec-rule"></div>
+      <p class="body-p">Operational performance benchmarks are tightening. MRC's 2025 report identifies payment acceptance and false declines as top merchant concerns. LexisNexis estimates U.S. merchants lose $4.61 for every $1 of fraud loss — the multiplier effect of chargebacks, processing costs, and lost goods. Sift reported average chargeback rates of 0.17% in Q1 2025. Over one-third of businesses already use AI for fraud detection, and 72% of business leaders expect AI-generated fraud and deepfakes to become major challenges by 2026. The operational benchmark has shifted from gateway reliability to fraud-cost containment and authorization-rate optimisation.</p>
+    </div>
+
+    <div class="tk-block">
+      <div class="tk-label">KEY TAKEAWAYS</div>
+      <div class="tk-item">
+        <div class="tk-dot"></div>
+        <div class="tk-text">Growth is in wallets, BNPL, and instant rails — card-rail dominance remains but the strategic opportunity is in the faster-growth layers sitting on top of it</div>
+      </div>
+      <div class="tk-item">
+        <div class="tk-dot"></div>
+        <div class="tk-text">No single provider leads all layers — multi-rail strategy is not a hedge, it is the only rational response to a structurally fragmented market</div>
+      </div>
+      <div class="tk-item">
+        <div class="tk-dot"></div>
+        <div class="tk-text">Fraud containment has become a board-level performance metric; the $4.61 multiplier means fraud cost management is a margin decision, not an operational one</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="brief-close">
+    <div class="close-rule"></div>
+    <div class="close-upsell">A Study on U.S. digital payments would cover provider selection frameworks, multi-rail architecture decisions, and competitive financial benchmarking across PayPal, Stripe, Visa, Mastercard, Block, and Adyen — run it from your dashboard.</div>
+  </div>
+
+  <div class="page-ft">
+    <div class="page-ft-row1">
+      <span class="ft-lbl">KEY TAKEAWAYS</span>
+      <span class="ft-pg">4</span>
+      <span class="ft-wm">Caspr<em>.</em></span>
+    </div>
+    <div class="page-ft-disclaimer">Informational purposes only. Not investment or professional advice. Data as at July 2026. © 2026 Caspr.</div>
+  </div>
+</div>
+
+</body>
+</html>

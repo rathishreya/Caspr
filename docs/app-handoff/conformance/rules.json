@@ -1,0 +1,1988 @@
+{
+  "specVersion": "1",
+  "spec": "docs/app-handoff/CONVENTIONS-CONFORMANCE-SPEC.md",
+  "note": "Config, not specification. The reasoning lives in the spec on Drive and is never copied here. Every id below must appear in the spec (SPEC-DRIFT). Rules carrying \"calibration\": true were authored against the written conventions, never against the source, and are expected to need tuning on first run.",
+  "rules": [
+    {
+      "id": "STRUCT-01",
+      "family": "STRUCT",
+      "tier": 1,
+      "check": "static",
+      "statement": "No root barrel — root barrels kill tree-shaking and create cycles",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · Problem #8",
+      "detect": {
+        "kind": "forbidPath",
+        "include": [
+          "**/src/features/index.ts",
+          "**/src/components/index.ts"
+        ]
+      }
+    },
+    {
+      "id": "STRUCT-02",
+      "family": "STRUCT",
+      "tier": 1,
+      "check": "static",
+      "statement": "No global hooks/ utils/ services/ constants/ directory under src/",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · What not to do",
+      "detect": {
+        "kind": "forbidPath",
+        "include": [
+          "**/src/hooks/**",
+          "**/src/utils/**",
+          "**/src/services/**",
+          "**/src/constants/**"
+        ]
+      }
+    },
+    {
+      "id": "STRUCT-03",
+      "family": "STRUCT",
+      "tier": 1,
+      "check": "static",
+      "statement": "Tests are colocated — no __tests__/ directory",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · Part 3 Structure",
+      "detect": {
+        "kind": "forbidPath",
+        "include": [
+          "**/__tests__/**"
+        ]
+      }
+    },
+    {
+      "id": "STRUCT-05a",
+      "family": "STRUCT",
+      "tier": 1,
+      "check": "static",
+      "statement": "*Screen is feature composition and never lives in pages/",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · Problem #10",
+      "detect": {
+        "kind": "forbidPath",
+        "include": [
+          "**/src/pages/**/*Screen.tsx"
+        ]
+      }
+    },
+    {
+      "id": "STRUCT-05b",
+      "family": "STRUCT",
+      "tier": 1,
+      "check": "static",
+      "statement": "*Page is a route wrapper and never lives inside a feature",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · Problem #10",
+      "detect": {
+        "kind": "forbidPath",
+        "include": [
+          "**/src/features/**/*Page.tsx"
+        ]
+      }
+    },
+    {
+      "id": "STRUCT-08",
+      "family": "STRUCT",
+      "tier": 1,
+      "check": "static",
+      "statement": "Fixtures never come from the API client — nothing outside data/ imports mockClient",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · Problem #5",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "from\\s+['\"][^'\"]*mockClient['\"]",
+        "include": [
+          "**/src/**/*.{ts,tsx}"
+        ],
+        "exclude": [
+          "**/src/data/**",
+          "**/*.test.{ts,tsx}",
+          "**/src/test/**"
+        ]
+      }
+    },
+    {
+      "id": "STRUCT-09",
+      "family": "STRUCT",
+      "tier": 1,
+      "check": "static",
+      "statement": "@/ resolves to src/ — no import ascending three or more levels",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · Problem #8",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "from\\s+['\"]\\.\\./\\.\\./\\.\\./",
+        "include": [
+          "**/src/**/*.{ts,tsx}"
+        ]
+      }
+    },
+    {
+      "id": "STRUCT-10",
+      "family": "STRUCT",
+      "tier": 1,
+      "check": "static",
+      "statement": "No Feature-Sliced Design layout",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · What not to do",
+      "detect": {
+        "kind": "forbidPath",
+        "include": [
+          "**/src/entities/**",
+          "**/src/widgets/**",
+          "**/src/shared/lib/**"
+        ]
+      }
+    },
+    {
+      "id": "TRANSPORT-01",
+      "family": "TRANSPORT",
+      "tier": 1,
+      "check": "static",
+      "statement": "EventSource is forbidden — a token in a query string is a token in every access log",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · Transport",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "new\\s+EventSource\\s*\\(",
+        "include": [
+          "**/src/**/*.{ts,tsx}",
+          "**/packages/**/*.ts"
+        ]
+      }
+    },
+    {
+      "id": "TRANSPORT-02",
+      "family": "TRANSPORT",
+      "tier": 1,
+      "check": "static",
+      "statement": "No axios and no second fetch wrapper — one seam, CasprClient",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · Transport",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "from\\s+['\"]axios['\"]|require\\(['\"]axios['\"]\\)|\"axios\"\\s*:",
+        "include": [
+          "**/src/**/*.{ts,tsx}",
+          "**/package.json"
+        ]
+      }
+    },
+    {
+      "id": "TRANSPORT-03",
+      "family": "TRANSPORT",
+      "tier": 1,
+      "check": "static",
+      "statement": "Every REST call uses config.apiBase, never backendOrigin concatenated with a path",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · S2",
+      "calibration": true,
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "\\$\\{[^}]*backendOrigin[^}]*\\}/|backendOrigin\\s*\\+\\s*['\"]/",
+        "include": [
+          "**/src/**/*.{ts,tsx}"
+        ],
+        "exclude": [
+          "**/src/config/env.ts",
+          "**/src/shared/config/**"
+        ]
+      }
+    },
+    {
+      "id": "TRANSPORT-05",
+      "family": "TRANSPORT",
+      "tier": 1,
+      "check": "static",
+      "statement": "wallet.reserve and wallet.resolveReservation do not exist on the seam — removed, not deprecated",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · S1 consequence 1",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "\\bresolveReservation\\b|wallet\\.reserve\\b|reserve\\s*:\\s*\\(",
+        "include": [
+          "**/src/data/**/*.ts",
+          "**/packages/contract/**/*.ts"
+        ]
+      }
+    },
+    {
+      "id": "TRANSPORT-06",
+      "family": "TRANSPORT",
+      "tier": 1,
+      "check": "static",
+      "statement": "No hardcoded origin or localhost literal in application source",
+      "source": "eslint caspr/no-hardcoded-origin",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "https?://(localhost|127\\.0\\.0\\.1|\\d+\\.\\d+\\.\\d+\\.\\d+)",
+        "include": [
+          "**/src/**/*.{ts,tsx}"
+        ],
+        "exclude": [
+          "**/*.test.{ts,tsx}",
+          "**/src/test/**",
+          "**/e2e/**",
+          "**/src/config/env.ts"
+        ]
+      }
+    },
+    {
+      "id": "TRANSPORT-08",
+      "family": "TRANSPORT",
+      "tier": 1,
+      "check": "static",
+      "statement": "output_ready URLs refuse javascript: and data: schemes",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · Streams",
+      "calibration": true,
+      "detect": {
+        "kind": "requirePattern",
+        "pattern": "javascript:|data:",
+        "include": [
+          "**/src/data/**/*.ts",
+          "**/src/features/**/stream*.ts"
+        ],
+        "min": 1
+      }
+    },
+    {
+      "id": "TRANSPORT-10",
+      "family": "TRANSPORT",
+      "tier": 1,
+      "check": "static",
+      "statement": "Nothing from the ez-caspr legacy catalog — no /chat-stream?token=, no /wallet/tiers, no Razorpay or PayPal, no browser-side AWS keys",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · Legacy",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "chat-stream\\?token=|/wallet/tiers|razorpay|paypal|ask-caspr/create-session",
+        "flags": "i",
+        "include": [
+          "**/src/**/*.{ts,tsx}",
+          "**/packages/**/*.ts"
+        ]
+      }
+    },
+    {
+      "id": "SEAM-01",
+      "family": "SEAM",
+      "tier": 1,
+      "check": "static",
+      "statement": "A cast is not a conversion — no res.json() as T on a response body",
+      "source": "TEST-SESSION-PROMPT-2026-08-25.md §8.1",
+      "calibration": true,
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "\\.json\\(\\)\\s*(?:as\\s+|\\)\\s*as\\s+)",
+        "include": [
+          "**/src/**/*.{ts,tsx}",
+          "**/packages/**/*.ts"
+        ],
+        "allowPattern": "as\\s+(?:unknown|UserRead|ProfileRead|WalletRead|ReservationRead|PricingRead)\\b"
+      }
+    },
+    {
+      "id": "SEAM-03",
+      "family": "SEAM",
+      "tier": 1,
+      "check": "static",
+      "statement": "A fixture is never a prop default — reachable only when a caller asks for it",
+      "source": "TEST-SESSION-PROMPT-2026-08-25.md §8.2",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "\\w+\\s*=\\s*(MOCK_|SAMPLE_|FIXTURE_|DEMO_|PLACEHOLDER_)[A-Z0-9_]+",
+        "include": [
+          "**/src/**/*.{ts,tsx}"
+        ],
+        "exclude": [
+          "**/*.test.{ts,tsx}",
+          "**/src/test/**",
+          "**/src/data/mockClient.ts"
+        ]
+      }
+    },
+    {
+      "id": "SEAM-04",
+      "family": "SEAM",
+      "tier": 1,
+      "check": "static",
+      "statement": "Empty is empty, unknown is unknown — money never defaults to zero",
+      "source": "TEST-SESSION-PROMPT-2026-08-25.md §8.3",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "(?:[Cc]ents|[Bb]alance|[Aa]mount|[Ss]pendable|[Bb]udget)\\w*\\s*(?:\\?\\?|\\|\\|)\\s*0\\b",
+        "include": [
+          "**/src/**/*.{ts,tsx}"
+        ],
+        "exclude": [
+          "**/*.test.{ts,tsx}",
+          "**/src/test/**"
+        ]
+      }
+    },
+    {
+      "id": "SEAM-06",
+      "family": "SEAM",
+      "tier": 1,
+      "check": "static",
+      "statement": "No collection call relies on the server's default page size of 20",
+      "source": "TEST-HANDOVER-2026-08-25.md §2",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "\\b(listFiles|listDocuments|listTurns|listAnalyses)\\s*\\(\\s*\\)",
+        "include": [
+          "**/src/**/*.{ts,tsx}"
+        ]
+      }
+    },
+    {
+      "id": "COLOR-01",
+      "family": "COLOR",
+      "tier": 1,
+      "check": "static",
+      "statement": "#9c9b98, #8a8a85, #8b8a96 and #e8453c may never be a text fill on a light surface",
+      "source": "design-guidelines.md §1 Text contrast rule 1 — 'This is lintable'",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "\\bcolor\\s*:\\s*[^;\\n]*#(9c9b98|8a8a85|8b8a96|e8453c)",
+        "flags": "i",
+        "include": [
+          "**/src/**/*.{ts,tsx,css,scss}",
+          "**/*.css"
+        ]
+      }
+    },
+    {
+      "id": "COLOR-03",
+      "family": "COLOR",
+      "tier": 1,
+      "check": "static",
+      "statement": "brand/black #0a0a0a is website chrome only — never app text. App text black is #1a1a17",
+      "source": "design-guidelines.md §1, Joy 2026-08-21",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "\\bcolor\\s*:\\s*[^;\\n]*#0a0a0a",
+        "flags": "i",
+        "include": [
+          "**/src/**/*.{ts,tsx,css,scss}"
+        ],
+        "allowPattern": "website|chrome|onboarding-nav|brand-black"
+      }
+    },
+    {
+      "id": "COLOR-05",
+      "family": "COLOR",
+      "tier": 1,
+      "check": "static",
+      "statement": "Opaque accent only — no tint, no pale fill, no rgba or opacity-modified accent as a surface",
+      "source": "design-guidelines.md §1",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "rgba\\(\\s*232\\s*,\\s*69\\s*,\\s*60|#e8453c[0-9a-f]{2}\\b",
+        "flags": "i",
+        "include": [
+          "**/src/**/*.{ts,tsx,css,scss}"
+        ]
+      }
+    },
+    {
+      "id": "COLOR-06",
+      "family": "COLOR",
+      "tier": 1,
+      "check": "static",
+      "statement": "No hand-typed hex outside the token definition file — colour resolves through a token",
+      "source": "design-guidelines.md §1 grey ramp",
+      "calibration": true,
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "#[0-9a-fA-F]{6}\\b",
+        "include": [
+          "**/src/**/*.{ts,tsx}"
+        ],
+        "exclude": [
+          "**/tokens*.{ts,css}",
+          "**/theme*.{ts,css}",
+          "**/*.test.{ts,tsx}",
+          "**/src/assets/**",
+          "**/icons/**"
+        ]
+      }
+    },
+    {
+      "id": "RADIUS-01",
+      "family": "RADIUS",
+      "tier": 1,
+      "check": "static",
+      "statement": "Radius is 0 · 2 · 12 · 20 only. Pills and glyphs are fully rounded and out of scope",
+      "source": "design-guidelines.md §2 (locked 2026-07-24, B2 ruling 2026-08-14)",
+      "detect": {
+        "kind": "numericScale",
+        "pattern": "border-?[Rr]adius\\s*:\\s*['\"]?(\\d+(?:\\.\\d+)?)(?:px)?\\b",
+        "include": [
+          "**/src/**/*.{ts,tsx,css,scss}",
+          "**/*.css"
+        ],
+        "allowed": [
+          0,
+          2,
+          12,
+          20
+        ],
+        "ignoreValues": [
+          9999,
+          999,
+          500,
+          50
+        ]
+      }
+    },
+    {
+      "id": "SPACE-01",
+      "family": "SPACE",
+      "tier": 1,
+      "check": "static",
+      "statement": "Every gap and pad is 4 · 8 · 12 · 16 · 20 · 24 · 32 · 48 · 64. Nothing else",
+      "source": "design-guidelines.md §9 (LOCKED 2026-08-21)",
+      "calibration": true,
+      "detect": {
+        "kind": "numericScale",
+        "pattern": "(?:gap|padding|margin)(?:-?(?:[Tt]op|[Rr]ight|[Bb]ottom|[Ll]eft|[Ii]nline|[Bb]lock))?\\s*:\\s*['\"]?(\\d+)(?:px)?\\b",
+        "include": [
+          "**/src/**/*.{ts,tsx,css,scss}",
+          "**/*.css"
+        ],
+        "allowed": [
+          0,
+          4,
+          8,
+          12,
+          16,
+          20,
+          24,
+          32,
+          48,
+          64
+        ]
+      }
+    },
+    {
+      "id": "TYPE-01",
+      "family": "TYPE",
+      "tier": 1,
+      "check": "static",
+      "statement": "Three fonts, no others — Instrument Serif, Inter, DM Mono",
+      "source": "design-guidelines.md §3",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "font-?[Ff]amily\\s*:",
+        "include": [
+          "**/src/**/*.{ts,tsx,css,scss}",
+          "**/*.css"
+        ],
+        "allowPattern": "Instrument Serif|Inter|DM Mono|var\\(--font|inherit|monospace|system-ui"
+      }
+    },
+    {
+      "id": "TYPE-03",
+      "family": "TYPE",
+      "tier": 1,
+      "check": "static",
+      "statement": "Fluid type for display sizes only — UI text stays fixed px so the user's font setting is respected",
+      "source": "design-guidelines.md §10b rule 2",
+      "calibration": true,
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "font-?[Ss]ize\\s*:\\s*clamp\\(",
+        "include": [
+          "**/src/**/*.{ts,tsx,css,scss}"
+        ],
+        "allowPattern": "h1|h2|hero|display|title|heading"
+      }
+    },
+    {
+      "id": "SHELL-02",
+      "family": "SHELL",
+      "tier": 1,
+      "check": "static",
+      "statement": "One structural breakpoint, ~1180. No second viewport breakpoint, no separate tablet layout",
+      "source": "design-guidelines.md §10b (LOCKED 2026-08-21)",
+      "calibration": true,
+      "detect": {
+        "kind": "numericScale",
+        "pattern": "@media[^{]*\\(\\s*(?:min|max)-width\\s*:\\s*(\\d+)px",
+        "include": [
+          "**/src/**/*.{ts,tsx,css,scss}",
+          "**/*.css"
+        ],
+        "allowed": [
+          1180,
+          1179,
+          1181
+        ]
+      }
+    },
+    {
+      "id": "SHELL-03",
+      "family": "SHELL",
+      "tier": 1,
+      "check": "static",
+      "statement": "Container queries on components, not viewport queries",
+      "source": "design-guidelines.md §10b rule 1",
+      "detect": {
+        "kind": "requirePattern",
+        "pattern": "@container|container-type\\s*:",
+        "include": [
+          "**/src/**/*.{ts,tsx,css,scss}",
+          "**/*.css"
+        ],
+        "min": 1
+      }
+    },
+    {
+      "id": "SHELL-05",
+      "family": "SHELL",
+      "tier": 1,
+      "check": "static",
+      "statement": "Flow/grid first — position:absolute only for true overlays",
+      "source": "ENGINEERING-STANDARDS-PROPOSAL.md §9 (promoted — see spec §3.6 note)",
+      "calibration": true,
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "position\\s*:\\s*['\"]?absolute",
+        "include": [
+          "**/src/**/*.{ts,tsx,css,scss}"
+        ],
+        "allowPattern": "overlay|scrim|drawer|modal|tooltip|popover|badge|dot|sr-only|visually-hidden"
+      }
+    },
+    {
+      "id": "A11Y-01",
+      "family": "FOCUS",
+      "tier": 1,
+      "check": "static",
+      "statement": "Interactive elements are <button>/<a>, not onClick on a div or span",
+      "source": "design-guidelines.md §1 (WCAG 2.2 AA is the referenced standard); counted in ENGINEERING-STANDARDS-PROPOSAL.md §4",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "<(div|span|li|td)\\b[^>]*\\sonClick=",
+        "include": [
+          "**/src/**/*.tsx"
+        ],
+        "allowPattern": "role=[\"']button[\"']"
+      }
+    },
+    {
+      "id": "FOCUS-01",
+      "family": "FOCUS",
+      "tier": 1,
+      "check": "static",
+      "statement": "Focus ring is 1.5px, not 2px — 2px perimeter is AAA (2.4.13); we hold AA",
+      "source": "focus-keyboard-spec.md §1 · design-guidelines.md §10a. Supersedes motion-and-interaction-states.md §4",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "outline\\s*:\\s*2px|outline-width\\s*:\\s*2px",
+        "include": [
+          "**/src/**/*.{ts,tsx,css,scss}",
+          "**/*.css"
+        ]
+      }
+    },
+    {
+      "id": "FOCUS-02",
+      "family": "FOCUS",
+      "tier": 1,
+      "check": "static",
+      "statement": ":focus-visible, never bare :focus — a mouse user never sees the ring",
+      "source": "focus-keyboard-spec.md §1 rule 2",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": ":focus(?![-\\w])",
+        "include": [
+          "**/src/**/*.{ts,tsx,css,scss}",
+          "**/*.css"
+        ],
+        "allowPattern": ":focus-visible|:focus-within"
+      }
+    },
+    {
+      "id": "FOCUS-03",
+      "family": "FOCUS",
+      "tier": 1,
+      "check": "static",
+      "statement": "Never outline:none without a replacement ring in the same rule",
+      "source": "focus-keyboard-spec.md §1 rule 1",
+      "detect": {
+        "kind": "pairedInBlock",
+        "pattern": "outline\\s*:\\s*(none|0)\\b",
+        "requires": "box-shadow|outline-offset|--focus|focus-ring|ring",
+        "window": 6,
+        "include": [
+          "**/src/**/*.{ts,tsx,css,scss}",
+          "**/*.css"
+        ]
+      }
+    },
+    {
+      "id": "FOCUS-04",
+      "family": "FOCUS",
+      "tier": 1,
+      "check": "static",
+      "statement": "The 2px offset is never collapsed to zero — it is what keeps the ring legal on an accent-filled control",
+      "source": "focus-keyboard-spec.md §1",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "outline-offset\\s*:\\s*0(?:px)?\\b",
+        "include": [
+          "**/src/**/*.{ts,tsx,css,scss}",
+          "**/*.css"
+        ]
+      }
+    },
+    {
+      "id": "FOCUS-06",
+      "family": "FOCUS",
+      "tier": 1,
+      "check": "static",
+      "statement": "A visually-hidden 'Skip to content' is the first tabbable element",
+      "source": "focus-keyboard-spec.md §3.6 — 'the file has never had' one",
+      "detect": {
+        "kind": "requirePattern",
+        "pattern": "[Ss]kip to (content|main)|skip-to-content|skipLink|SkipLink",
+        "include": [
+          "**/src/**/*.{ts,tsx}"
+        ],
+        "min": 1
+      }
+    },
+    {
+      "id": "KBD-05",
+      "family": "FOCUS",
+      "tier": 1,
+      "check": "static",
+      "statement": "Icon-only controls carry an aria-label",
+      "source": "motion-and-interaction-states.md §5",
+      "calibration": true,
+      "detect": {
+        "kind": "pairedInBlock",
+        "pattern": "<button(?![^>]*aria-label)[^>]*>\\s*$",
+        "requires": "aria-label|aria-labelledby|>[^<]*[A-Za-z]{2}",
+        "window": 3,
+        "include": [
+          "**/src/**/*.tsx"
+        ]
+      }
+    },
+    {
+      "id": "MOTION-01",
+      "family": "MOTION",
+      "tier": 1,
+      "check": "static",
+      "statement": "prefers-reduced-motion is mandatory — every motion has a reduced alternative. No exceptions",
+      "source": "motion-and-interaction-states.md §1",
+      "detect": {
+        "kind": "requirePattern",
+        "pattern": "prefers-reduced-motion",
+        "include": [
+          "**/src/**/*.{ts,tsx,css,scss}",
+          "**/*.css"
+        ],
+        "min": 1
+      }
+    },
+    {
+      "id": "MOTION-02",
+      "family": "MOTION",
+      "tier": 1,
+      "check": "static",
+      "statement": "Duration comes from a token — no raw ms literal in a transition",
+      "source": "motion-and-interaction-states.md §2",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "transition[^;\\n]*\\b\\d{2,4}ms",
+        "include": [
+          "**/src/**/*.{ts,tsx,css,scss}",
+          "**/*.css"
+        ],
+        "allowPattern": "var\\(--motion|var\\(--duration|var\\(--ease"
+      }
+    },
+    {
+      "id": "MOTION-03",
+      "family": "MOTION",
+      "tier": 1,
+      "check": "static",
+      "statement": "No box-shadow except the bottom drawer, modal cards and a dragged row",
+      "source": "motion-and-interaction-states.md §1",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "box-?[Ss]hadow\\s*:",
+        "include": [
+          "**/src/**/*.{ts,tsx,css,scss}",
+          "**/*.css"
+        ],
+        "allowPattern": "none|var\\(--shadow|drawer|modal|dialog|popover|dragging|elevated"
+      }
+    },
+    {
+      "id": "COPY-01",
+      "family": "COPY",
+      "tier": 1,
+      "check": "static",
+      "statement": "No exclamation points. Ever",
+      "source": "copy-standards.md §1 · brand-guidelines.md",
+      "calibration": true,
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": ">\\s*[A-Z][^<>{}]{3,}!\\s*<",
+        "include": [
+          "**/src/**/*.tsx"
+        ],
+        "exclude": [
+          "**/*.test.tsx",
+          "**/src/test/**"
+        ]
+      }
+    },
+    {
+      "id": "COPY-02",
+      "family": "COPY",
+      "tier": 1,
+      "check": "static",
+      "statement": "Banned vocabulary — platform, leverage, algorithms, workflows, powerful AI, robust, seamless, revolutionary, game-changing, chatbot, web scraping, hallucinate",
+      "source": "copy-standards.md §1",
+      "calibration": true,
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "\\b(leverages?|leveraging|revolutionary|game-?changing|seamless(?:ly)?|robust|chatbot|web scraping|hallucinat\\w+|powerful AI|excited to announce)\\b",
+        "flags": "i",
+        "include": [
+          "**/src/**/*.tsx",
+          "**/src/**/*copy*.ts",
+          "**/src/**/content/**/*.ts"
+        ],
+        "exclude": [
+          "**/*.test.{ts,tsx}",
+          "**/src/test/**"
+        ]
+      }
+    },
+    {
+      "id": "COPY-04",
+      "family": "COPY",
+      "tier": 1,
+      "check": "static",
+      "statement": "'Top up' verb, 'top-up' noun. Never mixed, never 'topup'",
+      "source": "copy-standards.md §2",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "\\btopup\\b|\\bTopUp\\b(?!\\s*[:(=])",
+        "flags": "i",
+        "include": [
+          "**/src/**/*.tsx"
+        ],
+        "exclude": [
+          "**/*.test.tsx"
+        ]
+      }
+    },
+    {
+      "id": "COPY-07",
+      "family": "COPY",
+      "tier": 1,
+      "check": "static",
+      "statement": "Data Room · Research Budget · Brief · Study · Intelligence are capitalised proper nouns",
+      "source": "copy-standards.md §2",
+      "calibration": true,
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": ">[^<>{}]*\\b(data room|research budget)\\b",
+        "include": [
+          "**/src/**/*.tsx"
+        ],
+        "exclude": [
+          "**/*.test.tsx"
+        ]
+      }
+    },
+    {
+      "id": "AIACT-01",
+      "family": "AIACT",
+      "tier": 1,
+      "check": "static",
+      "statement": "Every onboarding footer carries the AI disclosure link",
+      "source": "ai-disclosure-spec.md §1 — EU AI Act Art. 50(1), in force since 2 Aug 2026",
+      "detect": {
+        "kind": "requirePattern",
+        "pattern": "ai-disclosure|AI disclosure",
+        "include": [
+          "**/src/**/*.{ts,tsx}"
+        ],
+        "min": 1
+      }
+    },
+    {
+      "id": "SECRET-01",
+      "family": "SECRET",
+      "tier": 1,
+      "check": "static",
+      "statement": "No server secret in the frontend repo — only VITE_*, which are public the moment the app builds",
+      "source": "CLAUDE.md · team repositories",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "\\b(DATABASE_URL|RDS_PASSWORD|SES_SECRET|SES_ACCESS|STRIPE_SECRET_KEY|STRIPE_WEBHOOK_SECRET|AWS_SECRET_ACCESS_KEY|AI__BASE_URL)\\b",
+        "include": [
+          "**/apps/**",
+          "**/packages/**",
+          "**/*.env*",
+          "**/vite.config.ts"
+        ],
+        "exclude": [
+          "**/node_modules/**"
+        ]
+      }
+    },
+    {
+      "id": "SECRET-03",
+      "family": "SECRET",
+      "tier": 1,
+      "check": "static",
+      "statement": "No AWS key, private key, Stripe live key or webhook secret in tracked files",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · Part 4",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|sk_live_[0-9a-zA-Z]{8}|whsec_[0-9a-zA-Z]{8}",
+        "include": [
+          "**/*"
+        ]
+      }
+    },
+    {
+      "id": "SECRET-04",
+      "family": "SECRET",
+      "tier": 1,
+      "check": "static",
+      "statement": "No document files in the repo beyond README.md and README-DEV.md — two live copies of a document is a fork, not a backup",
+      "source": "CLAUDE.md · CODE ONLY in the local folders",
+      "detect": {
+        "kind": "forbidPath",
+        "include": [
+          "**/*.md"
+        ],
+        "exclude": [
+          "**/README.md",
+          "**/README-DEV.md",
+          "**/node_modules/**",
+          "**/CHANGELOG.md",
+          "**/LICENSE.md",
+          "**/.github/**"
+        ]
+      }
+    },
+    {
+      "id": "SECRET-05",
+      "family": "SECRET",
+      "tier": 1,
+      "check": "static",
+      "statement": "The retired Caspr-Joy/Caspr-app remote appears in no config",
+      "source": "CLAUDE.md · team repositories",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "Caspr-Joy/Caspr-app|caspr-ai/caspr-product",
+        "flags": "i",
+        "include": [
+          "**/*"
+        ]
+      }
+    },
+    {
+      "id": "ADV-QUAL-01",
+      "family": "ADV-QUAL",
+      "tier": 2,
+      "check": "static",
+      "statement": "eslint-plugin-jsx-a11y installed and enabled",
+      "source": "ENGINEERING-STANDARDS-PROPOSAL.md §9 — 'not installed'",
+      "detect": {
+        "kind": "requirePattern",
+        "pattern": "jsx-a11y",
+        "include": [
+          "**/package.json",
+          "**/eslint.config.*"
+        ],
+        "min": 1,
+        "absentIfMissing": true
+      }
+    },
+    {
+      "id": "ADV-QUAL-02",
+      "family": "ADV-QUAL",
+      "tier": 2,
+      "check": "static",
+      "statement": "Prettier and .editorconfig present",
+      "source": "ENGINEERING-STANDARDS-PROPOSAL.md §9 (Tier 2 — not adopted)",
+      "detect": {
+        "kind": "requirePath",
+        "include": [
+          "**/.prettierrc*",
+          "**/prettier.config.*",
+          "**/.editorconfig"
+        ],
+        "absentIfMissing": true
+      }
+    },
+    {
+      "id": "ADV-QUAL-03",
+      "family": "ADV-QUAL",
+      "tier": 2,
+      "check": "static",
+      "statement": "noUncheckedIndexedAccess is on",
+      "source": "ENGINEERING-STANDARDS-PROPOSAL.md §9 (Tier 2 — not adopted)",
+      "detect": {
+        "kind": "requirePattern",
+        "pattern": "noUncheckedIndexedAccess\"?\\s*:\\s*true",
+        "include": [
+          "**/tsconfig*.json"
+        ],
+        "min": 1,
+        "absentIfMissing": true
+      }
+    },
+    {
+      "id": "ADV-QUAL-04",
+      "family": "ADV-QUAL",
+      "tier": 2,
+      "check": "static",
+      "statement": "File size budget ~300 lines (proposal's own footnote: a proposal, not a citation — recommend a ratchet, not a cliff)",
+      "source": "ENGINEERING-STANDARDS-PROPOSAL.md §9 — largest file was 813",
+      "detect": {
+        "kind": "fileMetric",
+        "maxLines": 300,
+        "include": [
+          "**/src/**/*.{ts,tsx}",
+          "**/src/**/*.py"
+        ],
+        "exclude": [
+          "**/*.test.{ts,tsx}",
+          "**/tests/**",
+          "**/src/test/**"
+        ]
+      }
+    },
+    {
+      "id": "ADV-SEC-02",
+      "family": "ADV-SEC",
+      "tier": 2,
+      "check": "static",
+      "statement": "Security headers — CSP with per-request nonce and strict-dynamic, nosniff, HSTS, frame-ancestors, Referrer-Policy, Permissions-Policy",
+      "source": "ENGINEERING-STANDARDS-PROPOSAL.md §1 — 'We currently ship none of these'",
+      "detect": {
+        "kind": "requirePattern",
+        "pattern": "Content-Security-Policy|strict-dynamic|Strict-Transport-Security",
+        "include": [
+          "**/*.{ts,js,mjs,yml,yaml,conf,html}"
+        ],
+        "min": 1,
+        "absentIfMissing": true
+      }
+    },
+    {
+      "id": "ADV-TEST-01",
+      "family": "ADV-TEST",
+      "tier": 2,
+      "check": "static",
+      "statement": "Playwright width matrix covers the load-bearing widths — 1254 (buffers gone), 1180 (structural switch), 560 (centre floor)",
+      "source": "design-guidelines.md §10b test matrix",
+      "detect": {
+        "kind": "requirePattern",
+        "pattern": "1254|1180",
+        "include": [
+          "**/playwright.config.ts",
+          "**/e2e/**/*.ts"
+        ],
+        "min": 1,
+        "absentIfMissing": true
+      }
+    },
+    {
+      "id": "ADV-TEST-02",
+      "family": "ADV-TEST",
+      "tier": 2,
+      "check": "static",
+      "statement": "axe in CI",
+      "source": "ENGINEERING-STANDARDS-PROPOSAL.md §9",
+      "detect": {
+        "kind": "requirePattern",
+        "pattern": "axe-core|@axe-core/playwright|axe-playwright",
+        "include": [
+          "**/package.json",
+          "**/e2e/**/*.ts",
+          "**/.github/workflows/*.yml"
+        ],
+        "min": 1,
+        "absentIfMissing": true
+      }
+    },
+    {
+      "id": "ADV-SUPPLY-01",
+      "family": "ADV-SUPPLY",
+      "tier": 2,
+      "check": "static",
+      "statement": "CycloneDX SBOM generated at build time",
+      "source": "ENGINEERING-STANDARDS-PROPOSAL.md §8",
+      "detect": {
+        "kind": "requirePattern",
+        "pattern": "cyclonedx|syft|trivy sbom",
+        "flags": "i",
+        "include": [
+          "**/.github/workflows/*.yml",
+          "**/package.json",
+          "**/Dockerfile*"
+        ],
+        "min": 1,
+        "absentIfMissing": true
+      }
+    },
+    {
+      "id": "SEAM-02",
+      "family": "SEAM",
+      "tier": 1,
+      "check": "build",
+      "statement": "A cast is safe exactly where the type is written in the wire's own casing — a camelCase interface cast from a snake_case body is a defect",
+      "source": "TEST-HANDOVER-2026-08-25.md §7",
+      "detect": {
+        "kind": "typeCasing"
+      }
+    },
+    {
+      "id": "SEAM-05",
+      "family": "SEAM",
+      "tier": 1,
+      "check": "build",
+      "statement": "Every client method has a mounted route; every route has a caller",
+      "source": "TEST-SESSION-PROMPT-2026-08-25.md §3",
+      "detect": {
+        "kind": "crossRepoReachability"
+      }
+    },
+    {
+      "id": "SEAM-07",
+      "family": "SEAM",
+      "tier": 1,
+      "check": "build",
+      "statement": "Frontend contract types match the backend OpenAPI schema field-for-field, including casing and nullability",
+      "source": "TEST-SESSION-PROMPT-2026-08-25.md §3 — the $NaN bug",
+      "detect": {
+        "kind": "openApiParity"
+      }
+    },
+    {
+      "id": "COLOR-07",
+      "family": "COLOR",
+      "tier": 1,
+      "check": "runtime",
+      "statement": "Every text colour reaches 4.5:1 against its background",
+      "source": "design-guidelines.md §1",
+      "detect": {
+        "kind": "axe"
+      }
+    },
+    {
+      "id": "TARGET-01",
+      "family": "TARGET",
+      "tier": 1,
+      "check": "runtime",
+      "statement": "Interactive targets are ≥24×24 (WCAG 2.5.8 AA). Decorative and inline citation dots exempt",
+      "source": "focus-keyboard-spec.md §2 — 72 checkboxes are real failures",
+      "detect": {
+        "kind": "playwright"
+      }
+    },
+    {
+      "id": "TARGET-02",
+      "family": "TARGET",
+      "tier": 2,
+      "check": "runtime",
+      "statement": "Hit targets ≥44px on Compact (design preference, no regulation behind it)",
+      "source": "motion-and-interaction-states.md §4",
+      "detect": {
+        "kind": "playwright"
+      }
+    },
+    {
+      "id": "FOCUS-05",
+      "family": "FOCUS",
+      "tier": 1,
+      "check": "runtime",
+      "statement": "The ring is never clipped by an ancestor overflow:hidden (WCAG 2.4.11)",
+      "source": "focus-keyboard-spec.md §1 rule 3",
+      "detect": {
+        "kind": "playwright"
+      }
+    },
+    {
+      "id": "KBD-01",
+      "family": "KBD",
+      "tier": 1,
+      "check": "runtime",
+      "statement": "Focus returns to the trigger when a drawer, dialog or menu closes — the most common keyboard regression",
+      "source": "focus-keyboard-spec.md §3.1",
+      "detect": {
+        "kind": "playwright"
+      }
+    },
+    {
+      "id": "KBD-02",
+      "family": "KBD",
+      "tier": 1,
+      "check": "runtime",
+      "statement": "Confirms open focus on the safe control, never the destructive one",
+      "source": "focus-keyboard-spec.md §3.4",
+      "detect": {
+        "kind": "playwright"
+      }
+    },
+    {
+      "id": "KBD-03",
+      "family": "KBD",
+      "tier": 1,
+      "check": "runtime",
+      "statement": "Drawer Esc steps down one detent, never straight to dismissed",
+      "source": "focus-keyboard-spec.md §3.1",
+      "detect": {
+        "kind": "playwright"
+      }
+    },
+    {
+      "id": "KBD-04",
+      "family": "KBD",
+      "tier": 1,
+      "check": "runtime",
+      "statement": "Pane switcher is manual activation — arrowing must not fire Ask/Versions loads",
+      "source": "focus-keyboard-spec.md §3.2",
+      "detect": {
+        "kind": "playwright"
+      }
+    },
+    {
+      "id": "SHELL-01",
+      "family": "SHELL",
+      "tier": 1,
+      "check": "runtime",
+      "statement": "rail 0 0 64px · pane 0 0 390px · buffer 1 1 0 · centre 0 1 800px min-width 560px. Buffers give way before the centre does",
+      "source": "design-guidelines.md §10b — the CSS is authoritative over any Figma frame",
+      "detect": {
+        "kind": "playwright"
+      }
+    },
+    {
+      "id": "SHELL-04",
+      "family": "SHELL",
+      "tier": 1,
+      "check": "runtime",
+      "statement": "Bottom nav is persistent and top-most; drawers rise to 788, never 844",
+      "source": "design-guidelines.md §10",
+      "detect": {
+        "kind": "playwright"
+      }
+    },
+    {
+      "id": "AIACT-02",
+      "family": "AIACT",
+      "tier": 1,
+      "check": "build",
+      "statement": "Exported PDFs carry XMP: xmp:CreatorTool, dc:creator, dc:date, caspr:aiGenerated, caspr:generatedAt, caspr:analysisType, caspr:depth, caspr:sourceCount",
+      "source": "ai-disclosure-spec.md §2.2 — EU AI Act Art. 50(2)",
+      "detect": {
+        "kind": "exportPipeline"
+      }
+    },
+    {
+      "id": "AIACT-03",
+      "family": "AIACT",
+      "tier": 1,
+      "check": "build",
+      "statement": "Exported PPTX carries OOXML core properties plus the caspr:* custom part",
+      "source": "ai-disclosure-spec.md §2.2",
+      "detect": {
+        "kind": "exportPipeline"
+      }
+    },
+    {
+      "id": "AIACT-04",
+      "family": "AIACT",
+      "tier": 1,
+      "check": "build",
+      "statement": "The mark survives editing and is re-stamped on regeneration",
+      "source": "ai-disclosure-spec.md §2.3",
+      "detect": {
+        "kind": "exportPipeline"
+      }
+    },
+    {
+      "id": "AIACT-05",
+      "family": "AIACT",
+      "tier": 1,
+      "check": "build",
+      "statement": "The mark is not conditional on tier — free-trial output carries it identically",
+      "source": "ai-disclosure-spec.md §2.3",
+      "detect": {
+        "kind": "exportPipeline"
+      }
+    },
+    {
+      "id": "AIACT-06",
+      "family": "AIACT",
+      "tier": 1,
+      "check": "build",
+      "statement": "Uploaded source documents are never marked — only the deliverable",
+      "source": "ai-disclosure-spec.md §2.3",
+      "detect": {
+        "kind": "exportPipeline"
+      }
+    },
+    {
+      "id": "ADV-PERF-01",
+      "family": "ADV-PERF",
+      "tier": 2,
+      "check": "build",
+      "statement": "Initial JS < 200 KB compressed — last measured 206.76 KB",
+      "source": "ENGINEERING-STANDARDS-PROPOSAL.md §6",
+      "detect": {
+        "kind": "bundleBudget"
+      }
+    },
+    {
+      "id": "ADV-QUAL-05",
+      "family": "ADV-QUAL",
+      "tier": 2,
+      "check": "manual",
+      "statement": "ADRs exist for layout, backend language and auth model. NOTE: an ADR is a document, and CLAUDE.md keeps documents on Drive — where ADRs live is an unresolved conflict, not a check",
+      "source": "ENGINEERING-STANDARDS-PROPOSAL.md §9 vs CLAUDE.md CODE-ONLY rule",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "ADV-QUAL-06",
+      "family": "ADV-QUAL",
+      "tier": 2,
+      "check": "repo",
+      "statement": "Conventional Commits",
+      "source": "ENGINEERING-STANDARDS-PROPOSAL.md §9 — 'prose, inconsistent'",
+      "detect": {
+        "kind": "commitMessages"
+      }
+    },
+    {
+      "id": "SECRET-02",
+      "family": "SECRET",
+      "tier": 1,
+      "check": "repo",
+      "statement": "No .env committed in either repo",
+      "source": "CLAUDE.md",
+      "detect": {
+        "kind": "gitTracked"
+      }
+    },
+    {
+      "id": "STRUCT-04",
+      "family": "STRUCT",
+      "tier": 1,
+      "check": "manual",
+      "statement": "One index.ts per feature, exporting only the public surface",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · Problem #8",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "STRUCT-06",
+      "family": "STRUCT",
+      "tier": 1,
+      "check": "static",
+      "statement": "Pages are route adapters, 5-20 lines",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · Problem #1",
+      "calibration": true,
+      "detect": {
+        "kind": "fileMetric",
+        "maxLines": 20,
+        "include": [
+          "**/src/pages/*.tsx"
+        ],
+        "exclude": [
+          "**/*.test.tsx"
+        ]
+      }
+    },
+    {
+      "id": "STRUCT-07",
+      "family": "STRUCT",
+      "tier": 1,
+      "check": "static",
+      "statement": "No feature imports from app/shell; no page imports another page",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · Problem #6",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "froms+['\"][^'\"]*app/shell",
+        "include": [
+          "**/src/features/**/*.{ts,tsx}"
+        ]
+      }
+    },
+    {
+      "id": "TRANSPORT-04",
+      "family": "TRANSPORT",
+      "tier": 1,
+      "check": "static",
+      "statement": "VITE_BACKEND_ORIGIN stays a bare origin - no path segment in the value or its default",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · S2",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "VITE_BACKEND_ORIGINs*=s*S+//[^s]+/w",
+        "include": [
+          "**/.env*",
+          "**/*.env*"
+        ]
+      }
+    },
+    {
+      "id": "TRANSPORT-07",
+      "family": "TRANSPORT",
+      "tier": 1,
+      "check": "manual",
+      "statement": "Transport refreshes once on 401; a second 401 is a dead session, not a loop",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · Transport",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "TRANSPORT-09",
+      "family": "TRANSPORT",
+      "tier": 1,
+      "check": "static",
+      "statement": "WebSocket close 4401 is not retried; other closes back off, 6 attempts, 15s cap",
+      "source": "FRONTEND-CONVENTIONS-RECONCILED.md · Streams",
+      "detect": {
+        "kind": "requirePattern",
+        "pattern": "4401",
+        "include": [
+          "**/src/**/*.ts"
+        ],
+        "min": 1
+      }
+    },
+    {
+      "id": "COLOR-02",
+      "family": "COLOR",
+      "tier": 1,
+      "check": "static",
+      "statement": "Red text on light is #be3530 (5.61:1)",
+      "source": "design-guidelines.md §1",
+      "detect": {
+        "kind": "requirePattern",
+        "pattern": "be3530",
+        "flags": "i",
+        "include": [
+          "**/src/**/*.{ts,tsx,css,scss}"
+        ],
+        "min": 1,
+        "absentIfMissing": true
+      }
+    },
+    {
+      "id": "COLOR-04",
+      "family": "COLOR",
+      "tier": 1,
+      "check": "manual",
+      "statement": "The quiet text ramp is three levels: #1a1a17 then #5c5b58 then #75746f. No fourth quiet grey as text",
+      "source": "design-guidelines.md §1 rule 2",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "RADIUS-02",
+      "family": "RADIUS",
+      "tier": 1,
+      "check": "manual",
+      "statement": "12px is overlay surfaces only - modals, confirmation cards, popovers. Content and layout cards are 2",
+      "source": "design-guidelines.md §2 B2 ruling",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "RADIUS-03",
+      "family": "RADIUS",
+      "tier": 1,
+      "check": "manual",
+      "statement": "Controls inside a 12px overlay stay at 2",
+      "source": "design-guidelines.md §2",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "TYPE-02",
+      "family": "TYPE",
+      "tier": 1,
+      "check": "static",
+      "statement": "Instrument Serif is never used for wayfinding or nav",
+      "source": "design-guidelines.md §3",
+      "calibration": true,
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "Instrument Serif",
+        "include": [
+          "**/src/**/*[Nn]av*.{ts,tsx,css}",
+          "**/src/app/shell/**/*.{ts,tsx,css}"
+        ]
+      }
+    },
+    {
+      "id": "TYPE-04",
+      "family": "TYPE",
+      "tier": 1,
+      "check": "manual",
+      "statement": "Italic is exclusive to the product voice and a selection echo in a user bubble",
+      "source": "design-guidelines.md §11.0b",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "A11Y-02",
+      "family": "FOCUS",
+      "tier": 1,
+      "check": "static",
+      "statement": "Documents have heading structure - h1-h6, not styled spans",
+      "source": "design-guidelines.md §1 (WCAG 2.2 AA); counted in ENGINEERING-STANDARDS-PROPOSAL.md §4 - 16 headings across 151 files",
+      "calibration": true,
+      "detect": {
+        "kind": "requirePattern",
+        "pattern": "<h[1-6][s>]",
+        "include": [
+          "**/src/**/*.tsx"
+        ],
+        "min": 30
+      }
+    },
+    {
+      "id": "MOTION-04",
+      "family": "MOTION",
+      "tier": 1,
+      "check": "manual",
+      "statement": "Keyboard-initiated changes are never animated",
+      "source": "motion-and-interaction-states.md §1 frequency gate",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "MOTION-05",
+      "family": "MOTION",
+      "tier": 1,
+      "check": "manual",
+      "statement": "Frequent interactions - tag flip, tab switch, scroll - are instant",
+      "source": "motion-and-interaction-states.md §6",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "COPY-03",
+      "family": "COPY",
+      "tier": 1,
+      "check": "static",
+      "statement": "budget, never plan, in user-facing copy. Must not fire on the plan API field",
+      "source": "copy-standards.md §2",
+      "calibration": true,
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": ">[^<>{}]*\b([Yy]our|[Tt]he|[Cc]urrent)s+plan\b",
+        "include": [
+          "**/src/**/*.tsx"
+        ],
+        "exclude": [
+          "**/*.test.tsx"
+        ]
+      }
+    },
+    {
+      "id": "COPY-05",
+      "family": "COPY",
+      "tier": 1,
+      "check": "static",
+      "statement": "Exact balances carry two decimals; marketing figures carry none",
+      "source": "copy-standards.md §2",
+      "calibration": true,
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "toFixed(s*(?:0|1|3)s*)",
+        "include": [
+          "**/src/**/*.{ts,tsx}"
+        ],
+        "exclude": [
+          "**/*.test.{ts,tsx}"
+        ]
+      }
+    },
+    {
+      "id": "COPY-06",
+      "family": "COPY",
+      "tier": 1,
+      "check": "manual",
+      "statement": "Sentence case for UI labels and buttons, except proper nouns",
+      "source": "copy-standards.md §2",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "COPY-08",
+      "family": "COPY",
+      "tier": 1,
+      "check": "manual",
+      "statement": "Errors carry reason and reassurance. Red text only - no tint fills, no stripes",
+      "source": "copy-standards.md §2",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "COPY-09",
+      "family": "COPY",
+      "tier": 1,
+      "check": "manual",
+      "statement": "Depths, file states and wallet terms are never Lingo-aliased. Only Type/Sub-type labels resolve at runtime",
+      "source": "copy-standards.md §3",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "COPY-10",
+      "family": "COPY",
+      "tier": 1,
+      "check": "manual",
+      "statement": "Caspr dialogue is engine output - never hardcode it as copy",
+      "source": "design-guidelines.md §11.0b",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "ADV-SEC-01",
+      "family": "ADV-SEC",
+      "tier": 2,
+      "check": "manual",
+      "statement": "OWASP ASVS 5.0.0 Level 2 coverage",
+      "source": "ENGINEERING-STANDARDS-PROPOSAL.md §1 (not adopted)",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "ADV-SEC-03",
+      "family": "ADV-SEC",
+      "tier": 2,
+      "check": "manual",
+      "statement": "PCI SAQ A script inventory and tamper detection on payment pages (6.4.3, 11.6.1)",
+      "source": "ENGINEERING-STANDARDS-PROPOSAL.md §5 (not adopted)",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "ADV-PERF-02",
+      "family": "ADV-PERF",
+      "tier": 2,
+      "check": "runtime",
+      "statement": "LCP p75 < 2.5s",
+      "source": "ENGINEERING-STANDARDS-PROPOSAL.md §6",
+      "detect": {
+        "kind": "lighthouse"
+      }
+    },
+    {
+      "id": "ADV-PERF-03",
+      "family": "ADV-PERF",
+      "tier": 2,
+      "check": "runtime",
+      "statement": "INP p75 < 200ms",
+      "source": "ENGINEERING-STANDARDS-PROPOSAL.md §6",
+      "detect": {
+        "kind": "lighthouse"
+      }
+    },
+    {
+      "id": "ADV-PERF-04",
+      "family": "ADV-PERF",
+      "tier": 2,
+      "check": "runtime",
+      "statement": "CLS p75 < 0.1",
+      "source": "ENGINEERING-STANDARDS-PROPOSAL.md §6",
+      "detect": {
+        "kind": "lighthouse"
+      }
+    },
+    {
+      "id": "ADV-SUPPLY-02",
+      "family": "ADV-SUPPLY",
+      "tier": 2,
+      "check": "repo",
+      "statement": "SLSA provenance, Build L2 to L3",
+      "source": "ENGINEERING-STANDARDS-PROPOSAL.md §8",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "ADV-TEST-03",
+      "family": "ADV-TEST",
+      "tier": 2,
+      "check": "static",
+      "statement": "Lighthouse CI present and budgeted",
+      "source": "ENGINEERING-STANDARDS-PROPOSAL.md §9",
+      "detect": {
+        "kind": "requirePattern",
+        "pattern": "lighthouse",
+        "flags": "i",
+        "include": [
+          "**/package.json",
+          "**/.github/workflows/*.yml",
+          "**/lighthouserc*"
+        ],
+        "min": 1,
+        "absentIfMissing": true
+      }
+    },
+    {
+      "id": "ADV-TEST-04",
+      "family": "ADV-TEST",
+      "tier": 2,
+      "check": "static",
+      "statement": "Visual regression present",
+      "source": "ENGINEERING-STANDARDS-PROPOSAL.md §9",
+      "detect": {
+        "kind": "requirePattern",
+        "pattern": "chromatic|toHaveScreenshot|percy",
+        "flags": "i",
+        "include": [
+          "**/package.json",
+          "**/e2e/**/*.ts"
+        ],
+        "min": 1,
+        "absentIfMissing": true
+      }
+    },
+    {
+      "id": "ADV-AI-01",
+      "family": "ADV-AI",
+      "tier": 2,
+      "check": "manual",
+      "statement": "OWASP LLM Top 10 2025 + Agentic 2026 mapping documented",
+      "source": "ENGINEERING-STANDARDS-PROPOSAL.md §2",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "CRED-01",
+      "family": "CRED",
+      "tier": 1,
+      "check": "static",
+      "statement": "No credential file in any agent-readable tree — including the Drive folder",
+      "source": "ai-credential-exposure-rules.md R-CTX-1 [P0]; scope extended to Drive by Joy 2026-08-25",
+      "detect": {
+        "kind": "forbidPath",
+        "include": [
+          "**/.env",
+          "**/.env.local",
+          "**/.env.development",
+          "**/.env.staging",
+          "**/.env.production",
+          "**/.env.test",
+          "**/*.pem",
+          "**/*.key",
+          "**/*.p12",
+          "**/*.pfx",
+          "**/*_rsa",
+          "**/id_ed25519",
+          "**/id_ecdsa",
+          "**/credentials",
+          "**/*service-account*.json",
+          "**/kubeconfig",
+          "**/*.tfstate",
+          "**/*.tfstate.backup"
+        ],
+        "exclude": [
+          "**/.env.example",
+          "**/.env.sample",
+          "**/node_modules/**"
+        ]
+      }
+    },
+    {
+      "id": "CRED-02",
+      "family": "CRED",
+      "tier": 1,
+      "check": "static",
+      "statement": "Ignore rules carry every required exclusion pattern — depth, not the boundary",
+      "source": "ai-credential-exposure-rules.md R-CTX-2 [P0], verified by R-VER-1",
+      "detect": {
+        "kind": "requireAll",
+        "include": [
+          "**/.gitignore"
+        ],
+        "absentIfMissing": true,
+        "patterns": [
+          "\\.env",
+          "\\*\\.pem",
+          "\\*\\.key",
+          "_rsa",
+          "credentials",
+          "service-account",
+          "kubeconfig",
+          "\\.terraform",
+          "tfstate"
+        ]
+      }
+    },
+    {
+      "id": "CRED-03",
+      "family": "CRED",
+      "tier": 1,
+      "check": "static",
+      "statement": "No plaintext credential in any agent or MCP configuration",
+      "source": "ai-credential-exposure-rules.md R-VER-2 [P0], R-CTX-8 [P0]",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "AKIA[0-9A-Z]{16}|sk-[A-Za-z0-9]{20,}|sk_live_[0-9a-zA-Z]{8,}|sk_test_[0-9a-zA-Z]{8,}|whsec_[0-9a-zA-Z]{8,}|xox[baprs]-[0-9A-Za-z-]{10,}|ghp_[0-9A-Za-z]{20,}|gho_[0-9A-Za-z]{20,}|github_pat_[0-9A-Za-z_]{20,}|-----BEGIN[A-Z ]*PRIVATE KEY|(postgres(ql)?|mysql|redis|mongodb)(\\+[a-z]+)?://[^:/\\s]+:[^@\\s]+@",
+        "include": [
+          "**/CLAUDE.md",
+          "**/AGENTS.md",
+          "**/GEMINI.md",
+          "**/.cursor/rules/**",
+          "**/.cursorrules",
+          "**/mcp.json",
+          "**/.mcp.json",
+          "**/settings.json",
+          "**/settings.local.json",
+          "**/.claude/**/*.md"
+        ],
+        "allowPattern": "CASPR_DUMMY_"
+      }
+    },
+    {
+      "id": "CRED-04",
+      "family": "CRED",
+      "tier": 1,
+      "check": "static",
+      "statement": "No bidirectional-control or zero-width characters in agent config — the Rules File Backdoor channel",
+      "source": "ai-credential-exposure-rules.md R-CTX-7 [P0], R-VER-1 [P0]",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "[\\u202A-\\u202E\\u2066-\\u2069\\u200B-\\u200D\\u2060\\uFEFF]",
+        "include": [
+          "**/CLAUDE.md",
+          "**/AGENTS.md",
+          "**/GEMINI.md",
+          "**/.cursor/rules/**",
+          "**/.cursorrules",
+          "**/mcp.json",
+          "**/.mcp.json",
+          "**/settings.json",
+          "**/settings.local.json",
+          "**/.claude/**/*.md"
+        ]
+      }
+    },
+    {
+      "id": "CRED-05",
+      "family": "CRED",
+      "tier": 1,
+      "check": "static",
+      "statement": "No mixed-script confusable token in agent config — a non-printing filter will never catch these",
+      "source": "ai-credential-exposure-rules.md R-CTX-7 [P0], R-VER-1 [P0]",
+      "detect": {
+        "kind": "mixedScript",
+        "include": [
+          "**/CLAUDE.md",
+          "**/AGENTS.md",
+          "**/GEMINI.md",
+          "**/.cursor/rules/**",
+          "**/.cursorrules",
+          "**/mcp.json",
+          "**/.mcp.json",
+          "**/settings.json",
+          "**/settings.local.json",
+          "**/.claude/**/*.md"
+        ]
+      }
+    },
+    {
+      "id": "CRED-06",
+      "family": "CRED",
+      "tier": 1,
+      "check": "static",
+      "statement": "MCP configuration holds no plaintext long-lived token — OAuth or short-lived credentials at launch",
+      "source": "ai-credential-exposure-rules.md R-CTX-8 [P0]; MCP authorization spec 2025-11-25",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "\"(token|apiKey|api_key|secret|password|bearer|authorization)\"\\s*:\\s*\"(?!\\$\\{|CASPR_DUMMY_)[^\"]{8,}\"",
+        "flags": "i",
+        "include": [
+          "**/mcp.json",
+          "**/.mcp.json",
+          "**/claude_desktop_config.json"
+        ]
+      }
+    },
+    {
+      "id": "CRED-07",
+      "family": "CRED",
+      "tier": 1,
+      "check": "static",
+      "statement": "Placeholders use the house pattern CASPR_DUMMY_<KEY|SECRET|TOKEN|PEM|DSN>_<descriptor> — never a realistic-looking fake",
+      "source": "ai-credential-exposure-rules.md R-SHR-2 [P0]",
+      "calibration": true,
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "AKIA[0-9A-Z]{16}|sk-[A-Za-z0-9]{20,}|sk_live_[0-9a-zA-Z]{8,}|sk_test_[0-9a-zA-Z]{8,}|whsec_[0-9a-zA-Z]{8,}|xox[baprs]-[0-9A-Za-z-]{10,}|ghp_[0-9A-Za-z]{20,}|gho_[0-9A-Za-z]{20,}|github_pat_[0-9A-Za-z_]{20,}|-----BEGIN[A-Z ]*PRIVATE KEY|(postgres(ql)?|mysql|redis|mongodb)(\\+[a-z]+)?://[^:/\\s]+:[^@\\s]+@",
+        "include": [
+          "**/.env.example",
+          "**/.env.sample",
+          "**/fixtures/**",
+          "**/*.fixture.*",
+          "**/conftest.py"
+        ],
+        "allowPattern": "CASPR_DUMMY_(KEY|SECRET|TOKEN|PEM|DSN)_"
+      }
+    },
+    {
+      "id": "CRED-08",
+      "family": "CRED",
+      "tier": 1,
+      "check": "static",
+      "statement": "No $HOME, parent-directory or Docker-socket mount in an agent or CI runner definition",
+      "source": "ai-credential-exposure-rules.md R-CTX-11 [P0]",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "-\\s*['\"]?(\\$\\{?HOME\\}?|~|\\.\\.)(/[^:'\"\\s]*)?:|/var/run/docker\\.sock",
+        "include": [
+          "**/docker-compose*.yml",
+          "**/docker-compose*.yaml",
+          "**/Dockerfile*",
+          "**/.github/workflows/*.yml",
+          "**/.github/workflows/*.yaml",
+          "**/devcontainer.json"
+        ]
+      }
+    },
+    {
+      "id": "CRED-09",
+      "family": "CRED",
+      "tier": 1,
+      "check": "static",
+      "statement": "Secret scanning runs in CI and blocks",
+      "source": "ai-credential-exposure-rules.md R-RSP-1 [P0]",
+      "detect": {
+        "kind": "requirePattern",
+        "pattern": "gitleaks|trufflehog|detect-secrets|secret-scan",
+        "flags": "i",
+        "include": [
+          "**/.github/workflows/*.yml",
+          "**/.github/workflows/*.yaml",
+          "**/package.json",
+          "**/.pre-commit-config.yaml"
+        ],
+        "min": 1,
+        "absentIfMissing": true
+      }
+    },
+    {
+      "id": "CRED-10",
+      "family": "CRED",
+      "tier": 1,
+      "check": "static",
+      "statement": "No hardcoded credential in source — the fix is to remove the hardcoding, not to note the concern",
+      "source": "ai-credential-exposure-rules.md R-SHR-8, R-CLS-2 [P0]",
+      "detect": {
+        "kind": "forbidPattern",
+        "pattern": "AKIA[0-9A-Z]{16}|sk-[A-Za-z0-9]{20,}|sk_live_[0-9a-zA-Z]{8,}|sk_test_[0-9a-zA-Z]{8,}|whsec_[0-9a-zA-Z]{8,}|xox[baprs]-[0-9A-Za-z-]{10,}|ghp_[0-9A-Za-z]{20,}|gho_[0-9A-Za-z]{20,}|github_pat_[0-9A-Za-z_]{20,}|-----BEGIN[A-Z ]*PRIVATE KEY|(postgres(ql)?|mysql|redis|mongodb)(\\+[a-z]+)?://[^:/\\s]+:[^@\\s]+@",
+        "include": [
+          "**/src/**/*.ts",
+          "**/src/**/*.tsx",
+          "**/src/**/*.js",
+          "**/src/**/*.py",
+          "**/apps/**/*.ts",
+          "**/apps/**/*.tsx",
+          "**/packages/**/*.ts"
+        ],
+        "allowPattern": "CASPR_DUMMY_"
+      }
+    },
+    {
+      "id": "CRED-11",
+      "family": "CRED",
+      "tier": 1,
+      "check": "manual",
+      "statement": "The agent harness is launched with env -i and an explicit passlist, not from a profile-sourced interactive shell",
+      "source": "ai-credential-exposure-rules.md R-CTX-5 [P0]",
+      "note": "Unverifiable from inside the agent by construction — checking would require printenv, which R-CTX-3 forbids returning to context. Needs external infrastructure review.",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "CRED-12",
+      "family": "CRED",
+      "tier": 1,
+      "check": "manual",
+      "statement": "Agent credentials are short-lived and task-scoped; a static key needs a documented exception with an expiry date",
+      "source": "ai-credential-exposure-rules.md R-AGT-2 [P0], R-VER-3 [P0]",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "CRED-13",
+      "family": "CRED",
+      "tier": 1,
+      "check": "manual",
+      "statement": "Only approved providers receive Caspr content",
+      "source": "ai-credential-exposure-rules.md R-VND-1 [P0]",
+      "note": "Appendix E item 3 records the approved list as not started, but security-posture.md section 2 already names Anthropic, OpenAI and Google with executed DPAs and ZDR, confirmed by Jayant. The two documents need reconciling before this can be checked.",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "CRED-14",
+      "family": "CRED",
+      "tier": 1,
+      "check": "manual",
+      "statement": "Every secret definition records its tier alongside it",
+      "source": "ai-credential-exposure-rules.md R-CLS-6, R-VER-4",
+      "detect": {
+        "kind": "manual"
+      }
+    },
+    {
+      "id": "CRED-15",
+      "family": "CRED",
+      "tier": 1,
+      "check": "static",
+      "statement": "No file whose entire content is a single opaque token — the shape a bare API key takes",
+      "source": "ai-credential-exposure-rules.md R-CTX-1 [P0], R-CLS-2. Added after CRED-01 missed Ahrefs_Key.txt",
+      "detect": {
+        "kind": "opaqueSecretFile",
+        "include": [
+          "**/*"
+        ],
+        "exclude": [
+          "**/node_modules/**",
+          "**/.git/**",
+          "**/*.md",
+          "**/*.svg",
+          "**/*.png",
+          "**/*.jpg",
+          "**/dist/**",
+          "**/build/**"
+        ],
+        "maxBytes": 512,
+        "minTokenLength": 20
+      }
+    }
+  ]
+}
