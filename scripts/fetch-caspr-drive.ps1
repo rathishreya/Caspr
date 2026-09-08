@@ -63,8 +63,12 @@ param(
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
-$Staging  = Join-Path $env:LOCALAPPDATA 'caspr-drive-staging'
-$ToolsDir = Join-Path $PSScriptRoot '.tools'
+# LOCALAPPDATA is the right home on Windows but is not defined elsewhere, which
+# would make Join-Path throw on a null path.
+$StagingRoot = if ($env:LOCALAPPDATA) { $env:LOCALAPPDATA }
+               else { [System.IO.Path]::GetTempPath() }
+$Staging     = Join-Path $StagingRoot 'caspr-drive-staging'
+$ToolsDir    = Join-Path $PSScriptRoot '.tools'
 
 # Sum file sizes under a path, ignoring git metadata. Returns MB, 0 when empty —
 # Measure-Object yields a null Sum for an empty set, which would otherwise throw
@@ -200,8 +204,9 @@ function Invoke-DriveCopy {
 
     & $Rclone @rcloneArgs
     if ($LASTEXITCODE -ne 0) {
-        throw @"
-rclone copy failed (exit $LASTEXITCODE).
+        $code = $LASTEXITCODE
+        $hint = @"
+rclone copy failed (exit $code).
 
 If the error is 'directory not found', the folder is not visible at the root of
 'Shared with me'. Check the exact name with:
@@ -212,6 +217,7 @@ then re-run this script with -DriveFolder set to the name it prints. If nothing
 is listed at all, open Drive in a browser, right-click the folder and choose
 Organise -> Add shortcut to Drive, then re-run.
 "@
+        throw $hint
     }
 }
 
@@ -222,16 +228,29 @@ function Copy-IntoRepo {
 
     Write-Step "Mirroring into $Target"
 
-    # /E copies subdirectories including empty ones; /XD .git protects the repo
-    # metadata. This adds and overwrites but never deletes, so anything already
-    # committed survives even if Drive no longer has it.
-    robocopy $Source $Target /E /XD '.git' /NFL /NDL /NJH /NJS /NC /NS /NP | Out-Null
+    # Adds and overwrites but never deletes, so anything already committed
+    # survives even if Drive no longer has it. .git is skipped so the repository
+    # metadata is never touched.
+    $sourceRoot = (Resolve-Path -LiteralPath $Source).Path.TrimEnd('\', '/')
+    $copied = 0
 
-    # robocopy exit codes are a bit flags: 0-7 are success, 8+ are real failures.
-    if ($LASTEXITCODE -ge 8) {
-        throw "robocopy failed with exit code $LASTEXITCODE"
+    # A foreach statement, not ForEach-Object: the pipeline cmdlet runs its block
+    # in a child scope, so the counter would not survive the loop.
+    foreach ($file in @(Get-ChildItem -LiteralPath $Source -Recurse -File -Force)) {
+        $relative = $file.FullName.Substring($sourceRoot.Length).TrimStart('\', '/')
+        if ($relative -match '(^|[\\/])\.git([\\/]|$)') { continue }
+
+        $destination = Join-Path $Target $relative
+        $parent = Split-Path -Parent $destination
+        if ($parent -and -not (Test-Path -LiteralPath $parent)) {
+            New-Item -ItemType Directory -Force -Path $parent | Out-Null
+        }
+
+        Copy-Item -LiteralPath $file.FullName -Destination $destination -Force
+        $copied++
     }
-    $global:LASTEXITCODE = 0
+
+    Write-Note "$copied file(s) written"
 }
 
 # ----------------------------------------------------------------- 5. git ----
@@ -244,8 +263,12 @@ function Publish-Changes {
         $current = (git rev-parse --abbrev-ref HEAD).Trim()
         if ($current -ne $BranchName) {
             Write-Step "Switching to $BranchName"
-            git checkout $BranchName
-            if ($LASTEXITCODE -ne 0) { git checkout -b $BranchName }
+            # Ask first rather than letting a failed checkout print 'error:
+            # pathspec ... did not match', which reads like a real failure.
+            git rev-parse --verify --quiet "refs/heads/$BranchName" | Out-Null
+            if ($LASTEXITCODE -eq 0) { git checkout $BranchName }
+            else { git checkout -b $BranchName }
+            if ($LASTEXITCODE -ne 0) { throw "could not switch to $BranchName" }
         }
 
         if (-not (git status --porcelain)) {
@@ -264,15 +287,21 @@ function Publish-Changes {
             Write-Warn "That is large for a git repository. GitHub rejects any single file over 100 MB."
         }
 
-        git commit -q -m @"
+        # A here-string is only recognised in expression mode, so it has to be
+        # bound to a variable — passing @" directly as a command argument is a
+        # parse error.
+        $stamp = Get-Date -Format 'yyyy-MM-dd HH:mm'
+        $message = @"
 Mirror caspr-claude-core from Google Drive via rclone
 
 Full-fidelity copy of the shared Drive folder, binaries included. Fetched with
 rclone rather than file-by-file through the Drive API, so this supersedes the
 partial copy recorded in MANIFEST.md.
 
-Fetched $(Get-Date -Format 'yyyy-MM-dd HH:mm') by scripts/fetch-caspr-drive.ps1.
+Fetched $stamp by scripts/fetch-caspr-drive.ps1.
 "@
+
+        git commit -q -m $message
         if ($LASTEXITCODE -ne 0) { throw 'git commit failed' }
 
         Write-Step "Pushing to origin/$BranchName"
