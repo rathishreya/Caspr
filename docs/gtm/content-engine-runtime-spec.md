@@ -426,6 +426,17 @@ surfaces it on the workstream dashboard. **A failed item is never silently dropp
 **These are hand-made assets, not generated ones.** They are a library to draw from and a house style to match
 — not a pipeline.
 
+> **⚠ Corrected 2026-09-09 — that last clause undersells them.** Opening
+> `content/assets/visuals/social/a09_no_card.svg` shows a **parameterised template**: fixed palette, fixed
+> geometry, and five text slots. **The library is a pipeline missing its runtime, not a set of one-offs**, and
+> route (b) below is materially cheaper than this section implies.
+>
+> **The tell is one number.** The red dot period is placed at `cx="582.16"` — somebody measured the rendered
+> width of *"$100 to start."* by hand. **That is the work a generator has to do**, and it is why "fill the
+> template" is not sufficient on its own. Full anatomy, the six pieces a pipeline needs whichever route is
+> chosen, and the two constraints that bind it:
+> **[`content-engine-integrations.md`](content-engine-integrations.md) §6.**
+
 **Three routes, and the choice is Joy's — open question 5:**
 
 | | Route | What it means |
@@ -1361,6 +1372,12 @@ created.
 **None of these blocks stations ⑧ through ⑯, which can be built today. ⑲ is now the exception worth naming:
 it is a phase-1 dependency and three of its details are open — question 14.**
 
+**Questions 17 to 21 live in [`content-engine-integrations.md`](content-engine-integrations.md) §10** — the
+consolidated register of what connects, with what auth, and what is blocking. They continue this numbering:
+**17** one service principal or two (the index engine's safety test needs `trigger_generation` **absent**,
+this engine needs it present) · **18** `VISUAL_OVERFLOW` as a fifth control token · **19** HTML + headless
+Chromium or SVG templates · **20** font embedding licences · **21** does ⑲'s stale sweep reach images.
+
 | # | Question | Blocks | Why it is Joy's and not ours |
 |---|---|---|---|
 | **1** | **What is the watchlist?** Which subreddits, forums, publications, people | ①②③ | An editorial judgement about which rooms contain buyers |
@@ -1397,6 +1414,7 @@ Sequenced so nothing waits on an answer it does not need.
 | **5** | **② Listener · ③ Trend · ④ Claim · ⑥ Angle · ⑦ Board** | The intake half | **Q1, Q2, Q4, Q10** |
 | **5b** | **㉑ Outreach Desk** | The object and the entered rows need nothing. **Its two automatic feeds do** — community threads come from ②, so it lands with the intake half | Phase 5 · **Q7, Q15** |
 | **6** | **⑪ Visual Desk · ⑰ Comment Desk** | The two genuinely new capabilities | **Q5, Q6, Q8** |
+| **6c** | **The creative pipeline** — chart renderer, template layer, text measurement, rasteriser, storage | **⑪ produces nothing without it, whichever route Q5 picks.** Six pieces, one and a half of which exist — [`content-engine-integrations.md`](content-engine-integrations.md) §6.3 | **Q5, Q19, Q20** |
 | **6b** | **⏱ Daily track** (§5A) | **A second trigger, a track flag and an expiry timer over stations already built.** ⑰ comments need none of it — 🟢 they are already outside the gate. Cheap once ⑬ and ⑯ exist; pointless before the intake half is live | **Q13** + phases 2, 3, 5 |
 | **7** | **⑱ Meter** | Needs the app live for the event stream | Product event tracking |
 | **7b** | **⑳ Dashboard** | Three of its four bands read stations that must already be running, and the fourth reads ⑱ | Phases 3, 7 · **Q16** |
