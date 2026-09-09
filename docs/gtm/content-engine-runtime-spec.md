@@ -39,7 +39,7 @@ And one more, added because it is the question that decides whether any of it wa
 2. **Where a prompt exists, it is used verbatim.** This file never restates prompt text — it says who fills
    which `{brace}`, from where, and what happens when a token cannot be filled.
 3. **Where something is genuinely undecided, it is listed in §8 as an open question rather than resolved
-   quietly.** Thirteen are open. None blocks the first four stations.
+   quietly.** Sixteen are open. None blocks the first four stations.
 
 **Not in scope here:** the Website, SEO, Performance and Email workstreams beyond where content crosses into
 them; paid campaign management; video editing (`portal-build-spec.md` §11 — the DM team's editor owns it).
@@ -48,8 +48,9 @@ them; paid campaign management; video editing (`portal-build-spec.md` §11 — t
 
 ## 1 · The line, end to end
 
-Five acts. Eighteen stations. One item passes through them in order; a published analysis re-enters at Act 3
-once per derivative.
+Five acts. Eighteen stations in the line, and **three that sit across it** — §7A. One item passes through the
+eighteen in order; a published analysis re-enters at Act 3 once per derivative. The other three touch every
+act and belong to no single one, which is exactly why a diagram drawn as a line loses them.
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════════╗
@@ -128,6 +129,23 @@ once per derivative.
 
    ⑱  THE METER              publish log → event stream → cohort → x
                               + p (presence), monthly
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  ACROSS ALL FIVE — §7A         these belong to no single act                  ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+   ⑲  THE TRUTH LAYER        canonical facts ──► ⑨ context AND ⑫ rule set
+                              ◄── reads ⑯ publish log → stale flags on live pages
+                              ⛔ an enumerated allowlist, never a glob
+                              🔴 GAP · "1M+" vs "1 million" — the match, not the diff
+
+   ⑳  THE DASHBOARD          Pipeline · Organic · Paid · Funnel
+                              reads ⑬ ⑭ ⑯ ⑱ ⑲ ㉑ · read Wed, 30 min
+                              ⛔ a failed collector is "not collected", never 0
+
+   ㉑  THE OUTREACH DESK      relationships, not content · monthly targets
+                              ◄── auto-fed by ② (threads) and the event stream (clusters)
+                              ⛔ the portal drafts. a person sends. no send path exists
 ```
 
 **One loop, one re-entry and two clocks:**
@@ -1121,12 +1139,227 @@ one.
 | **⑯ Publisher** | **Makes `x` computable** | Without `utm_*` + `icp_hint`, revenue has no channel and the target is unprovable |
 | ⑰ Comment Desk | Numerator | Cheapest reach available — 130 min/week already committed |
 | ⑱ Meter | — | Computes `x` and `p`; enforces both traps above |
+| **⑲ Truth Layer** | **Protective, numerator side** | A wrong fact here is not one error — it is the same error generated into ~23 items, linted *as correct*, and published. The only defect class `FACT_WRONG` cannot catch, because it is judged against this table |
+| **⑳ Dashboard** | **Where `x` is read** | ⑱ produces the number; this produces the decision. The `x@6 > 2` gate is taken here, and the ⑬ ceiling becomes visible here two weeks before it binds |
+| **㉑ Outreach Desk** | **Numerator** | The **only** station that moves `p` through its largest channel — 6.5× of citations come from third-party pages, and ⑯ cannot produce one |
+
+---
+
+## 7A · The three stations that sit across the line — ⑲ ⑳ ㉑
+
+Eighteen stations describe an item's journey. **These three do not sit between two others — each of them
+touches every act, which is why a diagram drawn as a line misses them.**
+
+```
+   ⑲  THE TRUTH LAYER      canonical facts → ⑨ context AND ⑫ rule set
+            │               reads back from ⑯ → stale flags on live pages
+            │               ⛔ allowlist, never a glob
+            │
+   ⑳  THE DASHBOARD        Pipeline · Organic · Paid · Funnel
+            │               ⛔ a failed collector is "not collected", never 0
+            │
+   ㉑  THE OUTREACH DESK    relationships, not content
+                            ⛔ the portal drafts. a person sends. no send path exists
+```
+
+**Why they were missed, stated plainly:** the line was drawn from the shape of one content item, and none of
+these three produces one. ⑲ produces the *inputs* to every item, ⑳ produces the *reading* of all of them, and
+㉑ produces a relationship that may never become an item at all. All three are specified by Joy
+(`portal-build-spec.md` §3.1, §3.8, §3.9) and all three are in the Definition of Done.
+
+---
+
+### ⑲ The Truth Layer
+
+| | |
+|---|---|
+| **What** | Ingests the canonical specs from Drive, versions them on ingest, and extracts a **canonical facts table** — every number, claim and prohibition, each carrying its source file and its line. **That one table is both the generation context at ⑨ and the linter's rule set at ⑫.** On change it diffs against the previous version; every published item containing a superseded value is flagged with its **channel, URL and publish date**. |
+| **When** | On ingest, and on every change to a source file. **Joy specifies the behaviour, not the cadence** — proposed: poll the Drive folder hourly, plus a manual re-ingest. **Open question 14.** |
+| **Why** | *"`1M+ → 25M+` is currently wrong in roughly six places across Figma and the live site, and nobody has a list. That failure repeats every time a number moves. This module is the reason it stops repeating."* |
+| **The source list — nine files** | `site-truth.md` · `.agents/pricing-model.md` · `.agents/brand-guidelines.md` · `.agents/icp-personas.md` · `.agents/icp-copy.md` · `.agents/security-posture.md` · `.agents/caspr-brand-integration-brief.md` · `docs/product/document-taxonomy.md` · `docs/product/gate-output-spec.md` |
+| **⛔ An enumerated allowlist, never a glob** | Joy excludes `content/caspr-help-content-repository.xlsx` and states the general rule: ***"a file that instructs writers is not the same as a file that states facts."*** <br>**The runtime consequence:** if the ingest walks a folder, anyone who drops a file into it has silently amended the truth. **The nine paths are enumerated in config and a tenth requires a code change**, because Joy's own reason is that when the linter's rules and the generator's context come from the same wrong place, ***nothing downstream can catch it.*** |
+
+#### 🔴 The diff is the easy half. The match is the hard half — **NEW**
+
+`CanonicalFact` changing from `1M+` to `25M+` is a two-line diff. Finding it on a live page is not.
+
+| A writer wrote | A literal match finds it |
+|---|---|
+| `1M+ sources` | ✅ |
+| `1 million sources` | ❌ |
+| `over a million documents` | ❌ |
+| `1,000,000+` | ❌ |
+
+**Three of the four are missed, and Joy's own example is the case that proves it** — the figure is wrong in
+*roughly six* places, and "roughly" is the tell that nobody could enumerate them.
+
+**Proposal:** each `CanonicalFact` carries `surface_forms[]` — the literal renderings a writer might plausibly
+use. Generated once at ingest, **confirmed by a person the first time the fact is seen**, then reused for
+every future sweep at no cost. The stale sweep matches on **any** surface form.
+
+> **This is the one place in the engine where a recall failure is invisible.** A missed linter rule shows up as
+> a rejection; a missed stale flag shows up as a buyer reading a wrong number and nobody knowing.
+
+#### What happens to items already in flight — three cases, and they are not the same
+
+A fact can change on a Saturday, with items at every stage.
+
+| Where the item is | What happens | Why |
+|---|---|---|
+| **In the review queue** (⑬) | **Re-linted against the new table. Fails → pulled, back to ⑩.** The reviewer's queue count drops | It was generated against a context that is now wrong. A reviewer approving it would be approving a known error |
+| **Approved, not yet published** (between ⑬ and ⑯) | **Held. Back to ⑩, then re-reviewed** | Approval is a decision about a specific body of text. The regenerated body is different text, so the decision does not carry |
+| **Published** (past ⑯) | **`StaleFlag` raised** — `publish_record_id`, `fact_key`, `old_value`, `new_value`, `raised_at` | It is now a live inaccuracy on a public page, and Joy's health metric treats it as one |
+
+**The cost of getting this wrong is asymmetric.** Publishing a number we already know is wrong is worse than
+losing two review minutes, and it is much worse for a company whose position is *cited, or it does not ship*.
+
+| | |
+|---|---|
+| **Health metric** | **`Stale flags open: 0`.** *"Anything over 7 days old is a live inaccuracy on a public page"* — `operations-runbook.md` §10 |
+| **⚠ It must be visible** | A fact table nobody can see is a fact table nobody trusts. **Open stale flags render in the Pipeline band at ⑳**, which is where the seven-day clock is actually read |
+| **Data** | `TruthDoc{source_path, version_hash, ingested_at}` · `CanonicalFact{key, value, source_doc, source_line, effective_from}` + `surface_forms[]` **NEW** · `StaleFlag{publish_record_id, fact_key, old_value, new_value, raised_at, resolved_at}` |
+| **Joy** | `portal-build-spec.md` §3.1 · §4 · `operations-runbook.md` §10 |
+| **→ x** | **Protective, and it protects the numerator.** Every downstream station consumes this table, so a wrong fact here is not one error — it is the same error generated into ~23 items a week, linted *as correct*, and published. And it is the only defect class the reject codes cannot catch, because `FACT_WRONG` is judged against exactly this table. |
+
+---
+
+### ⑳ The Dashboard
+
+| | |
+|---|---|
+| **What** | *"One page. Four bands."* — **Pipeline · Organic · Paid · Funnel.** |
+| **When** | Read continuously. **The decision moment is the Wednesday review, 30 minutes** (`operations-runbook.md` §9) — which is also where ⑦'s topic pick happens, so the reading and the commissioning sit in the same half hour deliberately. |
+| **Why** | The Funnel band is, in Joy's own emphasis, ***"the band that proves RoI."*** The other three exist so that a bad funnel number can be traced to a cause rather than argued about. |
+
+**The four bands, their sources and — the part that is missing today — their freshness:**
+
+| Band | Contents | Source | Lag | Write |
+|---|---|---|---|---|
+| **Pipeline** | Queue state · items per reviewer · minutes outstanding · reject rate by reason · linter defects · **stale flags from ⑲** | The portal's own tables | **Live** | — |
+| **Organic** | Publish log by channel · Search Console impressions, clicks, positions · LinkedIn Company Page metrics · **self-reported** personal-profile reach | GSC API · Community Management API · a weekly form | **2–3 days** (GSC) · **7 days** (the form) | — |
+| **Paid** | Spend, clicks, CPC, conversions, CAC by campaign | Google Ads · Meta · LinkedIn Ads | ~1 day | **⛔ Read-only** (§6.3) |
+| **Funnel** | `prompt_submitted → signup_completed → analysis_completed → payment_succeeded`, split by `utm_campaign` and `icp_hint` | Product event stream (`tracking-spec.md`) | Depends on the stream | — |
+
+#### ⛔ A failed collector renders as "not collected". **Never as zero** — **NEW**
+
+`MetricSnapshot{source, metric, value, dimension, captured_at}` is a **snapshot table, not a live query** —
+which means there is a collector per source, on a cadence, and a collector can fail.
+
+> **A zero from a failed collector is the most dangerous cell on this page.** It reads as *"the channel is
+> dead"*, and the action it invites is killing a channel that is working.
+
+**This is Trap 1 in a different costume.** Trap 1 inflates the denominator with an internal transfer price and
+kills a working channel; a null rendered as zero empties the numerator and kills the same channel by the same
+logic. Both are arithmetic that looks fine on the page.
+
+**Three requirements:** every band cell renders its `captured_at` · a stale or failed collector renders as
+**"not collected"** with the age of the last good value · **a null is never coerced to 0** at any layer,
+including the chart.
+
+#### The one human input on the page, and it is labelled
+
+**Personal-profile post analytics are unavailable via API** — *"Nobody solves this, including the commercial
+schedulers"* (§6.1). v1 takes self-reported impressions through a **two-field weekly form**.
+
+**It renders differently from every other cell:** marked *self-reported*, carrying the date entered and the
+person who entered it. Joy's standard is *"directional, and honest about being directional"* — and a
+self-reported number sitting in the same visual weight as a Search Console number is not honest about it.
+
+| | |
+|---|---|
+| **The eight health metrics render here** | `operations-runbook.md` §10 — reject rate 5–15% · review completion 100% · review time 2–4 min · linter defects 0 · **stale flags 0** · activation → 25% · complaint rate <0.1% · CAC <$300. **Each row carries its stated action**, because a threshold without a response is a number people learn to scroll past |
+| **The RoI target, rendered so it can fail** | *"By the end of month three: cumulative attributed revenue ≥ 1.5× cumulative spend, with ≥60% attributed to owned channels."* **Both halves shown.** If owned share comes in below half, *"the machine is not working and more media will not fix it"* |
+| **Joy** | `portal-build-spec.md` §3.8 · §6.1 · §6.3 · §4 · `operations-runbook.md` §9 · §10 |
+| **→ x** | **This is where `x` is read, not computed** — ⑱ computes it. The distinction matters: the Meter produces a number, the Dashboard produces a decision, and the scale gate `x@6 > 2` is taken here. **The Pipeline band is also the only place the ⑬ ceiling becomes visible before it binds** — review completion falling below 90% two weeks running is the signal to cut volume, and it arrives before anything is missed. |
+
+---
+
+### ㉑ The Outreach Desk
+
+| | |
+|---|---|
+| **What** | *"The human work, tracked and target-driven. **Not content — relationships.**"* Seven entity kinds: guest-blog prospects · podcast targets · influencers and practitioners · testimonial participants · community threads worth answering · directory and listing submissions · **enterprise domain clusters** (3+ users on one domain, from `tracking-spec.md`). |
+| **When** | Continuous, against **monthly targets** (`operations-runbook.md` §6). One row has its own clock: domain clusters are worked *"within 7 days of appearing"*. |
+| **Why** | The three ways of appearing in `p` are weighted equally, and **⑯ can only ever produce one of them.** The other two — cited in an AI answer, listed on a third-party page ranking page one — are made here. |
+
+#### ⛔ The hard boundary — the portal drafts, a person sends
+
+> *"The portal **sources and drafts** — research the target, draft the approach, surface the thread.
+> A person **sends and talks**."*
+
+**The runtime reading: there is no send capability on this path, and none is built.** No email integration, no
+LinkedIn message, no form submission. A draft lands in the target's record and a person takes it from there.
+
+**Same class as communities at ⑯, and for the same reason.** An automated approach to a named human is spam,
+and the single asset being built by every other station is the credibility that spam destroys. A send button
+here would be one configuration change away from a mass send, which is exactly why the button does not exist.
+
+#### Two feeds are automatic. Five are entered — **NEW**
+
+| Entity | Where the row comes from |
+|---|---|
+| **Enterprise domain clusters** | **Automatic** — product event stream, 3+ signups on one domain. Raises a row with a 7-day clock |
+| **Community threads worth answering** | **Automatic** — ② the Listener already reads these rooms daily. **Nothing else consumes that half of its output today** |
+| Guest-blog prospects · podcast targets · influencers · testimonial participants · directories | Entered by a person |
+
+**Those two feeds are the whole reason this is a station and not a spreadsheet.** Everything else could live in
+a shared sheet; a domain cluster appearing on a Tuesday and being worked by Friday could not.
+
+#### ⚠ The overlap with ⑰ must be resolved, or the same thread is worked twice
+
+⑰ the Comment Desk produces *which post, which fact, which person*. ㉑ tracks *community threads worth
+answering*. **Read literally, both stations own the same Reddit thread.**
+
+**One field decides, and it is the guard rail already proposed at open question 8:**
+
+| `the_fact_to_bring` | Owner | Because the action is |
+|---|---|---|
+| **Present** | **⑰ Comment Desk** | A comment carrying a finding. One-shot, 1–2 min, outside the review gate |
+| **Empty** | **㉑ Outreach Desk** | Becoming a real participant in a room. Ongoing, owned, staged |
+
+**This is the same guard rail doing a second job.** Joy's reason for it at ⑰ was the astroturf risk — a
+comment with nothing to bring *is* astroturf. The same test also routes correctly: a thread we have nothing
+sourced to say about is not a comment opportunity, it is a relationship we have not built yet.
+
+#### Owner — and two rows have no owner today
+
+`operations-runbook.md` §6 assigns every monthly target. **§2A then records that the TL has departed** and the
+earned-media hire is **8–12 weeks** out.
+
+| Target | Owner | Status now |
+|---|---|---|
+| Guest posts placed — 2/month | ~~TL~~ | **Nobody can pitch. Lapses** |
+| Podcast appearances booked — 1/month | ~~TL~~ | **Nobody can pitch. Lapses** |
+| Directory and listing submissions — 10/month | SEO | Runs — *"SEO can submit a form"* |
+| Community threads answered — 20/month | Social | Runs |
+| Backlink outreach conversations — 15/month | SEO | Runs |
+| **Org** domain clusters — all 3+, within 7 days | Joy | Runs |
+| Expert testimonials — 12 recorded, 10 delivered | Social + SPOC | Runs, weeks 1–8 |
+
+**The station renders an unowned row as unowned. It does not hide it and it does not reassign it.** Joy's
+words: *"These simply do not happen, and that should be **a decision rather than a discovery**."* An unowned
+target that disappears from the screen is precisely how it becomes a discovery.
+
+**Open question 7 lands here too.** Outreach was dissolved as a workstream and redistributed — guest posts and
+directories to **SEO**, podcasts and community threads to **Content & Social**. So **㉑ is a station without a
+workstream**: one object, rows owned across two tabs. The `owner` field carries it; no third workstream is
+created.
+
+| | |
+|---|---|
+| **Per row** | `owner · stage · next_action · next_action_at · last_contact · outcome` — Joy's six, unchanged |
+| **Stage model** | **Not specified.** Proposed minimal: `identified → researched → drafted → sent → in conversation → won │ lost │ lapsed`. Only `drafted → sent` crosses the human boundary. **Open question 15** |
+| **Health** | A row whose `next_action_at` is in the past is the outreach equivalent of a stale flag, and it renders in the Pipeline band at ⑳ next to them. *"Backlink outreach conversations opened: 15"* is a count of rows that moved, not rows that exist |
+| **⛔ On backlinks** | *"Paid link-building is a penalty risk and is off-brand for a company selling defensibility."* The four routes are **directories, digital PR, guest posts, original research** — and *"Caspr's own output is the strongest link magnet available."* **The best row in this station is generated by ⑯**, which is the loop between the two |
+| **Joy** | `portal-build-spec.md` §3.9 · §4 · `portal-design-spec.md` §5 · `operations-runbook.md` §2A · §6 |
+| **→ x** | **Numerator — and the only station that moves `p` through its largest channel.** ***6.5× of citations come from third-party pages ranking page one***, and guest posts, directory listings, roundups and podcast pages *are* third-party pages. **No amount of publishing at ⑯ produces a single one of them.** With `p` at a baseline of **0 on every question tested**, this is the station with the most headroom in the engine — and the one currently missing two of its seven owners. |
 
 ---
 
 ## 8 · Open questions — for Joy
 
-**None of these blocks stations ⑧ through ⑯, which can be built today.**
+**None of these blocks stations ⑧ through ⑯, which can be built today. ⑲ is now the exception worth naming:
+it is a phase-1 dependency and three of its details are open — question 14.**
 
 | # | Question | Blocks | Why it is Joy's and not ours |
 |---|---|---|---|
@@ -1143,6 +1376,9 @@ one.
 | **11** | **`p` and atom-travel — same instrument or two?** The `p` basket is **frozen for a year**; a travel signal must not break that freeze | ⑪⑱ | The freeze is the metric's defence |
 | **12** | **Does a `no_data` verdict always end a content item?** Today it does — `INSUFFICIENT_SOURCE`, not produced, which is right for content. **But Case B shows a `no_data` claim carrying a real distribution finding**, and that finding is worth acting on through outreach rather than through a post. Should ⑥ be allowed to emit `type: "outreach"`, `owner: "seo"`? | ⑥ | It widens what a station may produce |
 | **13** | **⏱ The daily track — approved?** §5A. A second clock: **Type D only** · zero new notifications · 24-hour expiry · its own capped budget · never on `no_data`. **Four things it changes are named in §5A.6**, the largest being weekly volume rising ~23 → ~35–44 — **all of it derivative; origination stays at 2.5.** The two numbers — items per day and the expiry window — are yours to set | 5A | It adds a second review cadence, and the two-notifications rule is deliberate |
+| **14** | **⑲ — three things the spec does not settle.** (a) **Re-ingest cadence** — you specify the behaviour, not the clock; hourly poll proposed. (b) **`surface_forms[]`** — a literal diff finds `1M+` and misses *"1 million"*, *"over a million"*, *"1,000,000+"*. Proposed: generated at ingest, **confirmed by a person once per fact**, reused free thereafter. Is that confirmation yours? (c) **Approved-but-unpublished items on a fact change** — proposed **held and regenerated**, because an approval is a decision about specific text | ⑲ | (b) is a recall failure that is invisible by construction, and (c) trades review minutes against a known-wrong page |
+| **15** | **㉑ — the stage model, and what a lapsed target looks like.** Six fields are yours; the stages are not. Proposed: `identified → researched → drafted → sent → in conversation → won │ lost │ lapsed`. And with two targets currently unowned (guest posts, podcasts — the TL's), the station **renders them as unowned rather than hiding them**, on your own words: *"that should be a decision rather than a discovery"* | ㉑ | Whether a lapsed target stays on screen is a management call, not a build one |
+| **16** | **⑳ — does the Dashboard ship with three bands or four?** The Funnel band is *"the band that proves RoI"* and it depends on the product event stream, which is not live. Options: (a) ship three and add the fourth on the stream, (b) ship four with Funnel rendered **"not collected"** — which is the rule §7A already sets for every other failed collector | ⑳ | (b) is honest and consistent; (a) risks the page shipping without the band it exists for |
 
 ---
 
@@ -1152,21 +1388,31 @@ Sequenced so nothing waits on an answer it does not need.
 
 | Phase | Stations | Why here | Blocked on |
 |---|---|---|---|
-| **1** | **⑨ Assembly · ⑩ Writer · ⑫ Linter · ⑭ Ledger** | The whole data model falls out of ⑨. ⑫ is pure functions, testable today. ⑭ closes the loop | **Nothing** |
+| **0** | **⑲ Truth Layer — ingest and facts table only** | **Moved to the front, and it is a correction.** ⑨'s context and ⑫'s rule set are both *this table*; building either against hardcoded facts means building them twice. Ingest, version, extract, allowlist — **no stale detection yet**, which needs ⑯ | **Nothing.** Q14 refines it; it does not block it |
+| **1** | **⑨ Assembly · ⑩ Writer · ⑫ Linter · ⑭ Ledger** | The whole data model falls out of ⑨. ⑫ is pure functions, testable today. ⑭ closes the loop | **Phase 0** |
 | **2** | **⑧ Work Order · ⑬ Review Room** | One item can now go end to end against mocks | Nothing |
 | **3** | **⑮ Hygiene · ⑯ Publisher** | Real output, real attribution stamps | SES production · CMS write path |
+| **3b** | **⑲ stale detection + `surface_forms[]`** | Needs `PublishRecord` to exist before there is anything to sweep. **Held until phase 3 for that reason alone** — the facts table from phase 0 is already earning by then | Phase 3 · **Q14(b)** |
 | **4** | **⑤ Verifier** | Replaces mocked facts with real ones | **Q3 — service principal** |
 | **5** | **② Listener · ③ Trend · ④ Claim · ⑥ Angle · ⑦ Board** | The intake half | **Q1, Q2, Q4, Q10** |
+| **5b** | **㉑ Outreach Desk** | The object and the entered rows need nothing. **Its two automatic feeds do** — community threads come from ②, so it lands with the intake half | Phase 5 · **Q7, Q15** |
 | **6** | **⑪ Visual Desk · ⑰ Comment Desk** | The two genuinely new capabilities | **Q5, Q6, Q8** |
 | **6b** | **⏱ Daily track** (§5A) | **A second trigger, a track flag and an expiry timer over stations already built.** ⑰ comments need none of it — 🟢 they are already outside the gate. Cheap once ⑬ and ⑯ exist; pointless before the intake half is live | **Q13** + phases 2, 3, 5 |
 | **7** | **⑱ Meter** | Needs the app live for the event stream | Product event tracking |
+| **7b** | **⑳ Dashboard** | Three of its four bands read stations that must already be running, and the fourth reads ⑱ | Phases 3, 7 · **Q16** |
 
-**Start at ⑨.** Listing every `{brace}` and naming its source produces the data model for all eighteen
-stations, and it is the one piece of work that no open question touches.
+**Start at ⑲, then ⑨.** ⑲'s ingest is half a day and it is what ⑨ and ⑫ both read; going straight to ⑨ means
+hardcoding facts and replacing them later in two places. After that, listing every `{brace}` at ⑨ and naming
+its source produces the data model for the rest, and it is the one piece of work that no open question touches.
 
 ---
 
 *Document: `content-engine-runtime-spec.md` · 2026-09-08 · An addition to the content engine specification,
 not a revision of it. Every station cites the file and section it implements; every station marked **NEW**
-states what it adds and why nothing existing covers it. Thirteen open questions in §8 are flagged rather than
+states what it adds and why nothing existing covers it. Sixteen open questions in §8 are flagged rather than
 resolved — including §5A, the daily track, which is proposed in full and named as needing sign-off.*
+
+*Updated 2026-09-09 — **§7A adds the three stations that sit across the line**: ⑲ the Truth Layer, ⑳ the
+Dashboard, ㉑ the Outreach Desk. All three are Joy's (`portal-build-spec.md` §3.1, §3.8, §3.9) and all three
+were missing from the eighteen because none of them produces a content item. **⑲ moves to phase 0** — ⑨'s
+context and ⑫'s rule set are the same table, and building either without it means building it twice.*

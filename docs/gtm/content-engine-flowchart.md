@@ -3,7 +3,8 @@
 *2026-09-08. The picture of [`content-engine-runtime-spec.md`](content-engine-runtime-spec.md).*
 
 **This file holds the diagrams and nothing else.** Every rule, citation and open question lives in the runtime
-spec; this is the same mechanism drawn. Station numbers ①–⑱ are the spec's numbering.
+spec; this is the same mechanism drawn. Station numbers ①–㉑ are the spec's numbering — **①–⑱ are the line,
+**⑲ ⑳ ㉑ sit across it** and are drawn in §9A.
 
 > **§0 is the version to present.** Two diagrams, a line to say for each box, and the three questions
 > somebody will ask. **§1–§10 are the engineering view** — the same machine, at the detail a build needs.
@@ -605,11 +606,172 @@ flowchart TD
 
 ---
 
+## 9A · ⑲ ⑳ ㉑ — the three that sit across the line
+
+**Runtime spec §7A.** None of these three produces a content item, which is why a diagram drawn as a line
+loses them. Drawn here by what they read and what they feed.
+
+### 9A.1 · ⑲ The Truth Layer — one table, two consumers, one loop back
+
+```mermaid
+flowchart TD
+    DRIVE[("DRIVE<br/>9 canonical files<br/>⛔ enumerated allowlist<br/>NEVER a glob")]
+    ING["INGEST + VERSION<br/><small>TruthDoc: path, hash, at</small>"]
+    FACTS[("CANONICAL FACTS<br/>key · value · source_doc<br/>source_line · effective_from<br/><small>+ surface_forms[] NEW</small>")]
+
+    DRIVE --> ING --> FACTS
+
+    FACTS ==>|"generation context"| S9["⑨ ASSEMBLY"]
+    FACTS ==>|"rule set"| S12["⑫ LINTER"]
+
+    ING --> DIFF{"a fact CHANGED?"}
+    DIFF -->|no| IDLE["nothing"]
+    DIFF -->|yes| SWEEP["SWEEP EVERYTHING<br/>in flight and live"]
+
+    SWEEP --> Q["in the ⑬ queue<br/><small>re-lint · fail = back to ⑩</small>"]
+    SWEEP --> AP["approved, not published<br/><small>HELD · regenerate · re-review</small>"]
+    SWEEP --> PUB["published<br/><small>StaleFlag: channel, URL, date</small>"]
+
+    PUB --> HEALTH["⚠ open flags must be 0<br/><small>>7 days = a live inaccuracy<br/>on a public page</small>"]
+    HEALTH --> DASH["⑳ Pipeline band"]
+
+    S16[("⑯ PUBLISH LOG")] -.->|"what is live"| SWEEP
+
+    GAP["🔴 THE GAP IS THE MATCH, NOT THE DIFF<br/>1M+ ✅ · 1 million ❌ · over a million ❌ · 1,000,000+ ❌<br/><small>3 of 4 missed. Joy's own case is wrong in ROUGHLY six places —<br/>'roughly' is the tell that nobody could enumerate them</small>"]
+    GAP -.-> SWEEP
+
+    classDef src fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+    classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+    classDef dec fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+    classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
+    classDef gap fill:#ffebee,stroke:#c62828,stroke-width:2.5px,color:#8e0000
+    class DRIVE,FACTS,S16 src
+    class ING,SWEEP,Q,AP,PUB,S9,S12,IDLE,DASH mach
+    class DIFF dec
+    class HEALTH warn
+    class GAP gap
+```
+
+**The one line to say:** *"The numbers in our content come from one table, and when a number in it moves,
+every page carrying the old one raises a flag the same day. That is the module that stops `1M+ → 25M+` being
+wrong in six places with nobody holding the list."*
+
+---
+
+### 9A.2 · ⑳ The Dashboard — four bands, and the failure mode is a zero
+
+```mermaid
+flowchart LR
+    subgraph SRC["WHERE THE NUMBERS COME FROM"]
+        OWN[("portal tables<br/><small>LIVE</small>")]
+        GSC[("Search Console<br/><small>2–3 day lag</small>")]
+        LI[("LinkedIn Page<br/><small>~1 day</small>")]
+        FORM[("weekly form<br/><small>HUMAN · 7 days</small>")]
+        ADS[("Ads APIs<br/><small>⛔ READ-ONLY</small>")]
+        EV[("product events<br/><small>tracking-spec</small>")]
+    end
+
+    OWN --> B1["PIPELINE<br/><small>queue · reviewers · reject rate<br/>linter defects · ⑲ stale flags</small>"]
+    GSC --> B2["ORGANIC"]
+    LI --> B2
+    FORM --> B2
+    ADS --> B3["PAID<br/><small>spend · CPC · CAC</small>"]
+    EV --> B4["FUNNEL<br/><small>prompt → signup →<br/>analysis → payment</small>"]
+
+    B4 --> ROI["⭐ THE BAND THAT PROVES RoI"]
+
+    B1 --> WED{{"WEDNESDAY REVIEW<br/>30 minutes<br/><small>same half hour as the ⑦ pick</small>"}}
+    B2 --> WED
+    B3 --> WED
+    ROI --> WED
+
+    WED --> GATE["x@6 > 2 → scale<br/><small>read here, computed at ⑱</small>"]
+    WED --> CEIL["review completion <90%<br/>two weeks → CUT VOLUME<br/><small>the ⑬ ceiling, visible before it binds</small>"]
+
+    NULL["⛔ A FAILED COLLECTOR RENDERS<br/>'NOT COLLECTED' — NEVER 0<br/><small>a zero reads as 'the channel is dead'<br/>and the action it invites is killing<br/>a channel that is working. This is<br/>Trap 1 in a different costume</small>"]
+    NULL -.-> B2
+    NULL -.-> B3
+
+    SELF["⚠ the form is the ONE human input<br/><small>marked self-reported, with who and when.<br/>'directional, and honest about being directional'</small>"]
+    SELF -.-> FORM
+
+    classDef src fill:#e8f5e9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20
+    classDef band fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+    classDef hum fill:#e3f2fd,stroke:#1565c0,stroke-width:2.5px,color:#0d47a1
+    classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
+    classDef blk fill:#ffebee,stroke:#c62828,stroke-width:2.5px,color:#8e0000
+    class OWN,GSC,LI,FORM,ADS,EV src
+    class B1,B2,B3,B4,GATE,CEIL band
+    class WED hum
+    class ROI,SELF warn
+    class NULL blk
+```
+
+**The one line to say:** *"One page, four bands, read for thirty minutes on a Wednesday. Every cell says when
+it was last collected — and if a collector failed, it says so rather than showing a zero, because a zero is
+how you kill a channel that is working."*
+
+---
+
+### 9A.3 · ㉑ The Outreach Desk — the portal drafts, a person sends
+
+```mermaid
+flowchart TD
+    A1["② THE LISTENER<br/><small>already reads these rooms daily</small>"] -->|"AUTO"| DESK
+    A2["PRODUCT EVENT STREAM<br/><small>3+ signups on one domain</small>"] -->|"AUTO · 7-day clock"| DESK
+    A3["a person enters<br/><small>guest blogs · podcasts · influencers<br/>testimonials · directories</small>"] --> DESK
+
+    DESK[("㉑ OUTREACH DESK<br/><small>owner · stage · next action<br/>next_action_at · last contact · outcome</small>")]
+
+    DESK --> RES["THE PORTAL:<br/>researches the target<br/>drafts the approach<br/>surfaces the thread"]
+    RES ==> LINE{{"⛔ THE HARD BOUNDARY<br/>no send path exists<br/><small>no email, no DM, no form.<br/>same class as communities at ⑯</small>"}}
+    LINE ==> HUM["A PERSON<br/>sends and talks"]
+
+    HUM --> OUT1["guest post placed"]
+    HUM --> OUT2["podcast booked"]
+    HUM --> OUT3["directory listed"]
+    HUM --> OUT4["thread participated in"]
+
+    OUT1 --> P["📈 p — THIRD-PARTY PAGES<br/><small>6.5× of citations come from here<br/>⑯ cannot produce a single one</small>"]
+    OUT2 --> P
+    OUT3 --> P
+    OUT4 --> P
+
+    SPLIT{"which desk owns this thread?<br/>the_fact_to_bring"}
+    SPLIT -->|"PRESENT"| C17["⑰ COMMENT DESK<br/><small>a comment carrying a finding</small>"]
+    SPLIT -->|"EMPTY"| DESK2["㉑ — become a real participant first"]
+    A1 -.-> SPLIT
+
+    UNOWNED["⚠ 2 of 7 targets have NO OWNER<br/>guest posts · podcasts — the TL left<br/><small>8–12 weeks to the hire. The row RENDERS as<br/>unowned: 'that should be a decision<br/>rather than a discovery'</small>"]
+    UNOWNED -.-> DESK
+
+    LOOP["⑯ publishes a free, fully-cited sector report<br/><small>'the strongest link magnet available' — and it costs a Study</small>"]
+    LOOP -.->|"the best row in this station"| DESK
+
+    classDef auto fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+    classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+    classDef hum fill:#e3f2fd,stroke:#1565c0,stroke-width:2.5px,color:#0d47a1
+    classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
+    classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
+    class A1,A2,LOOP auto
+    class DESK,RES,OUT1,OUT2,OUT3,OUT4,DESK2,C17 mach
+    class A3,HUM,SPLIT hum
+    class LINE stop
+    class UNOWNED,P warn
+```
+
+**The one line to say:** *"Relationships, tracked like a pipeline. The portal researches the target and writes
+the approach — it never sends it. And this is the only part of the machine that gets us onto somebody else's
+page, which is where two thirds of being found actually happens."*
+
+---
+
 ## 10 · Build order
 
 ```mermaid
 flowchart LR
-    P1["PHASE 1<br/>⑨ assembly · ⑩ writer<br/>⑫ linter · ⑭ ledger<br/><small>BLOCKED ON NOTHING<br/>the data model falls out of ⑨</small>"]
+    P0["PHASE 0<br/>⑲ truth layer — ingest only<br/><small>BLOCKED ON NOTHING<br/>⑨ context AND ⑫ rules are ONE table<br/>build it twice otherwise</small>"]
+    P1["PHASE 1<br/>⑨ assembly · ⑩ writer<br/>⑫ linter · ⑭ ledger<br/><small>the data model falls out of ⑨</small>"]
     P2["PHASE 2<br/>⑧ work order · ⑬ review<br/><small>one item end to end<br/>against mocks</small>"]
     P3["PHASE 3<br/>⑮ hygiene · ⑯ publisher<br/><small>needs SES production<br/>+ CMS write path</small>"]
     P4["PHASE 4<br/>⑤ verifier<br/><small>needs the SERVICE PRINCIPAL</small>"]
@@ -617,22 +779,25 @@ flowchart LR
     P6["PHASE 6<br/>⑪ visual · ⑰ comments<br/><small>needs Q5 Q6 Q8</small>"]
     P6B["PHASE 6b<br/>⏱ daily track<br/><small>a trigger, a flag, a timer<br/>needs Q13</small>"]
     P7["PHASE 7<br/>⑱ meter<br/><small>needs the app live</small>"]
+    P3B["PHASE 3b<br/>⑲ stale detection<br/><small>needs ⑯ publish records<br/>+ Q14b surface forms</small>"]
+    P5B["PHASE 5b<br/>㉑ outreach desk<br/><small>its thread feed is ②<br/>needs Q7 Q15</small>"]
+    P7B["PHASE 7b<br/>⑳ dashboard<br/><small>3 bands read live stations<br/>the 4th reads ⑱ · needs Q16</small>"]
 
-    P1 --> P2 --> P3 --> P4 --> P5 --> P6 --> P6B --> P7
+    P0 --> P1 --> P2 --> P3 --> P3B --> P4 --> P5 --> P5B --> P6 --> P6B --> P7 --> P7B
 
-    START["START HERE<br/><small>list every brace in ⑨ and name its source.<br/>the data model for all eighteen stations<br/>falls out of that one exercise, and no<br/>open question touches it</small>"] --> P1
+    START["START HERE<br/><small>⑲ ingest first — half a day, and it is what<br/>⑨ and ⑫ both read. then list every brace in ⑨<br/>and name its source: the data model for the<br/>rest falls out, and no open question touches it</small>"] --> P0
 
     classDef go fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
     classDef wait fill:#fff8e1,stroke:#f9a825,stroke-width:1.5px,color:#7f5f00
     classDef start fill:#e3f2fd,stroke:#1565c0,stroke-width:2.5px,color:#0d47a1
-    class P1,P2 go
-    class P3,P4,P5,P6,P6B,P7 wait
+    class P0,P1,P2 go
+    class P3,P3B,P4,P5,P5B,P6,P6B,P7,P7B wait
     class START start
 ```
 
 ---
 
-*Document: `content-engine-flowchart.md` · 2026-09-08 · The diagrams for
+*Document: `content-engine-flowchart.md` · 2026-09-08, §9A added 2026-09-09 · The diagrams for
 [`content-engine-runtime-spec.md`](content-engine-runtime-spec.md). **This file holds no rules.** Where a
 diagram and the spec disagree, the spec is correct and the diagram is a bug — report it rather than following
 it. Worked examples: [`content-engine-example.md`](content-engine-example.md).*
