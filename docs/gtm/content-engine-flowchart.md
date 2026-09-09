@@ -5,6 +5,9 @@
 **This file holds the diagrams and nothing else.** Every rule, citation and open question lives in the runtime
 spec; this is the same mechanism drawn. Station numbers ①–⑱ are the spec's numbering.
 
+> **§0 is the version to present.** Two diagrams, a line to say for each box, and the three questions
+> somebody will ask. **§1–§10 are the engineering view** — the same machine, at the detail a build needs.
+
 **Worked examples:** [`content-engine-example.md`](content-engine-example.md).
 
 ---
@@ -21,6 +24,134 @@ spec; this is the same mechanism drawn. Station numbers ①–⑱ are the spec's
 | 📅 | Weekly clock |
 
 ---
+
+## 0 · The one-minute version — start here
+
+**Two diagrams. If you only show one thing, show these.**
+The ten that follow are the same machine at engineering detail; these are the same machine at explaining
+detail.
+
+---
+
+### 0.1 · Seven steps
+
+```mermaid
+flowchart TD
+    A["1 · LISTEN<br/>What are people talking about?"]
+    B["2 · CHECK<br/>Is it true?"]
+    C{"3 · DECIDE<br/>How fast does this need to move?"}
+    D["4 · WRITE<br/>The engine drafts it"]
+    E["5 · APPROVE<br/>A person says yes or no"]
+    F["6 · PUBLISH<br/>It goes out, tagged"]
+    G["7 · MEASURE<br/>Did it bring revenue?"]
+
+    A --> B --> C
+    C -->|"today"| D
+    C -->|"this week"| D
+    D --> E --> F --> G
+    G -.->|"what worked, what did not"| A
+
+    CASPR[("CASPR")] -.->|"answers step 2"| B
+    NO["Nothing to say?<br/>Nothing goes out."] -.-> B
+
+    classDef s fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+    classDef h fill:#e3f2fd,stroke:#1565c0,stroke-width:2.5px,color:#0d47a1
+    classDef c fill:#fdecea,stroke:#e8453c,stroke-width:2px,color:#8e2019
+    classDef n fill:#37474f,stroke:#263238,color:#ffffff
+    class A,B,D,F,G s
+    class C,E h
+    class CASPR c
+    class NO n
+```
+
+**How to say it, one line per box:**
+
+| | Say this |
+|---|---|
+| **1 · Listen** | *"We read the rooms our buyers are actually in — daily, read-only. We never post automatically."* |
+| **2 · Check** | *"Before we write anything, we ask Caspr whether it is true. **If we have nothing sourced to say, nothing goes out.** That is the whole brand in one rule."* |
+| **3 · Decide** | *"Some things need answering today. Some things deserve a proper analysis. The engine sorts them."* |
+| **4 · Write** | *"The engine drafts it — using our own voice rules, our own numbers, and the list of mistakes we have already corrected."* |
+| **5 · Approve** | *"**A person always decides.** Approve, or reject with a reason. Rejections teach the engine, so the same mistake does not come back."* |
+| **6 · Publish** | *"It goes out on the right channel, on the right day, tagged so we can trace what it earned. Community forums are posted by a human, always."* |
+| **7 · Measure** | *"We can point at revenue and say which post brought it."* |
+
+**The two boxes in blue are the human ones.** Everything else is the machine. That is the whole point of the
+diagram: **about eighty minutes of human attention a week runs the entire thing.**
+
+---
+
+### 0.2 · Two clocks
+
+```mermaid
+flowchart LR
+    T["A trend<br/>we can source"]
+
+    T --> D["DAILY<br/>a post, same day"]
+    T --> W["WEEKLY<br/>a full analysis"]
+
+    D --> D1["says WHAT IS HAPPENING"]
+    D --> D2["live in under an hour"]
+    D --> D3["1–2 min to approve"]
+
+    W --> W1["says WHAT IS TRUE"]
+    W --> W2["one analysis = 20 pieces"]
+    W --> W3["reviewed properly"]
+
+    D1 --> R["Same rules.<br/>Same gates.<br/>Same person approving."]
+    W1 --> R
+
+    classDef t fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+    classDef d fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
+    classDef w fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+    classDef r fill:#e3f2fd,stroke:#1565c0,stroke-width:2.5px,color:#0d47a1
+    class T t
+    class D,D1,D2,D3 d
+    class W,W1,W2,W3 w
+    class R r
+```
+
+**How to say it:**
+
+> *"A conversation happening today cannot wait until next Thursday. So the same trend gets answered twice —
+> a post today saying what is happening, and an analysis in a couple of weeks saying what is true.*
+>
+> *Neither is a compromise. A rushed analysis is not an analysis, and a post that arrives after the
+> conversation has moved on is not a post.*
+>
+> ***Same rules on both. Same person approving both.*** *Only the clock is different."*
+
+---
+
+### 0.3 · If someone asks "how much work is this for us?"
+
+| | Per week |
+|---|---|
+| Items the engine produces | **~35–44** |
+| **Human time to approve all of it** | **~85–115 minutes**, across three people |
+| Time available | ~450 minutes |
+| Things a person originates from scratch | **2.5** |
+
+> *"The engine is not a writing machine. It is a fan-out machine. **Two or three real pieces of research a
+> week become forty pieces of content** — and that ratio is the reason this is affordable at all."*
+
+---
+
+### 0.4 · If someone asks "what could go wrong?"
+
+**Three answers, and having them ready is the point:**
+
+| Risk | The answer |
+|---|---|
+| *"AI will publish something wrong"* | **Nothing publishes unreviewed. Ever.** There is no timeout that pushes it live. If nobody reviews, we skip the week — and skipping a week is a valid outcome |
+| *"AI will publish something unsourced"* | **The engine refuses to write it.** Every item must carry a finding from a real Caspr analysis or a named person's opinion. No source, no draft |
+| *"It will read like AI slop"* | **A machine checks the voice before a human sees it** — banned words, no exclamation points, no competitor in a headline. And every rejection is remembered, so the same fault does not recur |
+
+---
+
+# The detailed set
+
+**From here on this is the engineering view.** Sections 1–10 are for building, not for presenting.
 
 ## 1 · The master flow — two clocks, eighteen stations
 
