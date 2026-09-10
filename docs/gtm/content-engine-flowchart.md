@@ -3,8 +3,8 @@
 *2026-09-08. The picture of [`content-engine-runtime-spec.md`](content-engine-runtime-spec.md).*
 
 **This file holds the diagrams and nothing else.** Every rule, citation and open question lives in the runtime
-spec; this is the same mechanism drawn. Station numbers ①–㉑ are the spec's numbering — **①–⑱ are the line,
-**⑲ ⑳ ㉑ sit across it** and are drawn in §9A.
+spec; this is the same mechanism drawn. Station numbers ①–㉒ are the spec's numbering — **①–⑱ are the line,
+**⑲ ⑳ ㉑ ㉒ sit across it** and are drawn in §9A.
 
 > **§0 is the version to present.** Two diagrams, a line to say for each box, and the three questions
 > somebody will ask. **§1–§10 are the engineering view** — the same machine, at the detail a build needs.
@@ -606,9 +606,9 @@ flowchart TD
 
 ---
 
-## 9A · ⑲ ⑳ ㉑ — the three that sit across the line
+## 9A · ⑲ ⑳ ㉑ ㉒ — the four that sit across the line
 
-**Runtime spec §7A.** None of these three produces a content item, which is why a diagram drawn as a line
+**Runtime spec §7A.** None of these four produces a content item, which is why a diagram drawn as a line
 loses them. Drawn here by what they read and what they feed.
 
 ### 9A.1 · ⑲ The Truth Layer — one table, two consumers, one loop back
@@ -766,6 +766,71 @@ page, which is where two thirds of being found actually happens."*
 
 ---
 
+### 9A.4 · ㉒ The Performance Desk — the loop that was missing
+
+```mermaid
+flowchart TD
+    STAMP["🔴 utm_content = content_item.id<br/><small>ONE LINE IN ⑯ — and everything below needs it.<br/>Campaign-level attribution says 'LinkedIn earned $4,000'.<br/>It cannot say WHICH POST. Cannot be applied retroactively</small>"]
+
+    STAMP --> EV[("⑱ per-item outcomes")]
+
+    EV --> LADDER{"WHICH SIGNAL?"}
+    LADDER -->|"3–6 months"| S1["revenue x@3 x@6<br/><small>the truth. too slow to steer</small>"]
+    LADDER -->|"days ⭐"| S3["utm_content → prompt_submitted<br/><small>THE PRIMARY — the reader spends INTENT</small>"]
+    LADDER -->|"hours"| S5["⛔ likes, reactions, follows<br/><small>NOT AN INPUT. measures applause</small>"]
+
+    S3 --> PAR["WITHIN-PARENT RANKING ONLY<br/><small>1 analysis → 16–23 items. If the PARENT landed,<br/>every derivative looks good. With 3–6 parents<br/>a quarter that is MOST of the variance</small>"]
+
+    PAR --> SCOPE{"enough data to speak?"}
+    SCOPE -->|"channel · format · pillar<br/>~420–530 items"| OK["✅ may speak"]
+    SCOPE -->|"origination 30<br/>Type A 3–6"| NO["❌ SILENT<br/><small>4 data points is a coin<br/>landing heads twice</small>"]
+
+    OK --> PROP["MixProposal<br/><small>all typed. NO rationale field —<br/>if the numbers do not make<br/>the case, the case is not there</small>"]
+
+    PROP --> BOUND{"BOUNDED BY JOY'S CAPS"}
+    BOUND -->|"|Δ| ≤ 5 points"| HUM
+    BOUND -->|"⛔ pillar 2 can never be raised<br/>its cap is STRUCTURAL"| HUM
+    BOUND -->|"⛔ pillar 3 ceiling ~10%<br/>'speed commoditises'"| HUM
+
+    HUM{{"A HUMAN APPROVES<br/>monthly"}}
+    HUM -->|"approved"| S8["⑧ next cycle's MIX"]
+    HUM -->|"approved"| S7["⑦ a SORT ORDER<br/><small>never a shortlist.<br/>a human still picks</small>"]
+
+    NEVER["⛔ MAY NEVER TOUCH<br/>⑨ context · ⑫ linter rules · voice lanes · ⑭ failure modes<br/><small>a loop allowed to edit these optimises the brand away<br/>one approved proposal at a time, and nobody could point<br/>at the meeting where it was decided</small>"]
+    PROP -.-> NEVER
+
+    KILL["⚠ KILL CONDITION<br/>x@6 flat after 2 quarters of approved proposals<br/><small>→ the primary signal does not predict revenue. STOP.<br/>Tested against the metric it is not allowed to steer</small>"]
+    S8 -.-> KILL
+    KILL -.-> S1
+
+    LEDGER["⑭ THE LEDGER<br/><small>learns from the REVIEWER — negative</small>"]
+    LEDGER -.->|"the same shape, the other half"| PROP
+
+    classDef gap fill:#ffebee,stroke:#c62828,stroke-width:2.5px,color:#8e0000
+    classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+    classDef hum fill:#e3f2fd,stroke:#1565c0,stroke-width:2.5px,color:#0d47a1
+    classDef good fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+    classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
+    classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
+    class STAMP gap
+    class EV,PAR,PROP,S1,S8,S7,LEDGER mach
+    class LADDER,SCOPE,BOUND,HUM hum
+    class S3,OK good
+    class S5,NO,NEVER stop
+    class KILL warn
+```
+
+**The one line to say:** *"Right now the machine learns from what a reviewer rejected — a list of mistakes not
+to repeat. It never learns from what a reader actually opened. This closes that: once a month it says which
+**kinds** of item earned, and proposes making more of them. It proposes — a person still approves — and it is
+not allowed near the voice rules, because a loop that optimises those optimises the brand away."*
+
+**And the number to say with it:** *"It costs one line today — tagging every link with the item's id. Skip it
+and the first three months are unmeasurable, because you cannot go back and re-tag a link that is already in
+somebody's feed."*
+
+---
+
 ## 10 · Build order
 
 ```mermaid
@@ -781,23 +846,25 @@ flowchart LR
     P7["PHASE 7<br/>⑱ meter<br/><small>needs the app live</small>"]
     P3B["PHASE 3b<br/>⑲ stale detection<br/><small>needs ⑯ publish records<br/>+ Q14b surface forms</small>"]
     P5B["PHASE 5b<br/>㉑ outreach desk<br/><small>its thread feed is ②<br/>needs Q7 Q15</small>"]
+    P3C["PHASE 3c<br/>㉒ the stamp only<br/><small>utm_content = item id<br/>ONE LINE. must ship with<br/>the first publish or 3 months<br/>are unmeasurable</small>"]
+    P8["PHASE 8<br/>㉒ performance desk<br/><small>first real proposal is WEEK 12.<br/>measurement runs from day one<br/>needs Q22 Q23</small>"]
     P7B["PHASE 7b<br/>⑳ dashboard<br/><small>3 bands read live stations<br/>the 4th reads ⑱ · needs Q16</small>"]
 
-    P0 --> P1 --> P2 --> P3 --> P3B --> P4 --> P5 --> P5B --> P6 --> P6B --> P7 --> P7B
+    P0 --> P1 --> P2 --> P3 --> P3B --> P3C --> P4 --> P5 --> P5B --> P6 --> P6B --> P7 --> P7B --> P8
 
     START["START HERE<br/><small>⑲ ingest first — half a day, and it is what<br/>⑨ and ⑫ both read. then list every brace in ⑨<br/>and name its source: the data model for the<br/>rest falls out, and no open question touches it</small>"] --> P0
 
     classDef go fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
     classDef wait fill:#fff8e1,stroke:#f9a825,stroke-width:1.5px,color:#7f5f00
     classDef start fill:#e3f2fd,stroke:#1565c0,stroke-width:2.5px,color:#0d47a1
-    class P0,P1,P2 go
-    class P3,P3B,P4,P5,P5B,P6,P6B,P7,P7B wait
+    class P0,P1,P2,P3C go
+    class P3,P3B,P4,P5,P5B,P6,P6B,P7,P7B,P8 wait
     class START start
 ```
 
 ---
 
-*Document: `content-engine-flowchart.md` · 2026-09-08, §9A added 2026-09-09 · The diagrams for
+*Document: `content-engine-flowchart.md` · 2026-09-08, §9A added 2026-09-09, §9A.4 2026-09-10 · The diagrams for
 [`content-engine-runtime-spec.md`](content-engine-runtime-spec.md). **This file holds no rules.** Where a
 diagram and the spec disagree, the spec is correct and the diagram is a bug — report it rather than following
 it. Worked examples: [`content-engine-example.md`](content-engine-example.md).*

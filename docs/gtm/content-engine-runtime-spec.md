@@ -39,7 +39,7 @@ And one more, added because it is the question that decides whether any of it wa
 2. **Where a prompt exists, it is used verbatim.** This file never restates prompt text — it says who fills
    which `{brace}`, from where, and what happens when a token cannot be filled.
 3. **Where something is genuinely undecided, it is listed in §8 as an open question rather than resolved
-   quietly.** Sixteen are open. None blocks the first four stations.
+   quietly.** Eighteen are open. None blocks the first four stations.
 
 **Not in scope here:** the Website, SEO, Performance and Email workstreams beyond where content crosses into
 them; paid campaign management; video editing (`portal-build-spec.md` §11 — the DM team's editor owns it).
@@ -146,6 +146,12 @@ act and belong to no single one, which is exactly why a diagram drawn as a line 
    ㉑  THE OUTREACH DESK      relationships, not content · monthly targets
                               ◄── auto-fed by ② (threads) and the event stream (clusters)
                               ⛔ the portal drafts. a person sends. no send path exists
+
+   ㉒  THE PERFORMANCE DESK   ◄── reads ⑱ per item ──► proposes ⑧ mix, ⑦ ranking
+                              the positive loop. ⑭ learns from the reviewer,
+                              this learns from the reader · monthly
+                              ⛔ proposes, never applies · format/channel/pillar only
+                              🔴 needs utm_content = content_item.id, from the first publish
 ```
 
 **One loop, one re-entry and two clocks:**
@@ -1153,12 +1159,13 @@ one.
 | **⑲ Truth Layer** | **Protective, numerator side** | A wrong fact here is not one error — it is the same error generated into ~23 items, linted *as correct*, and published. The only defect class `FACT_WRONG` cannot catch, because it is judged against this table |
 | **⑳ Dashboard** | **Where `x` is read** | ⑱ produces the number; this produces the decision. The `x@6 > 2` gate is taken here, and the ⑬ ceiling becomes visible here two weeks before it binds |
 | **㉑ Outreach Desk** | **Numerator** | The **only** station that moves `p` through its largest channel — 6.5× of citations come from third-party pages, and ⑯ cannot produce one |
+| **㉒ Performance Desk** | **Numerator, compounding** | **The only station that raises return *per item* rather than adding items.** Every other numerator station adds supply at a fixed rate; this one changes the mix at no extra production cost. It is to ⑱ what ⑭ is to ⑬ — the loop that makes the measurement worth taking |
 
 ---
 
-## 7A · The three stations that sit across the line — ⑲ ⑳ ㉑
+## 7A · The four stations that sit across the line — ⑲ ⑳ ㉑ ㉒
 
-Eighteen stations describe an item's journey. **These three do not sit between two others — each of them
+Eighteen stations describe an item's journey. **These four do not sit between two others — each of them
 touches every act, which is why a diagram drawn as a line misses them.**
 
 ```
@@ -1171,12 +1178,22 @@ touches every act, which is why a diagram drawn as a line misses them.**
             │
    ㉑  THE OUTREACH DESK    relationships, not content
                             ⛔ the portal drafts. a person sends. no send path exists
+
+   ㉒  THE PERFORMANCE DESK  what kind of item earns → ⑧ mix, ⑦ ranking
+                            ⛔ proposes. never edits. never touches voice or rules
+                            🔴 blocked on one line: utm_content = item id
 ```
 
 **Why they were missed, stated plainly:** the line was drawn from the shape of one content item, and none of
-these three produces one. ⑲ produces the *inputs* to every item, ⑳ produces the *reading* of all of them, and
-㉑ produces a relationship that may never become an item at all. All three are specified by Joy
-(`portal-build-spec.md` §3.1, §3.8, §3.9) and all three are in the Definition of Done.
+these four produces one. ⑲ produces the *inputs* to every item, ⑳ produces the *reading* of all of them,
+㉑ produces a relationship that may never become an item at all, and ㉒ produces **a change to the mix of
+items made next time.** ⑲ ⑳ ㉑ are specified by Joy (`portal-build-spec.md` §3.1, §3.8, §3.9) and are in the
+Definition of Done.
+
+**㉒ is the one that is genuinely absent, and its absence is structural.** ⑭ the Ledger is the engine's only
+loop and it learns **from the reviewer** — a list of mistakes not to repeat. **Nothing learns from the
+reader.** ⑱ computes `x` and no station consumes it. So the engine compounds at not being wrong, and never
+compounds at being read.
 
 ---
 
@@ -1367,6 +1384,187 @@ created.
 
 ---
 
+### ㉒ The Performance Desk — **NEW · the engine has no positive loop**
+
+| | |
+|---|---|
+| **What** | Reads what each published item actually earned, finds which **kinds** of item earn most, and proposes a **mix change** to ⑧ and a **ranking hint** to ⑦. |
+| **When** | **Monthly.** Never weekly — §7A.4.2. |
+| **Why** | **⑭ the Ledger is the only loop in the engine, and it is entirely negative.** It learns from what a *reviewer rejected* — a list of mistakes not to repeat. **Nothing learns from what an audience rewarded.** ⑱ measures `x` and stops there; no station consumes its output. So the engine gets steadily better at not being wrong, and never better at being read. |
+| **The symmetry, and it is the argument for building it** | **⑭ learns from the reviewer. ㉒ learns from the reader.** Same shape — observe an outcome, extract a pattern, feed it forward — and Joy already calls ⑭ *"the portal's compounding asset."* This is the other half of the same asset |
+| **Joy** | Extends `content-calendar.md` §4 (the pillar shares) · `tracking-spec.md` Part 2, Part 4 · ⑯'s attribution stamp · ⑱ |
+| **→ x** | **Numerator, and it is the only station that compounds it.** Every other numerator station adds supply at a fixed rate; this one raises the *return per item* at no extra production cost. |
+
+#### 🔴 It is blocked on one line, and that line is missing today
+
+`tracking-spec.md` Part 2 captures `utm_source`, `utm_medium`, `utm_campaign`, **`utm_content`**, `utm_term`.
+⑯'s attribution stamp says *"every outbound link carries `utm_*` and `icp_hint`"* — **but it never says what
+goes in `utm_content`.** Part 4 item 5 and the cohort definition both attribute at **`utm_campaign`** level.
+
+> **Campaign-level attribution can tell you LinkedIn earned $4,000. It cannot tell you which post did.**
+> Every question this station exists to answer is a per-item question.
+
+**The fix is one assignment in ⑯:**
+
+```
+utm_content = content_item.id
+```
+
+**That is the entire dependency.** It costs nothing, it breaks nothing, and **it must be in place before the
+first item publishes** — because attribution cannot be applied retroactively to a link already in someone's
+feed. **Miss it at launch and the first three months are permanently unmeasurable at item level.**
+
+**⚠ This is ⑯'s own argument turned one notch finer.** The stamp exists because *"a published item with an
+unstamped link is a permanently unattributable acquisition."* An item stamped only to its campaign is
+permanently unattributable **as an item**.
+
+#### The signal ladder — and the primary is deliberately not the fast one
+
+| | Signal | Speed | Use |
+|---|---|---|---|
+| **1** | **Revenue** — `x@3`, `x@6` | 3–6 months | **The truth, and far too slow to steer a monthly mix.** Used to audit the loop, not to run it |
+| **2** | Signup | weeks | Confirms 3 |
+| **3** | **`utm_content` → `prompt_submitted`** | **days** | ⭐ **THE PRIMARY.** The first step of Joy's own funnel, attributable per item |
+| **4** | Third-party pickup (`p`) | monthly | ㉑'s channel. Reported, never mixed into 3 |
+| **5** | ~~Likes, reactions, follows~~ | hours | ⛔ **Not an input. §7A.4.3** |
+
+**Why 3 and not 5, stated so it survives an argument.** A reaction costs the reader nothing. **Clicking into a
+prompt costs intent** — it is the first moment a reader does something that could end in revenue, and
+`tracking-spec.md` puts `prompt_submitted` at the head of the funnel for exactly that reason. Between a post
+with 400 reactions and 2 prompts and a post with 30 reactions and 19 prompts, **the second one is the one to
+make more of**, and any metric that says otherwise is measuring applause.
+
+#### ⛔ Three guard rails, and without them this station is actively harmful
+
+##### 1 · It may propose. It may never edit.
+
+**The mix proposal goes to a human. It is never applied.**
+
+| ㉒ may write to | ㉒ may **never** touch |
+|---|---|
+| ⑧'s **mix** for next cycle — how many of each type | ⑨'s context blocks |
+| ⑦'s **ranking hint** — a sort order on candidates a human still picks from | ⑫'s linter rules |
+| ⑳ — the reading | **The voice lanes** (`audit.md` §5) |
+| | ⑭'s active failure modes |
+
+**Why the second column is absolute.** ⑫ and the voice lanes are what make the output *ours*. A loop allowed
+to edit them optimises the brand away one approved proposal at a time, and **nobody would be able to point at
+the meeting where it was decided.** ⑦ and ⑧ are where volume is allocated; that is a planning decision and a
+human already makes it weekly.
+
+##### 2 · ⚠ It will want to break two of Joy's own caps. Both are floors and ceilings, not defaults.
+
+`content-calendar.md` §4 sets twelve-week shares. **Two of them are deliberately held *below* what performance
+would choose:**
+
+| Pillar | Share | Joy's reason for the cap |
+|---|---|---|
+| **3 · From Weeks to Minutes** | **~8–10%** | *"Supporting, not leading — speed commoditises and cannot carry the position"* |
+| **2 · Analytical AI** | **~18–20%** | **Category education only.** ⛔ *"Never a hero, headline or ad"* — naming the generative category concedes we are in it |
+
+> **A performance loop will find both of these and push on them**, because *"15 minutes instead of three
+> weeks"* and *"unlike ChatGPT"* are the two most immediately legible things Caspr can say. **They are legible
+> precisely because they are the commodity claims** — which is Joy's argument for capping them.
+>
+> **The retired-copy list is the proof this is not hypothetical.** *"Your competitors are still waiting for
+> the research"* was retired for being *"speed-led and combative"* — and it is exactly the line an engagement
+> signal would have promoted.
+
+**So the proposal is bounded, not free:** each pillar carries a **floor and a ceiling taken from §4**, the
+proposal may move a share by at most **±5 points per cycle**, and **pillar 2 cannot be raised at all by this
+station** — its cap is structural (`/vs/*`, social and founder content only), not a quantity.
+**The two numbers are Joy's to set — open question 22.**
+
+##### 3 · The volume is too small to say most things, and the honest response is to scope it
+
+| Dimension | Items in twelve weeks | Can the loop speak? |
+|---|---|---|
+| **Channel** — blog · LinkedIn · X · email · community | **~420–530** | ✅ **Yes** |
+| **Format** — search answer · voiced variant · thread · atom · comment | ~420–530 | ✅ **Yes** |
+| **Pillar** — the five | ~420–530 | ✅ **Yes** |
+| **ICP** — the eight | ~50–65 each | ⚠ **Marginal** |
+| **Origination** — anything a person wrote from scratch | **30** | ❌ **No** |
+| **Type A** — published analyses | **3–6** | ❌ **Absolutely not** |
+
+> **Declaring "pricing analyses outperform market-sizing analyses" off four data points is not a finding. It
+> is a coin landing heads twice.**
+
+**The rule that follows:** **the loop speaks about *format, channel and pillar*. It never speaks about a
+topic.** ⑦ stays a human pick on evidence, exactly as Joy specified — *"⚠ A HUMAN PICKS. Never the machine."*
+The ranking hint ㉒ sends ⑦ is a **sort order**, never a shortlist, and never a score on the topic itself.
+
+**Minimum sample, proposed:** no cell speaks below **12 items across at least 4 weeks**. Below that the cell
+renders **"not enough yet"** — the same discipline as ⑳'s *"not collected, never 0"*, and for the same reason.
+**Number is Joy's — open question 22.**
+
+#### The parent confound — the fan-out makes naive measurement wrong
+
+**One published analysis becomes 16–23 items.** If that analysis's topic happened to land, **every derivative
+of it looks good** — and a loop reading them as independent observations will conclude that *the format* works
+when in fact *the parent* worked.
+
+**With 3–6 parents in a quarter, this is not a small correction. It is most of the variance.**
+
+**So every measurement is computed within-parent, not across the pool:** for each parent, rank its own
+derivatives against each other; the loop reads **the ranking**, never the raw number. A format that wins
+inside most parents is a real finding; a format that only wins inside the one parent that did well is the
+parent, and the within-parent comparison shows that immediately.
+
+**Comments (⑰) and daily-track items (§5A) have no parent** and are pooled separately — they are the only
+items measurable on their own terms, and they are also the highest-volume ones.
+
+#### What it emits — a typed proposal, and there is no free-text field
+
+**Same position as the index engine's renderer, for the same reason** — a proposal a human approves in two
+minutes must be inspectable at a glance, and prose is where an unsupported claim hides.
+
+```
+MixProposal {
+  cycle:            "2026-11"
+  dimension:        "format" | "channel" | "pillar"
+  cell:             "linkedin_voiced_variant"
+  n_items:          47            # ≥ the minimum, or no row
+  n_weeks:          6
+  within_parent_rank_median: 2    # of 5
+  prompts_per_item: 3.1
+  baseline:         1.8
+  proposed_delta:   +4            # points of share, |Δ| ≤ 5
+  floor / ceiling:  8 / 25        # from content-calendar §4
+  bounded_by:       null | "ceiling" | "pillar_2_structural"
+}
+```
+
+**Every field is a number, an enum or a computed value. There is no `rationale` field** — if the numbers do
+not make the case, the case is not there.
+
+#### Its own kill condition, because a loop that cannot be wrong is not a loop
+
+**⑭ has health thresholds and states the direction of the fix. This one needs the same.**
+
+| Signal | Reading | Do this |
+|---|---|---|
+| **Proposals rejected 3 cycles running** | The loop is miscalibrated — or it is finding things that are true and unusable, which is the same problem | **Fix the loop, not the reviewer** — ⑭'s own rule |
+| **Every proposal approved, always** | Rubber-stamping, or the deltas are too small to matter | Widen the bound or audit a cycle |
+| **`x@6` does not move after 2 quarters of approved proposals** | **The primary signal is not predicting revenue** | **Stop. Signal 3 is wrong and the ladder needs re-deriving from signal 1** |
+
+**The last row is the one that matters.** The whole station rests on the assumption that `prompt_submitted`
+predicts revenue. **That assumption is testable, and it is tested against `x@6` — the metric it is not allowed
+to steer.**
+
+**And the freeze applies here too.** `p`'s basket is frozen for a year because *"a metric you can edit when you
+dislike the reading is not a metric."* **The same holds: the ladder is fixed for a year.** Re-deriving it
+because of the third row above is a deliberate, recorded decision — never a quiet retune.
+
+#### §7A.4 · Why monthly, and why the numbers cannot come faster
+
+| | |
+|---|---|
+| **The cycle is monthly** | Joy's shares are **twelve-week** allocations. A weekly reweight on 35–44 items is chasing noise, and it would put a fourth notification into a week designed for two |
+| **The first proposal is at week 12, not week 4** | Below the minimum sample every cell reads *"not enough yet"*. **That is the correct output, and it should be shipped rather than worked around** |
+| **What runs from day one** | The **measurement**, not the proposing. `utm_content` stamps from the first publish, and the data accrues. **The station is cheap to run early and expensive to skip early** |
+
+---
+
 ## 8 · Open questions — for Joy
 
 **None of these blocks stations ⑧ through ⑯, which can be built today. ⑲ is now the exception worth naming:
@@ -1396,6 +1594,8 @@ Chromium or SVG templates · **20** font embedding licences · **21** does ⑲'s
 | **14** | **⑲ — three things the spec does not settle.** (a) **Re-ingest cadence** — you specify the behaviour, not the clock; hourly poll proposed. (b) **`surface_forms[]`** — a literal diff finds `1M+` and misses *"1 million"*, *"over a million"*, *"1,000,000+"*. Proposed: generated at ingest, **confirmed by a person once per fact**, reused free thereafter. Is that confirmation yours? (c) **Approved-but-unpublished items on a fact change** — proposed **held and regenerated**, because an approval is a decision about specific text | ⑲ | (b) is a recall failure that is invisible by construction, and (c) trades review minutes against a known-wrong page |
 | **15** | **㉑ — the stage model, and what a lapsed target looks like.** Six fields are yours; the stages are not. Proposed: `identified → researched → drafted → sent → in conversation → won │ lost │ lapsed`. And with two targets currently unowned (guest posts, podcasts — the TL's), the station **renders them as unowned rather than hiding them**, on your own words: *"that should be a decision rather than a discovery"* | ㉑ | Whether a lapsed target stays on screen is a management call, not a build one |
 | **16** | **⑳ — does the Dashboard ship with three bands or four?** The Funnel band is *"the band that proves RoI"* and it depends on the product event stream, which is not live. Options: (a) ship three and add the fourth on the stream, (b) ship four with Funnel rendered **"not collected"** — which is the rule §7A already sets for every other failed collector | ⑳ | (b) is honest and consistent; (a) risks the page shipping without the band it exists for |
+| **22** | **㉒ — the three numbers that bound the loop.** (a) **Max share move per cycle** — proposed **±5 points**; (b) **minimum sample** before a cell may speak — proposed **12 items across 4 weeks**, below which it renders *"not enough yet"*; (c) **the floors and ceilings per pillar**, taken from `content-calendar.md` §4. **⚠ And the one that is not a number:** pillars 2 and 3 are capped *below* what performance will choose, deliberately — proposed that **㉒ can never raise pillar 2 at all**, because its cap is structural (`/vs/*`, social and founder content), not a quantity | ㉒ | These are the bounds on a machine allowed to change your allocation. Setting them is the decision |
+| **23** | **㉒ — is `prompt_submitted` the right primary signal?** Revenue is the truth and is 3–6 months slow; reactions are hours-fast and measure applause. Proposed primary is **`utm_content` → `prompt_submitted`** — the first step of your own funnel, where the reader spends intent rather than a click. **The assumption is testable:** if `x@6` does not move after two quarters of approved proposals, the signal is wrong and the ladder is re-derived. **And like `p`'s basket, the ladder is frozen for a year** — *"a metric you can edit when you dislike the reading is not a metric"* | ㉒ | It decides what the engine optimises toward, which is a positioning question before it is a metrics one |
 
 ---
 
@@ -1410,13 +1610,15 @@ Sequenced so nothing waits on an answer it does not need.
 | **2** | **⑧ Work Order · ⑬ Review Room** | One item can now go end to end against mocks | Nothing |
 | **3** | **⑮ Hygiene · ⑯ Publisher** | Real output, real attribution stamps | SES production · CMS write path |
 | **3b** | **⑲ stale detection + `surface_forms[]`** | Needs `PublishRecord` to exist before there is anything to sweep. **Held until phase 3 for that reason alone** — the facts table from phase 0 is already earning by then | Phase 3 · **Q14(b)** |
+| **3c** | **㉒ — the stamp only.** `utm_content = content_item.id` in ⑯ | **One assignment, and it must ship with the first publish.** Attribution cannot be applied retroactively to a link already in somebody's feed — miss it and the first three months are permanently unmeasurable at item level | **Nothing.** Ships with phase 3 |
 | **4** | **⑤ Verifier** | Replaces mocked facts with real ones | **Q3 — service principal** |
 | **5** | **② Listener · ③ Trend · ④ Claim · ⑥ Angle · ⑦ Board** | The intake half | **Q1, Q2, Q4, Q10** |
 | **5b** | **㉑ Outreach Desk** | The object and the entered rows need nothing. **Its two automatic feeds do** — community threads come from ②, so it lands with the intake half | Phase 5 · **Q7, Q15** |
 | **6** | **⑪ Visual Desk · ⑰ Comment Desk** | The two genuinely new capabilities | **Q5, Q6, Q8** |
-| **6c** | **The creative pipeline** — chart renderer, template layer, text measurement, rasteriser, storage | **⑪ produces nothing without it, whichever route Q5 picks.** Six pieces, one and a half of which exist — [`content-engine-integrations.md`](content-engine-integrations.md) §6.3 | **Q5, Q19, Q20** |
 | **6b** | **⏱ Daily track** (§5A) | **A second trigger, a track flag and an expiry timer over stations already built.** ⑰ comments need none of it — 🟢 they are already outside the gate. Cheap once ⑬ and ⑯ exist; pointless before the intake half is live | **Q13** + phases 2, 3, 5 |
+| **6c** | **The creative pipeline** — chart renderer, template layer, text measurement, rasteriser, storage | **⑪ produces nothing without it, whichever route Q5 picks.** Six pieces, one and a half of which exist — [`content-engine-integrations.md`](content-engine-integrations.md) §6.3 | **Q5, Q19, Q20** |
 | **7** | **⑱ Meter** | Needs the app live for the event stream | Product event tracking |
+| **8** | **㉒ Performance Desk — the proposing half** | **Deliberately last, and deliberately late.** Below the minimum sample every cell reads *"not enough yet"*, so the first real proposal is week 12. **The measurement runs from day one; only the proposing waits** | Phase 3c · ⑱ · **Q22, Q23** |
 | **7b** | **⑳ Dashboard** | Three of its four bands read stations that must already be running, and the fourth reads ⑱ | Phases 3, 7 · **Q16** |
 
 **Start at ⑲, then ⑨.** ⑲'s ingest is half a day and it is what ⑨ and ⑫ both read; going straight to ⑨ means
@@ -1427,8 +1629,14 @@ its source produces the data model for the rest, and it is the one piece of work
 
 *Document: `content-engine-runtime-spec.md` · 2026-09-08 · An addition to the content engine specification,
 not a revision of it. Every station cites the file and section it implements; every station marked **NEW**
-states what it adds and why nothing existing covers it. Sixteen open questions in §8 are flagged rather than
+states what it adds and why nothing existing covers it. Eighteen open questions in §8 are flagged rather than
 resolved — including §5A, the daily track, which is proposed in full and named as needing sign-off.*
+
+*Updated 2026-09-10 — **㉒ the Performance Desk** joins §7A: the engine's **positive loop**. ⑭ learns from the
+reviewer; nothing learned from the reader, and ⑱'s output was consumed by no station. It proposes a mix change
+to ⑧ and a ranking hint to ⑦, and it may never edit ⑨'s context, ⑫'s rules or the voice lanes. **Blocked on one
+assignment — `utm_content = content_item.id` — which must ship with the first publish or three months are
+permanently unmeasurable.**​*
 
 *Updated 2026-09-09 — **§7A adds the three stations that sit across the line**: ⑲ the Truth Layer, ⑳ the
 Dashboard, ㉑ the Outreach Desk. All three are Joy's (`portal-build-spec.md` §3.1, §3.8, §3.9) and all three
