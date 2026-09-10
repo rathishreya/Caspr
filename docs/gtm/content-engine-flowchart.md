@@ -926,6 +926,50 @@ and then we answer it on our own site — automatically, with citations. Quora g
 
 ---
 
+### 9B.1b · ⭐ The line — automated up to posting, then a human
+
+```mermaid
+flowchart LR
+    A["② … ⑫<br/>LISTEN · VERIFY · WRITE · LINT<br/><small>🟢 FULLY AUTOMATED</small>"]
+    A --> R{{"⑬ APPROVE<br/>a human · 3 buttons<br/>⛔ no editing"}}
+    R --> P["⑯a THE PACKER<br/><small>🟢 AUTOMATED — assembles a post with<br/>NOTHING LEFT TO DECIDE:<br/>copy · image · STAMPED LINK ·<br/>hashtags · which account · which slot</small>"]
+    P --> SPLIT{"WHOSE PLATFORM?"}
+
+    SPLIT -->|"caspr.ai — OUR OWN SITE"| AUTO1["🟢 AUTOMATED<br/>blog · /market-size · /vs<br/><small>no account to ban, no<br/>authenticity question</small>"]
+    SPLIT -->|"email — SES"| AUTO2["🟢 AUTOMATED<br/><small>you cannot hand-send a campaign</small>"]
+    SPLIT -->|"LinkedIn · X · Reddit<br/>Quora · IG · FB"| MAN["⑯b THE POST DESK<br/>⚠ A HUMAN POSTS — for now<br/><small>copy body · download image ·<br/>COPY LINK (its own button) ·<br/>mark posted + paste live URL</small>"]
+
+    MAN --> CHECK["✅ THE PACKER FETCHES THAT URL<br/>and checks the stamp survived"]
+    CHECK -->|"missing"| LOST["🔴 attribution_lost<br/><small>flagged, not closed quietly</small>"]
+    CHECK -->|"present"| DONE["closed"]
+
+    RISK["🔴 THE SILENT RISK<br/>a human copy-pasting can DROP THE STAMPED LINK.<br/>the post looks fine and its revenue becomes<br/>PERMANENTLY unattributable — nobody would<br/>notice for three months"]
+    RISK -.-> MAN
+
+    WIN["⭐ WHAT THIS BUYS<br/>no LinkedIn OAuth at launch · no X OAuth ·<br/>no Community Management application ·<br/>zero automation-ban risk<br/><small>FOUR BLOCKERS BECAME NON-BLOCKERS</small>"]
+    MAN -.-> WIN
+
+    FLAG["turning it back on = ONE BOOLEAN per channel<br/>channel.autopost = true<br/><small>⛔ except REDDIT and QUORA — those never flip.<br/>automated posting there is a terms breach<br/>and the kill condition is ONE</small>"]
+    WIN -.-> FLAG
+
+    classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+    classDef hum fill:#e3f2fd,stroke:#1565c0,stroke-width:2.5px,color:#0d47a1
+    classDef good fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+    classDef gap fill:#ffebee,stroke:#c62828,stroke-width:2.5px,color:#8e0000
+    classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
+    class A,P,CHECK,DONE mach
+    class R,MAN,SPLIT hum
+    class AUTO1,AUTO2,WIN good
+    class RISK,LOST gap
+    class FLAG stop
+```
+
+**The one line to say:** *"Everything up to the moment of posting is automated — the listening, the checking,
+the writing, the image, the link. A person approves it, and for now a person posts it. Turning the posting on
+later is a switch, not a rebuild."*
+
+---
+
 ### 9B.2 · ㉖ Creation vs engagement — and who says what
 
 ```mermaid

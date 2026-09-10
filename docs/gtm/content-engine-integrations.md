@@ -47,10 +47,10 @@ and add nothing.
 | **C · Publishing** ||||||
 | C1 | **caspr.ai CMS** — write + build trigger | ⑯ | CMS token | **Website session** | 🔴 `portal-build-spec.md` §8.1 — *time-critical* |
 | C2 | **AWS SES** | ⑯ 6.7 | IAM | Portal | 🔴 **sandbox — 200/day, verified addresses only.** Production access is a **day-1** request; approval takes days |
-| C3 | **LinkedIn personal** — `w_member_social` | ⑯ ⑰ | OAuth per person | Each person | 🟡 **5 of 7 granted.** Open permission, no approval |
-| C4 | **LinkedIn Company Page** — Community Management API | ⑯ | App-level | Portal | 🟡 Development tier granted on application. ⛔ **Do not pursue Standard. Do not request `r_member_social`** |
-| C5 | **X** — free tier writes | ⑯ | OAuth | Portal | 🟢 sufficient for our volume. Read is unavailable at free tier, so X monitoring is out of scope |
-| C6 | **Communities** — Reddit and forums | ⑯ ⑰ ㉑ | **none** | — | 🟢 ⛔ **A human posts. Always. There is no integration and none is built** |
+| C3 | **LinkedIn personal** — `w_member_social` | ⑯ ⑰ | OAuth per person | Each person | 🟢 **NO LONGER BLOCKING — posting is manual for now.** Grant it in parallel, unhurried |
+| C4 | **LinkedIn Company Page** — Community Management API | ⑯ | App-level | Portal | 🟢 **NO LONGER BLOCKING.** Apply in parallel. ⛔ Never Standard, never `r_member_social` |
+| C5 | **X** — free tier writes | ⑯ | OAuth | Portal | 🟢 **Not needed at launch** — manual posting. Free tier covers it whenever we flip the flag |
+| C6 | **Communities · Reddit · Quora** | ⑯ ⑰ ㉑ | **none** | — | 🟢 ⛔ **A human posts. Always — and these two never flip to automated**, whatever we decide for the rest |
 | **D · Measurement** ||||||
 | D1 | Google Search Console | ⑳ ⑱ | OAuth / service account | Portal | 🟡 2–3 day lag is inherent |
 | D2 | LinkedIn Page analytics | ⑳ | C4's grant | Portal | 🟡 |
@@ -70,6 +70,11 @@ and add nothing.
 
 **Read the status column as a plan:** four 🔴 are someone else's (A1, C1, C2 approval, D5) and are asks, not
 work. **The rest of the red is E** — the creative pipeline — and it is ours.
+
+> ⭐ **Revised 2026-09-10: posting is manual for now, so C3, C4 and C5 stop gating anything.** ⑯a packs the
+> item — copy, image, **stamped link**, account, slot — and a person posts it. **Four blockers became
+> non-blockers**, and turning automation on later is one boolean per channel, not a rebuild. ⛔ **Reddit and
+> Quora never flip.**
 
 ---
 

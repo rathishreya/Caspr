@@ -71,7 +71,7 @@ Type A lands.
 | **Reposts with a line** — ㉕ tier 1 only | **10** — 2/weekday | Social | ⛔ none |
 | **⭐ Quora taps** — short answer + link to **our own page** | **5** · ~2 min each | Social | **The page is automated Type B. Only the tap is human** |
 | **⛔ Reddit answers — CAPPED** | **5** — 1/day max | rotating person **and** subreddit | ⛔ **never a brand account.** Ramps from 0 over 8 weeks |
-| **Brand posts** — Page · X · Quora Space · IG | **~21** | auto | ✅ **these DO go through ⑬** |
+| **Brand posts** — Page · X · IG | **~21** | ⚠ **a human posts, from ⑯b** | ✅ **these DO go through ⑬** |
 | **Reactions** | **untracked, by design** | anyone | ⛔ **never a target** |
 
 **~20–25 min/person/week, plus Social carrying the answers. ~175 min across seven.**
@@ -103,6 +103,9 @@ pod. ㉖ tracks both columns and **the external one is the health metric.**
 ---
 
 ## 2 · The week, by day and hour — **US Eastern**
+
+⚠ **Posting is manual for now, so the times below are targets rather than guarantees** — *08:30 ET* means
+*first thing*. ⑯a packs the item ready; a person posts it. **caspr.ai and email stay automated.**
 
 **IST shown for reference only.** ⭐ **The engine depends on no live human window** — comments are
 asynchronous on a 24-hour horizon and measured weekly, so **post times serve the reader and nobody commits an

@@ -116,9 +116,13 @@ act and belong to no single one, which is exactly why a diagram drawn as a line 
    ⑮  THE HYGIENE BENCH      prose cleaned · PDF untouched         Mon 20:00
             │                 ⚠ branches on artefact_type, not item type
             ▼                                                     
-   ⑯  THE PUBLISHER          blog · LinkedIn · X · email · community
-            │                 ⛔ unreviewed never publishes. communities = human
-            │                 ✅ every outbound link carries utm_* + icp_hint
+   ⑯a THE PACKER            assembles the ready-to-post item        AUTOMATED
+            │                 copy · image · STAMPED LINK · account · slot
+            ▼
+   ⑯b THE POST DESK         ⚠ A HUMAN POSTS — every platform, for now
+            │                 🟢 caspr.ai + email stay automated (our own)
+            │                 ⛔ unreviewed never publishes
+            │                 ✅ mark-posted VERIFIES the stamp survived
             │                                                     
    ⑰  THE COMMENT DESK       which post, which fact, which person  NEW · daily
                               ⛔ human posts. always. 14/week, outside the gate
@@ -586,6 +590,103 @@ Mon   rotating team post · email when scheduled
 
 > **Joy's post lands Tuesday** because the engagement rule depends on colleagues commenting inside 30–60
 > minutes, and a mid-week morning is when that is realistic.
+
+### ⭐ Revised 2026-09-10 — **⑯ splits in two. Everything up to posting is automated; posting is a human, for now.**
+
+**The line, stated once:**
+
+```
+② … ⑫  automated  →  ⑬ APPROVE (a human)  →  ⑯a PACK (automated)  →  ⑯b POST (a human, for now)
+```
+
+#### ⑯a · The Packer — **fully automated, and it does all the work**
+
+**It produces a post that is ready to go out, with nothing left to decide:**
+
+| It assembles | |
+|---|---|
+| **The copy**, at the exact length for that channel | ㉔ |
+| **The image file**, rendered and provenance-checked | ⑪ · ㉙ |
+| ⭐ **The link, already stamped** — `utm_source` · `utm_campaign` · `utm_content = item id` · `icp_hint` | ⑯ |
+| Hashtags, at the channel's count | ㉔ |
+| **Which account** posts it — brand or which person | ㉖ · ㉛ |
+| **When** — the exact slot | calendar §2 |
+
+#### ⑯b · The Post Desk — **the only manual step, and it is built to make one thing impossible**
+
+**One item at a time. One screen. Three controls:**
+
+| | |
+|---|---|
+| **Copy body** | One button. The full text, exactly as it goes out |
+| **Download image** | One button |
+| ⭐ **Copy link** | **A separate button, because it must not be retyped** |
+| **Mark posted → paste the live URL** | Closes the item |
+
+#### 🔴 The one real risk, and it is silent
+
+> **A human copying and pasting can drop the stamped link. If that happens, the post still looks fine —
+> and its revenue becomes permanently unattributable.**
+
+**Everything ㉒ does rests on `utm_content` arriving intact.** So three defences, all cheap:
+
+| | |
+|---|---|
+| **1** | **The link is its own copy button**, never buried in the body text a person edits |
+| **2** | ⭐ **On "mark posted" the person pastes the live URL back.** The Packer **fetches it and checks the stamped link is present.** Missing → the item flags as `attribution_lost` rather than closing quietly |
+| **3** | ⑳ carries **"posts with a verified stamp"** as a health metric. **Below 100% is a defect, not a nit** |
+
+**⚠ Without defence 2 this change would quietly break the performance loop**, and nobody would notice for
+three months — which is the exact failure the stamp exists to prevent.
+
+#### ⚠ What stays automated, and it is not a loophole
+
+**"Posting" means posting to somebody else's platform.** Two things are not that:
+
+| | Stays automated | Why |
+|---|---|---|
+| **caspr.ai — blog, `/market-size/*`, `/vs/*`** | 🟢 **Yes** | **It is our own site.** There is no account to ban, no authenticity question, and "manually publishing" a generated page means a person pasting HTML into a CMS for no benefit |
+| **Email — SES** | 🟢 **Yes** | **You cannot hand-send a campaign.** It is a scheduled send after approval, not a post. Warming, suppression and complaint handling are all automated already |
+
+**Everything with an account on a platform we do not own — LinkedIn, X, Reddit, Quora, Instagram, Facebook —
+is manual.**
+
+#### ⭐ What this buys, and it is more than it costs
+
+| | |
+|---|---|
+| **No LinkedIn OAuth at launch** | The **5-of-7 grants stop gating anything.** They were a blocker |
+| **No X OAuth at launch** | Same |
+| **No Community Management API application** | Same — it can be applied for in parallel, unhurried |
+| **Zero automation-ban risk** | A human posting from their own account is simply a person using LinkedIn |
+| **The brand-vs-individual account plumbing disappears** | For now there are no bot accounts at all |
+
+**Four blockers become non-blockers.** ⑯ can be built and shipped **before a single OAuth grant exists.**
+
+#### What it costs — stated honestly
+
+| | Per week |
+|---|---|
+| ~30 brand and individual posts — copy, image, link, paste | **~50 min** |
+| 35 comments *(always were manual)* | ~15 min per person |
+| 10 answers and taps | ~20 min |
+| **Total manual posting** | **~70–90 min, mostly on Social** |
+
+**And two things are genuinely lost:** **exact timing** — 08:30 ET becomes *"first thing"* — and **weekend
+posting**, unless someone volunteers. **Both are acceptable. Neither is worth an OAuth blocker at launch.**
+
+#### ⭐ Turning it back on is a flag, not a rebuild
+
+**⑯a already produces everything an API call needs.** So automation per channel is **one boolean**:
+
+```
+channel.autopost = false     ← today, every platform
+channel.autopost = true      ← later, one channel at a time
+```
+
+**⛔ Two exceptions that never flip, whatever we decide later:** **Reddit** and **Quora**. Automated posting
+there is a terms breach and an account ban, and `channel-model.md`'s kill condition is a single breach.
+**Those two are permanently human.**
 
 #### ✅ The attribution stamp — the one thing that makes `x` computable
 
@@ -1153,7 +1254,7 @@ one.
 | ⑬ Review Room | Ceiling | Throughput here is the ceiling on everything |
 | ⑭ Ledger | Compounding denominator | Reject rate 15% → 8% recovers ~7% of cost, permanently |
 | ⑮ Hygiene | Protective | Article 50 breach is an unbounded legal cost |
-| **⑯ Publisher** | **Makes `x` computable** | Without `utm_*` + `icp_hint`, revenue has no channel and the target is unprovable |
+| **⑯a/b Packer + Post Desk** | **Makes `x` computable** | Without `utm_*` + `icp_hint`, revenue has no channel and the target is unprovable |
 | ⑰ Comment Desk | Numerator | Cheapest reach available — 130 min/week already committed |
 | ⑱ Meter | — | Computes `x` and `p`; enforces both traps above |
 | **⑲ Truth Layer** | **Protective, numerator side** | A wrong fact here is not one error — it is the same error generated into ~23 items, linted *as correct*, and published. The only defect class `FACT_WRONG` cannot catch, because it is judged against this table |
@@ -1624,7 +1725,7 @@ Sequenced so nothing waits on an answer it does not need.
 | **1** | **⑨ Assembly · ⑩ Writer · ⑫ Linter · ⑭ Ledger** | The whole data model falls out of ⑨. ⑫ is pure functions, testable today. ⑭ closes the loop | **Phase 0** |
 | **2** | **⑧ Work Order · ⑬ Review Room** | One item can now go end to end against mocks | Nothing |
 | **2b** | **㉔ Placement Matrix · ㉚ Content Inventory** | The matrix constrains the draft, so it must exist before ⑩ is wired to real channels | Phase 2 |
-| **3** | **⑮ Hygiene · ⑯ Publisher** | Real output, real attribution stamps | SES production · CMS write path |
+| **3** | **⑮ Hygiene · ⑯a Packer · ⑯b Post Desk** | Real output, real attribution stamps. **⭐ No OAuth needed — posting is manual, so LinkedIn/X/CMA stop gating this** | SES production · CMS write path |
 | **3b** | **⑲ stale detection + `surface_forms[]`** | Needs `PublishRecord` to exist before there is anything to sweep. **Held until phase 3 for that reason alone** — the facts table from phase 0 is already earning by then | Phase 3 |
 | **3c** | **㉒ — the stamp only.** `utm_content = content_item.id` in ⑯ | **One assignment, and it must ship with the first publish.** Attribution cannot be applied retroactively to a link already in somebody's feed — miss it and the first three months are permanently unmeasurable at item level | **Nothing.** Ships with phase 3 |
 | **3d** | **㉙ Provenance Check** | **Sits between ⑮ and ⑯ and fails closed.** Cheap, and the thing it catches is a legal breach | Phase 3 |
