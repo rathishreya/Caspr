@@ -1,0 +1,426 @@
+# Content Engine — The Operating Model
+
+*2026-09-10. Eight registers that answer "what actually goes out, from whom, where, when, and why that one."*
+
+**An addition to [`content-engine-runtime-spec.md`](content-engine-runtime-spec.md).** The runtime spec says
+how an item moves through the machine. **This says what the machine is allowed to decide about it** — which
+source it came from, which person says it, which channel and hour it lands on, which narrative it belongs to,
+and what may never be done with a competitor's post.
+
+**Stations ㉓ to ㉚.** Every one of them is a **register a human owns** plus **rules the engine executes
+against it**. None of them writes copy; ⑩ still does that.
+
+---
+
+## 0 · Two corrections before anything else
+
+**Both are cases where the instruction, taken literally, would break something already decided.**
+
+### 0.1 ⛔ "No AI watermark" must never reach a Caspr deliverable
+
+The instruction is right for **marketing assets** and it is already ⑮'s job. **Applied to the product's own
+output it is a legal breach.**
+
+| Artefact | Rule | Source |
+|---|---|---|
+| **A Caspr PDF or PPTX we sell** | **The AI-provenance mark stays. Visible on the cover, machine-readable in XMP/OOXML** | **EU AI Act Article 50(2)**, in force **2 August 2026** · `docs/product/ai-disclosure-spec.md`, locked 2026-08-21 |
+| A social card, blog hero, OG image, ad creative | **Metadata stripped** — C2PA, EXIF, XMP generation flags | `CLAUDE.md` Rule 6 |
+
+> **We mark what we sell, and we clean what we publish about ourselves.** The two rules point in opposite
+> directions on purpose. ㉙ exists to check **both** directions, because a single "strip everything" pass
+> would satisfy the instruction and breach the Act.
+
+**Never claim human authorship either.** The skills' own ethics note is explicit, and for a company selling
+*cited, or it does not ship*, claiming otherwise would be self-defeating. **The goal is clean published text,
+not a claim about who wrote it.**
+
+### 0.2 ⛔ We cannot scrape, and that is a positioning constraint before it is a legal one
+
+`CLAUDE.md` bans **"web scraping"** as a term because the product's corpus claim is *"25M+ curated, credible
+sources — documents, government databases, news feeds — **not web scraping**."*
+
+> **A company whose entire differentiator is "we curate, we do not scrape" cannot scrape for its own
+> marketing.** If that ever surfaced it would not be a compliance problem, it would be the end of the claim.
+
+**So every source in ㉓ is accessed through an official API, an official feed, or a human reading it.** Where
+none of the three exists — Quora is the live example — **the source is read manually or not at all.** That is
+a smaller listening surface, and it is the correct one.
+
+---
+
+## ㉓ The Source Register — *"where does research come from"* · **answers open question 1**
+
+| | |
+|---|---|
+| **What** | The enumerated list of places the engine listens, with **how** each is accessed and **what it is for**. ① Watchlist is the config; this is its contents and its rules. |
+| **When** | ② reads it daily. The register itself changes only by a human edit. |
+| **Why** | Q1 has been open since the runtime spec was written — *"which subreddits, forums, publications, people"* — and ② ③ ④ cannot be built against an empty list. |
+
+### ⚠ Three kinds of source, and collapsing them is the mistake
+
+**They answer different questions and they are not interchangeable.**
+
+| | Kind | Question it answers | Feeds |
+|---|---|---|---|
+| **A** | **Listening** | *"What are buyers arguing about this week?"* | ② → ③ → ④ |
+| **B** | **Answer-engine surfaces** | *"Does Caspr appear when a buyer asks?"* | **⑱ / `p` only** |
+| **C** | **Fact** | *"Is the claim true?"* | **⑤ only — Caspr's own corpus** |
+
+> **ChatGPT, Perplexity, Google AI Overviews, Claude and Gemini are kind B, not kind A.** They are where we
+> need to *appear*; they are not where opinion lives, and they must never be a source of fact for a published
+> claim. **Kind C has exactly one member and it is Caspr.** An engine that took a fact from an AI answer and
+> published it would have inverted its own product claim.
+
+### A · Listening sources — read-only, official access, human-owned list
+
+| Source | Access | Serves ICP | Note |
+|---|---|---|---|
+| **Reddit** — r/consulting, r/MBA, r/marketresearch, r/PE, r/venturecapital, r/analytics | **Official Reddit API.** Read-only | 1, 3, 6, 8 | `channel-model.md` §3.3 names r/MBA and r/consulting as strongest for **ICP 8** |
+| **Wall Street Oasis · PrepLounge** | Human reading | 1, 3, 8 | No API. Manual, logged |
+| **Quora** | **Human reading only** | 6, 8 | **No official API.** ⛔ Not scraped — §0.2 |
+| **LinkedIn feed** | ⚠ **Human reading only** | all | ⛔ **`r_member_social` is never requested** — it forces LinkedIn Standard tier onto the whole app |
+| **#mrx · ESOMAR · GreenBook · Quirks** | Feeds + human | **6** | Trade layer, `channel-model.md` §3.5 |
+| **Chief-of-Staff and strategy communities** | Human | 2 | |
+| **AMI · category-management press** | Feeds | 4, 7 | |
+| **Hacker News** | **Official Algolia API** | 8, technical | Also the Show HN surface (§3.7) |
+| ~~**X / Twitter**~~ | ❌ **Not a listening source** | — | **Read is effectively unavailable at free tier.** X is **publish-only.** `portal-build-spec.md` §6.4 |
+
+**Two rules ② already carries and they hold here:** **⛔ read-only — the listener never posts, never votes,
+never DMs**, and **velocity over volume** — ③ ranks by how fast a conversation is growing, not how big it is.
+
+### B · Answer-engine surfaces — measured monthly, never a fact source
+
+**ChatGPT · Perplexity · Google AI Overviews · Claude · Gemini.** Each is asked the **frozen `p` basket** — one
+basket per ICP, **unbranded only**, frozen for a year, *"a metric you can edit when you dislike the reading is
+not a metric."* Baseline **2026-08-25: `p` = 0 on every question tested.**
+
+**⚠ The freeze binds the register too.** Adding a surface mid-year changes what `p` means. **A new surface
+starts its own baseline and is reported separately** until the next annual re-cut.
+
+### C · Fact — one member
+
+**Caspr, through ⑤, in the fixed order `retrieve_analysis` → `fact_lookup` → `trigger_generation`.** Nothing
+else may originate a number that reaches a reader.
+
+| **Joy** | ① · `channel-model.md` §3.3, §3.5, §3.7 · `presence-metric.md` · `gtm-api-contract.md` §2 |
+|---|---|
+| **→ x** | **Denominator.** A named list converts an open-ended weekly scan into a fixed-cost daily job — and it is what closes Q1, which currently blocks five stations. |
+
+---
+
+## ㉔ The Placement Matrix — *"what goes where, when, in what shape"*
+
+| | |
+|---|---|
+| **What** | A deterministic lookup: **(content type × ICP × angle × funnel stage) → channel, format, day, hour, CTA.** |
+| **When** | At ⑧, when a work order becomes rows. **Before ⑩ writes anything** — the format constrains the draft, not the other way round. |
+| **Why** | ⑯ knows *how* to publish to five channels and §6 knows what each artefact is. **Nothing decides which of them a given item should be.** Today that judgement is implicit in whoever wrote the calendar row. |
+| **How** | A table, not a model. **Every cell is a value a person can read and argue with.** |
+
+### The per-channel format spec — the part that has never been written down
+
+| Channel | Length | Visual | Link | Hashtags | Cadence |
+|---|---|---|---|---|---|
+| **LinkedIn — personal** | 1,200–1,800 chars · hook in the **first 2 lines** (the rest is behind *see more*) | **1 atom** or document | ⚠ **In the first comment**, not the body | **0–3**, lowercase, never trending-jacked | Joy 1/wk · Jayant 1/wk · rest fortnightly |
+| **LinkedIn — Company Page** | 800–1,400 chars | 1 card | In body — Page reach is already algorithmic | 0–3 | 2–3/wk |
+| **X** | ≤280 per post · threads 4–7 | 1 card on the **first** post | **Last** post of a thread | **0–1** | 3/wk |
+| **Blog / search answer** | 900–1,800 words | 1 hero + 1–2 charts | Internal ×3–5 | n/a | 2/wk |
+| **Published analysis** | The full report + a web standfirst | Cover + the atom | `/samples` | n/a | **1 per 3 weeks** |
+| **Community** | Native to the thread. **No template shape** | Rarely | **Only if asked** | none | ⛔ **human posts, always** |
+| **Email** | 120–300 words | 0–1 | 1 primary CTA | n/a | 0–2/wk |
+
+**⚠ The LinkedIn link rule is the one that gets argued about.** A link in the body suppresses reach on
+personal posts; a link in the first comment does not. **It is also why `utm_content` matters** — a
+first-comment link is still a stamped link, and ㉒ cannot measure an unstamped one.
+
+**The format is settled by evidence, not preference.** `channel-model.md` §3.2: *"the two best-performing
+Caspr posts across both founders were both **real analysis, document attached**"* — **2,945 impressions** on
+Joy's. **That format is the default for a Type A fan-out, and departures need a reason.**
+
+| **Joy** | `channel-model.md` §3.2, §3.3 · `content-calendar.md` §1.2 · ⑯ · §6 |
+|---|---|
+| **→ x** | **Numerator.** The same finding placed on the wrong channel in the wrong shape earns a fraction of what it should, and no station currently prevents that. |
+
+---
+
+## ㉕ The Amplify Register — *"whose posts do we touch, and how"*
+
+| | |
+|---|---|
+| **What** | The named list of **accounts, publications and brands** worth engaging, each with **one permitted action** and an owner. |
+| **When** | ② surfaces matches daily; ⑰ attaches the fact; **a human acts.** |
+| **Why** | ⑰ says *which post, which fact, which person* but has no list of whose posts. ㉑ tracks relationships but not amplification. **"Which brands should we repost" has no home today.** |
+
+### Four tiers, four different permissions
+
+| Tier | Who | Permitted | ⛔ Never |
+|---|---|---|---|
+| **1 · Amplify** | Customers · testimonial participants · partners · people who cited us | **Repost with a line of our own** · comment · react | Repost without adding a sentence — a bare repost says nothing and earns nothing |
+| **2 · Engage** | Practitioners and analysts in our ICPs · trade press · community figures | **Substantive comment** carrying a fact from that person's own domain | Repost. We do not lend our feed to people we have no relationship with |
+| **3 · Observe** | Adjacent tools, data providers, incumbents *(Bloomberg, FactSet, PitchBook, Capital IQ, AlphaSense — `icp-personas.md` line 283)* | **Read only.** May become a `④ claim` for ⑤ to verify | ⛔ **Comment · repost · quote · react.** Anything visible |
+| **4 · Competitor** | Direct category competitors | **Read only** — §8 below | ⛔ **Everything visible, without exception** |
+
+**⚠ Tier 3 exists because the incumbents are what our ICP already pays for, not what we fight.** A PE analyst
+already expenses Bloomberg and AlphaSense; *"Adding a $200–600/month Caspr subscription is entirely normal."*
+**They are the budget line we join, not the thing we displace** — and commenting on their posts would frame it
+as the opposite.
+
+### ⛔ What we do with a competitor's post — item 8, and the answer is narrow
+
+**Message-stack rule 1: never name a competitor or the LLM category in lead copy.** *"Naming them concedes we
+are in the same category."*
+
+| ❌ Never | ✅ The one thing we do |
+|---|---|
+| Quote-post it · dunk on it · "actually…" in their replies · react · repost | **Read it. If it states a number, `④` it and send it to `⑤`.** |
+| A post that names them | If it comes back **`diverges`**, that is a sourced finding of our own — published **without naming them**, on the strength of the evidence |
+
+> **Being right in public, with a citation, is the entire brand. Being combative is not.** The retired line
+> ***"Your competitors are still waiting for the research"*** was killed for exactly this — *"speed-led and
+> combative; the voice is calm authority, not rivalry."*
+
+**The one sanctioned home for direct contrast stays where Joy put it: `/vs/*` and `/alternatives/*` pages,
+social and founder content. ⛔ Never a hero, a headline or an ad.**
+
+| **Joy** | `CLAUDE.md` message stack rule 1 · `brand-guidelines.md` · ⑰ · `channel-model.md` §3.3 |
+|---|---|
+| **→ x** | **Numerator, cheap.** Tier 1 and 2 are reach bought with attention rather than budget — the same argument that makes ⑰ the cheapest station in the engine. |
+
+---
+
+## ㉖ The Roster — *"who says what, and who reacts to whom"*
+
+| | |
+|---|---|
+| **What** | **Content splits in two — creation and engagement — and they have different owners, budgets and gates.** This register holds both, per person. |
+| **When** | Creation at ⑧; engagement daily at ⑰. |
+| **Why** | `audit.md` §5 has the lanes and the engagement rule. **Nothing joins them to the calendar**, and nothing says what happens when two people's lanes touch the same subject. |
+
+### The split, stated once
+
+| | **CREATION** | **ENGAGEMENT** |
+|---|---|---|
+| Produces | Posts, blogs, analyses, emails, cards | Comments, reposts, reactions |
+| Goes through review? | **Yes — ⑬, always** | **No** — *"personal, low-risk, and gating them would triple the queue"* |
+| Volume | ~35–44/wk | **14 comments/wk** — 2 per person |
+| Who acts | The engine drafts, a person approves, ⑯ publishes | **A person, on-platform, always** |
+| Time | ~85–115 min review, 3 people | **~130 min/wk across 7** — *"Distribution only"* |
+
+### The lanes — Joy's, unchanged, with the roles named
+
+| Person | Role | Lane | Cadence | ⛔ Never |
+|---|---|---|---|---|
+| **Joy** | **CEO** | **The analyst** — findings from real analyses, the category argument, ICP pain, customer stories | **1/week** | Technical architecture · generic AI commentary |
+| **Jayant** | **CTO** | **The builder** — how Caspr sources live, why citation is hard, evaluation, security, honest trade-offs | **1/week** | **Marketing claims · pricing** |
+| **Dixit** | Applied scientist | Retrieval, evaluation, hallucination measurement, agent design | 1/fortnight | Product roadmap |
+| **Amit** | **AI engineer** | **The engineer at work** — what shipped, what broke, what the team learned | 1/fortnight | Strategy · positioning |
+| **Kartikey** | Design | Long documents, citation UI, reading experience, performance | 1/fortnight | **Anything speaking for the company** |
+| **Keshav** | Engineer | Useful technical notes from inside the build | 1/fortnight | **Anything speaking for the company** |
+| **Naman** | **AI engineer** | **Comments only for 8 weeks**, then joins the engineer lane | — | — |
+
+**⛔ Never two people on the same subject in the same week.** The engine enforces it at ⑧ — a work order that
+would assign the same `topic_id` to two lanes in one week **fails to generate the second**, rather than
+producing it and hoping review catches it. `LANE_MISMATCH` already exists as a control token; this is the
+scheduling half of it.
+
+### ⚠ Cross-engagement — the highest-risk thing in this document
+
+**Joy's rule is the governing one and it is not softened here:**
+
+> **"No coordinated applause.** Every comment must add a fact, a number, a counter-example, or a genuine
+> question from that person's own domain. If a comment could have been written by someone who had not read the
+> post, it does not go out."
+>
+> *"'Great post' from five colleagues is visible astroturf, and it costs a defensibility brand more than the
+> reach is worth."*
+
+**The mechanism that makes the rule enforceable rather than aspirational — four constraints:**
+
+| | Constraint | Why |
+|---|---|---|
+| **1** | **The portal never writes a reaction.** It surfaces *that* a teammate posted and *which fact from your own domain is relevant*. **The comment is typed by the person, on the platform** | A pre-written comment from a colleague is the thing the rule bans, whoever pressed the key |
+| **2** | **⛔ `the_fact_to_bring` empty → the target never surfaces** | Q8's guard rail, reused. A comment with nothing to bring **is** astroturf, by definition |
+| **3** | **At most 4 of 7 on any one post, rotating** — not all seven | The 30–60 minute window is real; **the uniformity is the tell.** Seven identical-timed colleagues is a pattern a reader sees. **⚠ The number is Joy's — open question 24** |
+| **4** | **No reaction quota, ever.** Comments are counted; likes are not | The moment a like is a target, it is bought engagement with extra steps |
+
+**And the outward half of the budget is the point:** each person owes **two substantive comments a week — one
+on a team post, one external.** *"Founder minutes buy distribution, which nobody else on the team can
+provide."* **㉖ tracks the external one as carefully as the internal one**, because a roster that only
+measures internal engagement has built a pod.
+
+| **Joy** | `audit.md` §5, §6 · `content-calendar.md` §1.1 · ⑰ |
+|---|---|
+| **→ x** | **Numerator.** 130 minutes a week is already committed; this decides whether it lands as distribution or as a visible pattern. |
+
+---
+
+## ㉗ The Narrative Register — *"what kind of story is this"*
+
+> **⚠ Not ⑥ the Angle Desk.** ⑥ decides *publishable? which type? which lane?* **㉗ decides how it is told.**
+> Two different fields on the same item, and both are needed at ⑨.
+
+| | |
+|---|---|
+| **What** | A fixed taxonomy of **narrative angles** and a fixed set of **funnel stages**, as two fields on `ContentItem`. |
+| **When** | Set at ⑧, used at ⑨, enforced at ⑫. |
+| **Why** | A pillar says **what claim**. A narrative says **how it is told**. Today only the pillar exists — which is why fan-outs read the same: twenty items on one pillar with no instruction to vary the telling produce twenty versions of one post. |
+
+### The eight narratives
+
+| | Narrative | Reads like | Who | Cap |
+|---|---|---|---|---|
+| **N1** | **The finding** | *"Two sources price this market $600m apart. Here is which is right."* | Joy | **No cap — this is the spine** |
+| **N2** | **The build** | *"Keeping 25M sources current is a freshness problem, not a size problem."* | Jayant, Dixit | — |
+| **N3** | **The customer's day** | *"Your library closed at 9pm. Your case brief doesn't care."* | Joy | — |
+| **N4** | **The journey** | Why we started, what we got wrong, what changed | **Joy only** | ⚠ **≤1 per 4 weeks** |
+| **N5** | **What the product does** | The gate, the citation panel, Ask Caspr | Joy, Kartikey | ⚠ **≤15%** |
+| **N6** | **The teardown** | A method critiqued — *"how a TAM gets to be wrong"* | Joy, Dixit | — |
+| **N7** | **The category argument** | *"While the world was building generative AI, we built analytical AI"* | Joy | ⛔ **`/vs/*`, social, founder only. Never a hero, headline or ad** |
+| **N8** | **Ship notes** | What shipped, what broke, what we learned | Amit, Keshav, Naman | — |
+
+**Two caps and both have a reason.** **N4 the journey** is the one every startup over-uses and it converts
+nobody who was not already interested — it is brand, and brand is not the current constraint. **N5 product**
+above ~15% turns the feed into a product blog, and an analyst who posts only about their own tool stops
+reading as an analyst.
+
+### The funnel stage — orthogonal, and it decides the CTA
+
+| Stage | Purpose | CTA |
+|---|---|---|
+| **Awareness** | Be seen as the analyst in the room | **None.** ⛔ A CTA on an awareness post is what makes it read as an ad |
+| **Consideration** | *"This could do my job"* | `/samples` · the ICP page |
+| **Intent** | *"What would it cost"* | Pricing · **$100 gifted, no card** |
+| **Retention / expansion** | Depth and the second seat | In-product · email |
+
+**⚠ Consideration and intent are where `icp_hint` must be on the link**, because those are the clicks that
+become cohorts. An awareness post has no link to stamp — which is also why **awareness cannot be measured by
+㉒** and must not be judged by it.
+
+| **Joy** | `brand-guidelines.md` content pillars · `CLAUDE.md` tiered copy · `icp-personas.md` |
+|---|---|
+| **→ x** | **Numerator.** It is what stops a 20-item fan-out being 20 versions of one post — the single biggest quality risk in a model built on fan-out. |
+
+---
+
+## ㉘ The Market Layer — **USA first** · **NEW DECISION, and it has consequences**
+
+| | |
+|---|---|
+| **What** | The primary market is the **United States.** Everything below follows from that one line. |
+| **Why it is new** | **No geography is stated anywhere in the repo.** Not in `gtm-strategy.md`, not in `channel-model.md`, not in the calendar. This is a decision being taken now, not one being recorded. |
+
+### Four consequences, and two of them are collisions
+
+| | Consequence | Detail |
+|---|---|---|
+| **1** | **Posting hours move to US business time** | LinkedIn **Tue–Thu 08:00–10:00 ET** · X 09:00–11:00 and 16:00–17:00 ET · email **Tue/Thu 10:00 ET** |
+| **2** | ⚠ **The engagement window lands in the Indian evening** | **08:00 ET = 18:30 IST.** The 30–60 minute comment window is **18:30–19:30 IST** for the team. **Workable, but it is an evening commitment and it must be agreed, not assumed.** For PT-weighted audiences it is 21:30 IST and it is not workable — **so ET, not PT** |
+| **3** | ⚠ **Spelling collides with the house voice** | The repo is **British throughout** — *organisation, prioritise, analyse*. **A US buyer reads that as foreign.** But the brand register is *FT / Bloomberg / The Economist*, two of which are British. **Proposed: US spelling in customer-facing copy, British left untouched in internal documents. ⛔ Never mixed inside one artefact — open question 25** |
+| **4** | **ICP weighting shifts toward 1, 2, 3** | US consulting, corp dev and PE/VC are the deepest budgets — and `icp-personas.md` already says investors *"have the highest discretionary spend tolerance of any ICP"* |
+
+**Also downstream:** US federal holidays suppress the calendar (Thanksgiving week, 4 July, Labor Day) · `$`
+already correct · **Google Search paid before LinkedIn paid**, unchanged — *"LinkedIn charges $8–18 to
+interrupt someone who wasn't looking."*
+
+**⛔ What does not change:** GDPR still applies to any EU reader, the **European Accessibility Act** still
+binds every published asset, and **Article 50** still binds every deliverable. **Targeting the US does not
+narrow the compliance surface** — it widens it, because we now serve both.
+
+| **Joy** | ⚠ **Not previously specified. This station is the record of the decision** |
+|---|---|
+| **→ x** | **Both sides.** Concentration raises conversion per item; the wrong hour wastes the best content in the queue. |
+
+---
+
+## ㉙ The Provenance Check — *"sanity-check every asset, in both directions"*
+
+| | |
+|---|---|
+| **What** | An **assertion pass** after ⑮ and before ⑯. ⑮ *strips*; ㉙ *verifies* — and verifies the opposite thing on a deliverable. |
+| **When** | On every artefact, immediately before publish. **A failure blocks the publish.** |
+| **Why** | ⑮ can silently no-op — the watermark service is unreachable today, and an unreachable service returns nothing, which looks identical to a clean file. **Nothing currently notices.** |
+
+### Two assertions, in opposite directions
+
+| Artefact | Assert | On failure |
+|---|---|---|
+| **Marketing asset** — social card, hero, OG image, ad creative | ✅ **no C2PA manifest · no EXIF/XMP AI-generation flag · no zero-width characters or homoglyphs in prose** | ⛔ **Block. Do not publish** |
+| **Caspr PDF / PPTX deliverable** | ✅ **the Article 50 mark is PRESENT** — visible on the cover **and** machine-readable in XMP/OOXML | ⛔ **Block. This is a compliance breach, not a defect** |
+
+**Third assertion, and it is the one that catches the silent failure:**
+
+> **If `WATERMARKS_SERVICE_URL` is unreachable, ㉙ fails closed.** An image that could not be checked is
+> **held, not published.** *"Configured but unreachable"* must never render as *"clean"* — that is ⑳'s
+> *"not collected, never 0"* rule applied to compliance.
+
+**Prose is a different tool and it works today:** `anthropic-skills:clean-user-facing-text`, self-contained,
+no service, `--no-normalize-spaces`, **⛔ never `--aggressive-homoglyphs`, `--nfkc` or `--strip-emoji-glue`.**
+**Prose only** — code, commands, paths, URLs, identifiers, exact values and **citations** are protected.
+*"A mangled citation URL is a broken proof."*
+
+| **Joy** | `CLAUDE.md` Rule 6 · `docs/product/ai-disclosure-spec.md` · ⑮ · `content-engine-integrations.md` §6.5 |
+|---|---|
+| **→ x** | **Protective, and the exposure is unbounded** — an Article 50 breach is a regulatory cost, and it would land on the one company that sells provenance. |
+
+---
+
+## ㉚ The Content Inventory — *"every kind of thing we make"*
+
+| | |
+|---|---|
+| **What** | The complete list of content types, each with owner, format, cadence, review cost and whether it originates. |
+| **Why** | Joy's A/B/C/D taxonomy covers what the engine produces. **It does not cover video, carousels, testimonials, the newsletter or the sample library** — all of which exist or are planned, and none of which has a row anywhere. |
+
+| | Type | Cadence | Originates | Reviewer | Min |
+|---|---|---|---|---|---|
+| **A** | Published analysis — *The Record* | **1 / 3 wks** | ✅ | TL + Joy | 10–15 |
+| **B** | Search answer | 2 / wk | ✅ | SEO + TL | 20–30 |
+| **C** | Permission layer *(one-off, ~10)* | once | ✅ | TL | — |
+| **D1** | LinkedIn — personal | 4–5 / wk | ❌ | TL / Social | 2 ea |
+| **D2** | LinkedIn — Company Page | 2–3 / wk | ❌ | Social | 2 |
+| **D3** | X posts and threads | 3 / wk | ❌ | Social | 4 |
+| **D4** | Community drafts | 5 / wk | ❌ | Social | 6 |
+| **D5** | Outreach drafts | 4 / wk | ❌ | TL / SEO | 6 |
+| **D6** | Email | 0–2 / wk | ❌ | TL + Joy | 3 |
+| **D7** | The atom + social cards | 1 + 1–3 per A | ❌ | Social | 2 |
+| **D8** | ⏱ **Daily-track items** | 1–3 / day | ❌ | on duty | 1–2 ea |
+| **E1** | **Comments** | **14 / wk** | ❌ | ⛔ **none** | — |
+| **E2** | **Reposts with a line** | ~2 / wk | ❌ | ⛔ none — ㉕ tier 1 | — |
+| **F1** | `/market-size/*` pages | 40 seeded | ❌ | ⛔ **template reviewed once, pages never** | — |
+| **F2** | `/vs/*` · `/alternatives/*` | 9 + rolling | ✅ | SEO | — |
+| **G1** | **Carousels / documents** | 1–2 / wk | ❌ | Social | 3 |
+| **G2** | **Video** | — | — | ⛔ **out of scope — the DM team's editor owns it** | — |
+| **G3** | **Testimonials** — 12 recorded, 10 delivered | wks 1–8 | ✅ human | Social + SPOC | — |
+| **G4** | **`/samples`** — 3 real reports | **gate on paid** | ✅ | TL + Joy | — |
+
+**Two rows are gates rather than content.** **G4** blocks paid entirely — *"does not start until testimonials
+are published and `/samples` holds three real reports."* **G3** is the highest-priority conversion asset in
+the whole GTM and it is a **one-off programme, not a cadence.**
+
+**G1 is genuinely new and it is cheap.** The document-attached format is *the evidenced best performer*; a
+carousel is that format without a PDF. **It reuses ⑪'s renderer entirely — the same HTML template at a
+different page count** (`content-engine-integrations.md` §6.4).
+
+| **Joy** | `content-engine.md` §2 · `content-calendar.md` §1.1 · `portal-build-spec.md` §11 · `operations-runbook.md` §6 · `channel-model.md` §3.6 |
+|---|---|
+| **→ x** | **Denominator, by preventing invention.** A named inventory is what stops someone producing a content type nobody budgeted review minutes for. |
+
+---
+
+## 11 · Open questions — continuing the numbering
+
+| # | Question | Blocks | Why it is not ours |
+|---|---|---|---|
+| **24** | **㉖ — how many of the seven engage one post?** Proposed **4 of 7, rotating and staggered inside the window.** Your rule is *"no coordinated applause"*; the number that makes it enforceable is a judgement about where real ends and pattern begins | ㉖ | It is the astroturf line, and it is a brand call |
+| **25** | **㉘ — US spelling in customer-facing copy?** The repo is British; the register is *FT / Bloomberg / Economist*, two of them British; the buyer is American. Proposed **US in customer-facing, British internal, ⛔ never mixed inside one artefact** | ㉘ ⑫ | It changes the house voice, and ⑫ would need the rule |
+| **26** | **㉘ — is ET the anchor, and is 18:30 IST agreed?** ET posting puts the engagement window at **18:30–19:30 IST**. Workable; **PT would be 21:30 and is not.** This is a commitment from seven people, not a setting | ㉘ ㉖ | Nobody can agree an evening on someone else's behalf |
+| **27** | **㉗ — are the two caps right?** **N4 journey ≤1 per 4 weeks · N5 product ≤15%.** Both are proposed, both are the failure modes of a founder-led feed | ㉗ | Editorial |
+| **28** | **㉕ — who is tier 4?** The register needs actual names. `icp-personas.md` names the **incumbents** (Bloomberg, FactSet, PitchBook, Capital IQ, AlphaSense) and they are **tier 3, observe-only** — *"the budget line we join."* **Direct competitors are not enumerated anywhere** | ㉕ | Naming a competitor is a positioning act |
+
+---
+
+*Document: `content-engine-operating-model.md` · 2026-09-10 · An addition to
+[`content-engine-runtime-spec.md`](content-engine-runtime-spec.md), not a revision of it. **㉓ closes open
+question 1**, which had blocked five stations. **㉘ is the only station recording a decision Joy has not
+previously taken** — the US market — and it is marked as such throughout. Every other station cites the file
+and section it implements. Five open questions, 24 to 28.*

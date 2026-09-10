@@ -3,8 +3,8 @@
 *2026-09-08. The picture of [`content-engine-runtime-spec.md`](content-engine-runtime-spec.md).*
 
 **This file holds the diagrams and nothing else.** Every rule, citation and open question lives in the runtime
-spec; this is the same mechanism drawn. Station numbers ①–㉒ are the spec's numbering — **①–⑱ are the line,
-**⑲ ⑳ ㉑ ㉒ sit across it** and are drawn in §9A.
+spec; this is the same mechanism drawn. Station numbers ①–㉚ are the spec's numbering — **①–⑱ are the line,
+**⑲ ⑳ ㉑ ㉒ sit across it** (§9A) and **㉓–㉚ are the operating model** (§9B).
 
 > **§0 is the version to present.** Two diagrams, a line to say for each box, and the three questions
 > somebody will ask. **§1–§10 are the engineering view** — the same machine, at the detail a build needs.
@@ -831,6 +831,228 @@ somebody's feed."*
 
 ---
 
+## 9B · ㉓–㉚ The operating model — sources, roster, placement, provenance
+
+**Spec: [`content-engine-operating-model.md`](content-engine-operating-model.md).** Eight registers a human
+owns, and rules the engine executes against them. None of them writes copy.
+
+### 9B.1 · ㉓ Three kinds of source — and collapsing them is the mistake
+
+```mermaid
+flowchart TD
+    subgraph A["A · LISTENING — what buyers argue about"]
+        R1["Reddit — official API<br/><small>r/consulting r/MBA r/marketresearch</small>"]
+        R2["WSO · PrepLounge · Quora<br/><small>HUMAN READING — no API</small>"]
+        R3["#mrx · ESOMAR · GreenBook · Quirks"]
+        R4["Hacker News — Algolia API"]
+        R5["LinkedIn feed<br/><small>⚠ human only</small>"]
+    end
+
+    subgraph B["B · ANSWER ENGINES — where we must APPEAR"]
+        P1["ChatGPT · Perplexity · AI Overviews<br/>Claude · Gemini"]
+    end
+
+    subgraph C["C · FACT — exactly one member"]
+        C1[("CASPR — via ⑤<br/>retrieve → lookup → generate")]
+    end
+
+    A --> L["② THE LISTENER<br/>⛔ read-only. never posts, never votes"]
+    L --> T["③ velocity > volume"] --> CL["④ claims"] --> V["⑤ VERIFIER"]
+    C1 --> V
+
+    B --> PM["⑱ / p — the frozen basket<br/><small>baseline 2026-08-25: p = 0</small>"]
+
+    XX["❌ X / Twitter is NOT a listening source<br/><small>read is unavailable at free tier. PUBLISH-ONLY</small>"]
+    NOSCRAPE["⛔ NEVER SCRAPE<br/><small>the product claim is 'curated, NOT web scraping'.<br/>A company selling that cannot scrape for its own marketing.<br/>No API → a human reads it, or we skip it</small>"]
+    BAD["⛔ an answer engine is NEVER a source of fact<br/><small>publishing one would invert our own product claim</small>"]
+
+    XX -.-> A
+    NOSCRAPE -.-> A
+    BAD -.-> B
+
+    classDef src fill:#e8f5e9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20
+    classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+    classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
+    classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
+    class R1,R2,R3,R4,R5,P1,C1 src
+    class L,T,CL,V,PM mach
+    class XX,NOSCRAPE,BAD stop
+```
+
+---
+
+### 9B.2 · ㉖ Creation vs engagement — and who says what
+
+```mermaid
+flowchart TD
+    ENG(("CONTENT"))
+    ENG --> CR["CREATION<br/>~40 items/wk"]
+    ENG --> EG["ENGAGEMENT<br/>~16 acts/wk"]
+
+    CR --> GATE{{"⑬ REVIEW GATE<br/>always"}}
+    EG --> NOGATE["⛔ NO GATE<br/><small>personal, low-risk. gating them<br/>would triple the queue</small>"]
+
+    GATE --> LANES
+
+    subgraph LANES["THE LANES — never two people, one subject, one week"]
+        J["JOY · CEO<br/>the analyst · 1/wk<br/><small>⛔ never architecture</small>"]
+        JY["JAYANT · CTO<br/>the builder · 1/wk<br/><small>⛔ NEVER pricing or marketing claims</small>"]
+        DX["DIXIT · applied science<br/>fortnightly"]
+        AM["AMIT · AI eng<br/>what shipped/broke · fortnightly"]
+        KT["KARTIKEY · design<br/><small>⛔ never speaks for the company</small>"]
+        KS["KESHAV · eng<br/><small>⛔ never speaks for the company</small>"]
+        NM["NAMAN · AI eng<br/><small>COMMENTS ONLY — 8 weeks</small>"]
+    end
+
+    NOGATE --> C1["1 comment on a TEAM post"]
+    NOGATE --> C2["1 comment EXTERNAL<br/><small>⭐ this is the health metric —<br/>internal-only means we built a pod</small>"]
+
+    C1 --> RULE
+    C2 --> RULE
+
+    RULE{{"⛔ NO COORDINATED APPLAUSE<br/>a fact, a number, a counter-example,<br/>or a real question from your OWN domain<br/><small>'great post' from five colleagues is<br/>visible astroturf, and it costs a<br/>defensibility brand more than the reach</small>"}}
+
+    RULE --> G1["1 · the portal NEVER writes a reaction<br/><small>it surfaces WHO posted + WHICH fact is yours.<br/>the person types it, on the platform</small>"]
+    RULE --> G2["2 · the_fact_to_bring EMPTY<br/>→ the target never surfaces"]
+    RULE --> G3["3 · max 4 of 7, rotating, staggered<br/><small>the window is real. the UNIFORMITY is the tell<br/>⚠ Q24 — Joy's number</small>"]
+    RULE --> G4["4 · ⛔ no reaction quota, ever<br/><small>a like with a target is bought<br/>engagement with extra steps</small>"]
+
+    classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+    classDef hum fill:#e3f2fd,stroke:#1565c0,stroke-width:2.5px,color:#0d47a1
+    classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
+    classDef good fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+    class ENG,CR,EG,J,JY,DX,AM,KT,KS,NM mach
+    class GATE,RULE hum
+    class NOGATE,G1,G2,G3,G4 stop
+    class C1,C2 good
+```
+
+---
+
+### 9B.3 · ㉔ ㉗ ㉘ Placement — what goes where, for whom, at what hour
+
+```mermaid
+flowchart LR
+    IT["an approved item"]
+    IT --> M{"㉔ THE MATRIX<br/>type × ICP × angle × stage"}
+
+    M --> CH["CHANNEL"]
+    M --> FM["FORMAT"]
+    M --> HR["HOUR"]
+
+    CH --> C1["LinkedIn personal<br/><small>1200–1800 ch · hook in 2 lines<br/>⚠ LINK IN FIRST COMMENT<br/>0–3 hashtags</small>"]
+    CH --> C2["X<br/><small>≤280 · thread 4–7<br/>link on the LAST post</small>"]
+    CH --> C3["Blog<br/><small>900–1800 words · 3–5 internal links</small>"]
+    CH --> C4["Community<br/><small>⛔ NO TEMPLATE SHAPE<br/>⛔ A HUMAN POSTS</small>"]
+
+    FM --> EV["⭐ DEFAULT = REAL ANALYSIS,<br/>DOCUMENT ATTACHED<br/><small>the two best-performing posts across<br/>both founders. 2,945 impressions.<br/>departures need a reason</small>"]
+
+    HR --> GEO["㉘ USA · EASTERN"]
+    GEO --> H1["LinkedIn Tue–Thu 08:00–10:00 ET"]
+    GEO --> H2["⚠ = 18:00–19:30 IST<br/>the comment window is an<br/>INDIAN EVENING · Q26"]
+    GEO --> H3["⛔ NOT Pacific<br/><small>PT 09:00 = 21:30 IST. not workable</small>"]
+
+    M --> NAR["㉗ NARRATIVE — how it is TOLD<br/><small>a PILLAR says what CLAIM.<br/>without this a 20-item fan-out<br/>is 20 versions of one post</small>"]
+    NAR --> N1["N1 finding ~35% — the spine"]
+    NAR --> N4["N4 journey ⚠ ≤1 per 4 wks"]
+    NAR --> N5["N5 product ⚠ ≤15%"]
+    NAR --> N7["N7 category ⛔ /vs/* only<br/>never a hero, headline or ad"]
+
+    M --> ST["FUNNEL STAGE → the CTA"]
+    ST --> S1["awareness → ⛔ NO CTA<br/><small>a CTA here is what makes it an ad</small>"]
+    ST --> S2["consideration/intent →<br/>link + icp_hint + utm_content"]
+
+    classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+    classDef hum fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+    classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
+    classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
+    classDef good fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+    class IT,CH,FM,HR,C1,C2,C3,NAR,N1,ST,S2,GEO mach
+    class M hum
+    class H1,H2,N4,N5 warn
+    class C4,H3,N7,S1 stop
+    class EV good
+```
+
+---
+
+### 9B.4 · ㉕ Whose posts we touch — four tiers, four permissions
+
+```mermaid
+flowchart TD
+    F["② surfaces a post"] --> T{"㉕ WHICH TIER?"}
+
+    T -->|"customers · partners<br/>people who cited us"| T1["TIER 1 · AMPLIFY<br/><small>repost WITH A LINE OF OUR OWN<br/>· comment · react</small>"]
+    T -->|"practitioners in our ICPs<br/>trade press"| T2["TIER 2 · ENGAGE<br/><small>substantive comment only.<br/>⛔ no repost — we do not lend our<br/>feed to people we have no<br/>relationship with</small>"]
+    T -->|"Bloomberg · FactSet · PitchBook<br/>Capital IQ · AlphaSense"| T3["TIER 3 · OBSERVE<br/>⛔ nothing visible<br/><small>these are the BUDGET LINE WE JOIN,<br/>not what we displace. commenting<br/>would frame it as the opposite</small>"]
+    T -->|"direct competitors<br/>⚠ Q28 — nobody has named them"| T4["TIER 4 · READ ONLY"]
+
+    T1 --> NB["⛔ never a BARE repost<br/><small>says nothing, earns nothing</small>"]
+
+    T4 --> ONLY["THE ONE THING WE DO"]
+    ONLY --> CLAIM["they stated a number → ④ it"]
+    CLAIM --> VER["⑤ VERIFIER"]
+    VER -->|"diverges"| OWN["our OWN sourced post<br/>⛔ WITHOUT NAMING THEM"]
+    VER -->|"confirmed"| NOTHING["nothing. it was just true"]
+
+    NEVER["⛔ NEVER: quote-post · dunk · 'actually…' in<br/>their replies · react · repost · name them in a headline<br/><small>naming them CONCEDES WE ARE IN THE SAME CATEGORY.<br/>'Your competitors are still waiting for the research'<br/>was RETIRED — speed-led and combative.<br/>The voice is calm authority, not rivalry</small>"]
+    T4 --> NEVER
+
+    HOME["✅ the ONE sanctioned home for direct contrast:<br/>/vs/* · /alternatives/* · social · founder content"]
+    OWN -.-> HOME
+
+    classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+    classDef hum fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+    classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
+    classDef good fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+    classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
+    class F,CLAIM,VER,OWN,NOTHING,ONLY mach
+    class T hum
+    class T3,T4,NEVER,NB stop
+    class T1,T2,HOME good
+```
+
+---
+
+### 9B.5 · ㉙ The provenance check — two assertions, opposite directions
+
+```mermaid
+flowchart TD
+    A["an approved artefact"] --> H["⑮ HYGIENE — strips"]
+    H --> P{"㉙ WHAT IS THIS?<br/>branch on artefact_type"}
+
+    P -->|"marketing asset<br/>card · hero · OG · ad"| M["ASSERT ABSENT<br/><small>no C2PA manifest<br/>no EXIF/XMP AI flag<br/>no zero-width / homoglyphs</small>"]
+    P -->|"a Caspr PDF / PPTX<br/>WE SELL"| D["ASSERT PRESENT<br/><small>the Article 50 mark —<br/>visible on the cover AND<br/>machine-readable in XMP/OOXML</small>"]
+
+    M -->|pass| PUB["⑯ PUBLISH"]
+    D -->|pass| PUB
+    M -->|fail| BLOCK["⛔ BLOCK"]
+    D -->|fail| BREACH["⛔ BLOCK — COMPLIANCE BREACH<br/><small>EU AI Act Art. 50(2), in force 2 Aug 2026.<br/>Not a defect. A legal obligation</small>"]
+
+    SVC{"WATERMARKS_SERVICE_URL<br/>reachable?"}
+    M -.-> SVC
+    SVC -->|"🔴 NO — today"| FAILCLOSED["FAIL CLOSED · HELD, NOT PUBLISHED<br/><small>an unreachable service returns nothing,<br/>which looks IDENTICAL to a clean file.<br/>'configured but unreachable' must never<br/>render as 'clean'</small>"]
+
+    RULE["⭐ WE MARK WHAT WE SELL,<br/>AND WE CLEAN WHAT WE PUBLISH ABOUT OURSELVES<br/><small>the two rules point in opposite directions ON PURPOSE.<br/>a single 'strip everything' pass would satisfy<br/>the instruction and breach the Act</small>"]
+    P -.-> RULE
+
+    NOCLAIM["⛔ and it NEVER claims human authorship<br/><small>for a company selling 'cited, or it does not ship',<br/>claiming otherwise would be self-defeating</small>"]
+    PUB -.-> NOCLAIM
+
+    classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+    classDef hum fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+    classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
+    classDef gap fill:#ffebee,stroke:#c62828,stroke-width:2.5px,color:#8e0000
+    classDef good fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+    class A,H,M,D,PUB mach
+    class P,SVC hum
+    class BLOCK,NOCLAIM stop
+    class BREACH,FAILCLOSED gap
+    class RULE good
+```
+
+---
+
 ## 10 · Build order
 
 ```mermaid
@@ -864,7 +1086,7 @@ flowchart LR
 
 ---
 
-*Document: `content-engine-flowchart.md` · 2026-09-08, §9A added 2026-09-09, §9A.4 2026-09-10 · The diagrams for
+*Document: `content-engine-flowchart.md` · 2026-09-08, §9A added 2026-09-09, §9A.4 and §9B 2026-09-10 · The diagrams for
 [`content-engine-runtime-spec.md`](content-engine-runtime-spec.md). **This file holds no rules.** Where a
 diagram and the spec disagree, the spec is correct and the diagram is a bug — report it rather than following
 it. Worked examples: [`content-engine-example.md`](content-engine-example.md).*
