@@ -914,11 +914,15 @@ flowchart TD
         NM["NAMAN · AI eng<br/><small>COMMENTS ONLY — 8 weeks</small>"]
     end
 
-    NOGATE --> C1["1 comment on a TEAM post"]
-    NOGATE --> C2["1 comment EXTERNAL<br/><small>⭐ this is the health metric —<br/>internal-only means we built a pod</small>"]
+    NOGATE --> C1["35 comments/wk<br/><small>1 per person per WEEKDAY</small>"]
+    NOGATE --> C2["⭐ 15 ANSWERS/wk — Quora 10, Reddit 5<br/><small>the engine DRAFTS, a human POSTS.<br/>2–3 min to check, not 20 to write —<br/>which is why volume tripled and<br/>hours barely moved</small>"]
+    NOGATE --> C3["10 reposts + brand posts on<br/>LinkedIn · X · Quora Space · IG"]
+    CAP["⛔ REDDIT IS THE CEILING, NOT OUR TIME<br/>1/day max · rotating person AND subreddit<br/>never a brand account · RAMPS 0→5 over 8 weeks<br/><small>'any account warned or removed. community trust<br/>does not survive a second breach.'<br/>QUORA carries the volume instead — and it<br/>ranks in Google and feeds answer engines</small>"]
+    C2 -.-> CAP
 
     C1 --> RULE
     C2 --> RULE
+    C3 --> RULE
 
     RULE{{"⛔ NO COORDINATED APPLAUSE<br/>a fact, a number, a counter-example,<br/>or a real question from your OWN domain<br/><small>'great post' from five colleagues is<br/>visible astroturf, and it costs a<br/>defensibility brand more than the reach</small>"}}
 
@@ -933,8 +937,8 @@ flowchart TD
     classDef good fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
     class ENG,CR,EG,J,JY,DX,AM,KT,KS,NM mach
     class GATE,RULE hum
-    class NOGATE,G1,G2,G3,G4 stop
-    class C1,C2 good
+    class NOGATE,G1,G2,G3,G4,CAP stop
+    class C1,C2,C3 good
 ```
 
 ---

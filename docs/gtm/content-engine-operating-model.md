@@ -1,13 +1,13 @@
 # Content Engine — The Operating Model
 
-*2026-09-10. Eight registers that answer "what actually goes out, from whom, where, when, and why that one."*
+*2026-09-10. Ten registers that answer "what actually goes out, from whom, where, when, and why that one."*
 
 **An addition to [`content-engine-runtime-spec.md`](content-engine-runtime-spec.md).** The runtime spec says
 how an item moves through the machine. **This says what the machine is allowed to decide about it** — which
 source it came from, which person says it, which channel and hour it lands on, which narrative it belongs to,
 and what may never be done with a competitor's post.
 
-**Stations ㉓ to ㉚.** Every one of them is a **register a human owns** plus **rules the engine executes
+**Stations ㉓ to ㉜.** Every one of them is a **register a human owns** plus **rules the engine executes
 against it**. None of them writes copy; ⑩ still does that.
 
 ---
@@ -697,6 +697,125 @@ Reddit — **long, cited, and still earning in a year.** That is how this brand 
 
 **The next scale step is not more comments. It is ㉑ — getting onto other people's pages**, where
 **6.5× of citations** come from.
+
+---
+
+### ⭐ Revised again — **daily, every platform, brand AND individual**
+
+**Was 30 acts a week. Now ~64.** ⚑ **And the ceiling that binds is not our time — it is Reddit's tolerance.**
+
+#### ⚠ Read this before the numbers: the two platforms scale differently, and getting it wrong is a ban
+
+| | **Quora — scales** | **Reddit — does NOT scale** |
+|---|---|---|
+| Built for | **Answering many questions.** Volume is the intended behaviour | **Participating in a community.** Volume is the reported behaviour |
+| Daily posting | **Fine, and rewarded** | ⛔ **Fastest route to a shadowban** |
+| New accounts | Tolerated | ⛔ **Watched.** Karma and account age gate everything |
+| If we get it wrong | An answer is downvoted | **`channel-model.md` kill condition: *"any account warned or removed. Community trust does not survive a second breach."*** |
+
+> **⛔ So Reddit is capped at 1 a day, rotating across subreddits AND across people, never link-first — and it
+> ramps rather than starting at full volume.** Seven accounts all posting daily from day one is the single
+> most reliable way to lose the channel permanently.
+>
+> **Quora carries the volume instead.** It also **ranks in Google and feeds answer engines**, which Reddit
+> largely does not. **It is the better surface anyway.**
+
+#### The daily grid — brand and individual, every platform
+
+**M–F unless marked. Times US Eastern.**
+
+| Platform | **BRAND account** | **INDIVIDUAL accounts** | Per week |
+|---|---|---|---|
+| **LinkedIn** | **1 post/day** *(Page)* + 2 comments/day | **1 founder post Tue + Thu** · rotating team 3/wk · **1 comment per person per weekday** | **5 brand posts · 5 team posts · 35 comments** |
+| **X** | **2 posts/day** + 3 replies/day | 1 reply per person, 2×/wk | **10 brand posts · 15 replies · 14 individual** |
+| **Quora** ⭐ | 1 answer/day *(Space)* | **1 answer/day, rotating lane owner** | **10 answers — 5 brand, 5 individual** |
+| **Reddit** ⛔ | ⛔ **never a brand account** | **1/day max, rotating person AND subreddit** | **5, capped** |
+| **Hacker News** | ⛔ never | **Jayant · Dixit · Keshav** — as themselves, when relevant | 2–3 |
+| **Instagram** | **The atom, 3×/wk, auto** | — | 3 |
+| **Facebook** | Mirror of the Page post, auto | — | ⛔ unmeasured |
+
+**Totals: ~30 posts and ~34 engagement acts a week — ≈64, from 30.**
+
+| | Was | **Now** |
+|---|---|---|
+| Comments | 21 | **35** — 1 per person per weekday |
+| Reposts with a line | 6 | **10** — 2 per weekday |
+| **⭐ Answers — Quora + Reddit** | **3** | **15** — 10 Quora, 5 Reddit |
+| Brand posts across platforms | ~5 | **~21** |
+| Reactions | untracked | **untracked** ⛔ never a target |
+
+#### Why this is affordable, and it is not because people work more
+
+> **The engine drafts every one of them. A human reviews and posts.**
+
+A drafted, sourced Quora answer is **2–3 minutes to check and post** — not the twenty it takes to write one.
+That is the entire reason the volume moves and the hours barely do:
+
+| | Per person | Total |
+|---|---|---|
+| **5 comments** *(1/weekday)* | ~15 min | 105 |
+| **Answers** — drafted, human posts | Social + lane owners | ~60 |
+| **Reposts** | Social | ~10 |
+| **Brand posts** — automated, reviewed in the normal queue | — | in the 85–115 |
+| | **~20–25 min each** | **~175 min + Social** |
+
+**⚠ Review capacity does not move.** Brand posts go through ⑬ like everything else and are already counted in
+the 85–115 minutes. **Comments and answers never enter the queue** — Joy's rule, unchanged.
+
+#### The ramp — ⛔ do not start at full volume
+
+| Weeks | Reddit | Quora | Why |
+|---|---|---|---|
+| **1–2** | **0** | 3/wk | **Accounts are new.** Read and participate; post nothing |
+| **3–4** | **2/wk** | 5/wk | One account, one subreddit, no links |
+| **5–8** | **3/wk** | 7/wk | Two accounts, links only where genuinely asked |
+| **9+** | **5/wk — the cap** | **10/wk** | Full volume |
+
+**Quora needs no ramp. Reddit needs all of it.**
+
+---
+
+## ㉜ The Data Access Ledger — **what is free, what costs, and what does not exist**
+
+| | |
+|---|---|
+| **What** | Every data source the engine reads, with its **real access tier** and cost. |
+| **Why** | *"Kitna free mein mil sakta hai"* is a build question with a specific answer, and getting it wrong late means either an unbudgeted bill or a station that cannot run. |
+
+### ⭐ The headline: **most of what this engine needs is free**
+
+| Source | Tier | What it gives | Cost |
+|---|---|---|---|
+| **Google Search Console** | 🟢 **Free** | ⭐ **Queries that already reached us**, impressions, position. The best listening surface we have | **$0** — OAuth |
+| **Hacker News (Algolia)** | 🟢 **Free, no key at all** | Full search over posts and comments | **$0** |
+| **LinkedIn — posting** | 🟢 **Free** | `w_member_social`, **open permission, no approval.** 150 req/member/day | **$0** |
+| **LinkedIn — Page** | 🟢 **Free** | Community Management API, **development tier granted on application** | **$0** |
+| **X — posting** | 🟢 **Free tier** | Writes are sufficient for our volume | **$0** |
+| **Google Ads Keyword Planner** | 🟢 Free *(with an Ads account)* | Volume and **CPC** — and CPC is our discriminator | **$0** |
+| **RSS / trade feeds** | 🟢 Free | #mrx, GreenBook, Quirks, category press | **$0** |
+| **Model API — drafting** | 🟡 Paid, small | The whole writing layer | **$40–100/mo** — the 80% Haiku split |
+| **⚠ Reddit API** | 🟡 **Free tier exists, but** | Read access to subreddits | **⚠ Commercial use is a paid tier since the 2023 change. Verify current terms before building against it** — this is the one number in this table that has moved before and will again |
+| **Perplexity API** | 🟡 Paid, usage | Citation mining — **which pages the engines trust** | Small at monthly cadence |
+| **Ahrefs** | 🟡 **Probably already licensed** | Backlinks, keywords, competitor ranking | ⚠ **A credential for it exists in this folder** — `CLAUDE.md` Rule 7 names it. **⛔ Not opened, and the path is not repeated here.** Confirm the licence with whoever holds it |
+| **⛔ Quora** | 🔴 **No API. None. At any price** | — | **Human reading and human posting only** |
+| **⛔ X — reading** | 🔴 Paid, and **we skip it** | Search, mentions | **We decided X is publish-only.** Not worth it |
+| **⛔ LinkedIn — reading feeds** | 🔴 Not available to us | — | `r_member_social` **forces Standard tier onto the whole app.** ⛔ Never requested |
+| **⛔ "What is trending on ChatGPT"** | 🔴 **Does not exist** | — | No engine publishes it. Not a pricing question |
+
+### What this actually means
+
+| | |
+|---|---|
+| **🟢 Free covers** | **Google demand data · HN · all posting · all trade feeds · keyword CPC.** That is the **listening half and the publishing half**, both at **$0** |
+| **🟡 Paid, and small** | **The models ($40–100/mo)** · Perplexity for citation mining · **possibly Reddit** |
+| **🔴 Not buyable** | **Quora and LinkedIn feeds are human work at any budget.** ⚠ **That is a staffing line, not an API line** — and it is why ㉛ caps Reddit and puts a person on Quora |
+
+> **⭐ The one thing to plan for: Reddit is the only listening source with a commercial pricing risk.**
+> Everything else is either free forever or already budgeted. **⚠ Verify Reddit's current commercial terms
+> before phase 5** — and if the number is bad, **the fallback is human reading, exactly as Quora already
+> is.** The channel does not die; it gets slower and cheaper.
+
+**⛔ And no paid tier ever unlocks scraping.** §0.2 holds regardless of budget.
 
 ---
 

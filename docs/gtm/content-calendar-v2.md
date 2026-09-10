@@ -63,17 +63,28 @@ what is departed from and why.**
 **Against ~450 available minutes.** The headroom is not slack — it absorbs regeneration and the weeks a
 Type A lands.
 
-### 1.2 · ENGAGEMENT — ⛔ not reviewed, **30 acts** *(was 16)*
+### 1.2 · ENGAGEMENT — **~64 acts** *(was 16)* · comments and answers ⛔ not reviewed
 
 | Act | Per week | Who | Gate |
 |---|---|---|---|
-| **Comments** | **21** — 3 each | all 7 | ⛔ **none** — *"gating them would triple the queue"* |
-| **Reposts with a line** — ㉕ tier 1 only | **6** | Social | ⛔ none |
-| **⭐ Answers — Quora · Reddit** | **3** | lane owner | ⛔ none · ⛔ **a human posts** |
+| **Comments** | **35** — 1 per person per weekday | all 7 | ⛔ **none** — *"gating them would triple the queue"* |
+| **Reposts with a line** — ㉕ tier 1 only | **10** — 2/weekday | Social | ⛔ none |
+| **⭐ Quora answers** | **10** — 2/day, brand + individual | Social + lane owner | ⛔ none · ⛔ **a human posts** |
+| **⛔ Reddit answers — CAPPED** | **5** — 1/day max | rotating person **and** subreddit | ⛔ **never a brand account.** Ramps from 0 over 8 weeks |
+| **Brand posts** — Page · X · Quora Space · IG | **~21** | auto | ✅ **these DO go through ⑬** |
 | **Reactions** | **untracked, by design** | anyone | ⛔ **never a target** |
 
-**~35 min/person/week, up from 20. ~245 minutes across seven.** Distribution time, not review time — review
-stays at 85–115 minutes across three marketing people and does not move.
+**~20–25 min/person/week, plus Social carrying the answers. ~175 min across seven.**
+
+**⭐ Volume tripled and the hours barely moved, because the engine drafts every one of them.** A drafted,
+sourced Quora answer is **2–3 minutes to check and post**, not the twenty it takes to write. **Review capacity
+does not move at all** — brand posts are already inside the 85–115 minutes, and comments and answers never
+enter the queue.
+
+**⛔ Reddit is capped at 1/day and ramps from zero over eight weeks.** The ceiling is not our time, it is
+Reddit's tolerance: *"any account warned or removed. Community trust does not survive a second breach."*
+**Quora carries the volume instead — and it ranks in Google and feeds answer engines, which Reddit does
+not.**
 
 **⭐ The three answers matter more than the twenty-one comments.** A LinkedIn comment is dead in 48 hours; a
 **Quora or Reddit answer ranks in Google, gets cited by answer engines, and keeps earning for years.** It is
