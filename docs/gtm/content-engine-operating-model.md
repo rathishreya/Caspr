@@ -83,7 +83,36 @@ a smaller listening surface, and it is the correct one.
 | **Chief-of-Staff and strategy communities** | Human | 2 | |
 | **AMI · category-management press** | Feeds | 4, 7 | |
 | **Hacker News** | **Official Algolia API** | 8, technical | Also the Show HN surface (§3.7) |
+| **Google demand surfaces** — autocomplete · People Also Ask · related searches · **Search Console queries** | **GSC API** + official suggest endpoints | **all** | **⚠ Added after review — see below** |
 | ~~**X / Twitter**~~ | ❌ **Not a listening source** | — | **Read is effectively unavailable at free tier.** X is **publish-only.** `portal-build-spec.md` §6.4 |
+
+#### ⚠ Google is a listening source too, and it was missing
+
+**Added 2026-09-10 after review.** The first draft placed Google only as an **answer-engine surface** (AI
+Overviews, kind B) and as **measurement** (Search Console, at ⑳). **Both are true and neither is the whole
+of it.**
+
+> **What people type into Google is the largest, cheapest, most literal record of what buyers actually want
+> to know** — and for a GTM whose compounding channel is *discoverability*, leaving it out of listening was a
+> real omission.
+
+| Surface | What it gives | Access |
+|---|---|---|
+| **Search Console — queries** | ⭐ **Questions people asked that already reached us**, with impressions and position. The highest-intent listening surface we have, and it costs nothing | GSC API — already connected at ⑳ |
+| **Autocomplete / suggest** | How a question is *phrased* before it is finished | Official suggest endpoint |
+| **People Also Ask · related searches** | The question *behind* the question — direct input to Type B | Official, per-query |
+
+**Two rules bind it, and they are the ones already written:**
+
+- **⛔ CPC decides, not volume.** `channel-model.md` §3.1: *"The discriminator for what to target is CPC, not
+  volume. `secondary research` at **$9** is a student."* A high-volume query with no commercial intent is a
+  student, and a student is ICP 8 at $8 a brief
+- **⛔ Phrased as a person asks, not as a keyword** — the `p` basket's own construction rule, and the same
+  discipline applies to what ③ ranks
+
+**⚠ And it must not contaminate `p`.** GSC queries are **branded and unbranded mixed**; the `p` basket is
+**unbranded only and frozen for a year.** They are separate instruments: **GSC listens, `p` measures.** Mixing
+them would break the freeze, which is the metric's only defence.
 
 **Two rules ② already carries and they hold here:** **⛔ read-only — the listener never posts, never votes,
 never DMs**, and **velocity over volume** — ③ ranks by how fast a conversation is growing, not how big it is.
@@ -116,6 +145,63 @@ else may originate a number that reaches a reader.
 | **When** | At ⑧, when a work order becomes rows. **Before ⑩ writes anything** — the format constrains the draft, not the other way round. |
 | **Why** | ⑯ knows *how* to publish to five channels and §6 knows what each artefact is. **Nothing decides which of them a given item should be.** Today that judgement is implicit in whoever wrote the calendar row. |
 | **How** | A table, not a model. **Every cell is a value a person can read and argue with.** |
+
+### The matrix itself — the cells, not the shape
+
+**⚠ Added 2026-09-10 after review.** The section above described a lookup and then did not provide one. **A
+table nobody can read a value out of is a shape, not a matrix** — which is the exact failure this document
+exists to prevent.
+
+#### A · ICP → where they are, what convinces them
+
+| ICP | Primary channel | Secondary | Lead narrative | The proof that moves them |
+|---|---|---|---|---|
+| **3 · Investors** ⭐ | **LinkedIn personal** — Joy | Search *(job-shaped)* · trade | **N1 finding** | A diligence-shaped analysis with the sources visible |
+| **1 · Consultants** ⭐ | **Search** — job-shaped | LinkedIn · **r/consulting** | N1 · **N3 day** | Desk-research hours removed from a live engagement |
+| **2 · Strategy / Corp Dev** | LinkedIn personal | Search · Chief-of-Staff communities | N1 · **N6 teardown** | A board paper that survives the room |
+| **4 · Agencies** | LinkedIn · **The Drum · Campaign** | Search | N3 · N6 | Pitch research at a fraction of the retainer |
+| 5 · Founders | Search · **HN** | X | N3 · N8 | An investor-ready market size with citations |
+| 6 · Market Research | **#mrx · ESOMAR · Quirks · GreenBook** | LinkedIn | **N2 build** · N6 | Method, sourcing and the unbillable pre-fieldwork layer |
+| 7 · Category managers | Search | Category-management press | N3 | Category landscape and sizing |
+| 8 · Students | **Reddit — r/MBA · WSO · PrepLounge** | Search | N3 | *"Your library closed at 9pm"* — the $8/$40 rungs |
+
+**⭐ The two starred ICPs carry ~60% of active content** and the four unstarred rows are **site and search
+only** for twelve weeks. **The row exists so the choice is visible, not so it is worked.**
+
+#### B · Content type → channel, stage, CTA
+
+| Type | Goes to | Stage | CTA |
+|---|---|---|---|
+| **A · Published analysis** | Blog + `/samples` → **fan-out to all** | Consideration | `/samples` |
+| **B · Search answer** | Blog only | **Awareness → consideration** | The ICP page |
+| **D1 · LinkedIn personal** | The author's own feed | **Awareness** | ⛔ **none** |
+| **D2 · Company Page** | Page | Consideration | ICP page · `/samples` |
+| **D3 · X** | X | Awareness | Last post of the thread |
+| **D4 · Community** | The thread it belongs to | Awareness | ⛔ **only if asked** |
+| **D5 · Outreach** | ㉑ — a person sends | Consideration | Whatever that relationship needs |
+| **D6 · Email** | SES | **Intent · retention** | One, primary |
+| **D7 · Atom / cards** | Attached to D1–D3 | any | inherits |
+| **G1 · Carousel** | LinkedIn · Company Page | Consideration | First comment |
+| **F1 · `/market-size/*`** | Blog, unreviewed | **Awareness** | ICP page |
+| **F2 · `/vs/*` · `/alternatives/*`** | Blog | **Consideration** | Pricing |
+
+#### C · The routing rule — how ⑧ actually picks, in order
+
+```
+1. type + stage        → the channel set          (table B)
+2. ICP                 → narrows it, and sets the narrative   (table A)
+3. narrative           → ⛔ fails the row if the lane cannot carry it   (㉖)
+4. channel             → format, length, link position, hashtags
+5. week + channel      → day and hour, US Eastern              (calendar v2 §2)
+6. stage               → the CTA, or none
+```
+
+**⛔ Step 3 is a hard stop, not a preference.** A row asking **Jayant** to carry **N1 a finding** or anything
+about **pricing** fails at ⑧ and is never drafted — `LANE_MISMATCH` exists for exactly this, and it is cheaper
+to fail a row than to burn a review minute rejecting it.
+
+**⚠ Where two rows collide on one subject in one week, the second fails** — *"never two people on the same
+subject in the same week."* The engine enforces it here rather than hoping review catches it.
 
 ### The per-channel format spec — the part that has never been written down
 
@@ -159,6 +245,23 @@ Joy's. **That format is the default for a Type A fan-out, and departures need a 
 | **2 · Engage** | Practitioners and analysts in our ICPs · trade press · community figures | **Substantive comment** carrying a fact from that person's own domain | Repost. We do not lend our feed to people we have no relationship with |
 | **3 · Observe** | Adjacent tools, data providers, incumbents *(Bloomberg, FactSet, PitchBook, Capital IQ, AlphaSense — `icp-personas.md` line 283)* | **Read only.** May become a `④ claim` for ⑤ to verify | ⛔ **Comment · repost · quote · react.** Anything visible |
 | **4 · Competitor** | Direct category competitors | **Read only** — §8 below | ⛔ **Everything visible, without exception** |
+
+#### The names the repo already holds — **added after review**
+
+**The tiers above were a schema with no members.** These are drawn from `operations-runbook.md` §2A and
+`channel-model.md` §3.5, not invented:
+
+| Tier | Named today | Still needed |
+|---|---|---|
+| **1 · Amplify** | ⚠ **Nobody yet** — the testimonial programme (12 recorded, 10 delivered, weeks 1–8) **is what populates this tier.** It is the highest-priority conversion asset for exactly that reason | Names arrive as testimonials land |
+| **2 · Engage** | **Quirks · GreenBook · #mrx · ESOMAR** *(ICP 6)* · **The Drum · Campaign** *(ICP 4)* · category-management press *(ICP 7)* · **cybernews** · **searchfunder** · G2 · Datarade | Individual practitioners, by name |
+| **3 · Observe** | **Bloomberg · FactSet · PitchBook · Capital IQ · AlphaSense** | — |
+| **4 · Competitor** | ⚠ **Nobody. Not enumerated anywhere in the repo** | **Q28** |
+
+**⚠ A distinction the runbook already draws and it belongs here.** *"A good candidate separates them: **G2 and
+Datarade are a form and a login, cybernews is a pitch to a named editor, and searchfunder is a forum thread
+where the only honest move is to become a real participant first.** A weak one calls all four outreach."*
+**The register carries that difference per row**, because the action is different in each case.
 
 **⚠ Tier 3 exists because the incumbents are what our ICP already pays for, not what we fight.** A PE analyst
 already expenses Bloomberg and AlphaSense; *"Adding a $200–600/month Caspr subscription is entirely normal."*
@@ -418,6 +521,11 @@ different page count** (`content-engine-integrations.md` §6.4).
 | **28** | **㉕ — who is tier 4?** The register needs actual names. `icp-personas.md` names the **incumbents** (Bloomberg, FactSet, PitchBook, Capital IQ, AlphaSense) and they are **tier 3, observe-only** — *"the budget line we join."* **Direct competitors are not enumerated anywhere** | ㉕ | Naming a competitor is a positioning act |
 
 ---
+
+*Revised the same day after a self-audit against the ten requirements. **Three things were missing and are
+now in:** the placement matrix had a shape but no cells (㉔); **Google's demand surfaces were absent from
+listening** entirely, present only as an answer engine and as measurement (㉓); and ㉕'s four tiers were a
+schema with no members, when the repo already held names for two of them.*
 
 *Document: `content-engine-operating-model.md` · 2026-09-10 · An addition to
 [`content-engine-runtime-spec.md`](content-engine-runtime-spec.md), not a revision of it. **㉓ closes open

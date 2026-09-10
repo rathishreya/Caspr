@@ -846,6 +846,7 @@ flowchart TD
         R3["#mrx · ESOMAR · GreenBook · Quirks"]
         R4["Hacker News — Algolia API"]
         R5["LinkedIn feed<br/><small>⚠ human only</small>"]
+        R6["⭐ GOOGLE DEMAND SURFACES<br/><small>Search Console queries · autocomplete<br/>People Also Ask · related searches</small>"]
     end
 
     subgraph B["B · ANSWER ENGINES — where we must APPEAR"]
@@ -865,6 +866,8 @@ flowchart TD
     XX["❌ X / Twitter is NOT a listening source<br/><small>read is unavailable at free tier. PUBLISH-ONLY</small>"]
     NOSCRAPE["⛔ NEVER SCRAPE<br/><small>the product claim is 'curated, NOT web scraping'.<br/>A company selling that cannot scrape for its own marketing.<br/>No API → a human reads it, or we skip it</small>"]
     BAD["⛔ an answer engine is NEVER a source of fact<br/><small>publishing one would invert our own product claim</small>"]
+    CPC["⛔ CPC decides what to target, NOT volume<br/><small>'secondary research' at $9 is a student.<br/>and GSC is branded+unbranded MIXED — it must<br/>never contaminate p, which is unbranded and<br/>frozen for a year. GSC listens, p measures</small>"]
+    CPC -.-> R6
 
     XX -.-> A
     NOSCRAPE -.-> A
@@ -874,9 +877,9 @@ flowchart TD
     classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
     classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
     classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
-    class R1,R2,R3,R4,R5,P1,C1 src
+    class R1,R2,R3,R4,R5,R6,P1,C1 src
     class L,T,CL,V,PM mach
-    class XX,NOSCRAPE,BAD stop
+    class XX,NOSCRAPE,BAD,CPC stop
 ```
 
 ---
