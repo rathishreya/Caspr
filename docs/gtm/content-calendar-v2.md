@@ -2,9 +2,9 @@
 
 *2026-09-10. Supersedes [`content-calendar.md`](content-calendar.md).*
 
-> **⚠ Joy's `content-calendar.md` is not deleted, and deliberately.** This repository is a **mirror of Joy's
-> Drive folder** — a deletion here can propagate to the original. **Removing it is Joy's call, not this
-> session's.** Until then, **where the two disagree, this file is operative.**
+> **`content-calendar.md` is now a pointer to this file.** Not deleted — **ten files link to that path,
+> `CLAUDE.md` among them**, so deleting it breaks ten references while leaving the old text would leave two
+> calendars claiming to be the calendar. The original is in git history.
 
 ---
 
@@ -78,13 +78,15 @@ pod. ㉖ tracks both columns and **the external one is the health metric.**
 
 ## 2 · The week, by day and hour — **US Eastern**
 
-**IST shown because the team is in India and the engagement window is an evening commitment (Q26).**
+**IST shown for reference only.** ⭐ **The engine depends on no live human window** — comments are
+asynchronous on a 24-hour horizon and measured weekly, so **post times serve the reader and nobody commits an
+evening.** Decisions §4.1.
 
 | Day | ET | IST | Publishes | Narrative | Who |
 |---|---|---|---|---|---|
 | **Tue** | **08:30** | 18:00 | **Joy LinkedIn** ⭐ · search answer #1 | **N1 finding** | auto |
 | | 09:30 | 19:00 | X post | N1 derivative | auto |
-| | **08:30–09:30** | **18:00–19:00** | ⚠ **the comment window — 4 of 7** | — | **humans** |
+| | 08:30–09:30 | 18:00–19:00 | **the comment window — a bonus, never a rota.** ⛔ Max 3 of 7, nobody assigned | — | whoever is about |
 | **Wed** | 08:30 | 18:00 | Company Page | N3 / N5 | auto |
 | | 10:00 | 19:30 | Community threads | native | ⛔ **human posts** |
 | | 16:00 | 01:30 +1 | X post | N6 | auto |
@@ -97,9 +99,9 @@ pod. ㉖ tracks both columns and **the external one is the health metric.**
 | **Any** | — | — | Outreach — **Joy taps send** | — | Joy |
 | **Daily** | **rolling** | — | ⏱ daily track · comments · tier-1 reposts | — | on duty |
 
-**Why Tuesday and Thursday carry the founders.** Joy's own reason holds and the clock moves it: the
-engagement rule depends on colleagues commenting inside 30–60 minutes, and **Tue–Thu 08:00–10:00 ET is when a
-US business audience is on LinkedIn.** Monday is inbox-clearing; Friday afternoon is gone.
+**Why Tuesday and Thursday carry the founders.** **Tue–Thu 08:00–10:00 ET is when a US business audience is
+on LinkedIn.** Monday is inbox-clearing; Friday afternoon is gone. **That is the whole reason** — the slot is
+chosen for the reader, not for who can be online to comment.
 
 **⛔ Never two people on the same subject in the same week** — enforced at ⑧, not left to review.
 
@@ -182,23 +184,23 @@ cold-start slot. That is the cap.
 
 ---
 
-## 6 · What this calendar cannot yet fill
+## 6 · What was open when this was written
 
-**Named rather than quietly assumed:**
+**All of them are now taken — [`content-engine-decisions.md`](content-engine-decisions.md).**
 
-| | Open | Question |
+| | Was open | **Decided** |
 |---|---|---|
-| The **㉓ listening list** is proposed, not confirmed | Which subreddits and communities are actually ours | **Q1** |
-| **4 of 7** on a post | The astroturf line | **Q24** |
-| **US spelling** | British throughout today | **Q25** |
-| **18:30 IST** as a standing commitment | Seven people's evenings | **Q26** |
-| **Tier 4** — who the competitors are | Nobody has named them | **Q28** |
+| The ㉓ listening list | Which communities are ours | **㉓, enumerated — plus Google demand surfaces** |
+| How many engage one post | The astroturf line | **3 of 7 as a ceiling, nobody assigned** |
+| Spelling | British throughout | **US in customer-facing copy, enforced at ⑫** |
+| The 18:30 IST window | Seven people's evenings | ⭐ **Removed as a dependency.** Comments are asynchronous on a 24-hour horizon and measured weekly. **Post times serve the reader; nobody commits an evening** |
+| Tier 4 | Nobody named | **ChatGPT — `/vs/chatgpt` already exists** |
 
-**None of these blocks weeks 1–4.** All of them bind by week 6.
+**Nothing on this calendar now waits on an answer.**
 
 ---
 
-*Document: `content-calendar-v2.md` · 2026-09-10 · Supersedes `content-calendar.md`, which is left in place
-because this repository mirrors Joy's Drive and its removal is Joy's call. **Joy's three movements, twelve-week
+*Document: `content-calendar-v2.md` · 2026-09-10 · Supersedes `content-calendar.md`, which is now a pointer
+to this file. **Joy's three movements, twelve-week
 shape, ICP concentration and review-ceiling logic are kept and cited.** What departs is listed in §0 with a
 reason for each. Companion: [`content-engine-operating-model.md`](content-engine-operating-model.md).*

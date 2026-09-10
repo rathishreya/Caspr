@@ -244,7 +244,7 @@ Joy's. **That format is the default for a Type A fan-out, and departures need a 
 | **1 · Amplify** | Customers · testimonial participants · partners · people who cited us | **Repost with a line of our own** · comment · react | Repost without adding a sentence — a bare repost says nothing and earns nothing |
 | **2 · Engage** | Practitioners and analysts in our ICPs · trade press · community figures | **Substantive comment** carrying a fact from that person's own domain | Repost. We do not lend our feed to people we have no relationship with |
 | **3 · Observe** | Adjacent tools, data providers, incumbents *(Bloomberg, FactSet, PitchBook, Capital IQ, AlphaSense — `icp-personas.md` line 283)* | **Read only.** May become a `④ claim` for ⑤ to verify | ⛔ **Comment · repost · quote · react.** Anything visible |
-| **4 · Competitor** | Direct category competitors | **Read only** — §8 below | ⛔ **Everything visible, without exception** |
+| **4 · Competitor** | **ChatGPT**, and whoever a future `/vs/` page names | **Read only** — §8 below | ⛔ **Everything visible, without exception** |
 
 #### The names the repo already holds — **added after review**
 
@@ -256,7 +256,7 @@ Joy's. **That format is the default for a Type A fan-out, and departures need a 
 | **1 · Amplify** | ⚠ **Nobody yet** — the testimonial programme (12 recorded, 10 delivered, weeks 1–8) **is what populates this tier.** It is the highest-priority conversion asset for exactly that reason | Names arrive as testimonials land |
 | **2 · Engage** | **Quirks · GreenBook · #mrx · ESOMAR** *(ICP 6)* · **The Drum · Campaign** *(ICP 4)* · category-management press *(ICP 7)* · **cybernews** · **searchfunder** · G2 · Datarade | Individual practitioners, by name |
 | **3 · Observe** | **Bloomberg · FactSet · PitchBook · Capital IQ · AlphaSense** | — |
-| **4 · Competitor** | ⚠ **Nobody. Not enumerated anywhere in the repo** | **Q28** |
+| **4 · Competitor** | **ChatGPT** — `/vs/chatgpt` exists, and a `/vs/` page is the sanctioned home for the contrast. ⛔ **Membership grants no action; nothing visible, ever** | **A name enters when a `/vs/` page is written, never before.** The register follows the pages |
 
 **⚠ A distinction the runbook already draws and it belongs here.** *"A good candidate separates them: **G2 and
 Datarade are a form and a login, cybernews is a pitch to a named editor, and searchfunder is a forum thread
@@ -343,7 +343,7 @@ scheduling half of it.
 |---|---|---|
 | **1** | **The portal never writes a reaction.** It surfaces *that* a teammate posted and *which fact from your own domain is relevant*. **The comment is typed by the person, on the platform** | A pre-written comment from a colleague is the thing the rule bans, whoever pressed the key |
 | **2** | **⛔ `the_fact_to_bring` empty → the target never surfaces** | Q8's guard rail, reused. A comment with nothing to bring **is** astroturf, by definition |
-| **3** | **At most 4 of 7 on any one post, rotating** — not all seven | The 30–60 minute window is real; **the uniformity is the tell.** Seven identical-timed colleagues is a pattern a reader sees. **⚠ The number is Joy's — open question 24** |
+| **3** | **At most 3 of 7 on any one post — a ceiling, and nobody is assigned** | **The uniformity is the tell**, and the asymmetry decides the number: the downside is the brand, the upside is marginal reach on one post. **⭐ And no rota exists — the engine depends on no live window.** Decisions §4.1 |
 | **4** | **No reaction quota, ever.** Comments are counted; likes are not | The moment a like is a target, it is bought engagement with extra steps |
 
 **And the outward half of the budget is the point:** each person owes **two substantive comments a week — one
@@ -417,7 +417,7 @@ become cohorts. An awareness post has no link to stamp — which is also why **a
 | | Consequence | Detail |
 |---|---|---|
 | **1** | **Posting hours move to US business time** | LinkedIn **Tue–Thu 08:00–10:00 ET** · X 09:00–11:00 and 16:00–17:00 ET · email **Tue/Thu 10:00 ET** |
-| **2** | ⚠ **The engagement window lands in the Indian evening** | **08:00 ET = 18:30 IST.** The 30–60 minute comment window is **18:30–19:30 IST** for the team. **Workable, but it is an evening commitment and it must be agreed, not assumed.** For PT-weighted audiences it is 21:30 IST and it is not workable — **so ET, not PT** |
+| **2** | **The window is a bonus, not a commitment** | 08:00 ET is 18:30 IST. ⭐ **The engine was changed so it does not need anyone there** — comments are asynchronous, 24-hour, measured weekly. **ET rather than PT regardless**, because PT would put even the optional window at 21:30 IST. Decisions §4.1 |
 | **3** | ⚠ **Spelling collides with the house voice** | The repo is **British throughout** — *organisation, prioritise, analyse*. **A US buyer reads that as foreign.** But the brand register is *FT / Bloomberg / The Economist*, two of which are British. **Proposed: US spelling in customer-facing copy, British left untouched in internal documents. ⛔ Never mixed inside one artefact — open question 25** |
 | **4** | **ICP weighting shifts toward 1, 2, 3** | US consulting, corp dev and PE/VC are the deepest budgets — and `icp-personas.md` already says investors *"have the highest discretionary spend tolerance of any ICP"* |
 
