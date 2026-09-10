@@ -418,7 +418,7 @@ become cohorts. An awareness post has no link to stamp — which is also why **a
 |---|---|---|
 | **1** | **Posting hours move to US business time** | LinkedIn **Tue–Thu 08:00–10:00 ET** · X 09:00–11:00 and 16:00–17:00 ET · email **Tue/Thu 10:00 ET** |
 | **2** | **The window is a bonus, not a commitment** | 08:00 ET is 18:30 IST. ⭐ **The engine was changed so it does not need anyone there** — comments are asynchronous, 24-hour, measured weekly. **ET rather than PT regardless**, because PT would put even the optional window at 21:30 IST. Decisions §4.1 |
-| **3** | ⚠ **Spelling collides with the house voice** | The repo is **British throughout** — *organisation, prioritise, analyse*. **A US buyer reads that as foreign.** But the brand register is *FT / Bloomberg / The Economist*, two of which are British. **Proposed: US spelling in customer-facing copy, British left untouched in internal documents. ⛔ Never mixed inside one artefact — open question 25** |
+| **3** | ⚠ **Spelling collides with the house voice** | The repo is **British throughout** — *organisation, prioritise, analyse*. **A US buyer reads that as foreign.** But the brand register is *FT / Bloomberg / The Economist*, two of which are British. **✅ Decided: US spelling in customer-facing copy, British left untouched internally, ⛔ never mixed inside one artefact — and it is enforced as a ⑫ linter rule, not a review instruction.** The register argument is about *tone*, not orthography: Bloomberg is American and reads exactly as premium |
 | **4** | **ICP weighting shifts toward 1, 2, 3** | US consulting, corp dev and PE/VC are the deepest budgets — and `icp-personas.md` already says investors *"have the highest discretionary spend tolerance of any ICP"* |
 
 **Also downstream:** US federal holidays suppress the calendar (Thanksgiving week, 4 July, Labor Day) · `$`
@@ -531,4 +531,7 @@ schema with no members, when the repo already held names for two of them.*
 [`content-engine-runtime-spec.md`](content-engine-runtime-spec.md), not a revision of it. **㉓ closes open
 question 1**, which had blocked five stations. **㉘ is the only station recording a decision Joy has not
 previously taken** — the US market — and it is marked as such throughout. Every other station cites the file
-and section it implements. Five open questions, 24 to 28.*
+and section it implements. **The five questions this document raised, 24 to 28, are all taken in**
+[`content-engine-decisions.md`](content-engine-decisions.md) **— nothing here waits on an answer.**
+**⭐ The engagement window was removed as a dependency rather than negotiated:** comments are asynchronous on a
+24-hour horizon and measured weekly, so post times serve the reader and nobody commits an evening.*

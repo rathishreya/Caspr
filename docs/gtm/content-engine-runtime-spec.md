@@ -1619,26 +1619,26 @@ Sequenced so nothing waits on an answer it does not need.
 
 | Phase | Stations | Why here | Blocked on |
 |---|---|---|---|
-| **0** | **⑲ Truth Layer — ingest and facts table only** | **Moved to the front, and it is a correction.** ⑨'s context and ⑫'s rule set are both *this table*; building either against hardcoded facts means building them twice. Ingest, version, extract, allowlist — **no stale detection yet**, which needs ⑯ | **Nothing.** Q14 refines it; it does not block it |
-| **0b** | **㉓ Source Register · ㉖ Roster · ㉗ Narrative Register** | **Three tables and no code.** ㉓ closes Q1 and unblocks phase 5; ㉗ is two fields on `ContentItem` that ⑨ needs from the first draft | **Nothing.** Q1 answered in ㉓ |
+| **0** | **⑲ Truth Layer — ingest and facts table only** | **Moved to the front, and it is a correction.** ⑨'s context and ⑫'s rule set are both *this table*; building either against hardcoded facts means building them twice. Ingest, version, extract, allowlist — **no stale detection yet**, which needs ⑯ | **Nothing** |
+| **0b** | **㉓ Source Register · ㉖ Roster · ㉗ Narrative Register** | **Three tables and no code.** ㉓ closes Q1 and unblocks phase 5; ㉗ is two fields on `ContentItem` that ⑨ needs from the first draft | **Nothing** |
 | **1** | **⑨ Assembly · ⑩ Writer · ⑫ Linter · ⑭ Ledger** | The whole data model falls out of ⑨. ⑫ is pure functions, testable today. ⑭ closes the loop | **Phase 0** |
 | **2** | **⑧ Work Order · ⑬ Review Room** | One item can now go end to end against mocks | Nothing |
 | **2b** | **㉔ Placement Matrix · ㉚ Content Inventory** | The matrix constrains the draft, so it must exist before ⑩ is wired to real channels | Phase 2 |
 | **3** | **⑮ Hygiene · ⑯ Publisher** | Real output, real attribution stamps | SES production · CMS write path |
-| **3b** | **⑲ stale detection + `surface_forms[]`** | Needs `PublishRecord` to exist before there is anything to sweep. **Held until phase 3 for that reason alone** — the facts table from phase 0 is already earning by then | Phase 3 · **Q14(b)** |
+| **3b** | **⑲ stale detection + `surface_forms[]`** | Needs `PublishRecord` to exist before there is anything to sweep. **Held until phase 3 for that reason alone** — the facts table from phase 0 is already earning by then | Phase 3 |
 | **3c** | **㉒ — the stamp only.** `utm_content = content_item.id` in ⑯ | **One assignment, and it must ship with the first publish.** Attribution cannot be applied retroactively to a link already in somebody's feed — miss it and the first three months are permanently unmeasurable at item level | **Nothing.** Ships with phase 3 |
 | **3d** | **㉙ Provenance Check** | **Sits between ⑮ and ⑯ and fails closed.** Cheap, and the thing it catches is a legal breach | Phase 3 |
-| **4** | **⑤ Verifier** | Replaces mocked facts with real ones | **Q3 — service principal** |
-| **5** | **② Listener · ③ Trend · ④ Claim · ⑥ Angle · ⑦ Board** | The intake half | **Q1, Q2, Q4, Q10** |
-| **5b** | **㉑ Outreach Desk** | The object and the entered rows need nothing. **Its two automatic feeds do** — community threads come from ②, so it lands with the intake half | Phase 5 · **Q7, Q15** |
-| **5c** | **㉕ Amplify Register** | Needs ② surfacing posts to match against | Phase 5 · **Q28** |
-| **6** | **⑪ Visual Desk · ⑰ Comment Desk** | The two genuinely new capabilities | **Q5, Q6, Q8** |
-| **6b** | **⏱ Daily track** (§5A) | **A second trigger, a track flag and an expiry timer over stations already built.** ⑰ comments need none of it — 🟢 they are already outside the gate. Cheap once ⑬ and ⑯ exist; pointless before the intake half is live | **Q13** + phases 2, 3, 5 |
-| **6c** | **The creative pipeline** — chart renderer, template layer, text measurement, rasteriser, storage | **⑪ produces nothing without it, whichever route Q5 picks.** Six pieces, one and a half of which exist — [`content-engine-integrations.md`](content-engine-integrations.md) §6.3 | **Q5, Q19, Q20** |
+| **4** | **⑤ Verifier** | Replaces mocked facts with real ones | 🔴 **Two service principals** — builds against the checked-in mock meanwhile |
+| **5** | **② Listener · ③ Trend · ④ Claim · ⑥ Angle · ⑦ Board** | The intake half | — |
+| **5b** | **㉑ Outreach Desk** | The object and the entered rows need nothing. **Its two automatic feeds do** — community threads come from ②, so it lands with the intake half | Phase 5 |
+| **5c** | **㉕ Amplify Register** | Needs ② surfacing posts to match against | Phase 5 |
+| **6** | **⑪ Visual Desk · ⑰ Comment Desk** | The two genuinely new capabilities | — |
+| **6b** | **⏱ Daily track** (§5A) | **A second trigger, a track flag and an expiry timer over stations already built.** ⑰ comments need none of it — 🟢 they are already outside the gate. Cheap once ⑬ and ⑯ exist; pointless before the intake half is live | Phases 2, 3, 5 |
+| **6c** | **The creative pipeline** — chart renderer, template layer, text measurement, rasteriser, storage | **⑪ produces nothing without it, whichever route Q5 picks.** Six pieces, one and a half of which exist — [`content-engine-integrations.md`](content-engine-integrations.md) §6.3 | — |
 | **7** | **⑱ Meter** | Needs the app live for the event stream | Product event tracking |
-| **7b** | **⑳ Dashboard** | Three of its four bands read stations that must already be running, and the fourth reads ⑱ | Phases 3, 7 · **Q16** |
-| **8** | **㉒ Performance Desk — the proposing half** | **Deliberately last, and deliberately late.** Below the minimum sample every cell reads *"not enough yet"*, so the first real proposal is week 12. **The measurement runs from day one; only the proposing waits** | Phase 3c · ⑱ · **Q22, Q23** |
-| **—** | **㉘ Market Layer — USA** | **Not a build. A decision and a timezone constant** | **Q25, Q26** |
+| **7b** | **⑳ Dashboard** | Three of its four bands read stations that must already be running, and the fourth reads ⑱ | Phases 3, 7 |
+| **8** | **㉒ Performance Desk — the proposing half** | **Deliberately last, and deliberately late.** Below the minimum sample every cell reads *"not enough yet"*, so the first real proposal is week 12. **The measurement runs from day one; only the proposing waits** | Phase 3c · ⑱ |
+| **—** | **㉘ Market Layer — USA** | **Not a build. A decision and a timezone constant.** US spelling is a ⑫ rule; **no live comment window is required of anyone** | — |
 
 **Start at ⑲, then ⑨.** ⑲'s ingest is half a day and it is what ⑨ and ⑫ both read; going straight to ⑨ means
 hardcoding facts and replacing them later in two places. After that, listing every `{brace}` at ⑨ and naming

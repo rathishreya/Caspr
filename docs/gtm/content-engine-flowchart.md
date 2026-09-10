@@ -2,7 +2,7 @@
 
 *2026-09-08. The picture of [`content-engine-runtime-spec.md`](content-engine-runtime-spec.md).*
 
-**This file holds the diagrams and nothing else.** Every rule, citation and open question lives in the runtime
+**This file holds the diagrams and nothing else.** Every rule and citation lives in the runtime
 spec; this is the same mechanism drawn. Station numbers ①–㉚ are the spec's numbering — **①–⑱ are the line,
 **⑲ ⑳ ㉑ ㉒ sit across it** (§9A) and **㉓–㉚ are the operating model** (§9B).
 
@@ -171,7 +171,7 @@ flowchart TD
 
     S6 -->|"📅 Type A or Type B"| S7
     S6 -->|"⏱ Type D"| S8D
-    S6 -->|"no_data + distribution finding"| OUT["OUTREACH<br/><small>owner: SEO · Q12</small>"]
+    S6 -->|"no_data + distribution finding"| OUT["OUTREACH → ㉑<br/><small>owner: SEO · ✅ permitted</small>"]
     S6 -->|"NO_ANGLE"| STOP1["⬛ not produced"]
 
     subgraph ACT2["ACT 2 — PLAN"]
@@ -308,7 +308,7 @@ flowchart TD
     ROUTE{"WHICH CLOCK?"}
     ROUTE -->|"a post responding to<br/>something said today"| D["⏱ DAILY TRACK<br/><small>Type D only<br/>same day · expires 24h</small>"]
     ROUTE -->|"an analysis to commission<br/>or an evergreen answer"| W["📅 WEEKLY TRACK<br/><small>Type A / B<br/>topic board → Wed pick</small>"]
-    ROUTE -->|"a distribution finding,<br/>not a content one"| O["OUTREACH<br/><small>roundups · directories<br/>owner: SEO · Q12</small>"]
+    ROUTE -->|"a distribution finding,<br/>not a content one"| O["OUTREACH → ㉑<br/><small>roundups · directories<br/>owner: SEO · ✅ permitted</small>"]
 
     X4 -.->|"the exempt channels"| EX["/vs/* · /alternatives/*<br/>social · founder content<br/><small>body copy only</small>"]
     EX --> D
@@ -571,17 +571,17 @@ flowchart TD
         H5["COMMUNITY POSTS<br/><small>always, without exception</small>"]
     end
 
-    subgraph JAYANT["🔒 BLOCKED ON JAYANT"]
-        B1["service principal<br/><small>the blocking item — nothing<br/>integrates without it · Q3</small>"]
-        B2["AI__BASE_URL confirmation"]
+    subgraph JAYANT["🔒 THE ONE EXTERNAL ASK"]
+        B1["TWO service principals<br/><small>content engine WITH trigger_generation,<br/>index engine WITHOUT it — its safety<br/>test asserts the absence. one cannot<br/>serve both. scopes are written out:<br/>a ten-minute task</small>"]
+        B2["⭐ and NOTHING WAITS on it —<br/>a checked-in mock returns all four<br/>verdicts and stays as the<br/>permanent contract test"]
     end
 
-    subgraph DECIDE["❓ BLOCKED ON JOY — 13 open questions"]
-        D1["Q1 the watchlist"]
-        D2["Q4 topic board screen"]
-        D3["Q5 how the atom chart is made"]
-        D4["Q6 hygiene service deploy"]
-        D5["Q13 the daily track — approved?"]
+    subgraph DECIDE["✅ ALL 27 QUESTIONS TAKEN"]
+        D1["sources ㉓ · topic board = a list view"]
+        D3["atom chart = propose_visuals<br/>rendered HTML → Chromium"]
+        D4["watermark service ships INSIDE<br/>the portal — same repo, same deploy"]
+        D5["daily track: 3/day, 24h expiry"]
+        D6["⭐ no live comment window is<br/>required of anyone"]
     end
 
     M1 --> M2 --> M3 --> M4 --> M5
@@ -591,10 +591,11 @@ flowchart TD
     M5 --> H4 --> H5
     M5 --> M6
 
-    B1 -.->|"blocks"| M2
-    D1 -.->|"blocks"| M1
-    D3 -.->|"blocks"| M4
-    D5 -.->|"blocks"| M3
+    B1 -.->|"the only ask"| M2
+    B2 -.->|"unblocks it meanwhile"| M2
+    D1 -.-> M1
+    D3 -.-> M4
+    D5 -.-> M3
 
     classDef mach fill:#e8f5e9,stroke:#2e7d32,stroke-width:1.5px,color:#1b5e20
     classDef hum fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
@@ -917,7 +918,7 @@ flowchart TD
 
     RULE --> G1["1 · the portal NEVER writes a reaction<br/><small>it surfaces WHO posted + WHICH fact is yours.<br/>the person types it, on the platform</small>"]
     RULE --> G2["2 · the_fact_to_bring EMPTY<br/>→ the target never surfaces"]
-    RULE --> G3["3 · max 4 of 7, rotating, staggered<br/><small>the window is real. the UNIFORMITY is the tell<br/>⚠ Q24 — Joy's number</small>"]
+    RULE --> G3["3 · max 3 of 7 — a CEILING, nobody assigned<br/><small>the UNIFORMITY is the tell. downside is the brand,<br/>upside is marginal reach on one post — so the<br/>lower number wins. ⭐ AND NO ROTA EXISTS:<br/>the engine depends on no live window</small>"]
     RULE --> G4["4 · ⛔ no reaction quota, ever<br/><small>a like with a target is bought<br/>engagement with extra steps</small>"]
 
     classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
@@ -952,7 +953,7 @@ flowchart LR
 
     HR --> GEO["㉘ USA · EASTERN"]
     GEO --> H1["LinkedIn Tue–Thu 08:00–10:00 ET"]
-    GEO --> H2["⚠ = 18:00–19:30 IST<br/>the comment window is an<br/>INDIAN EVENING · Q26"]
+    GEO --> H2["⭐ NOBODY COMMITS AN EVENING<br/><small>18:00 IST is shown for reference only.<br/>comments are ASYNC, 24h, measured WEEKLY.<br/>the engine needs no human online</small>"]
     GEO --> H3["⛔ NOT Pacific<br/><small>PT 09:00 = 21:30 IST. not workable</small>"]
 
     M --> NAR["㉗ NARRATIVE — how it is TOLD<br/><small>a PILLAR says what CLAIM.<br/>without this a 20-item fan-out<br/>is 20 versions of one post</small>"]
@@ -988,7 +989,7 @@ flowchart TD
     T -->|"customers · partners<br/>people who cited us"| T1["TIER 1 · AMPLIFY<br/><small>repost WITH A LINE OF OUR OWN<br/>· comment · react</small>"]
     T -->|"practitioners in our ICPs<br/>trade press"| T2["TIER 2 · ENGAGE<br/><small>substantive comment only.<br/>⛔ no repost — we do not lend our<br/>feed to people we have no<br/>relationship with</small>"]
     T -->|"Bloomberg · FactSet · PitchBook<br/>Capital IQ · AlphaSense"| T3["TIER 3 · OBSERVE<br/>⛔ nothing visible<br/><small>these are the BUDGET LINE WE JOIN,<br/>not what we displace. commenting<br/>would frame it as the opposite</small>"]
-    T -->|"direct competitors<br/>⚠ Q28 — nobody has named them"| T4["TIER 4 · READ ONLY"]
+    T -->|"ChatGPT — /vs/chatgpt exists"| T4["TIER 4 · READ ONLY<br/><small>membership grants NO action.<br/>a name enters when a /vs/ page<br/>is written, never before</small>"]
 
     T1 --> NB["⛔ never a BARE repost<br/><small>says nothing, earns nothing</small>"]
 
@@ -1063,33 +1064,33 @@ flowchart LR
     P0["PHASE 0<br/>⑲ truth layer — ingest only<br/><small>BLOCKED ON NOTHING<br/>⑨ context AND ⑫ rules are ONE table<br/>build it twice otherwise</small>"]
     P1["PHASE 1<br/>⑨ assembly · ⑩ writer<br/>⑫ linter · ⑭ ledger<br/><small>the data model falls out of ⑨</small>"]
     P2["PHASE 2<br/>⑧ work order · ⑬ review<br/><small>one item end to end<br/>against mocks</small>"]
-    P3["PHASE 3<br/>⑮ hygiene · ⑯ publisher<br/><small>needs SES production<br/>+ CMS write path</small>"]
-    P4["PHASE 4<br/>⑤ verifier<br/><small>needs the SERVICE PRINCIPAL</small>"]
-    P5["PHASE 5<br/>② ③ ④ ⑥ ⑦<br/><small>the intake half<br/>needs Q1 Q2 Q4 Q10</small>"]
-    P6["PHASE 6<br/>⑪ visual · ⑰ comments<br/><small>needs Q5 Q6 Q8</small>"]
-    P6B["PHASE 6b<br/>⏱ daily track<br/><small>a trigger, a flag, a timer<br/>needs Q13</small>"]
+    P3["PHASE 3<br/>⑮ hygiene · ⑯ publisher<br/><small>needs SES production + CMS write path.<br/>REQUEST SES DAY ONE — approval takes days</small>"]
+    P4["PHASE 4<br/>⑤ verifier<br/><small>🔴 needs TWO SERVICE PRINCIPALS.<br/>builds against a CHECKED-IN MOCK that<br/>stays as the permanent contract test</small>"]
+    P5["PHASE 5<br/>② ③ ④ ⑥ ⑦<br/><small>the intake half — ALL DECIDED<br/>sources ㉓ · topic board is a list view</small>"]
+    P6["PHASE 6<br/>⑪ visual · ⑰ comments<br/><small>ALL DECIDED · propose_visuals + HTML/Chromium.<br/>watermark service ships INSIDE the portal</small>"]
+    P6B["PHASE 6b<br/>⏱ daily track<br/><small>a trigger, a flag, a timer<br/>3/day cap · 24h expiry</small>"]
     P7["PHASE 7<br/>⑱ meter<br/><small>needs the app live</small>"]
-    P3B["PHASE 3b<br/>⑲ stale detection<br/><small>needs ⑯ publish records<br/>+ Q14b surface forms</small>"]
-    P5B["PHASE 5b<br/>㉑ outreach desk<br/><small>its thread feed is ②<br/>needs Q7 Q15</small>"]
+    P3B["PHASE 3b<br/>⑲ stale detection<br/><small>needs ⑯ publish records.<br/>surface_forms confirmed once per fact.<br/>images REGENERATE, never text-diff</small>"]
+    P5B["PHASE 5b<br/>㉑ outreach desk + ㉕ amplify<br/><small>its thread feed is ②<br/>stages decided · lapsed rows RENDER</small>"]
     P3C["PHASE 3c<br/>㉒ the stamp only<br/><small>utm_content = item id<br/>ONE LINE. must ship with<br/>the first publish or 3 months<br/>are unmeasurable</small>"]
-    P8["PHASE 8<br/>㉒ performance desk<br/><small>first real proposal is WEEK 12.<br/>measurement runs from day one<br/>needs Q22 Q23</small>"]
-    P7B["PHASE 7b<br/>⑳ dashboard<br/><small>3 bands read live stations<br/>the 4th reads ⑱ · needs Q16</small>"]
+    P8["PHASE 8<br/>㉒ performance desk<br/><small>first real proposal is WEEK 12.<br/>measurement runs from day one.<br/>±5 pts · min 12 items / 4 weeks</small>"]
+    P7B["PHASE 7b<br/>⑳ dashboard<br/><small>FOUR bands. Funnel renders<br/>NOT COLLECTED until the stream is live</small>"]
 
     P0 --> P1 --> P2 --> P3 --> P3B --> P3C --> P4 --> P5 --> P5B --> P6 --> P6B --> P7 --> P7B --> P8
 
-    START["START HERE<br/><small>⑲ ingest first — half a day, and it is what<br/>⑨ and ⑫ both read. then list every brace in ⑨<br/>and name its source: the data model for the<br/>rest falls out, and no open question touches it</small>"] --> P0
+    START["⭐ START HERE — NOTHING IS WAITING<br/><small>all 27 questions are decided. ⑲ ingest first —<br/>half a day, and it is what ⑨ and ⑫ both read.<br/>then list every brace in ⑨ and name its source</small>"] --> P0
 
     classDef go fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
     classDef wait fill:#fff8e1,stroke:#f9a825,stroke-width:1.5px,color:#7f5f00
     classDef start fill:#e3f2fd,stroke:#1565c0,stroke-width:2.5px,color:#0d47a1
-    class P0,P1,P2,P3C go
-    class P3,P3B,P4,P5,P5B,P6,P6B,P7,P7B,P8 wait
+    class P0,P1,P2,P3C,P5,P5B,P6,P6B,P8,P7B,P3B go
+    class P3,P4,P7 wait
     class START start
 ```
 
 ---
 
-*Document: `content-engine-flowchart.md` · 2026-09-08, §9A added 2026-09-09, §9A.4 and §9B 2026-09-10 · The diagrams for
+*Document: `content-engine-flowchart.md` · 2026-09-08, §9A added 2026-09-09, §9A.4 and §9B 2026-09-10, decisions folded in the same day · The diagrams for
 [`content-engine-runtime-spec.md`](content-engine-runtime-spec.md). **This file holds no rules.** Where a
 diagram and the spec disagree, the spec is correct and the diagram is a bug — report it rather than following
 it. Worked examples: [`content-engine-example.md`](content-engine-example.md).*
