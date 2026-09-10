@@ -843,10 +843,10 @@ owns, and rules the engine executes against them. None of them writes copy.
 flowchart TD
     subgraph A["A · LISTENING — what buyers argue about"]
         R1["Reddit — official API<br/><small>r/consulting r/MBA r/marketresearch</small>"]
-        R2["WSO · PrepLounge · Quora<br/><small>HUMAN READING — no API</small>"]
+        R2["⭐ SEARCH-DATA API<br/>Quora · WSO · PrepLounge · forums<br/><small>they have no API — so we read the<br/>SEARCH INDEX OF THE SITE, not the site.<br/>a licensed results feed is NOT a crawl</small>"]
         R3["#mrx · ESOMAR · GreenBook · Quirks"]
         R4["Hacker News — Algolia API"]
-        R5["LinkedIn feed<br/><small>⚠ human only</small>"]
+        R5["❌ LinkedIn feed — DROPPED<br/><small>r_member_social poisons the whole app,<br/>and it was the weakest source anyway</small>"]
         R6["⭐ GOOGLE DEMAND SURFACES<br/><small>Search Console queries · autocomplete<br/>People Also Ask · related searches</small>"]
     end
 
@@ -891,6 +891,41 @@ flowchart TD
 
 ---
 
+### 9B.1a · ⭐ The Quora flip — the question is theirs, the answer is ours
+
+```mermaid
+flowchart LR
+    Q[("QUORA · WSO · forums<br/><small>no API of their own</small>")]
+    Q --> API["⭐ SEARCH-DATA API<br/><small>site:quora.com — every RANKING question,<br/>as structured JSON. we read the INDEX,<br/>never the site. not a crawl</small>"]
+    API --> BRIEF["a ranking question IS A BRIEF<br/><small>proven demand · the buyer's OWN WORDS ·<br/>the competition visible in the answers below</small>"]
+    BRIEF --> V["⑤ VERIFIER<br/>is it sourceable?"]
+    V --> PAGE["🟢 TYPE B PAGE ON caspr.ai<br/>FULLY AUTOMATED<br/><small>our URL · our citations · our utm<br/>ours forever</small>"]
+    PAGE --> TAP["a 2-min Quora tap<br/>short answer + link<br/><small>⛔ THE ONLY HUMAN STEP</small>"]
+
+    NO["⛔ AUTOMATING QUORA POSTING IS NOT THE JUGAAD<br/><small>browser automation = terms breach + account ban<br/>+ exactly what §0.2 forbids. that door stays closed</small>"]
+    NO -.-> TAP
+
+    WHY["⭐ WHY THIS IS BETTER THAN ANSWERING ON QUORA<br/>they own the ranking → WE own it<br/>no citations we control → ALL of them<br/>gone if the platform changes → STILL OURS<br/>manual → AUTOMATED"]
+    PAGE -.-> WHY
+
+    RED["⛔ REDDIT DOES NOT GET THIS<br/><small>a link-first answer is removed and the account warned.<br/>kill condition is ONE breach. reddit stays small,<br/>human, and genuinely participating</small>"]
+    TAP -.-> RED
+
+    classDef src fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+    classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+    classDef hum fill:#e3f2fd,stroke:#1565c0,stroke-width:2.5px,color:#0d47a1
+    classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
+    class Q,PAGE,WHY src
+    class API,BRIEF,V mach
+    class TAP hum
+    class NO,RED stop
+```
+
+**The one line to say:** *"We do not write on Quora. We use Quora to find out what people are actually asking,
+and then we answer it on our own site — automatically, with citations. Quora gets a two-minute link."*
+
+---
+
 ### 9B.2 · ㉖ Creation vs engagement — and who says what
 
 ```mermaid
@@ -915,7 +950,7 @@ flowchart TD
     end
 
     NOGATE --> C1["35 comments/wk<br/><small>1 per person per WEEKDAY</small>"]
-    NOGATE --> C2["⭐ 15 ANSWERS/wk — Quora 10, Reddit 5<br/><small>the engine DRAFTS, a human POSTS.<br/>2–3 min to check, not 20 to write —<br/>which is why volume tripled and<br/>hours barely moved</small>"]
+    NOGATE --> C2["⭐ 10 ANSWERS/wk — 5 Quora TAPS, 5 Reddit<br/><small>a Quora tap is a short answer + a link to<br/>OUR OWN page. ~2 min. the page itself is<br/>automated Type B. total human posting<br/>in the whole engine: ~10 MIN/WEEK</small>"]
     NOGATE --> C3["10 reposts + brand posts on<br/>LinkedIn · X · Quora Space · IG"]
     CAP["⛔ REDDIT IS THE CEILING, NOT OUR TIME<br/>1/day max · rotating person AND subreddit<br/>never a brand account · RAMPS 0→5 over 8 weeks<br/><small>'any account warned or removed. community trust<br/>does not survive a second breach.'<br/>QUORA carries the volume instead — and it<br/>ranks in Google and feeds answer engines</small>"]
     C2 -.-> CAP

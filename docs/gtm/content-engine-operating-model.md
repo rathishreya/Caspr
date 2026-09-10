@@ -71,9 +71,10 @@ sources — documents, government databases, news feeds — **not web scraping**
 > **A company whose entire differentiator is "we curate, we do not scrape" cannot scrape for its own
 > marketing.** If that ever surfaced it would not be a compliance problem, it would be the end of the claim.
 
-**So every source in ㉓ is accessed through an official API, an official feed, or a human reading it.** Where
-none of the three exists — Quora is the live example — **the source is read manually or not at all.** That is
-a smaller listening surface, and it is the correct one.
+**So every source in ㉓ is accessed through an official API, an official feed, or a licensed search-data
+feed.** ⭐ **Where a site has no API of its own — Quora is the live example — we read the *search index* of
+that site, not the site.** That is a bought, structured feed of results the search engines already publish,
+and it is categorically not a crawl. **Nothing in the listening layer is done by hand.**
 
 ---
 
@@ -105,15 +106,102 @@ a smaller listening surface, and it is the correct one.
 | Source | Access | Serves ICP | Note |
 |---|---|---|---|
 | **Reddit** — r/consulting, r/MBA, r/marketresearch, r/PE, r/venturecapital, r/analytics | **Official Reddit API.** Read-only | 1, 3, 6, 8 | `channel-model.md` §3.3 names r/MBA and r/consulting as strongest for **ICP 8** |
-| **Wall Street Oasis · PrepLounge** | Human reading | 1, 3, 8 | No API. Manual, logged |
-| **Quora** | **Human reading only** | 6, 8 | **No official API.** ⛔ Not scraped — §0.2 |
-| **LinkedIn feed** | ⚠ **Human reading only** | all | ⛔ **`r_member_social` is never requested** — it forces LinkedIn Standard tier onto the whole app |
+| **Wall Street Oasis · PrepLounge** | 🟢 **Search-data API** + RSS | 1, 3, 8 | No API of their own — **we read the index, not the site** |
+| **Quora** | 🟢 **Search-data API** — `site:quora.com` | 6, 8 | **No API of their own.** ⛔ Still never scraped — **a licensed search feed is not a crawl** |
+| ~~**LinkedIn feed**~~ | ❌ **Dropped as a listening source** | — | ⛔ `r_member_social` forces Standard tier onto the whole app, **and it was always the weakest source.** Reddit, Google and HN give more, cheaply |
 | **#mrx · ESOMAR · GreenBook · Quirks** | Feeds + human | **6** | Trade layer, `channel-model.md` §3.5 |
-| **Chief-of-Staff and strategy communities** | Human | 2 | |
+| **Chief-of-Staff and strategy communities** | 🟢 **Search-data API** | 2 | |
 | **AMI · category-management press** | Feeds | 4, 7 | |
 | **Hacker News** | **Official Algolia API** | 8, technical | Also the Show HN surface (§3.7) |
 | **Google demand surfaces** — autocomplete · People Also Ask · related searches · **Search Console queries** | **GSC API** + official suggest endpoints | **all** | **⚠ Added after review — see below** |
 | ~~**X / Twitter**~~ | ❌ **Not a listening source** | — | **Read is effectively unavailable at free tier.** X is **publish-only.** `portal-build-spec.md` §6.4 |
+
+### ⭐ Revised 2026-09-10 — **research is fully automated. "Human reading" is gone.**
+
+**The earlier version put five sources on "a human reads it" because they have no API. That was the wrong
+answer to the right constraint.**
+
+> **⭐ The move: we do not read the site. We read the search index of the site.**
+
+**Quora, Wall Street Oasis, PrepLounge and every forum are already crawled, indexed and ranked by Google and
+Bing.** A **search-data API** returns those results as structured JSON — the question, its URL, its rank, its
+snippet. **That is a licensed search-results feed, not scraping**, and it gets us the whole listening surface
+of a site that has no API of its own.
+
+| | Old | **New** |
+|---|---|---|
+| **Quora** | 🔴 human reads it | 🟢 **`site:quora.com` via a search-data API** — every ranking question, structured |
+| **WSO · PrepLounge** | 🔴 human reads it | 🟢 **Same, plus RSS where the forum offers it** |
+| **Chief-of-Staff · strategy communities** | 🔴 human | 🟢 **Same** |
+| **LinkedIn feed** | 🔴 human | ⚠ **Dropped as a listening source entirely — see below** |
+| Reddit · HN · Google · trade feeds | 🟢 already automated | 🟢 unchanged |
+
+**⛔ It is still not scraping, and the distinction is not a technicality.** We call an API that *sells search
+results*; we never fetch a page the site did not intend us to fetch, never bypass a login, never automate a
+browser. §0.2 holds exactly as before.
+
+**⚠ LinkedIn feed reading is dropped rather than worked around.** `r_member_social` would force Standard tier
+onto the whole app, and **LinkedIn was always the weakest listening source** — Reddit, Google and HN give us
+more, cheaply. **Cutting it removes the last manual row rather than pretending someone will do it.**
+
+---
+
+### ⭐ The Quora play — and the workaround is not "post on Quora faster"
+
+**Automating Quora posting is not available and should not be attempted.** Browser automation against a
+consumer UI breaches their terms, gets accounts banned, and is the exact thing §0.2 forbids. **⛔ That door
+is closed and it stays closed.**
+
+**But the value was never the posting.** Look at what Quora actually gives us:
+
+> **A Quora question that ranks is a keyword with proven demand, in the exact words a buyer used, with the
+> competition visible in the answers below it.**
+
+**That is a brief. And we already have a machine that turns briefs into pages — Type B.**
+
+#### So the flip: **the question comes from Quora. The answer lives on our domain.**
+
+```
+search-data API  →  ranking Quora / WSO / forum questions  →  ⑦ topic board
+                                                     ↓
+                                    ⑤ VERIFIER — is the answer sourceable?
+                                                     ↓
+                              TYPE B page on caspr.ai  ← 🟢 FULLY AUTOMATED
+                              our URL · our citations · our utm · ours forever
+                                                     ↓
+                              a 2-minute Quora answer linking to it  ← the only human step
+```
+
+**Why this is strictly better than answering on Quora:**
+
+| | Answer on Quora | **Answer on our domain** |
+|---|---|---|
+| Who owns the ranking | **Quora** | **Us** |
+| Citations, `utm`, attribution | ⛔ none we control | ✅ all of it |
+| Feeds `p` | Indirectly | **Directly** |
+| If the platform changes its mind | Gone | **Still ours** |
+| Automated? | ⛔ No | 🟢 **Entirely** |
+
+**Quora stops being a content channel and becomes two things it is genuinely good at: a demand signal, and a
+two-minute distribution tap.**
+
+#### What that does to the volume
+
+| | Was | **Now** |
+|---|---|---|
+| **Quora answers a human writes** | 10/wk | ⛔ **0 written by hand** |
+| **Type B pages from Quora-sourced questions** | — | 🟢 **+3–5/wk, automated** |
+| **Quora taps** — a short answer + link | — | **5/wk · ~2 min each · 10 minutes total** |
+| **Reddit** | 5/wk, capped | **unchanged — still capped, still human** |
+
+**⚠ Reddit does not get this treatment and cannot.** A link-first Reddit answer is removed and the account is
+warned; the channel's kill condition is one breach. **Reddit stays a small, human, genuinely-participating
+channel** — and that is the correct shape for it.
+
+**Net: ~10 minutes of human posting a week, down from an hour**, and **the compounding asset moved onto our
+own domain**, which is where `p` is actually won.
+
+---
 
 #### ⚠ Google is a listening source too, and it was missing
 
@@ -728,7 +816,7 @@ Reddit — **long, cited, and still earning in a year.** That is how this brand 
 |---|---|---|---|
 | **LinkedIn** | **1 post/day** *(Page)* + 2 comments/day | **1 founder post Tue + Thu** · rotating team 3/wk · **1 comment per person per weekday** | **5 brand posts · 5 team posts · 35 comments** |
 | **X** | **2 posts/day** + 3 replies/day | 1 reply per person, 2×/wk | **10 brand posts · 15 replies · 14 individual** |
-| **Quora** ⭐ | 1 answer/day *(Space)* | **1 answer/day, rotating lane owner** | **10 answers — 5 brand, 5 individual** |
+| **Quora** ⭐ | ⛔ **Nothing written by hand** | **5 taps/wk — a short answer + a link to our own page.** ~2 min each | **5 taps · +3–5 Type B pages, automated** |
 | **Reddit** ⛔ | ⛔ **never a brand account** | **1/day max, rotating person AND subreddit** | **5, capped** |
 | **Hacker News** | ⛔ never | **Jayant · Dixit · Keshav** — as themselves, when relevant | 2–3 |
 | **Instagram** | **The atom, 3×/wk, auto** | — | 3 |
@@ -740,7 +828,7 @@ Reddit — **long, cited, and still earning in a year.** That is how this brand 
 |---|---|---|
 | Comments | 21 | **35** — 1 per person per weekday |
 | Reposts with a line | 6 | **10** — 2 per weekday |
-| **⭐ Answers — Quora + Reddit** | **3** | **15** — 10 Quora, 5 Reddit |
+| **⭐ Answers** | **3** | **10** — 5 Quora taps, 5 Reddit · **plus 3–5 automated Type B pages that Quora questions now feed** |
 | Brand posts across platforms | ~5 | **~21** |
 | Reactions | untracked | **untracked** ⛔ never a target |
 
@@ -754,7 +842,7 @@ That is the entire reason the volume moves and the hours barely do:
 | | Per person | Total |
 |---|---|---|
 | **5 comments** *(1/weekday)* | ~15 min | 105 |
-| **Answers** — drafted, human posts | Social + lane owners | ~60 |
+| **Answers** — 5 Quora taps + 5 Reddit | Social + lane owners | **~25** |
 | **Reposts** | Social | ~10 |
 | **Brand posts** — automated, reviewed in the normal queue | — | in the 85–115 |
 | | **~20–25 min each** | **~175 min + Social** |
@@ -797,9 +885,10 @@ the 85–115 minutes. **Comments and answers never enter the queue** — Joy's r
 | **⚠ Reddit API** | 🟡 **Free tier exists, but** | Read access to subreddits | **⚠ Commercial use is a paid tier since the 2023 change. Verify current terms before building against it** — this is the one number in this table that has moved before and will again |
 | **Perplexity API** | 🟡 Paid, usage | Citation mining — **which pages the engines trust** | Small at monthly cadence |
 | **Ahrefs** | 🟡 **Probably already licensed** | Backlinks, keywords, competitor ranking | ⚠ **A credential for it exists in this folder** — `CLAUDE.md` Rule 7 names it. **⛔ Not opened, and the path is not repeated here.** Confirm the licence with whoever holds it |
-| **⛔ Quora** | 🔴 **No API. None. At any price** | — | **Human reading and human posting only** |
+| **⭐ Search-data API** — SerpAPI · DataForSEO · Serper · Bing Web Search | 🟡 **Paid, cheap** | ⭐ **The whole no-API listening layer** — Quora, WSO, PrepLounge, forums, as structured JSON | **Tens of dollars a month at this volume.** ⚠ Verify current pricing — it moves |
+| **⛔ Quora — POSTING** | 🔴 **No API, and no workaround** | — | **A 2-minute human tap, 5×/wk. ⛔ Browser automation is a terms breach and an account ban** |
 | **⛔ X — reading** | 🔴 Paid, and **we skip it** | Search, mentions | **We decided X is publish-only.** Not worth it |
-| **⛔ LinkedIn — reading feeds** | 🔴 Not available to us | — | `r_member_social` **forces Standard tier onto the whole app.** ⛔ Never requested |
+| ~~**LinkedIn — reading feeds**~~ | ❌ **Dropped entirely** | — | Forces Standard tier onto the whole app, **and it was the weakest source anyway** |
 | **⛔ "What is trending on ChatGPT"** | 🔴 **Does not exist** | — | No engine publishes it. Not a pricing question |
 
 ### What this actually means
@@ -808,7 +897,7 @@ the 85–115 minutes. **Comments and answers never enter the queue** — Joy's r
 |---|---|
 | **🟢 Free covers** | **Google demand data · HN · all posting · all trade feeds · keyword CPC.** That is the **listening half and the publishing half**, both at **$0** |
 | **🟡 Paid, and small** | **The models ($40–100/mo)** · Perplexity for citation mining · **possibly Reddit** |
-| **🔴 Not buyable** | **Quora and LinkedIn feeds are human work at any budget.** ⚠ **That is a staffing line, not an API line** — and it is why ㉛ caps Reddit and puts a person on Quora |
+| **🔴 Not buyable** | **Only two things: posting to Quora and Reddit.** ⛔ **Reading them is fully automated** via the search-data feed. **⚠ ~10 minutes of human posting a week** — that is the entire manual surface left in the engine |
 
 > **⭐ The one thing to plan for: Reddit is the only listening source with a commercial pricing risk.**
 > Everything else is either free forever or already budgeted. **⚠ Verify Reddit's current commercial terms

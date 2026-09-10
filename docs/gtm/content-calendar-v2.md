@@ -45,7 +45,7 @@ what is departed from and why.**
 
 | Type | Item | Per week | Orig? | Reviewer | Min |
 |---|---|---|---|---|---|
-| **B** | Search answers | 2 | ✅ | SEO + TL | 20–30 |
+| **B** | Search answers | **5–7** *(2 planned + 3–5 from Quora/forum demand)* | ✅ | SEO + TL | 25–35 |
 | **A** | Published analysis | 0.33 | ✅ | TL + Joy | 10–15 |
 | **D1** | LinkedIn — Joy · Jayant | 2 | ❌ | TL | 4 |
 | **D1** | LinkedIn — rotating team | 2–3 | ❌ | Social | 4 |
@@ -69,7 +69,7 @@ Type A lands.
 |---|---|---|---|
 | **Comments** | **35** — 1 per person per weekday | all 7 | ⛔ **none** — *"gating them would triple the queue"* |
 | **Reposts with a line** — ㉕ tier 1 only | **10** — 2/weekday | Social | ⛔ none |
-| **⭐ Quora answers** | **10** — 2/day, brand + individual | Social + lane owner | ⛔ none · ⛔ **a human posts** |
+| **⭐ Quora taps** — short answer + link to **our own page** | **5** · ~2 min each | Social | **The page is automated Type B. Only the tap is human** |
 | **⛔ Reddit answers — CAPPED** | **5** — 1/day max | rotating person **and** subreddit | ⛔ **never a brand account.** Ramps from 0 over 8 weeks |
 | **Brand posts** — Page · X · Quora Space · IG | **~21** | auto | ✅ **these DO go through ⑬** |
 | **Reactions** | **untracked, by design** | anyone | ⛔ **never a target** |
@@ -81,10 +81,16 @@ sourced Quora answer is **2–3 minutes to check and post**, not the twenty it t
 does not move at all** — brand posts are already inside the 85–115 minutes, and comments and answers never
 enter the queue.
 
-**⛔ Reddit is capped at 1/day and ramps from zero over eight weeks.** The ceiling is not our time, it is
-Reddit's tolerance: *"any account warned or removed. Community trust does not survive a second breach."*
-**Quora carries the volume instead — and it ranks in Google and feeds answer engines, which Reddit does
-not.**
+**⭐ Quora is now a demand signal, not a writing job.** A ranking Quora question is a keyword with proven
+demand in the buyer's own words — so it becomes a **Type B page on our domain, fully automated**, and Quora
+gets a **2-minute tap linking to it.** Our URL, our citations, our attribution, ours if the platform changes
+its mind.
+
+**⛔ Reddit is capped at 1/day and ramps from zero over eight weeks**, and it does **not** get the link
+treatment — a link-first Reddit answer is removed and the account warned, and the kill condition is one
+breach. *"Community trust does not survive a second breach."*
+
+**⭐ Total human posting: ~10 minutes a week.** That is the entire manual surface left in the engine.
 
 **⭐ The three answers matter more than the twenty-one comments.** A LinkedIn comment is dead in 48 hours; a
 **Quora or Reddit answer ranks in Google, gets cited by answer engines, and keeps earning for years.** It is
