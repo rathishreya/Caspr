@@ -172,7 +172,7 @@ act and belong to no single one, which is exactly why a diagram drawn as a line 
      Wed pick · any type             Type D only  (+ ⑰ comments)
      Type A · Type B                 confirmed │ diverges │ definitional
           │                          ⛔ never no_data
-          ▼                             │  no notification · expires 24h
+          ▼                             │  no notification · 48h → demotes
    ⑧ WORK ORDER ◄────────────────────┘
      Thu 06:00 · ~23 rows           daily · 1–3 rows · no calendar slot
           │                             │
@@ -182,7 +182,7 @@ act and belong to no single one, which is exactly why a diagram drawn as a line 
           │                             │
           ▼                             ▼
    Mon 18:00 deadline              same day, next open window
-   Tue–Sun publishing              ⏱ or discarded
+   Tue–Sun publishing              ⏱ or demoted to weekly, never lost
 ```
 
 **⏱ Timing, so the diagram is not misread as elapsed time.** ⑧ through ⑫ is **minutes of machine work on both
@@ -718,7 +718,7 @@ no sign-off. **What is new is only the post half.**
 | **1** | **Same eighteen stations. A second clock, never a second pipeline** | 🟢 Joy's own pattern — *"review is a mode, not a node."* Two pipelines are two rulesets that will drift |
 | **2** | **Type D only** — one X post, one lane-matched LinkedIn post, plus comment targets. ⛔ Never Type A, Type B, email or a community draft | 🟢 Review cost differs **tenfold**: origination 8–15 min, derivative 1–2. **A daily track carrying origination is the weekly queue with a shorter deadline** |
 | **3** | ⛔ **Zero new notifications.** It appears as a badge on My Week — 🟢 which is already *"every person's landing"* | 🟢 *"Two notifications per week. No more. **A queue that nags gets muted, and a muted queue is a stopped machine**"* |
-| **4** | **⏱ It expires in 24 hours.** Unreviewed, the item is **discarded**, never carried into the weekly queue | **This is what stops it becoming queue debt.** A response reviewed three days late is not a response, so nothing is lost by dropping it — and a track that cannot accumulate a backlog cannot nag |
+| **4** | **⏱ It never expires — after 48 hours unreviewed it DEMOTES.** ⚑ **Changed 2026-09-10: nothing is discarded.** The item stops being a *today* item and joins the weekly queue as an ordinary derivative. **Why not keep it as a today item forever:** a reply arriving a week after the conversation ended is not late, it is embarrassing — but the writing is already paid for, so it becomes a normal derivative rather than being thrown away. **Why not discard:** the user's call, and it is right — a drafted, sourced item has cost real money and real review capacity to produce | 🟢 **Nothing is lost. Nothing publishes into a dead conversation eitue | **This is what stops it becoming queue debt.** A response reviewed three days late is not a response, so nothing is lost by dropping it — and a track that cannot accumulate a backlog cannot nag |
 | **5** | **Its own budget, stated and capped** — see 5A.5. It never draws on the weekly plan's minutes | 🟢 *"Volume is a function of review capacity, not ambition"* |
 | **6** | ⛔ **Fires only on `confirmed`, `diverges` or `definitional`. Never on `no_data`** | **Case B is the reason.** The highest-velocity trend the engine found was the one that must not become a post. A track keyed to velocity alone would have grabbed exactly that |
 | **7** | **It consumes no calendar slot** and publishes to the next open window, not to a fixed day | 🟢 The Tue/Wed/Thu/Fri/Mon slots belong to the weekly plan. Joy's post lands Tuesday for a reason; a daily item must not displace it |
@@ -882,7 +882,7 @@ cheap."*
 | | Change | Mitigation |
 |---|---|---|
 | **1** | **A second generation trigger.** Today generation fires only at Thursday 06:00 | The daily trigger produces 1–3 Type D rows and never a work order |
-| **2** | **A review surface outside the Monday deadline** | No notification, and it expires — so it cannot become a second deadline |
+| **2** | **A review surface outside the Monday deadline** | No notification, and it **demotes rather than nagging** — so it cannot become a second deadline |
 | **3** | **An item source that is not the Work Order Desk** | It consumes no calendar slot and draws on its own capped budget |
 | **4** | **Weekly volume rises from ~23 to ~35–44 items** | All of the increase is derivative, at 1–2 min each. **Origination is unchanged at 2.5 a week**, which is the figure the capacity case actually rests on |
 
@@ -901,7 +901,7 @@ does can start billable work.
 Is there a publishable angle, and what type is it?
 
   Type D — a post responding to something being said today
-     └─► DAILY TRACK.  Same day. Expires in 24h.
+     └─► DAILY TRACK.  Same day. 48h unreviewed → demotes to weekly.
 
   Type A or B — an analysis to commission, or an evergreen answer
      └─► WEEKLY TRACK.  Topic board → Wednesday pick → Thursday generation.
@@ -921,7 +921,7 @@ Is there a publishable angle, and what type is it?
 🟢 A finding published six days after the conversation moved on reaches none of the three ways `p` counts an
 appearance. **The daily track is what makes a trend reachable at all.**
 
-**And the cost is small and bounded:** ~20–40 review minutes a week, a few Haiku calls, and a hard expiry that
+**And the cost is small and bounded:** ~20–40 review minutes a week, a few Haiku calls, and a demotion rule that
 guarantees the number cannot drift.
 
 ---
@@ -1604,7 +1604,7 @@ Chromium or SVG templates · **20** font embedding licences · **21** does ⑲'s
 | **10** | **Does `index-engine.md` already do stations ④–⑤?** It is an autonomous engine publishing how old figures are and how far sources disagree. **We should not build two.** We can map the overlap on request | ④⑤ scope | Avoids duplicating your own engine |
 | **11** | **`p` and atom-travel — same instrument or two?** The `p` basket is **frozen for a year**; a travel signal must not break that freeze | ⑪⑱ | The freeze is the metric's defence |
 | **12** | **Does a `no_data` verdict always end a content item?** Today it does — `INSUFFICIENT_SOURCE`, not produced, which is right for content. **But Case B shows a `no_data` claim carrying a real distribution finding**, and that finding is worth acting on through outreach rather than through a post. Should ⑥ be allowed to emit `type: "outreach"`, `owner: "seo"`? | ⑥ | It widens what a station may produce |
-| **13** | **⏱ The daily track — approved?** §5A. A second clock: **Type D only** · zero new notifications · 24-hour expiry · its own capped budget · never on `no_data`. **Four things it changes are named in §5A.6**, the largest being weekly volume rising ~23 → ~35–44 — **all of it derivative; origination stays at 2.5.** The two numbers — items per day and the expiry window — are yours to set | 5A | It adds a second review cadence, and the two-notifications rule is deliberate |
+| **13** | **⏱ The daily track — approved?** §5A. A second clock: **Type D only** · zero new notifications · **demotes at 48h, never discards** · its own capped budget · never on `no_data`. **Four things it changes are named in §5A.6**, the largest being weekly volume rising ~23 → ~35–44 — **all of it derivative; origination stays at 2.5.** **✅ Decided: 3 items/day, and nothing is ever discarded — an unreviewed today-item demotes to the weekly queue at 48 hours** | 5A | It adds a second review cadence, and the two-notifications rule is deliberate |
 | **14** | **⑲ — three things the spec does not settle.** (a) **Re-ingest cadence** — you specify the behaviour, not the clock; hourly poll proposed. (b) **`surface_forms[]`** — a literal diff finds `1M+` and misses *"1 million"*, *"over a million"*, *"1,000,000+"*. Proposed: generated at ingest, **confirmed by a person once per fact**, reused free thereafter. Is that confirmation yours? (c) **Approved-but-unpublished items on a fact change** — proposed **held and regenerated**, because an approval is a decision about specific text | ⑲ | (b) is a recall failure that is invisible by construction, and (c) trades review minutes against a known-wrong page |
 | **15** | **㉑ — the stage model, and what a lapsed target looks like.** Six fields are yours; the stages are not. Proposed: `identified → researched → drafted → sent → in conversation → won │ lost │ lapsed`. And with two targets currently unowned (guest posts, podcasts — the TL's), the station **renders them as unowned rather than hiding them**, on your own words: *"that should be a decision rather than a discovery"* | ㉑ | Whether a lapsed target stays on screen is a management call, not a build one |
 | **16** | **⑳ — does the Dashboard ship with three bands or four?** The Funnel band is *"the band that proves RoI"* and it depends on the product event stream, which is not live. Options: (a) ship three and add the fourth on the stream, (b) ship four with Funnel rendered **"not collected"** — which is the rule §7A already sets for every other failed collector | ⑳ | (b) is honest and consistent; (a) risks the page shipping without the band it exists for |
@@ -1633,7 +1633,7 @@ Sequenced so nothing waits on an answer it does not need.
 | **5b** | **㉑ Outreach Desk** | The object and the entered rows need nothing. **Its two automatic feeds do** — community threads come from ②, so it lands with the intake half | Phase 5 |
 | **5c** | **㉕ Amplify Register** | Needs ② surfacing posts to match against | Phase 5 |
 | **6** | **⑪ Visual Desk · ⑰ Comment Desk** | The two genuinely new capabilities | — |
-| **6b** | **⏱ Daily track** (§5A) | **A second trigger, a track flag and an expiry timer over stations already built.** ⑰ comments need none of it — 🟢 they are already outside the gate. Cheap once ⑬ and ⑯ exist; pointless before the intake half is live | Phases 2, 3, 5 |
+| **6b** | **⏱ Daily track** (§5A) | **A second trigger, a track flag and a demotion rule over stations already built.** ⑰ comments need none of it — 🟢 they are already outside the gate. Cheap once ⑬ and ⑯ exist; pointless before the intake half is live | Phases 2, 3, 5 |
 | **6c** | **The creative pipeline** — chart renderer, template layer, text measurement, rasteriser, storage | **⑪ produces nothing without it, whichever route Q5 picks.** Six pieces, one and a half of which exist — [`content-engine-integrations.md`](content-engine-integrations.md) §6.3 | — |
 | **7** | **⑱ Meter** | Needs the app live for the event stream | Product event tracking |
 | **7b** | **⑳ Dashboard** | Three of its four bands read stations that must already be running, and the fourth reads ⑱ | Phases 3, 7 |

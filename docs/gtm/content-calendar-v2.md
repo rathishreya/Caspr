@@ -63,15 +63,24 @@ what is departed from and why.**
 **Against ~450 available minutes.** The headroom is not slack — it absorbs regeneration and the weeks a
 Type A lands.
 
-### 1.2 · ENGAGEMENT — ⛔ not reviewed, ~16 acts
+### 1.2 · ENGAGEMENT — ⛔ not reviewed, **30 acts** *(was 16)*
 
 | Act | Per week | Who | Gate |
 |---|---|---|---|
-| **Comments** — 1 internal + 1 external each | **14** | all 7 | ⛔ **none** — *"gating them would triple the queue"* |
-| **Reposts with a line** — ㉕ tier 1 only | ~2 | Social | ⛔ none |
+| **Comments** | **21** — 3 each | all 7 | ⛔ **none** — *"gating them would triple the queue"* |
+| **Reposts with a line** — ㉕ tier 1 only | **6** | Social | ⛔ none |
+| **⭐ Answers — Quora · Reddit** | **3** | lane owner | ⛔ none · ⛔ **a human posts** |
 | **Reactions** | **untracked, by design** | anyone | ⛔ **never a target** |
 
-**⚠ The external comment is the one that counts.** A roster measuring only internal engagement has built a
+**~35 min/person/week, up from 20. ~245 minutes across seven.** Distribution time, not review time — review
+stays at 85–115 minutes across three marketing people and does not move.
+
+**⭐ The three answers matter more than the twenty-one comments.** A LinkedIn comment is dead in 48 hours; a
+**Quora or Reddit answer ranks in Google, gets cited by answer engines, and keeps earning for years.** It is
+also the only engagement act that moves `p`, which is at **0**. **Comments are rented reach. Answers are
+owned.**
+
+**⚠ And the external comment is the one that counts.** A roster measuring only internal engagement has built a
 pod. ㉖ tracks both columns and **the external one is the health metric.**
 
 ---

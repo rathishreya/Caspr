@@ -76,7 +76,7 @@ flagged as invented.
 |---|---|---|---|
 | **9** | `diverges` findings — Type A or B | **Type B by default. Type A only when reconciling it *is* the analysis** ⚑ | A divergence is usually one reconciled number — that is a search answer. **Type A is 1 per 3 weeks and cannot be spent on every divergence** |
 | **12** | May ⑥ emit `type: outreach` | **Yes** | Case B proved a `no_data` claim can carry a real distribution finding. **㉑ now exists to receive it — this is what makes ㉑ worth building** |
-| **13** | Daily track approved | **Yes. 3 items/day cap, 24-hour expiry** | Already effectively taken — *"viral content thodi wait karega tumhare weekly approvals ka."* The two numbers are the conservative end |
+| **13** | Daily track approved | **Yes. 3 items/day. ⚑ Revised 2026-09-10: NOTHING EXPIRES** — unreviewed at 48h it **demotes** into the weekly queue | A drafted, sourced item cost real money to produce, so discarding it is waste. But a reply a week after the conversation ended is embarrassing, so it stops being a *today* item. **Demotion is both** |
 | **27** | Narrative caps | **N4 journey ≤1 per 4 weeks · N5 product ≤15%** ⚑ | The two failure modes of a founder-led feed. Both reversible upward once there is data |
 
 ---

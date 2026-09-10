@@ -93,7 +93,7 @@ flowchart LR
 
     D --> D1["says WHAT IS HAPPENING"]
     D --> D2["live in under an hour"]
-    D --> D3["1–2 min to approve"]
+    D --> D3["1–2 min to approve<br/>48h unreviewed → demotes,<br/>never discarded"]
 
     W --> W1["says WHAT IS TRUE"]
     W --> W2["one analysis = 20 pieces"]
@@ -859,10 +859,15 @@ flowchart TD
     end
 
     A --> L["② THE LISTENER<br/>⛔ read-only. never posts, never votes"]
-    L --> T["③ velocity > volume"] --> CL["④ claims"] --> V["⑤ VERIFIER"]
+    L --> G["4 GATES<br/><small>relevance · SOURCEABLE · lane · not repeated<br/>fail = dropped, no score computed</small>"]
+    G --> T["③ RANK<br/><small>⭐ DISAGREEMENT ABOUT A NUMBER — highest weight<br/>velocity >2.0 · buyer density · CPC not volume<br/>⛔ raw volume is not a signal at all</small>"]
+    T --> CL["④ claims"] --> V["⑤ VERIFIER"]
     C1 --> V
 
     B --> PM["⑱ / p — the frozen basket<br/><small>baseline 2026-08-25: p = 0</small>"]
+    B --> CITE["⭐ CITATION MINING — same query, 2nd output<br/><small>when an engine answers it SHOWS ITS SOURCES.<br/>that is the outreach target list, ranked by what<br/>the machines actually trust. → ㉑<br/>⛔ via official APIs. never browser automation</small>"]
+    NOTREND["❌ 'what is trending on ChatGPT' DOES NOT EXIST<br/><small>no engine publishes what its users ask —<br/>it is their most valuable private asset.<br/>trends come from A, where people argue in public</small>"]
+    NOTREND -.-> B
 
     XX["❌ X / Twitter is NOT a listening source<br/><small>read is unavailable at free tier. PUBLISH-ONLY</small>"]
     NOSCRAPE["⛔ NEVER SCRAPE<br/><small>the product claim is 'curated, NOT web scraping'.<br/>A company selling that cannot scrape for its own marketing.<br/>No API → a human reads it, or we skip it</small>"]
@@ -879,8 +884,9 @@ flowchart TD
     classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
     classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
     class R1,R2,R3,R4,R5,R6,P1,C1 src
-    class L,T,CL,V,PM mach
-    class XX,NOSCRAPE,BAD,CPC stop
+    class G,T mach
+    class L,T,CL,V,PM,CITE mach
+    class XX,NOSCRAPE,BAD,CPC,NOTREND stop
 ```
 
 ---
