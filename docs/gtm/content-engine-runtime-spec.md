@@ -1565,7 +1565,15 @@ because of the third row above is a deliberate, recorded decision — never a qu
 
 ---
 
-## 8 · Open questions — for Joy
+## 8 · Open questions — **all taken. See [`content-engine-decisions.md`](content-engine-decisions.md)**
+
+> **⚑ 2026-09-10 — every question below has been decided**, with the basis stated and marked where it is
+> judgement rather than citation. **Each is reversible in a line and none overrides anything Joy specified.**
+> The questions are kept here because the decisions record cites them by number.
+>
+> **One external blocker remains: the service principal — and it must be TWO**, one carrying
+> `trigger_generation` for this engine and one without it for the index engine, whose safety test asserts its
+> absence.
 
 **None of these blocks stations ⑧ through ⑯, which can be built today. ⑲ is now the exception worth naming:
 it is a phase-1 dependency and three of its details are open — question 14.**

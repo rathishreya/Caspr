@@ -510,7 +510,7 @@ different page count** (`content-engine-integrations.md` §6.4).
 
 ---
 
-## 11 · Open questions — continuing the numbering
+## 11 · Open questions — **all taken.** See [`content-engine-decisions.md`](content-engine-decisions.md)
 
 | # | Question | Blocks | Why it is not ours |
 |---|---|---|---|

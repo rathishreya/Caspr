@@ -31,7 +31,10 @@ and add nothing.
 
 ## 1 · The register — everything, one table
 
-**Legend:** 🟢 ready · 🟡 needs an action we can take · 🔴 blocked on someone else · ⚪ undecided
+**Legend:** 🟢 ready · 🟡 needs an action we can take · 🔴 blocked on someone else · ✅ **decided —** [`content-engine-decisions.md`](content-engine-decisions.md)
+
+**⚠ A1 is now TWO principals**, not one — the index engine's safety test asserts `trigger_generation` is
+**absent** from its scopes while this engine requires it present, so one principal cannot serve both.
 
 | | Integration | Station | Auth | Owner | Status |
 |---|---|---|---|---|---|
@@ -55,12 +58,12 @@ and add nothing.
 | D4 | Google Ads · Meta · LinkedIn Ads | ⑳ | OAuth | Portal | 🟡 **⛔ read-only in v1** |
 | D5 | Product event stream | ⑱ ⑳ ㉑ | internal | Product | 🔴 needs the app live |
 | **E · Creative & rendering — §6** ||||||
-| E1 | `propose_visuals` — chart **data** | ⑪ | A1's principal | Jayant | 🔴 with A1 · ⚪ **and route is Q5** |
+| E1 | `propose_visuals` — chart **data** | ⑪ | A1's principal | Jayant | 🔴 with A1 · ✅ **route decided — Q5** |
 | E2 | **Chart renderer** — data → SVG | ⑪ | — | Portal | 🔴 **does not exist. Not named in any document** |
 | E3 | **Template layer** — the house card | ⑪ | — | Portal | 🟡 **more exists than ⑪ claims — §6.1** |
 | E4 | **Text measurement** — for the red dot | ⑪ | — | Portal | 🔴 **§6.3, and it is the fiddly one** |
 | E5 | **Rasteriser** — SVG/HTML → PNG | ⑪ | — | Portal | 🟡 **Chromium is already in the org's stack — §6.4** |
-| E6 | **Fonts** — Instrument Serif · Inter | ⑪ | licence | Portal | ⚪ **embeddable at render time? §6.6** |
+| E6 | **Fonts** — Instrument Serif · Inter | ⑪ | licence | Portal | ✅ **ship the files, pinned — Q20.** Licence is a confirmation, not a decision |
 | E7 | **Image storage + CDN** | ⑪ ⑯ | IAM | Portal | 🔴 **does not exist — §6.7** |
 | E8 | `WATERMARKS_SERVICE_URL` — image metadata | ⑪ ⑮ | service | **Deploys with the portal** | 🔴 **not reachable. Rule 6 is unenforceable for images until it is** |
 | E9 | `anthropic-skills:clean-user-facing-text` — prose | ⑮ | **none** | — | 🟢 **self-contained scripts, no service.** This is the default |
@@ -97,7 +100,7 @@ surfaces it and halts."* **Cache hits charge nothing.**
 **⚠ The index engine takes the same principal minus one scope.** `index-engine-runtime-spec.md` §2 requires
 `trigger_generation` to be **absent** from its scope list, and asserts that absence in a test. **If both
 engines share one principal, that test cannot pass.** Either two principals are issued or the index engine
-gets its own — **open question 17.**
+gets its own. **✅ Decided: TWO principals** — `content-engine-decisions.md` §1.
 
 ---
 
@@ -374,7 +377,7 @@ this engine is **not** the integrations — it is the **85–115 minutes a week 
 
 ---
 
-## 10 · Open questions — continuing the runtime spec's numbering
+## 10 · Open questions — **all taken.** See [`content-engine-decisions.md`](content-engine-decisions.md)
 
 | # | Question | Blocks | Why it is not ours |
 |---|---|---|---|
