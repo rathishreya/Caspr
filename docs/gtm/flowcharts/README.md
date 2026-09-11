@@ -1,6 +1,6 @@
 # Flowcharts — the source files
 
-*2026-09-11. Nine mermaid charts. Render them, don't read them.*
+*2026-09-11. Eleven mermaid charts. Render them, don't read them.*
 
 **These are diagram sources, not documents.** Every rule and citation lives in the specs; these are the same
 mechanisms drawn, one question per chart. Where a chart and a spec disagree, **the spec is right and the
@@ -17,6 +17,8 @@ chart is a bug.**
 | `F-engage.mmd` | **Creation vs engagement**, who comments where, and **how a target is found** | portrait |
 | `G-calendar.mmd` | **How the calendar is built** — once, weekly, automatically, monthly | square |
 | `H-sanity.mmd` | **Every sanity check in order**, and what each one refuses | wide |
+| `I-platforms.mmd` | **Every platform: what content, what format, what size, when** — including Instagram's dimensions, where Reels stop, and why the caption is not a separate step | square |
+| `J-accounts.mmd` | ⭐ **Whose account a post goes out from, and the mechanism that decides it** — the narrative picks the person, not the rota | square |
 
 ## Rendering
 

@@ -21,6 +21,22 @@ subgraph DEM["⭐ A3 · WHO HAS THE PAIN RIGHT NOW"]
   D3["<b>LEADERSHIP + FUNDING</b><br/>hires · promotes · receives_financing<br/>acquires<br/><i>a new Head of Strategy<br/>is a BUYING MOMENT</i>"]
 end
 
+subgraph TREND["⭐ A2b · WHAT IS TRENDING RIGHT NOW — added 2026-09-11"]
+  R1["<b>GOOGLE TRENDS</b> 🟢 <b>FREE</b><br/>daily trends RSS + related queries<br/><i>the closest free thing to<br/>'what is spiking today'</i>"]
+  R2["<b>GDELT</b> 🟢 <b>FREE, no key</b><br/><i>global news, re-indexed every<br/>15 minutes, with tone and theme.<br/>the biggest free news feed there is</i>"]
+  R3["<b>YOUTUBE DATA API</b> 🟢 free quota<br/><i>search + most-popular by category.<br/>ICP 1/3 watch conference talks</i>"]
+  R4["<b>STACK EXCHANGE</b> 🟢 free API<br/><i>quant + data questions — ICP 6</i>"]
+  R5["<b>PRODUCT HUNT</b> 🟢 free API<br/><i>what tools our ICP is being sold</i>"]
+  R6["<b>BING WEBMASTER</b> 🟢 free<br/><i>our OWN query data —<br/>the free half of Bing</i>"]
+end
+
+subgraph ASKED["⚠ WHAT WAS ASKED FOR — the honest answer on each"]
+  Q1["<b>X / TWITTER trending</b><br/>🔴 <b>PAID or nothing</b><br/><i>free tier is write-only. read starts<br/>at the paid tier. ⚠ RECOMMEND SKIP —<br/>Google Trends + GDELT cover<br/>'what is spiking' for $0</i>"]
+  Q2["<b>INSTAGRAM</b><br/>🟡 <b>narrow and low-value</b><br/><i>Hashtag Search exists on the Graph API<br/>(business account, capped per week) —<br/>but our buyer does not discuss market<br/>sizing on Instagram. KEEP AS A<br/>PUBLISHING SURFACE ONLY</i>"]
+  Q3["<b>FACEBOOK</b><br/>🔴 <b>NOT a listening source</b><br/><i>public content search was retired<br/>years ago. the Graph API returns<br/>OUR OWN page only. nothing to listen to</i>"]
+  Q4["<b>BING search</b><br/>🟡 <b>paid</b> for web search<br/>🟢 <b>free</b> for Bing Webmaster<br/><i>take the free half</i>"]
+end
+
 subgraph MISC["A4 · A5"]
   M1["<b>G2 · CAPTERRA</b> 🟢 search-data<br/><i>buyer pain in their own words</i>"]
   M2["<b>CONFERENCE AGENDAS</b> 🟢<br/><i>what the industry itself decided<br/>matters this year</i>"]
@@ -42,6 +58,8 @@ CITE["⭐ <b>CITATION MINING</b><br/><i>same query, second output:<br/>which pag
 NUM ==>|"⭐ THE FIGURE"| RANK
 TALK -->|"② listener, daily"| RANK
 MISC --> RANK
+    TREND ==>|"⭐ what is SPIKING"| RANK
+    ASKED -.->|"the paid ones are\noptional, not required"| TREND
 RANK --> VER
 CASPR --> VER
 DEM ==> OUTR
@@ -61,7 +79,10 @@ classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
 classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
 classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
 classDef gap fill:#ffebee,stroke:#c62828,stroke-width:2.5px,color:#8e0000
-class T1,T2,T3,T4,T5,M1,M2,M3,B1,CASPR src
+class T1,T2,T3,T4,T5,M1,M2,M3,B1,CASPR,R6 src
+    class R1,R2,R3,R4,R5 star
+    class Q1,Q3 gap
+    class Q2,Q4 warn
 class N1,N2,N3,N4,D1,D2,D3 star
 class RANK,VER,P,OUTR mach
 class X1 stop

@@ -1,0 +1,45 @@
+flowchart LR
+
+ITEM(["<b>ONE APPROVED FINDING</b><br/><i>㉔ decides which of these it<br/>becomes — often several</i>"])
+
+ITEM --> A1 --> A2
+ITEM --> B1 --> B2
+ITEM --> C1 --> C2
+ITEM --> D1 --> D2
+
+A1["<b>LINKEDIN — post</b> ⭐<br/>1,200–1,800 chars · <b>hook in the first 2 lines</b><br/>1 atom or a document<br/>⚠ <b>link in the FIRST COMMENT</b>, never the body<br/>0–3 hashtags, lowercase<br/><b>Tue + Thu 08:30 ET</b> · team Mon/Thu 10:00"]
+A2["<b>LINKEDIN — carousel</b><br/>1080×1080 · 6–12 pages<br/><i>⭐ the evidenced best performer —<br/>2,945 impressions on the document post</i><br/><b>Fri 09:30</b>"]
+
+B1["<b>X</b> — secondary<br/>≤280 · thread 4–7<br/>card on the FIRST post<br/><b>link on the LAST post</b><br/>0–1 hashtags<br/><b>09:30 and 16:00 ET</b><br/>⚠ publish-only — we cannot read X"]
+B2["<b>caspr.ai</b> 🟢 stays automated<br/>search answer 900–1,800 words<br/>1 hero + 1–2 charts · 3–5 internal links<br/>published analysis every 3 weeks<br/><b>Tue + Fri 08:30</b>"]
+
+C1["<b>INSTAGRAM</b> ⚠ <b>repost surface only</b><br/><i>the atom card. NOTHING is written for it —<br/>our buyer does not choose a research tool here.<br/>zero cost, ZERO EXPECTATION</i><br/>feed 1080×1080 or 1080×1350 · carousel ≤20<br/><b>Reels 1080×1920, 9:16</b><br/>caption: <b>first ~125 chars</b> show before 'more'<br/>3–5 hashtags <i>(limit is 30 — using 30<br/>is a signal of desperation)</i><br/><b>3×/week, automatic</b>"]
+C2["⛔ <b>REELS — where we stop</b><br/>✅ the engine writes the <b>script, hook, caption</b><br/>⛔ <b>it does NOT make video</b><br/><i>'video editing — the DM team's editor owns this'</i>"]
+
+D1["<b>REDDIT</b> ⛔ capped<br/>native to the thread · <b>no template shape</b><br/>link only if genuinely asked · no hashtags<br/><b>1/day max</b>, rotating person AND subreddit<br/>ramps 0→5 over 8 weeks<br/>⛔ <b>a human posts. never a brand account</b>"]
+D2["<b>QUORA</b> ⭐ a demand signal, not a channel<br/>a <b>2-minute tap + a link to our own page</b><br/><i>the ranking question becomes an automated<br/>Type B page on caspr.ai — our URL,<br/>our citations, ours forever</i><br/><b>5/week</b>"]
+
+ITEM --> E1
+E1["<b>EMAIL</b> 🟢 automated<br/>120–300 words · 1 CTA<br/><b>Thu 10:00</b> when scheduled<br/>⚠ SES sandbox until production access"]
+E1 --> E2
+E2["<b>FACEBOOK</b> ⛔ <b>not a channel</b><br/><i>a Page exists so the company looks real<br/>to anyone who checks.<br/><b>nothing planned, nothing measured</b></i>"]
+
+A2 --> R
+B2 --> R
+C2 --> R
+D2 --> R
+E2 --> R
+
+R["<b>⚠ TWO THINGS THAT ARE NOT SEPARATE STEPS</b><br/><br/><b>THE CAPTION</b> — on every social surface the<br/><b>body copy IS the caption.</b> written once, to that<br/>channel's length. never written then 'captioned'<br/><br/><b>THE HASHTAGS</b> — they come from the<br/><b>channel rule</b>, never invented per post<br/>⛔ never trending-jacked"]
+
+R --> S["⭐ <b>AND ON EVERY LINK, EVERY SURFACE</b><br/><code>utm_content = the item's own id</code> + icp_hint<br/><i>this one line is what lets us say<br/><b>which post</b> brought the revenue</i>"]
+
+classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+classDef good fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
+classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
+class ITEM,B1 mach
+class A1,A2,B2,D2,S good
+class C1,R warn
+class C2,D1,E2 stop
+class E1 mach

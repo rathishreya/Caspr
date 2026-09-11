@@ -1,0 +1,60 @@
+flowchart TD
+
+F["<b>AN APPROVED FINDING</b><br/><i>it does not yet belong to anybody</i>"]
+
+F --> N{"<b>STEP 1 · WHAT KIND OF STORY IS IT?</b><br/>the NARRATIVE decides — ㉗<br/><i>this is the whole mechanism.<br/>nobody picks 'whose turn it is'</i>"}
+
+N -->|"<b>N1</b> a finding —<br/>two sources disagree<br/>about a number"| J["<b>JOY</b> · CEO<br/><i>the analyst</i>"]
+N -->|"<b>N3</b> the customer's day"| J
+N -->|"<b>N6</b> a teardown —<br/>how a TAM gets wrong"| J2["<b>JOY or DIXIT</b>"]
+N -->|"<b>N4</b> the journey ⚠"| J3["<b>JOY ONLY</b><br/>⚠ ≤1 per 4 weeks"]
+
+N -->|"<b>N2</b> the build — how we<br/>keep 25M sources current,<br/>why citation is hard"| JY["<b>JAYANT</b> · CTO<br/><i>the builder</i>"]
+
+N -->|"retrieval · evaluation<br/>hallucination measurement"| DX["<b>DIXIT</b><br/>applied scientist"]
+N -->|"<b>N8</b> what shipped,<br/>what broke"| AM["<b>AMIT</b> · AI engineer<br/><i>the engineer at work</i>"]
+N -->|"long documents · citation UI<br/>reading experience"| KT["<b>KARTIKEY</b><br/>design"]
+N -->|"technical notes from<br/>inside the build"| KS["<b>KESHAV</b><br/>engineer"]
+N -->|"<b>N5</b> what the product does ⚠<br/><b>N7</b> the category argument"| CO["<b>COMPANY PAGE</b><br/><i>⚠ N5 ≤15% · N7 only on /vs/</i>"]
+
+J --> G
+JY --> G
+DX --> G
+AM --> G
+KT --> G
+KS --> G
+
+G{"<b>STEP 2 · THE LANE CHECK</b> — at ⑧<br/>⛔ <b>A HARD STOP, NOT A PREFERENCE</b>"}
+
+G -->|"✅ in lane"| W
+G -->|"⛔ Jayant + pricing<br/>or a marketing claim"| F1["<b>THE ROW FAILS AND IS<br/>NEVER DRAFTED</b><br/><i>cheaper to fail a row than to<br/>burn a review minute rejecting it</i>"]
+G -->|"⛔ Kartikey or Keshav<br/>speaking FOR the company"| F1
+G -->|"⛔ Amit on strategy<br/>or positioning"| F1
+G -->|"⛔ Naman — anything,<br/>for 8 weeks"| F2["<b>NAMAN: COMMENTS ONLY</b><br/><i>then he joins the engineer lane</i>"]
+
+W{"<b>STEP 3 · IS SOMEONE ELSE<br/>ALREADY ON THIS SUBJECT<br/>THIS WEEK?</b>"}
+W -->|yes| F3["⛔ <b>THE SECOND ROW FAILS</b><br/><i>never two people on the same<br/>subject in the same week —<br/>enforced at ⑧, not left to review</i>"]
+W -->|no| C
+
+C["<b>STEP 4 · CADENCE</b><br/>Joy 1/wk · Jayant 1/wk<br/>everyone else 1/fortnight<br/><i>the rota is a consequence,<br/>not a decision</i>"]
+
+C --> P["<b>STEP 5 · ㉔ PLACEMENT</b><br/>→ which platform, what format,<br/>which day and hour"]
+
+P --> OUT["<b>⑯a PACK → ⑬ APPROVE → ⑯b POST</b><br/><i>from that person's own account,<br/>by that person</i>"]
+
+WHY["⭐ <b>WHY IT IS DECIDED THIS WAY</b><br/><i>the subject picks the person, not the calendar.</i><br/>a CTO posting a pricing claim reads as marketing.<br/>a designer speaking for the company reads as<br/>a company with no spokesperson.<br/><b>each lane is a standing beat — so the<br/>calendar writes itself</b>"]
+N -.-> WHY
+
+EX["⚠ <b>THE ONE THING THIS DOES NOT DECIDE</b><br/><i>comments. those are found by ⑰ from the<br/>fact each person can bring —<br/>same principle, different trigger</i>"]
+OUT -.-> EX
+
+classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+classDef hum fill:#e3f2fd,stroke:#1565c0,stroke-width:2.5px,color:#0d47a1
+classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
+classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
+classDef good fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+class F,C,P,DX,AM,KT,KS,CO mach
+class N,G,W,J,J2,JY hum
+class F1,F2,F3 stop
+class WHY,J3,EX warn
+class OUT good
