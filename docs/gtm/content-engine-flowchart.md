@@ -26,6 +26,125 @@ spec; this is the same mechanism drawn. Station numbers ①–㉚ are the spec's
 
 ---
 
+## 0A · ⭐ The master chart — everything on one line
+
+**The whole system, both engines, left to right.** Where §0 is the version to *say* and §1–§10 are the
+engineering cuts, **this is the one to put on a slide.**
+
+```mermaid
+flowchart LR
+
+SRC["<b>① SOURCES</b><br/>Reddit API · Hacker News<br/>Google demand surfaces<br/>Quora · WSO · forums<br/><i>via licensed search index</i><br/>trade feeds<br/><br/>⛔ read-only · never scraped"]
+
+LIS["<b>② LISTENER</b><br/><i>never posts,<br/>votes or DMs</i>"]
+
+GATE["<b>4 GATES</b><br/>relevant · <b>sourceable</b><br/>in a lane · not repeated<br/><i>fail = dropped</i>"]
+
+RANK["<b>③ RANK</b><br/><b>disagreement<br/>about a number</b><br/>velocity >2.0<br/>buyer density<br/><i>⛔ volume is not a signal</i>"]
+
+CLAIM["<b>④ CLAIM READER</b><br/><i>what do they believe?</i>"]
+
+CASPR[("<b>CASPR</b><br/>25M sources")]
+
+VER{"<b>⑤ VERIFIER</b><br/>is it true?<br/><i>free → cheap → billable<br/>billable needs a<br/>human's name</i>"}
+
+STOP["⛔ <b>NOTHING GOES OUT</b><br/>no source, no item<br/><i>the model REFUSES —<br/>and that is a success,<br/>not an error</i>"]
+
+CLK{"<b>⑥ WHICH CLOCK?</b>"}
+
+DLY["<b>DAILY</b> — what is happening<br/>3/day · live within the hour<br/><i>48h unreviewed → DEMOTES<br/>to weekly, never discarded</i>"]
+
+BRD["<b>⑦ TOPIC BOARD</b><br/>⚠ <b>A HUMAN PICKS</b><br/><i>never the machine</i>"]
+
+WO["<b>⑧ WORK ORDER</b><br/>~40 rows, sized to<br/>the review budget<br/><i>only 2.5 are original</i>"]
+
+WRI["<b>⑨⑩⑪ ASSEMBLE · WRITE · CHART</b><br/>9 context blocks<br/>80% cheap model<br/><i>$40–100 a month</i>"]
+
+LINT["<b>⑫ LINTER</b><br/>banned words · US spelling<br/>no competitor in a headline<br/><i>fail → back, silently</i>"]
+
+REV{"<b>⑬ REVIEW ROOM</b><br/><b>A PERSON DECIDES</b><br/>approve · reject+reason · hold<br/><i>⛔ no editing<br/>85–115 min/week, 3 people</i>"}
+
+LED["<b>⑭ LEDGER</b><br/><i>every rejection, forever —<br/>so the same mistake<br/>cannot come back</i>"]
+
+HYG["<b>⑮⑲ HYGIENE + PROVENANCE</b><br/>marketing asset → mark <b>REMOVED</b><br/>report we sell → mark <b>KEPT</b><br/><i>EU AI Act, Art. 50(2)</i><br/><b>can't check? HOLD</b>"]
+
+PACK["<b>⑯a PACKER</b> — automated<br/>copy · image · account · slot<br/><b>+ the STAMPED LINK</b><br/><i>this is what makes revenue<br/>traceable to one post</i>"]
+
+POST["<b>⑯b POST DESK</b><br/><b>A PERSON POSTS</b> — for now<br/><i>caspr.ai + email stay automated</i>"]
+
+OUT["<b>LIVE</b><br/>LinkedIn · X · Reddit · Quora<br/>Instagram · blog · email"]
+
+ENG["<b>⑰㉕ ENGAGE</b><br/>35 comments · 10 reposts<br/>⛔ <b>no coordinated applause</b><br/><i>empty fact field →<br/>the target never surfaces</i>"]
+
+MET["<b>⑱ METER</b><br/><b>x</b> = revenue per $1 spent<br/><b>p</b> = do we appear<br/>when a buyer asks<br/><i>p is currently ZERO</i>"]
+
+PERF["<b>㉒ PERFORMANCE DESK</b><br/><i>which KINDS of item earned →<br/>proposes next month's mix</i><br/><b>proposes. never edits.</b>"]
+
+TRU["<b>⑲ TRUTH LAYER</b><br/><i>ONE table of every number<br/>we claim — the writer's context<br/>AND the linter's rulebook</i><br/><b>a number moves → every live<br/>page with the old one FLAGS</b>"]
+
+REG["<b>THE REGISTERS ㉓–㉜</b><br/><i>ten tables a person owns.<br/>the engine executes against them<br/>and CANNOT edit them</i><br/>sources · placement · roster<br/>narrative · amplify · market<br/>platforms · data access"]
+
+IDX["<b>ENGINE 2 · INDEX</b><br/>⛔ <b>NO HUMAN ANYWHERE</b><br/>ⓐ basket → ⓑ probe → ⓒ gates → ⓕ render<br/><i>ⓑ cannot commission new analysis —<br/>enforced by its own credential</i>"]
+
+G6["<b>ⓒ SIX GATES</b> — instead of a reader<br/>G1 freshness · G2 source · G3 basis<br/>G4 period · G5 sanity<br/><b>G6 — more than 20% of rows suppressed<br/>→ PUBLISH NOTHING, WAKE A HUMAN</b>"]
+
+REN["<b>ⓕ RENDERER</b><br/><b>no free-text field exists</b><br/><i>a model never writes a<br/>sentence a reader sees</i>"]
+
+SRC --> LIS --> GATE --> RANK --> CLAIM --> VER
+CASPR --> VER
+VER -->|"no_data"| STOP
+VER -->|"confirmed · diverges<br/>definitional"| CLK
+CLK -->|"today"| DLY
+CLK -->|"this week"| BRD
+DLY --> WO
+BRD --> WO
+WO --> WRI --> LINT --> REV
+REV -->|"reject + reason"| LED
+LED -.->|"injected into every<br/>later generation"| WRI
+REV -->|"approve"| HYG --> PACK --> POST --> OUT
+ENG --> OUT
+OUT --> MET --> PERF
+PERF -.->|"±5 points max ·<br/>a human approves the mix"| WO
+OUT -.->|"what is live"| TRU
+TRU -->|"context"| WRI
+TRU -->|"rules"| LINT
+REG -.-> WO
+REG -.-> PACK
+REG -.-> ENG
+CASPR --> IDX
+IDX --> G6 --> REN
+REN --> MET
+
+classDef src fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+classDef human fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#0d47a1
+classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
+classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
+classDef red fill:#ffebee,stroke:#c62828,stroke-width:2.5px,color:#8e0000
+
+class SRC,CASPR src
+class LIS,GATE,RANK,CLAIM,WO,WRI,LINT,PACK,MET,DLY,IDX,REN mach
+class VER,CLK,REV,BRD,POST human
+class STOP,ENG stop
+class LED,PERF,TRU,REG warn
+class HYG,G6 red
+```
+
+**Reading it:** the spine runs **sources → listen → verify → decide → make → review → ship → measure**, with
+**Engine 2 (the index engine)** on its own track below because it shares only the corpus and the meter.
+**Blue = a person decides · dark = a hard stop · amber = a loop · red = a compliance gate.**
+
+**Four things to point at:**
+
+| | |
+|---|---|
+| **The dark box early on** | `no_data` → **nothing goes out.** The engine refuses, and the refusal is a success |
+| **The two blue diamonds** | The only places a person decides — **⑬ review** and **⑦ the topic pick** |
+| **The amber boxes** | Three loops: **the reviewer** teaches it, **the reader** teaches it, and the **truth layer** corrects what is already live |
+| **The red boxes** | **Compliance, not preference** — Article 50 on one side, G6 corpus degradation on the other |
+
+---
+
 ## 0 · The one-minute version — start here
 
 **Two diagrams. If you only show one thing, show these.**
