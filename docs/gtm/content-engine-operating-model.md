@@ -92,7 +92,10 @@ and it is categorically not a crawl. **Nothing in the listening layer is done by
 
 | | Kind | Question it answers | Feeds |
 |---|---|---|---|
-| **A** | **Listening** | *"What are buyers arguing about this week?"* | ② → ③ → ④ |
+| **A1** ⭐ | **Numbers issued** | *"What is the figure, officially?"* — **added 2026-09-11** | **③ → ⑤** |
+| **A2** | **People talking** | *"What are buyers arguing about this week?"* | ② → ③ → ④ |
+| **A3** ⭐ | **Demand signals** | *"Who has the pain right now?"* — **added 2026-09-11** | **㉑ only** |
+| **A4 · A5** | Reviews, agendas, academic | *"What does the market say it needs?"* | ⑦ · ICP copy |
 | **B** | **Answer-engine surfaces** | *"Does Caspr appear when a buyer asks?"* | **⑱ / `p` only** |
 | **C** | **Fact** | *"Is the claim true?"* | **⑤ only — Caspr's own corpus** |
 
@@ -101,7 +104,9 @@ and it is categorically not a crawl. **Nothing in the listening layer is done by
 > claim. **Kind C has exactly one member and it is Caspr.** An engine that took a fact from an AI answer and
 > published it would have inverted its own product claim.
 
-### A · Listening sources — read-only, official access, human-owned list
+### A2 · Where people talk — read-only, official access
+
+**⚠ This was the whole register until 2026-09-11. It is now one class of five — see below.**
 
 | Source | Access | Serves ICP | Note |
 |---|---|---|---|
@@ -265,6 +270,101 @@ only expensive thing here.
 
 **Volume is deliberately not a signal at all.** A big conversation we cannot source is worth less than a small
 one we can.
+
+### 🔴 The register was half a register — and the missing half contradicted our own scorer
+
+**Found 2026-09-11.** Everything above is **where people talk.** Reddit, Quora, forums, trade chatter.
+
+**But ③ ranks trends with one signal above all others:**
+
+> ⭐ **"are two credible sources arguing about A NUMBER?"**
+
+**And not one source above publishes a number.** Forums discuss numbers; they do not issue them. Market
+figures are issued by **filings, earnings, funding announcements, government statistics and trade bodies** —
+and none of those were in the register.
+
+**So the engine's highest-weighted signal had no feed.** That is not a thin list, it is an internal
+contradiction, and it is the real reason the register felt short.
+
+---
+
+### A1 · ⭐ **WHERE NUMBERS GET ISSUED** — the missing half
+
+| Source | What it gives | Access |
+|---|---|---|
+| **PredictLeads** ⭐ | **Financing events with amounts** · `has_revenue` · `has_valuation` · `has_earnings` · acquisitions · IPOs · partnerships · layoffs — as **structured, dated, source-linked records** | 🟢 **CONNECTED AND LIVE** — verified 2026-09-11, returning same-day data |
+| **SEC EDGAR** | **10-K and 10-Q market-size claims, risk factors, segment revenue.** Where a company states its own TAM — and where it disagrees with the analyst report | 🟢 **Free official API** |
+| **US government statistics** — Census · BLS · BEA | The base numbers a consultancy's market size is built on top of | 🟢 **Free APIs** |
+| **Eurostat · ONS · national statistics** | Same, for any non-US sizing | 🟢 Free |
+| **Trade bodies** — ESOMAR industry report · sector associations | The industry's own published figures, which is exactly what a consultancy's differs from | 🟢 Free / member |
+| **Company IR pages and earnings feeds** | Revenue and guidance, direct from the issuer | 🟢 RSS |
+
+> ⭐ **Why this is the strongest source class we have.** A market-sizing disagreement is almost never found
+> between two forum posts. **It is found between a consultancy's published figure and what the companies in
+> that market actually filed.** That gap is the `diverges` verdict, and a `diverges` finding is the
+> highest-travelling artefact the engine produces.
+
+---
+
+### A3 · ⭐ **WHO HAS THE PAIN RIGHT NOW** — demand signals
+
+**Also new, also PredictLeads, and it feeds ㉑ outreach rather than ⑦ the topic board.**
+
+| Signal | What it means | Category |
+|---|---|---|
+| **Job openings** | A firm posting for three market-research analysts **has the pain today**, and is spending on it | `research` · `data_analysis` · `consulting` |
+| **Technology detections** | Who already runs AlphaSense, Bloomberg or a competing stack — **the budget line we join** | — |
+| **Leadership changes** — `hires` · `promotes` | A new Head of Strategy or Corp Dev is **a buying moment**, and they are ICP 2 | — |
+| **`receives_financing`** | A freshly funded company is about to do market work it has never done before | ICP 8 |
+| **`acquires` · `merges_with`** | Somebody just needed diligence, and will need it again | ICP 3 |
+
+**⚠ This is a different kind of source and must not be confused with the others.** It does not tell us what to
+*write*; it tells us **who to talk to**. It feeds ㉑, not ⑦. Mixing them would have the engine writing posts
+about individual companies, which is neither our voice nor our register.
+
+---
+
+### A4 · Reviews and competitive surfaces
+
+| Source | What it gives | Access |
+|---|---|---|
+| **G2 · Capterra** | What buyers say about research tools **in their own words** — pain language for ICP copy | 🟢 Search-data API |
+| **Conference agendas** — ESOMAR · Quirks · trade events | **What the industry itself decided matters this year.** A published agenda is a curated list of live problems | 🟢 Free |
+
+### A5 · Academic — for ICP 6 and 8
+
+**OpenAlex · Semantic Scholar** — 🟢 free APIs. Literature synthesis is the job ICP 8 is doing at 9pm, and
+ICP 6's methodological arguments start in papers before they reach `#mrx`.
+
+---
+
+### ⚠ Two more connections that exist and are not listening sources
+
+**Naming them so nobody wires them to the wrong station:**
+
+| | What it is | Which station |
+|---|---|---|
+| **Supermetrics** | 150+ marketing and ad data sources in one place | **⑳ the dashboard** — it is a *measurement* connector, not a listening one |
+| **Vibe Prospecting** | Business and prospect enrichment | **㉑ outreach** — it enriches a target we already chose; it never picks a topic |
+
+---
+
+### The register, restated
+
+| Class | Answers | Feeds | Was it there before? |
+|---|---|---|---|
+| **A1 · Numbers issued** | *what is the figure, officially* | **③ ⑤** | 🔴 **No — the biggest gap** |
+| **A2 · People talking** | *what are buyers arguing about* | ② → ③ → ④ | ✅ Yes |
+| **A3 · Demand signals** | *who has the pain right now* | **㉑** | 🔴 **No** |
+| **A4 · Reviews · agendas** | *what the market says it needs* | ⑦ · ICP copy | 🔴 No |
+| **A5 · Academic** | *where the argument starts* | ICP 6, 8 | 🔴 No |
+| **B · Answer engines** | *do we appear* | ⑱ / `p` | ✅ Yes |
+| **C · Fact** | *is it true* | ⑤ only | ✅ Yes |
+
+**⛔ Every rule above still holds without exception.** Official APIs and licensed feeds only · read-only ·
+**never scraped** · and **an answer engine is never a source of fact.** The register got wider, not looser.
+
+---
 
 ### B · Answer-engine surfaces — measured monthly, never a fact source
 

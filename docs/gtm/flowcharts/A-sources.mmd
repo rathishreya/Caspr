@@ -1,48 +1,69 @@
 flowchart LR
 
-subgraph LISTEN["KIND A · LISTENING — what buyers argue about"]
-  A1["<b>REDDIT</b><br/>r/consulting · r/MBA<br/>r/marketresearch · r/PE<br/>r/venturecapital · r/analytics<br/><i>official API · read-only</i><br/>🟡 commercial tier — verify price"]
-  A2["<b>WALL ST OASIS · PREPLOUNGE</b><br/><i>no API of their own</i><br/>🟢 licensed SEARCH-DATA API<br/>+ RSS where offered"]
-  A3["<b>QUORA</b><br/><i>no API of their own</i><br/>🟢 search-data API<br/><code>site:quora.com</code><br/><b>we read the INDEX, not the site</b>"]
-  A4["<b>HACKER NEWS</b><br/>🟢 Algolia API<br/><i>free, no key at all</i>"]
-  A5["<b>GOOGLE DEMAND</b><br/>Search Console queries ⭐<br/>autocomplete · People Also Ask<br/>🟢 free with OAuth"]
-  A6["<b>TRADE</b><br/>#mrx · ESOMAR<br/>GreenBook · Quirks<br/>AMI · category press<br/>🟢 RSS, free"]
+subgraph NUM["⭐ A1 · WHERE NUMBERS GET ISSUED — the half that was missing"]
+  N1["<b>PREDICTLEADS</b> 🟢 CONNECTED &amp; LIVE<br/><i>verified 2026-09-11, same-day data</i><br/>financing events WITH AMOUNTS<br/>has_revenue · has_valuation · has_earnings<br/>acquisitions · IPOs · partnerships"]
+  N2["<b>SEC EDGAR</b> 🟢 free official API<br/><i>10-K / 10-Q market-size claims,<br/>segment revenue, risk factors —<br/>where a company states its OWN TAM</i>"]
+  N3["<b>GOVERNMENT STATISTICS</b> 🟢 free<br/>US Census · BLS · BEA<br/>Eurostat · ONS<br/><i>the base numbers a consultancy's<br/>market size is built on top of</i>"]
+  N4["<b>TRADE BODIES + IR FEEDS</b> 🟢<br/>ESOMAR industry report<br/>sector associations · earnings RSS"]
 end
 
-subgraph ANS["KIND B · ANSWER ENGINES — where we must APPEAR"]
-  B1["ChatGPT · Claude · Perplexity<br/>Google AI Overviews · Gemini<br/><i>official APIs only</i>"]
+subgraph TALK["A2 · WHERE PEOPLE TALK"]
+  T1["<b>REDDIT</b> — official API, read-only<br/>r/consulting · r/MBA · r/PE<br/>r/marketresearch · r/venturecapital"]
+  T2["<b>QUORA · WSO · PREPLOUNGE · forums</b><br/>🟢 licensed SEARCH-DATA API<br/><i>no API of their own — we read the<br/>INDEX of the site, not the site</i>"]
+  T3["<b>HACKER NEWS</b> 🟢 Algolia, free, no key"]
+  T4["<b>GOOGLE DEMAND</b> 🟢 free<br/>Search Console queries ⭐<br/>autocomplete · People Also Ask"]
+  T5["<b>TRADE CHATTER</b> 🟢 RSS<br/>#mrx · GreenBook · Quirks · AMI"]
 end
 
-subgraph FACT["KIND C · FACT — exactly one member"]
-  C1[("<b>CASPR</b><br/>25M curated sources<br/><i>via ⑤, in fixed order</i>")]
+subgraph DEM["⭐ A3 · WHO HAS THE PAIN RIGHT NOW"]
+  D1["<b>JOB OPENINGS</b> — PredictLeads<br/>categories: research · data_analysis<br/><i>a firm posting for 3 market-research<br/>analysts HAS THE PAIN TODAY</i>"]
+  D2["<b>TECH DETECTIONS</b><br/><i>who already runs AlphaSense<br/>or Bloomberg — the budget<br/>line we JOIN</i>"]
+  D3["<b>LEADERSHIP + FUNDING</b><br/>hires · promotes · receives_financing<br/>acquires<br/><i>a new Head of Strategy<br/>is a BUYING MOMENT</i>"]
 end
 
-LIS["<b>② THE LISTENER</b><br/>daily · ⛔ never posts,<br/>votes or DMs"]
-P["<b>p — PRESENCE</b><br/>frozen basket, unbranded<br/><i>currently ZERO</i>"]
-CITE["⭐ <b>CITATION MINING</b><br/><i>same query, second output:<br/>WHICH PAGES the engines cite.<br/>that is the outreach target list</i>"]
-VER["<b>⑤ VERIFIER</b><br/>is the claim true?"]
+subgraph MISC["A4 · A5"]
+  M1["<b>G2 · CAPTERRA</b> 🟢 search-data<br/><i>buyer pain in their own words</i>"]
+  M2["<b>CONFERENCE AGENDAS</b> 🟢<br/><i>what the industry itself decided<br/>matters this year</i>"]
+  M3["<b>OPENALEX · SEMANTIC SCHOLAR</b> 🟢<br/><i>ICP 6 and 8 — where the<br/>argument starts</i>"]
+end
 
-X1["❌ <b>X / TWITTER — NOT a source</b><br/><i>read unavailable at free tier.<br/>X is publish-only</i>"]
-X2["❌ <b>LINKEDIN FEED — dropped</b><br/><i>r_member_social would force<br/>Standard tier onto the whole app</i>"]
-X3["⛔ <b>'WHAT IS TRENDING ON CHATGPT'</b><br/><i>does not exist. no engine publishes<br/>what its users ask. not a pricing question</i>"]
-X4["⛔ <b>NEVER SCRAPE</b><br/><i>our product claim is 'curated, NOT scraped'.<br/>a company selling that cannot scrape<br/>for its own marketing</i>"]
+subgraph ANS["B · ANSWER ENGINES — where we must APPEAR"]
+  B1["ChatGPT · Claude · Perplexity<br/>AI Overviews · Gemini<br/><i>official APIs only</i>"]
+end
 
-LISTEN --> LIS
+CASPR[("<b>C · FACT — one member</b><br/>CASPR, 25M sources<br/><i>via ⑤, fixed order</i>")]
+
+RANK["<b>③ RANK</b><br/>⭐ <b>are two credible sources<br/>arguing about A NUMBER?</b><br/><i>highest weight of the four signals</i>"]
+VER["<b>⑤ VERIFIER</b>"]
+OUTR["<b>㉑ OUTREACH</b><br/><i>who to TALK to —<br/>never what to write</i>"]
+P["<b>p — PRESENCE</b> · currently ZERO"]
+CITE["⭐ <b>CITATION MINING</b><br/><i>same query, second output:<br/>which pages the engines trust</i>"]
+
+NUM ==>|"⭐ THE FIGURE"| RANK
+TALK -->|"② listener, daily"| RANK
+MISC --> RANK
+RANK --> VER
+CASPR --> VER
+DEM ==> OUTR
 ANS --> P
 ANS --> CITE
-FACT --> VER
-LIS --> VER
-X1 -.-> LISTEN
-X2 -.-> LISTEN
-X3 -.-> ANS
-X4 -.-> LISTEN
-B1 -.->|"⛔ NEVER a source of fact —<br/>publishing one would invert<br/>our own product claim"| VER
+CITE --> OUTR
+
+WHY["🔴 <b>WHY A1 WAS THE REAL GAP</b><br/><i>③ ranks on 'two sources disagree about a number' —<br/>but forums DISCUSS numbers, they do not ISSUE them.<br/>a sizing disagreement is almost never between two forum posts.<br/><b>it is between a consultancy's published figure and<br/>what the companies in that market actually FILED.</b><br/>the highest-weighted signal had no feed</i>"]
+WHY -.-> NUM
+
+X1["⛔ <b>NEVER SCRAPE</b> · ⛔ <b>an answer engine is NEVER a source of fact</b><br/>⛔ X is publish-only · ⛔ LinkedIn feed dropped<br/>⛔ A3 feeds ㉑ ONLY — mixing it into ⑦ would have us<br/>writing posts about individual companies, which is not our register<br/><i>the register got WIDER, not looser</i>"]
+X1 -.-> RANK
 
 classDef src fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+classDef star fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px,color:#1b5e20
 classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
 classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
 classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
-class A1,A2,A3,A4,A5,A6,B1,C1 src
-class LIS,VER,P mach
-class X1,X2,X3,X4 stop
+classDef gap fill:#ffebee,stroke:#c62828,stroke-width:2.5px,color:#8e0000
+class T1,T2,T3,T4,T5,M1,M2,M3,B1,CASPR src
+class N1,N2,N3,N4,D1,D2,D3 star
+class RANK,VER,P,OUTR mach
+class X1 stop
 class CITE warn
+class WHY gap
