@@ -1,0 +1,54 @@
+flowchart TD
+
+subgraph ONCE["BUILT ONCE — the twelve-week shape"]
+  O1["<b>ONE ARGUMENT, THREE MOVEMENTS</b><br/><i>not a topic list — an argument told in order</i><br/><b>1–4</b> the question after the number<br/><b>5–8</b> where numbers come from<br/><b>9–10</b> what research costs<br/><b>11–12</b> back to the analyst"]
+  O2["<b>TYPE A LANDS EVERY 3rd WEEK</b><br/>weeks 3 · 6 · 9 · 12<br/><i>and its ~20 derivatives spread across<br/>that week and the next —<br/><b>deliberately spread, not dumped</b></i>"]
+  O3["<b>ICP CONCENTRATION</b><br/>Investors 35% · Consultants 25%<br/>Agencies 20% · Strategy 15%<br/><b>4 ICPs get 0% active content</b><br/><i>and that is correct — the narrow<br/>launch IS the plan</i>"]
+  O4["<b>PILLAR SHARES</b> 42/18/8/20/12<br/><i>12-week output shares,<br/>not a ranking of importance</i>"]
+  O5["⚠ <b>WEEKS 1–4 TIGHT · 9–12 INDICATIVE</b><br/><i>'a calendar that pretended to know<br/>week 11 in August would be theatre'</i>"]
+  O1 --> O2 --> O3 --> O4 --> O5
+end
+
+subgraph WEEKLY["DECIDED EACH WEEK — Wednesday, 30 minutes"]
+  W1["<b>⑦ TOPIC BOARD</b><br/>ranked candidates + their evidence<br/>⚠ <b>A HUMAN PICKS</b>"]
+  W2["the movement sets what the week<br/>is <b>ABOUT</b>; the pipeline sets<br/>the specific <b>TOPIC</b>"]
+  W3["<b>⑳ the dashboard is read in the<br/>same half hour</b><br/><i>the reading and the commissioning<br/>sit together, deliberately</i>"]
+  W1 --> W2
+  W3 -.-> W1
+end
+
+subgraph AUTO["FILLED AUTOMATICALLY — Thursday 06:00"]
+  A1["<b>⑧ WORK ORDER</b><br/>calendar slot + picked topic<br/>→ ~40 rows"]
+  A2["each row gets: type · ICP · narrative<br/>stage · channel · format · day · hour"]
+  A3["⛔ <b>SIZED TO THE REVIEW BUDGET</b><br/><i>the engine cannot outrun its gate.<br/>volume is a function of review minutes,<br/>never the other way round</i>"]
+  A1 --> A2 --> A3
+end
+
+subgraph ADJ["ADJUSTED MONTHLY"]
+  M1["<b>㉒ PERFORMANCE DESK</b><br/><i>which KINDS of item earned</i><br/>→ proposes a mix change"]
+  M2["⛔ <b>bounded</b>: ±5 points per cycle<br/>floors and ceilings per pillar<br/><b>pillar 2 can never be raised</b><br/><i>its cap is structural, not a quantity</i>"]
+  M3["⚠ <b>a human approves the proposal.</b><br/>it never applies itself"]
+  M1 --> M2 --> M3
+end
+
+ONCE --> WEEKLY --> AUTO
+AUTO --> ADJ
+M3 -.->|"next cycle's mix"| A1
+
+HOL["<b>US FEDERAL HOLIDAYS SUPPRESS THE WEEK</b><br/>Thanksgiving · 4 July · Labor Day<br/>Memorial Day · Christmas–New Year<br/><i>a post into a dead week wastes an<br/>origination slot — and there are only 2.5</i>"]
+AUTO -.-> HOL
+
+COLD["<b>WEEKS 1–2 · COLD START</b><br/>no ledger, no performance history, p = 0<br/>✅ listening runs from day one<br/>✅ <code>utm_content</code> on the very first link —<br/><i>it can never be applied retroactively</i><br/>✅ testimonials: 12 recorded, 10 delivered"]
+ONCE -.-> COLD
+
+GATE["⛔ <b>TWO HARD GATES</b><br/><b>1 ·</b> website + app both live → gates EVERYTHING<br/><i>'driving anyone into the old surfaces spends<br/>the one thing that cannot be re-spent —<br/>a first impression'</i><br/><b>2 ·</b> /samples holds 3 real reports<br/>+ testimonials published → gates PAID"]
+COLD --> GATE
+
+classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+classDef hum fill:#e3f2fd,stroke:#1565c0,stroke-width:2.5px,color:#0d47a1
+classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
+classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
+class O1,O2,O3,O4,W2,A1,A2,M1 mach
+class W1,W3,M3 hum
+class A3,M2,GATE stop
+class O5,HOL,COLD warn

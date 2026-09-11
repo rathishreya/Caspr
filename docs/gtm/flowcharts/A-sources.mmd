@@ -1,0 +1,48 @@
+flowchart LR
+
+subgraph LISTEN["KIND A · LISTENING — what buyers argue about"]
+  A1["<b>REDDIT</b><br/>r/consulting · r/MBA<br/>r/marketresearch · r/PE<br/>r/venturecapital · r/analytics<br/><i>official API · read-only</i><br/>🟡 commercial tier — verify price"]
+  A2["<b>WALL ST OASIS · PREPLOUNGE</b><br/><i>no API of their own</i><br/>🟢 licensed SEARCH-DATA API<br/>+ RSS where offered"]
+  A3["<b>QUORA</b><br/><i>no API of their own</i><br/>🟢 search-data API<br/><code>site:quora.com</code><br/><b>we read the INDEX, not the site</b>"]
+  A4["<b>HACKER NEWS</b><br/>🟢 Algolia API<br/><i>free, no key at all</i>"]
+  A5["<b>GOOGLE DEMAND</b><br/>Search Console queries ⭐<br/>autocomplete · People Also Ask<br/>🟢 free with OAuth"]
+  A6["<b>TRADE</b><br/>#mrx · ESOMAR<br/>GreenBook · Quirks<br/>AMI · category press<br/>🟢 RSS, free"]
+end
+
+subgraph ANS["KIND B · ANSWER ENGINES — where we must APPEAR"]
+  B1["ChatGPT · Claude · Perplexity<br/>Google AI Overviews · Gemini<br/><i>official APIs only</i>"]
+end
+
+subgraph FACT["KIND C · FACT — exactly one member"]
+  C1[("<b>CASPR</b><br/>25M curated sources<br/><i>via ⑤, in fixed order</i>")]
+end
+
+LIS["<b>② THE LISTENER</b><br/>daily · ⛔ never posts,<br/>votes or DMs"]
+P["<b>p — PRESENCE</b><br/>frozen basket, unbranded<br/><i>currently ZERO</i>"]
+CITE["⭐ <b>CITATION MINING</b><br/><i>same query, second output:<br/>WHICH PAGES the engines cite.<br/>that is the outreach target list</i>"]
+VER["<b>⑤ VERIFIER</b><br/>is the claim true?"]
+
+X1["❌ <b>X / TWITTER — NOT a source</b><br/><i>read unavailable at free tier.<br/>X is publish-only</i>"]
+X2["❌ <b>LINKEDIN FEED — dropped</b><br/><i>r_member_social would force<br/>Standard tier onto the whole app</i>"]
+X3["⛔ <b>'WHAT IS TRENDING ON CHATGPT'</b><br/><i>does not exist. no engine publishes<br/>what its users ask. not a pricing question</i>"]
+X4["⛔ <b>NEVER SCRAPE</b><br/><i>our product claim is 'curated, NOT scraped'.<br/>a company selling that cannot scrape<br/>for its own marketing</i>"]
+
+LISTEN --> LIS
+ANS --> P
+ANS --> CITE
+FACT --> VER
+LIS --> VER
+X1 -.-> LISTEN
+X2 -.-> LISTEN
+X3 -.-> ANS
+X4 -.-> LISTEN
+B1 -.->|"⛔ NEVER a source of fact —<br/>publishing one would invert<br/>our own product claim"| VER
+
+classDef src fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
+classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
+class A1,A2,A3,A4,A5,A6,B1,C1 src
+class LIS,VER,P mach
+class X1,X2,X3,X4 stop
+class CITE warn

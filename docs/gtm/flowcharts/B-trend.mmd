@@ -1,0 +1,77 @@
+flowchart LR
+
+IN["<b>② LISTENER</b> — everything collected today<br/><i>hundreds of threads, questions and posts</i>"]
+
+G1{"<b>GATE 1 · RELEVANCE</b><br/>does it touch one of the<br/>8 ICPs' actual work?"}
+G2{"<b>GATE 2 · SOURCEABILITY</b> ⭐<br/>is there a <b>checkable claim</b> in it?"}
+G3{"<b>GATE 3 · LANE</b><br/>can one of the 7 people<br/>carry it in their own voice?"}
+G4{"<b>GATE 4 · NOT REPEATED</b><br/>did we cover it in<br/>the last 30 days?"}
+
+D1["🗑 <b>DROPPED</b><br/><i>no score computed —<br/>ranking things we cannot<br/>publish wastes the only<br/>expensive thing here</i>"]
+D2["🗑 <b>DROPPED</b><br/><i>no claim → nothing for ⑤<br/>to verify → nothing we<br/>are allowed to say</i>"]
+D3["🗑 DROPPED"]
+D4["🗑 DROPPED"]
+
+RANK["<b>③ RANK THE SURVIVORS</b> — four signals"]
+R1["⭐ <b>DISAGREEMENT</b> — highest weight<br/><i>are two credible sources arguing<br/>about A NUMBER?</i>"]
+R2["<b>VELOCITY</b><br/>mentions in 24h ÷ trailing<br/>7-day daily average<br/><b>>2.0 = accelerating</b>"]
+R3["<b>BUYER DENSITY</b><br/><i>share of the conversation from<br/>ICP-shaped accounts, not<br/>the general public</i>"]
+R4["<b>SEARCH INTENT</b><br/><b>CPC, never volume</b><br/><i>'secondary research' at $9<br/>is a student</i>"]
+NOVOL["⛔ <b>RAW VOLUME IS NOT A SIGNAL</b><br/><i>a big conversation we cannot source<br/>is worth less than a small one we can</i>"]
+
+WHY["⭐ <b>WHY DISAGREEMENT WINS</b><br/><i>a settled topic gives an analyst nothing to add.<br/>a disagreement is exactly what ⑤ returns as<br/><b>diverges</b> — and a diverges finding is the<br/>highest-travelling artefact the engine makes.<br/>the scorer HUNTS for it, in numbers not opinions</i>"]
+
+CLAIM["<b>④ CLAIM READER</b><br/><i>turn the conversation into<br/>a checkable assertion + its basis</i>"]
+
+VER{"<b>⑤ VERIFIER</b> — ask Caspr<br/><i>1 retrieve_analysis (free) →<br/>2 fact_lookup (cheap) →<br/>3 trigger_generation (billable,<br/>needs a human's name)</i>"}
+
+V1["<b>confirmed</b><br/>it is true"]
+V2["⭐ <b>diverges</b><br/>two sources disagree<br/>on the same basis"]
+V3["<b>definitional</b><br/>they measure<br/>different things"]
+V4["<b>no_data</b>"]
+
+STOP["⛔ <b>NOTHING GOES OUT</b><br/><i>the model returns a refusal token<br/>instead of a draft. no source, no item.<br/><b>the refusal is a success, not an error</b></i>"]
+OUTR["→ <b>㉑ OUTREACH</b><br/><i>a no_data claim can still carry<br/>a real distribution finding</i>"]
+
+SPEED{"<b>⑥ HOW FAST DOES<br/>THIS NEED TO MOVE?</b>"}
+VIRAL["🔥 <b>VIRAL / DAILY TRACK</b><br/>velocity high + confirmed/diverges<br/><i>3 a day, capped</i>"]
+WEEK["📅 <b>WEEKLY TRACK</b><br/><i>deserves a full analysis</i>"]
+
+IN --> G1
+G1 -->|no| D1
+G1 -->|yes| G2
+G2 -->|no| D2
+G2 -->|yes| G3
+G3 -->|no| D3
+G3 -->|yes| G4
+G4 -->|"covered"| D4
+G4 -->|"new"| RANK
+RANK --> R1 & R2 & R3 & R4
+NOVOL -.-> RANK
+R1 -.-> WHY
+R1 --> CLAIM
+R2 --> CLAIM
+R3 --> CLAIM
+R4 --> CLAIM
+CLAIM --> VER
+VER --> V1 & V2 & V3 & V4
+V4 --> STOP
+V4 -.->|"if it carries a<br/>distribution finding"| OUTR
+V1 --> SPEED
+V2 --> SPEED
+V3 --> SPEED
+SPEED -->|"the conversation<br/>is happening NOW"| VIRAL
+SPEED -->|"it will still<br/>matter in 2 weeks"| WEEK
+
+classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+classDef hum fill:#e3f2fd,stroke:#1565c0,stroke-width:2.5px,color:#0d47a1
+classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
+classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
+classDef good fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+classDef drop fill:#eceff1,stroke:#90a4ae,stroke-width:1px,color:#455a64
+class IN,RANK,R2,R3,R4,CLAIM,V1,V3 mach
+class G1,G2,G3,G4,VER,SPEED hum
+class STOP,NOVOL stop
+class WHY,R1,V2,OUTR warn
+class VIRAL,WEEK good
+class D1,D2,D3,D4,V4 drop

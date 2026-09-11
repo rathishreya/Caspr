@@ -1,0 +1,52 @@
+flowchart TD
+
+T["<b>A TREND WE CAN SOURCE</b>"]
+T --> SPLIT{"⑥ WHICH CLOCK?"}
+
+subgraph DAY["🔥 DAILY TRACK — says WHAT IS HAPPENING"]
+  DA["<b>06:00</b> · ② listener has run overnight<br/>③ ranked · ④ claims made"]
+  DB["<b>07:00</b> · ⑤ verifier — batched<br/><i>one call for the day's probes,<br/>not one per claim</i>"]
+  DC["<b>MAX 3 ITEMS A DAY</b><br/><i>Type D derivatives only.<br/>⛔ never originates a new analysis</i>"]
+  DD["⑨⑩⑫ draft + lint<br/><i>minutes</i>"]
+  DE["<b>⑬ REVIEW — whoever is on duty</b><br/>1–2 min each<br/>⛔ <b>no new notification</b><br/><i>a badge, not a second deadline</i>"]
+  DF["⑯a pack → ⑯b <b>a person posts</b><br/><i>next open window, same day</i>"]
+  DG["⏱ <b>48h unreviewed → DEMOTES</b><br/><i>joins the weekly queue as an<br/>ordinary derivative.</i><br/><b>NOTHING IS EVER DISCARDED</b>"]
+  DA --> DB --> DC --> DD --> DE --> DF
+  DE -.->|"nobody got to it"| DG
+end
+
+subgraph WK["📅 WEEKLY TRACK — says WHAT IS TRUE"]
+  WA["<b>WED</b> · ⑦ TOPIC BOARD<br/>⚠ <b>A HUMAN PICKS</b><br/><i>ranked candidates + evidence.<br/>the machine sorts, never chooses</i>"]
+  WB["<b>THU 06:00</b> · ⑧ WORK ORDER<br/><i>calendar slot + picked topic<br/>→ ~40 rows, sized to the<br/>review budget</i>"]
+  WC["⑨⑩⑪⑫ assemble · write · chart · lint"]
+  WD["<b>THU 07:00 → MON 18:00</b><br/>⑬ REVIEW — 3 people<br/><i>85–115 min between them.<br/><b>two notifications a week, no more</b></i>"]
+  WE["<b>TUE–SUN</b> · publishing, spread<br/><i>never dumped in one day</i>"]
+  WA --> WB --> WC --> WD --> WE
+end
+
+subgraph FAN["THE FAN-OUT — why the volume works"]
+  FA["<b>1 PUBLISHED ANALYSIS</b><br/><i>every 3 weeks</i>"]
+  FB["<b>→ 16–23 ITEMS</b><br/><i>spread over two weeks</i><br/>LinkedIn ×5 · X thread · carousel<br/>atom + cards · search answers<br/>community drafts · email block"]
+  FA --> FB
+end
+
+SPLIT -->|"the conversation is<br/>happening TODAY"| DAY
+SPLIT -->|"it will still matter<br/>in two weeks"| WK
+WE --> FAN
+FB -.->|"re-enters at ⑨,<br/>once per derivative"| WC
+
+SAME["⭐ <b>SAME RULES. SAME GATES.<br/>SAME PERSON APPROVING.</b><br/><i>only the clock is different.</i><br/><br/>⛔ the daily track may NEVER run on <b>no_data</b><br/>⛔ it may NEVER commission a new analysis —<br/>an unattended run cannot supply a human's name<br/>✅ a candidate worth commissioning is PROMOTED<br/>to Wednesday's board, not lost"]
+DAY -.-> SAME
+WK -.-> SAME
+
+WHY["<b>WHY TWO CLOCKS AT ALL</b><br/><i>a rushed analysis is not an analysis,<br/>and a post that lands after the conversation<br/>has moved on is not a post.</i><br/><b>neither track is a compromise</b>"]
+SAME -.-> WHY
+
+classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+classDef hum fill:#e3f2fd,stroke:#1565c0,stroke-width:2.5px,color:#0d47a1
+classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
+classDef good fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+class T,DA,DB,DC,DD,WB,WC,FA,FB mach
+class SPLIT,DE,WA,WD,DF hum
+class DG,SAME,WHY warn
+class WE good

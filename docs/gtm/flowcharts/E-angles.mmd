@@ -1,0 +1,71 @@
+flowchart TD
+
+IT["<b>AN APPROVED FINDING</b>"]
+
+IT --> Q1{"<b>1 · WHAT KIND OF CLAIM?</b><br/><i>the PILLAR — 5 of them, with<br/>12-week output shares</i>"}
+P1["<b>1 · An analyst, not an assistant</b> — 42%<br/><i>the spine</i>"]
+P2["<b>2 · Analytical AI</b> — 18%<br/>⛔ <b>/vs/ pages, social and founder<br/>content ONLY. never a hero or ad</b>"]
+P3["<b>3 · Weeks to minutes</b> — 8%<br/><i>capped — speed commoditises</i>"]
+P4["<b>4 · A fraction of the cost</b> — 20%"]
+P5["<b>5 · Your data is your data</b> — 12%"]
+
+Q1 --> P1 & P2 & P3 & P4 & P5
+
+Q2{"<b>2 · HOW IS IT TOLD?</b><br/><i>the NARRATIVE — and this is the axis<br/>that did not exist. without it, a 20-item<br/>fan-out is 20 versions of one post</i>"}
+P1 --> Q2
+P4 --> Q2
+
+N1["<b>N1 · THE FINDING</b> ~35% ⭐<br/><i>'two sources price this market<br/>$600m apart. here is which is right'</i><br/>Joy · no cap — the spine"]
+N2["<b>N2 · THE BUILD</b><br/><i>'keeping 25M sources current is a<br/>freshness problem, not a size one'</i><br/>Jayant, Dixit"]
+N3["<b>N3 · THE CUSTOMER'S DAY</b><br/><i>'your library closed at 9pm.<br/>your case brief doesn't care'</i><br/>Joy"]
+N4["<b>N4 · THE JOURNEY</b> ⚠<br/>why we started, what we got wrong<br/><b>≤1 per 4 weeks · Joy only</b><br/><i>every startup over-uses it and<br/>it converts nobody</i>"]
+N5["<b>N5 · WHAT THE PRODUCT DOES</b> ⚠<br/><b>≤15%</b><br/><i>above that the feed becomes a product<br/>blog, and an analyst who posts only<br/>about their own tool stops reading<br/>as an analyst</i>"]
+N6["<b>N6 · THE TEARDOWN</b><br/><i>'how a TAM gets to be wrong'</i>"]
+N7["<b>N7 · THE CATEGORY ARGUMENT</b><br/>⛔ <b>/vs/ only. never a hero,<br/>headline or ad</b>"]
+N8["<b>N8 · SHIP NOTES</b><br/>Amit, Keshav, Naman"]
+
+Q2 --> N1 & N2 & N3 & N4 & N5 & N6 & N7 & N8
+
+Q3{"<b>3 · WHAT IS IT FOR?</b><br/><i>the FUNNEL STAGE — it decides the CTA</i>"}
+N1 --> Q3
+N3 --> Q3
+
+S1["<b>AWARENESS</b> — brand<br/><i>be seen as the analyst in the room</i><br/>⛔ <b>NO CTA</b><br/><i>a CTA on an awareness post<br/>is what makes it read as an ad</i>"]
+S2["<b>CONSIDERATION</b><br/><i>'this could do my job'</i><br/>→ /samples · the ICP page"]
+S3["<b>INTENT</b> — lead gen<br/><i>'what would it cost'</i><br/>→ pricing · $100 gifted, no card"]
+S4["<b>RETENTION</b><br/>→ in-product · email"]
+
+Q3 --> S1 & S2 & S3 & S4
+
+Q4{"<b>4 · WHO IS IT FOR?</b><br/>the ICP"}
+S2 --> Q4
+S3 --> Q4
+
+I3["<b>INVESTORS</b> ⭐ 35%<br/>LinkedIn — Joy<br/><i>a diligence-shaped analysis<br/>with the sources visible</i>"]
+I1["<b>CONSULTANTS</b> ⭐ 25%<br/>search · r/consulting<br/><i>desk-research hours removed<br/>from a live engagement</i>"]
+I2["<b>STRATEGY / CORP DEV</b> 15%<br/><i>a board paper that<br/>survives the room</i>"]
+I4["<b>AGENCIES</b> 20%<br/>The Drum · Campaign"]
+I0["<b>FOUNDERS · MRX · CATEGORY · STUDENTS</b><br/><i>0% active for 12 weeks —<br/>site and search only.</i><br/><b>deliberate: a team with 8 ICP pages<br/>in front of them will produce for all 8<br/>and dilute everything</b>"]
+
+Q4 --> I3 & I1 & I2 & I4
+Q4 -.-> I0
+
+OUT["<b>㉔ THE PLACEMENT MATRIX</b><br/>→ channel · format · length<br/>link position · hashtag count<br/>day + hour (US Eastern)"]
+I3 --> OUT
+I1 --> OUT
+I2 --> OUT
+I4 --> OUT
+
+LANE["⛔ <b>THE LANE CHECK — a HARD STOP at ⑧</b><br/><i>a row asking Jayant to carry a finding, or<br/>anything about pricing, FAILS and is never drafted.<br/>cheaper to fail a row than to burn a review minute<br/>rejecting it</i><br/><br/>⛔ <b>and never two people on the same<br/>subject in the same week</b>"]
+OUT --> LANE
+
+classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+classDef hum fill:#e3f2fd,stroke:#1565c0,stroke-width:2.5px,color:#0d47a1
+classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
+classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
+classDef good fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+class IT,P1,P3,P4,P5,N2,N3,N6,N8,S2,S4,OUT mach
+class Q1,Q2,Q3,Q4 hum
+class LANE,P2,N7,S1 stop
+class N4,N5,I0 warn
+class N1,S3,I3,I1,I2,I4 good

@@ -1,0 +1,55 @@
+flowchart LR
+
+I["<b>AN ITEM MOVING THROUGH THE ENGINE</b>"]
+
+I --> S1{"<b>1 · SOURCE CHECK</b> — at ⑤<br/>is there a citation?"}
+S1 -->|"no_data"| X1["⛔ <b>INSUFFICIENT_SOURCE</b><br/><i>the model returns a refusal token<br/>instead of a draft. the item is<br/>NOT PRODUCED</i>"]
+
+S1 -->|yes| S2{"<b>2 · LANE CHECK</b> — at ⑧<br/>can this person carry it?"}
+S2 -->|no| X2["⛔ <b>LANE_MISMATCH</b><br/><i>the row fails before drafting.<br/>cheaper than a review minute</i>"]
+
+S2 -->|yes| S3{"<b>3 · DETERMINISTIC LINT</b> — ⑫<br/>L01–L11"}
+S3 -->|fail| X3["↩ <b>BACK TO ⑩, SILENTLY</b><br/>banned words · exclamation points<br/><b>competitor in a headline</b><br/>US spelling · pricing phrasing<br/><i>never enters the queue</i>"]
+
+S3 -->|pass| S4{"<b>4 · SEMANTIC LINT</b> — L20–L24<br/><i>model calls, on every item</i>"}
+S4 -->|fail| X3
+S4 -.->|"L22 <b>FETCHES the source</b><br/>a failed fetch is NOT a pass"| S4
+
+S4 -->|pass| S5{"<b>5 · VISUAL BOUNDS</b> — ⑪"}
+S5 -->|"overflows"| X4["⛔ <b>VISUAL_OVERFLOW</b><br/><i>a headline one character too long<br/>breaks the card in a way the linter<br/>CANNOT SEE — it reads text, not pixels</i>"]
+
+S5 -->|pass| S6{"<b>6 · THE HUMAN GATE</b> — ⑬<br/><b>A PERSON READS IT</b>"}
+S6 -->|"reject + 1 of 10 reason codes"| X5["→ <b>⑭ LEDGER</b><br/><i>stored forever, injected into every<br/>later generation. the same mistake<br/>cannot come back</i>"]
+S6 -->|"nobody reviewed"| X6["⛔ <b>IT SIMPLY DOES NOT PUBLISH</b><br/><i>there is no timeout that pushes<br/>an item live. skipping a week<br/>is a valid outcome</i>"]
+
+S6 -->|approve| S7{"<b>7 · PROVENANCE</b> — ㉙<br/><i>branches on artefact_type</i>"}
+S7 -->|"marketing asset"| P1["assert <b>ABSENT</b><br/>no C2PA · no EXIF/XMP AI flag<br/>no zero-width or homoglyphs"]
+S7 -->|"a report we SELL"| P2["assert <b>PRESENT</b><br/><i>the Article 50 mark —<br/>removing it is a breach</i>"]
+S7 -->|"service unreachable"| X7["⛔ <b>FAIL CLOSED — HELD, NOT PUBLISHED</b><br/><i>a service returning nothing looks<br/>IDENTICAL to a clean file.<br/>'unreachable' must never render as 'clean'</i>"]
+
+P1 --> S8
+P2 --> S8
+S8{"<b>8 · TRUTH SWEEP</b> — ⑲<br/>did a number change<br/>while this was in flight?"}
+S8 -->|"in the queue"| X8["re-linted · fails → back to ⑩"]
+S8 -->|"approved, not yet posted"| X9["⛔ <b>HELD, regenerated, RE-REVIEWED</b><br/><i>an approval is a decision about<br/>SPECIFIC TEXT. new text, new decision</i>"]
+S8 -->|"already live"| X10["🚩 <b>StaleFlag</b> — channel, URL, date<br/><i>open flags must be 0. anything over<br/>7 days is a live inaccuracy</i>"]
+
+S8 -->|"unchanged"| S9{"<b>9 · THE STAMP</b><br/>did <code>utm_content</code> survive<br/>the copy-paste?"}
+S9 -->|missing| X11["🔴 <b>attribution_lost</b><br/><i>flagged, not closed quietly.<br/>without this the whole performance<br/>loop breaks silently and nobody<br/>notices for three months</i>"]
+S9 -->|present| OUT["✅ <b>LIVE, AND MEASURABLE</b>"]
+
+IDX["<b>ENGINE 2 · a different set entirely</b><br/>G1 freshness 30d · G2 resolvable source<br/>G3 stated basis · G4 period alignment<br/>G5 spread >500% = our unit error<br/><b>G6 >20% suppressed → PUBLISH NOTHING,<br/>WAKE A HUMAN</b><br/><i>because there is no reader,<br/>the gates ARE the safety</i>"]
+OUT -.-> IDX
+
+classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+classDef hum fill:#e3f2fd,stroke:#1565c0,stroke-width:2.5px,color:#0d47a1
+classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
+classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
+classDef good fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+classDef red fill:#ffebee,stroke:#c62828,stroke-width:2.5px,color:#8e0000
+class I,P1,P2,X8 mach
+class S1,S2,S3,S4,S5,S6,S7,S8,S9 hum
+class X1,X2,X3,X4,X6,X7,IDX stop
+class X5,X9,X10 warn
+class OUT good
+class X11 red

@@ -1,0 +1,59 @@
+flowchart TD
+
+TOP(("<b>CONTENT</b>"))
+TOP --> CR["<b>CREATION</b> — ~40 items/week<br/>✅ <b>goes through ⑬ review, always</b>"]
+TOP --> EG["<b>ENGAGEMENT</b> — ~64 acts/week<br/>⛔ <b>NO review gate</b><br/><i>'personal, low-risk, and gating them<br/>would triple the queue for no benefit'</i>"]
+
+EG --> HOW{"<b>HOW DOES A TARGET<br/>GET FOUND?</b>"}
+HOW --> H1["② the listener already reads<br/>these rooms daily"]
+H1 --> H2["match against <b>㉕ THE AMPLIFY REGISTER</b><br/><i>a named list — not 'whoever posted'</i>"]
+
+H2 --> T1["<b>TIER 1 · AMPLIFY</b><br/>customers · partners · people who cited us<br/>✅ <b>repost WITH A LINE OF OUR OWN</b><br/>✅ comment · ✅ react<br/>⛔ never a bare repost — it says<br/>nothing and earns nothing"]
+H2 --> T2["<b>TIER 2 · ENGAGE</b><br/>practitioners in our ICPs · trade press<br/>Quirks · GreenBook · The Drum · cybernews<br/>✅ <b>substantive comment only</b><br/>⛔ no repost — we do not lend our feed<br/>to people we have no relationship with"]
+H2 --> T3["<b>TIER 3 · OBSERVE</b><br/>Bloomberg · FactSet · PitchBook<br/>Capital IQ · AlphaSense<br/>⛔ <b>NOTHING VISIBLE</b><br/><i>these are the budget line we JOIN,<br/>not what we displace</i>"]
+H2 --> T4["<b>TIER 4 · COMPETITOR</b> — ChatGPT<br/>⛔ <b>nothing visible, ever</b><br/>✅ the one move: verify a number<br/>they stated → publish <b>our own</b><br/>finding <b>without naming them</b>"]
+
+T1 --> WHO
+T2 --> WHO
+
+WHO{"<b>WHO COMMENTS?</b><br/><i>⑰ attaches the fact;<br/>㉖ says whose domain it is</i>"}
+W1["<b>JOY</b> · CEO → LinkedIn<br/>investors, consultants, trade"]
+W2["<b>JAYANT</b> · CTO → LinkedIn · <b>HN</b><br/>⛔ never pricing or marketing claims"]
+W3["<b>DIXIT · KARTIKEY · KESHAV</b><br/>→ X · HN — their own craft<br/>⛔ never speak for the company"]
+W4["<b>AMIT</b> → X · Reddit (technical)"]
+W5["<b>NAMAN</b> → comments only, 8 weeks"]
+W6["<b>SOCIAL</b> → Reddit · Quora · Page"]
+WHO --> W1 & W2 & W3 & W4 & W5 & W6
+
+GUARD["⛔ <b>THE GUARD RAIL</b><br/><code>the_fact_to_bring</code> is EMPTY<br/>→ <b>the target never surfaces at all</b><br/><i>a comment with nothing to bring<br/><b>IS</b> astroturf, by definition</i>"]
+WHO --> GUARD
+
+RULE["⛔ <b>NO COORDINATED APPLAUSE</b><br/><i>every comment carries a fact, a number,<br/>a counter-example or a real question<br/>from that person's OWN domain.</i><br/><b>'great post' from five colleagues is<br/>visible astroturf, and it costs a<br/>defensibility brand more than<br/>the reach is worth</b>"]
+GUARD --> RULE
+
+R1["<b>1 ·</b> the portal NEVER writes a reaction<br/><i>it surfaces WHO posted and WHICH fact<br/>is yours. the person types it, on the platform</i>"]
+R2["<b>2 ·</b> max <b>3 of 7</b> on any one post<br/><i>a ceiling, and NOBODY IS ASSIGNED.<br/>the window is real — the uniformity is the tell</i>"]
+R3["<b>3 ·</b> ⛔ <b>no reaction quota, ever</b><br/><i>a like with a target is bought<br/>engagement with extra steps</i>"]
+RULE --> R1 & R2 & R3
+
+VOL["<b>THE WEEK</b><br/>35 comments — 1 per person per weekday<br/>10 reposts with a line<br/>5 Quora taps · 5 Reddit <b>(capped)</b><br/>~21 brand posts<br/><br/><i>~20–25 min per person</i>"]
+R1 --> VOL
+R2 --> VOL
+R3 --> VOL
+
+EXT["⭐ <b>THE EXTERNAL COMMENT IS THE HEALTH METRIC</b><br/><i>1 internal + 1 external each.<br/>a roster that measures only internal<br/>engagement has built a pod</i>"]
+VOL --> EXT
+
+RED["⛔ <b>REDDIT IS THE CEILING, NOT OUR TIME</b><br/>1/day max · rotating person AND subreddit<br/>never a brand account · ramps 0→5 over 8 weeks<br/><i>'any account warned or removed.<br/>community trust does not survive a second breach'</i>"]
+VOL --> RED
+
+classDef mach fill:#f5f4f2,stroke:#3c3c3a,stroke-width:1.5px,color:#1a1a19
+classDef hum fill:#e3f2fd,stroke:#1565c0,stroke-width:2.5px,color:#0d47a1
+classDef stop fill:#37474f,stroke:#263238,stroke-width:2px,color:#ffffff
+classDef warn fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#7f5f00
+classDef good fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+class TOP,CR,H1,H2,W1,W2,W3,W4,W5,W6,VOL mach
+class HOW,WHO hum
+class EG,GUARD,RULE,T3,T4,RED,R1,R2,R3 stop
+class EXT warn
+class T1,T2 good
