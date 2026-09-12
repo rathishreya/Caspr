@@ -1,0 +1,26 @@
+{
+  "$schema": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainer.schema.json",
+  "name": "Caspr GTM Portal",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:22",
+
+  // Installs once when the Codespace is created, so the first `npm run dev` is instant.
+  "onCreateCommand": "cd portal && npm install",
+
+  // Starts the console automatically. GitHub forwards 3000 and hands back a public URL —
+  // which is the point of this file: seeing the portal should not require a local Node.
+  "postAttachCommand": "cd portal && npm run dev",
+
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": {
+      "label": "Caspr Team console",
+      "onAutoForward": "openPreview"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode"]
+    }
+  }
+}
