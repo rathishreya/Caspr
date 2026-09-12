@@ -6,6 +6,13 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   typedRoutes: true,
+  /*
+   * ⛔ Next writes AGENTS.md and CLAUDE.md into the app directory on `dev` unless this is
+   * off. CLAUDE.md's standing rule is that no `.md` other than the README lives in a code
+   * repo — every document belongs on Drive under `docs/gtm/`. A generated one that
+   * reappears on every dev run is exactly the drift that rule exists to stop.
+   */
+  agentRules: false,
   // Linting is a workspace-level gate (`npm run gate`), never a step inside the build —
   // a build that lints is a build that fails for a reason nobody deploying cares about.
   async headers() {
