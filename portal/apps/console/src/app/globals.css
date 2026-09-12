@@ -1,0 +1,948 @@
+/*
+ * The console's stylesheet.
+ *
+ * Every value comes from a token. Every rule that is not obvious carries the line of the
+ * spec it implements, because this file is where the design decisions either survive
+ * contact with a build or quietly stop being true.
+ *
+ * Reading order:
+ *   1  reset
+ *   2  type ramp            design spec §3
+ *   3  shell                design spec §6, responsive spec §3
+ *   4  primitives           banners, tables, tiles, tags, states
+ *   5  screens              calendar grid, library, dashboard
+ */
+
+@import '@caspr-portal/tokens/tokens.css';
+
+/* ── 1 · Reset ─────────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--surface-base);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 20px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ⛔ The whole console has two radii. Anything else is a mistake, so nothing inherits one. */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  border-radius: var(--radius-none);
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+/*
+ * Focus is visible and it is not the accent colour.
+ * Red means attention — rejected, stale, over threshold, defect (§1 decision 4). A focus
+ * ring in red would say "something is wrong here" on every keyboard tab stop.
+ */
+:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--accent-wash);
+  color: var(--text-primary);
+}
+
+/* ── 2 · Type ramp — design spec §3 ────────────────────────────────────────── */
+
+.t-title-l {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
+  letter-spacing: -0.01em;
+}
+
+.t-title-m {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.t-body-m {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.t-body-s {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.t-label {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+/*
+ * DM Mono is numbers, codes, timestamps and short uppercase labels. Never prose (§3).
+ * The +4% tracking is part of the style, not a flourish — without it the uppercase mono
+ * labels set too tight to scan at 11px.
+ */
+.t-meta,
+.t-meta-bold {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.t-meta {
+  font-weight: 400;
+}
+
+.t-meta-bold {
+  font-weight: 500;
+}
+
+.t-data-m {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+.t-data-l {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 32px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The only serif in the console. §1 decision 2. */
+.t-wordmark {
+  font-family: var(--font-wordmark);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+
+.text-attention {
+  color: var(--accent-attention);
+}
+
+/* ── 3 · Shell — two zones, never three. §1 decision 3 ─────────────────────── */
+
+.shell {
+  display: grid;
+  grid-template-columns: var(--rail-expanded) minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.rail {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-base);
+  border-right: 1px solid var(--border-default);
+  overflow: hidden;
+}
+
+.rail__brand {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--border-default);
+  min-height: 76px;
+}
+
+/* The red dot period. The one place the accent is not attention — it is the wordmark. */
+.rail__dot {
+  color: var(--accent-attention);
+}
+
+.rail__team,
+.narrow-route__team {
+  color: var(--text-tertiary);
+}
+
+.narrow-route__dot {
+  color: var(--accent-attention);
+}
+
+/* Shown only when the rail is collapsed — see the 1179 block below. */
+.rail__wordmark-mark {
+  display: none;
+}
+
+.rail__nav {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: var(--space-3) 0;
+}
+
+.rail__section {
+  padding: var(--space-4) var(--space-4) var(--space-2);
+  color: var(--text-tertiary);
+}
+
+.rail__link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-4);
+  height: 32px;
+  color: var(--text-secondary);
+  border-left: 2px solid transparent;
+}
+
+.rail__link:hover {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+/*
+ * The active row is `surface/raised` plus a 2px marker — §6: "Active or first row on
+ * surface/raised". The marker is 2px because that is the radius scale's other value, and
+ * the rail is where the two scales have to agree.
+ */
+.rail__link[aria-current='page'] {
+  background: var(--surface-raised);
+  color: var(--text-primary);
+  border-left-color: var(--accent-attention);
+}
+
+.rail__link-label {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.rail__icon {
+  flex: 0 0 20px;
+  display: grid;
+  place-items: center;
+}
+
+/*
+ * The footer names the workstreams the signed-in person owns.
+ * §5 rule 3: "Workstreams are where work is organised; My Week is where a person starts.
+ * The nav footer names which workstreams the signed-in person owns, so the tree is never
+ * abstract."
+ */
+.rail__footer {
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  border-top: 1px solid var(--border-default);
+}
+
+.rail__footer-owns {
+  color: var(--text-tertiary);
+  margin-top: var(--space-1);
+}
+
+.work {
+  min-width: 0;
+  padding: var(--work-padding-y) var(--work-padding-x) var(--space-8);
+}
+
+.screen-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-5);
+}
+
+.screen-header__meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-5);
+  color: var(--text-secondary);
+}
+
+/* Tabs — second level, and there is never a third. §5 rule 1. */
+.tabs {
+  display: flex;
+  gap: var(--space-5);
+  border-bottom: 1px solid var(--border-default);
+  margin-bottom: var(--space-5);
+}
+
+.tabs__link {
+  padding-bottom: var(--space-3);
+  margin-bottom: -1px;
+  border-bottom: 2px solid transparent;
+  color: var(--text-secondary);
+}
+
+.tabs__link:hover {
+  color: var(--text-primary);
+}
+
+.tabs__link[aria-current='page'] {
+  color: var(--text-primary);
+  border-bottom-color: var(--text-primary);
+}
+
+/* ── 3a · Responsive — responsive spec §3 ──────────────────────────────────── */
+
+/*
+ * 900–1179: the rail collapses to icons.
+ *
+ * Built first, deliberately. §5 of the responsive spec: collapsing 220 → 64 frees 156px,
+ * which fixes four of the six tables that break at 900. The scroll container below is a
+ * backstop, not the mechanism.
+ */
+@media (max-width: 1179px) {
+  .shell {
+    grid-template-columns: var(--rail-collapsed) minmax(0, 1fr);
+  }
+
+  .rail__brand {
+    justify-content: center;
+    padding-inline: var(--space-2);
+  }
+
+  .rail__wordmark-full,
+  .rail__team,
+  .rail__link-label,
+  .rail__section,
+  .rail__footer-text {
+    /* Hidden visually; the accessible name stays on the link's aria-label. */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .rail__wordmark-mark {
+    display: inline;
+  }
+
+  .rail__link {
+    justify-content: center;
+    padding-inline: 0;
+    border-left-width: 2px;
+  }
+
+  .rail__footer {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Rule 4: gutters and padding absorb the loss before type does. */
+  .work {
+    padding-inline: var(--work-padding-x-compact);
+  }
+}
+
+/*
+ * < 900: the console does not render. It routes.
+ *
+ * §10 and frame 65:1584 — "routes to the Personal Queue rather than dead-ending", because
+ * that is what a phone user is almost always there to do. Both trees are in the document
+ * and CSS chooses; no JavaScript, no measurement, no flash of the wrong one.
+ */
+.narrow-route {
+  display: none;
+}
+
+@media (max-width: 899px) {
+  .shell {
+    display: none;
+  }
+
+  .narrow-route {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-5);
+    min-height: 100vh;
+    padding: var(--space-6) var(--space-5);
+  }
+}
+
+/* ── 4 · Primitives ────────────────────────────────────────────────────────── */
+
+/*
+ * The attention banner.
+ *
+ * `accent/wash` ground with an `accent/attention` border. Red text on the dark wash, never
+ * red text on a light surface: #E8453C measures 3.93:1 and fails 4.5:1 on white, which is
+ * why the console is dark-first in the first place.
+ */
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+  padding: var(--space-3) var(--space-4);
+  background: var(--accent-wash);
+  border: 1px solid var(--accent-attention);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-5);
+}
+
+.banner__headline {
+  color: var(--accent-attention);
+}
+
+.banner__detail {
+  color: var(--text-secondary);
+}
+
+/* A table scrolls; it never squashes. Responsive spec rule 1. */
+.table-scroll {
+  overflow-x: auto;
+  /* The page body never scrolls sideways — the container does. */
+  max-width: 100%;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  /* Below this the columns squash, which rule 1 forbids. */
+  min-width: 560px;
+}
+
+.table thead th {
+  text-align: left;
+  padding: var(--space-2) var(--space-4) var(--space-2) 0;
+  color: var(--text-tertiary);
+  border-bottom: 1px solid var(--border-default);
+  white-space: nowrap;
+}
+
+/* §6: list rows carry a 1px top border and no bottom border. */
+.table tbody td {
+  padding: var(--space-3) var(--space-4) var(--space-3) 0;
+  border-top: 1px solid var(--border-default);
+  vertical-align: top;
+}
+
+.table tbody tr:first-child td {
+  border-top: none;
+}
+
+.table td:last-child,
+.table th:last-child {
+  padding-right: 0;
+}
+
+/* Numeric columns are mono and tabular so magnitudes line up down the column. */
+/*
+ * The column that absorbs the slack.
+ *
+ * Without it a full-width table spreads four columns evenly and pushes a two-character
+ * count 400px from its label. One column takes the remainder; the rest hug their content.
+ */
+.table .fill {
+  width: 100%;
+}
+
+/* An identity column never wraps — responsive rule 2 keeps it whole. */
+.table .nowrap {
+  white-space: nowrap;
+}
+
+.table .num {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1px;
+  background: var(--border-default);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-6);
+}
+
+.tile {
+  background: var(--surface-raised);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.tile__label {
+  color: var(--text-tertiary);
+}
+
+.tile__value {
+  color: var(--text-primary);
+}
+
+.tile__value--attention {
+  color: var(--accent-attention);
+}
+
+.tile__note {
+  color: var(--text-secondary);
+}
+
+/*
+ * A bar is one measure across categories: one neutral fill, direct-labelled, no legend.
+ * §8: "Colouring bars by category would make red mean 'the fifth reason' and stop it
+ * meaning attention." A bar turns red only when it breaches a threshold.
+ */
+.bar-track {
+  height: 6px;
+  background: var(--surface-hover);
+  border-radius: var(--radius-none);
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: var(--border-strong);
+}
+
+.bar-fill--over {
+  background: var(--accent-attention);
+}
+
+.panel {
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  padding: var(--space-5);
+}
+
+.panel__title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.section-label {
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-3);
+}
+
+.tag {
+  display: inline-block;
+  padding: 1px var(--space-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+}
+
+.tag--attention {
+  border-color: var(--accent-attention);
+  color: var(--accent-attention);
+}
+
+/*
+ * States — §11A. Three kinds, and a bare "No data" hides which one you are in.
+ * Every state names its kind on the first line and its consequence on the second.
+ */
+.state {
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.state--degraded {
+  border-color: var(--accent-attention);
+  background: var(--accent-wash);
+}
+
+.state__kind {
+  color: var(--text-tertiary);
+}
+
+.state--degraded .state__kind {
+  color: var(--accent-attention);
+}
+
+.state__consequence {
+  color: var(--text-secondary);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/*
+ * Available to assistive technology, absent from the layout.
+ *
+ * Used where colour or position carries meaning that a screen reader would otherwise
+ * lose — a HOLDING card's reason, a voice lane on a card that shows only a title.
+ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.row-between {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+/* ── 5 · Calendar ──────────────────────────────────────────────────────────── */
+
+/*
+ * Seven equal columns that never collapse to fewer.
+ *
+ * A week that reflows to two rows of days stops being a week — the reader's whole model of
+ * the screen is the horizontal sweep from Monday. So the grid holds seven and the
+ * container scrolls when the viewport cannot give each column a legible width, which is
+ * responsive rule 1 applied to something that is not a table.
+ */
+.week-scroll {
+  overflow-x: auto;
+  padding-bottom: var(--space-2);
+}
+
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(132px, 1fr));
+  gap: var(--space-3);
+  min-width: 924px;
+}
+
+.week-col {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.week-col__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border-default);
+}
+
+.week-col__weekday {
+  color: var(--text-secondary);
+}
+
+.week-col__date {
+  color: var(--text-tertiary);
+}
+
+.week-col__head--today {
+  border-bottom-color: var(--border-strong);
+}
+
+.week-col__head--today .week-col__weekday,
+.week-col__head--today .week-col__date {
+  color: var(--text-primary);
+}
+
+/*
+ * A past day recedes. It does not disappear: Monday carries the review deadline, and the
+ * deadline is the most consequential thing on the screen even after it has passed.
+ */
+.week-col--past {
+  opacity: 0.55;
+}
+
+.card {
+  display: block;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+}
+
+a.card:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+}
+
+/*
+ * The head wraps rather than truncating.
+ *
+ * At 1100 the rail has collapsed and a calendar column is ~130px; `COMMUNITY` and
+ * `OUTREACH` no longer fit beside the time. An ellipsised channel label is worse than a
+ * second line — the channel is how a reader scans the grid, and `COMMUNI…` is not a
+ * channel. So the label drops beneath the time and the card grows by one line.
+ */
+.card__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-2);
+}
+
+.card__time {
+  color: var(--text-primary);
+}
+
+.card__channel {
+  color: var(--text-tertiary);
+}
+
+.card__title {
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+/* Holding: bordered in the accent, tagged, and it says so in words for a screen reader. */
+.card--holding {
+  border-color: var(--accent-attention);
+  background: var(--accent-wash);
+}
+
+.card--holding .card__time {
+  color: var(--accent-attention);
+}
+
+.card__flag {
+  display: inline-block;
+  margin-top: var(--space-2);
+  color: var(--accent-attention);
+}
+
+/* A milestone is the week's rhythm, not content. No card, no border — just the fact. */
+.milestone {
+  padding: var(--space-3) 0;
+  border-top: 1px solid var(--border-default);
+}
+
+.milestone__time {
+  display: block;
+  color: var(--text-secondary);
+}
+
+.milestone__label {
+  color: var(--text-secondary);
+}
+
+.week-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.week-nav__button {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+}
+
+.week-nav__button:hover {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+/* ── 5a · Library ──────────────────────────────────────────────────────────── */
+
+.tier {
+  /*
+   * A reading measure, not a viewport width. Responsive rule 4 keeps type fixed and lets
+   * the gutter absorb the loss; a line of approved copy set 1100px wide is unreadable in
+   * exactly the way the copy itself argues against.
+   */
+  max-width: 1080px;
+  border-top: 1px solid var(--border-default);
+  padding-top: var(--space-4);
+  margin-top: var(--space-5);
+}
+
+.tier__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+
+.tier__permits {
+  color: var(--text-secondary);
+}
+
+.copy-line {
+  padding: var(--space-3) 0;
+  border-top: 1px solid var(--border-default);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
+  gap: var(--space-5);
+  align-items: baseline;
+}
+
+.copy-line:first-of-type {
+  border-top: none;
+}
+
+@media (max-width: 1024px) {
+  .copy-line {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2);
+  }
+}
+
+.copy-line__text {
+  color: var(--text-primary);
+}
+
+/*
+ * A retired line is struck through and set in the accent.
+ *
+ * Two signals rather than one, because colour alone is not a signal for every reader —
+ * and this is the one list where reading it wrong means republishing retired copy.
+ */
+.copy-line--blocked .copy-line__text {
+  color: var(--accent-attention);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.copy-line__note {
+  color: var(--text-secondary);
+}
+
+.copy-line__placement {
+  color: var(--text-tertiary);
+  margin-top: var(--space-1);
+}
+
+/* ── 5b · Layout helpers ───────────────────────────────────────────────────── */
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+  gap: var(--space-4);
+  /* Panels are as tall as their content. Stretching a three-row panel to match a
+     six-row one buys symmetry and pays for it with a void. */
+  align-items: start;
+}
+
+/*
+ * A panel whose table needs the full measure takes the whole row rather than scrolling
+ * inside half of one. Responsive rule 1 allows the scroll container as a backstop; a
+ * table that scrolls at 1440 is not a backstop, it is a layout mistake.
+ */
+.grid-2 > .panel--wide {
+  grid-column: 1 / -1;
+}
+
+.mix-row {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) 56px;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-2) 0;
+}
+
+.mix-row--reason {
+  grid-template-columns: minmax(0, 168px) minmax(0, 1fr) 72px;
+}
+
+.mix-row--reason .mix-row__id {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mix-row__id {
+  color: var(--text-secondary);
+}
+
+.mix-row__value {
+  text-align: right;
+  color: var(--text-secondary);
+}
+
+.mix-row__value--over {
+  color: var(--accent-attention);
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@caspr-portal/console",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@caspr-portal/db": "*",
+    "@caspr-portal/domain": "*",
+    "@caspr-portal/tokens": "*",
+    "next": "^16.3.5",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.1"
+  }
+}

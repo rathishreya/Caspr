@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "declaration": false,
+    "declarationMap": false,
+    "types": ["node"],
+    "paths": {
+      "@caspr-portal/domain": ["./packages/domain/src/index.ts"],
+      "@caspr-portal/tokens": ["./packages/tokens/src/index.ts"],
+      "@caspr-portal/db": ["./packages/db/src/index.ts"]
+    }
+  },
+  "include": ["packages/**/*.ts", "eslint.config.js", "vitest.config.ts"],
+  "exclude": ["node_modules", "**/dist", "**/.next"]
+}

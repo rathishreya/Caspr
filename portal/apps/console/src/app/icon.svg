@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!--
+    The console's mark.
+
+    Drawn rather than set in type: a favicon renders at 16px through whatever fonts the
+    browser has, and Instrument Serif is not one of them. So the wordmark is abstracted to
+    the two things that survive at that size — the C and the red dot period.
+
+    Colours are the tokens' literal values because an SVG served as a file cannot read a
+    CSS custom property. They are the only hardcoded hex outside the tokens package, and
+    this comment is the reason.
+      #0C0B09  surface/base
+      #F5F4F0  text/primary
+      #E8453C  accent/attention
+  -->
+  <rect width="32" height="32" fill="#0C0B09" />
+  <path
+    d="M22 9.5a8.5 8.5 0 1 0 0 13"
+    fill="none"
+    stroke="#F5F4F0"
+    stroke-width="3.4"
+    stroke-linecap="round"
+  />
+  <circle cx="25.5" cy="22.5" r="2.6" fill="#E8453C" />
+</svg>

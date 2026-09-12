@@ -1,0 +1,13 @@
+node_modules/
+.next/
+out/
+dist/
+*.tsbuildinfo
+coverage/
+
+# Secrets never enter this repo — portal-build-spec.md §7, CLAUDE.md Rule 7.
+# Runtime configuration comes from AWS Secrets Manager. .env.example is the only
+# committed env file, and it holds names, never values.
+.env
+.env.*
+!.env.example

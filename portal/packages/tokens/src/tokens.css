@@ -1,0 +1,87 @@
+/*
+ * Portal design tokens — CSS mirror of `index.ts`.
+ *
+ * Kept in lockstep by `tokens.test.ts`, which parses this file and asserts every custom
+ * property matches the TypeScript constant. A value cannot move in one and not the other.
+ *
+ * Source of truth: docs/gtm/portal-design-spec.md §3 (Drive).
+ */
+
+:root {
+  /* ── Portal / Colour ─────────────────────────────────────────────────────── */
+  --surface-base: #0c0b09;
+  --surface-raised: #161512;
+  --surface-hover: #211f1c;
+
+  /* ⛔ White has exactly one meaning: content under judgement. §2. */
+  --surface-card: #ffffff;
+  --surface-card-sub: #f6f5f3;
+
+  --border-default: #2e2c28;
+  --border-strong: #403e39;
+  --border-card: #e2e1de;
+
+  --text-primary: #f5f4f0;
+  --text-secondary: #9c9a94;
+  --text-tertiary: #5c5a55;
+  --text-on-card: #0a0a0a;
+  --text-on-card-sub: #5c5b58;
+
+  /* ⛔ Attention only. Never decoration, never a category. §1 decision 4. */
+  --accent-attention: #e8453c;
+  --accent-hover: #f05048;
+  --accent-wash: #2a1512;
+
+  /* ── Portal / Space ──────────────────────────────────────────────────────── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* ── Radius — no others exist ────────────────────────────────────────────── */
+  --radius-none: 0px;
+  --radius-sm: 2px;
+
+  /* ── Layout ──────────────────────────────────────────────────────────────── */
+  --rail-expanded: 220px;
+  --rail-collapsed: 64px;
+  --work-padding-x: 40px;
+  --work-padding-y: 28px;
+  --work-padding-x-compact: 20px;
+  --min-tap-target: 44px;
+
+  /* ── Families ────────────────────────────────────────────────────────────── */
+  --font-body: var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: var(--font-dm-mono), ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
+  /* The only serif use in the entire console. */
+  --font-wordmark: var(--font-instrument-serif), ui-serif, Georgia, 'Times New Roman', serif;
+
+  /* ── Motion ──────────────────────────────────────────────────────────────── */
+  --motion-review-advance: 120ms;
+
+  color-scheme: dark;
+}
+
+/*
+ * §14.2 rule 1: no transitions on navigation, tabs, tables or state changes.
+ * Enforced globally rather than left to discipline — a transition added in a component
+ * three months from now is silently overridden here.
+ */
+*,
+*::before,
+*::after {
+  transition: none !important;
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+}
