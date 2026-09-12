@@ -153,13 +153,23 @@ export const NAV_DESTINATIONS: readonly NavDestination[] = NAV.flatMap(
   (section) => section.destinations,
 );
 
+export const UNBUILT_PREFIX = '/not-built/';
+
 /** Slugs the not-built route generates. Derived, so a new stub cannot be forgotten. */
 export const UNBUILT_SLUGS: readonly string[] = NAV_DESTINATIONS.filter(
   (destination) => !destination.built,
-).map((destination) => destination.href.split('/').at(-1) ?? '');
+).map((destination) => destination.href.slice(UNBUILT_PREFIX.length));
 
+/**
+ * ⚠ Matched on the whole path, not on a suffix.
+ *
+ * A suffix match looked equivalent and was not: `Content & Social` points at
+ * `/content-social/dashboard`, which ends with `/dashboard`, so `destinationBySlug('dashboard')`
+ * returned the built workstream and the System Dashboard stub 404ed. Two destinations in
+ * this tree share a last path segment, and more will.
+ */
 export function destinationBySlug(slug: string): NavDestination | undefined {
-  return NAV_DESTINATIONS.find((destination) => destination.href.endsWith(`/${slug}`));
+  return NAV_DESTINATIONS.find((destination) => destination.href === `${UNBUILT_PREFIX}${slug}`);
 }
 
 /**
