@@ -42,6 +42,15 @@ export interface WeekRange {
   readonly days: readonly CalendarDay[];
   /** `18 – 24 AUG`, or `29 SEP – 5 OCT` when the week straddles a month. */
   readonly label: string;
+  /**
+   * True when `now` falls inside this week.
+   *
+   * It is what decides whether `isPast` should be *drawn*. Receding the days already
+   * behind you is useful while you are working the current week; on a week you have
+   * navigated to, every day is behind you or none is, and dimming all seven says nothing
+   * while making the whole screen look faded. See the Calendar.
+   */
+  readonly containsToday: boolean;
 }
 
 const PARTS = new Intl.DateTimeFormat('en-GB', {
@@ -174,7 +183,13 @@ export function buildWeek(startDate: string, now: Date): WeekRange {
   }
 
   const end = addDays(startDate, DAYS_IN_WEEK - 1);
-  return { start: startDate, end, days, label: weekLabel(startDate, end) };
+  return {
+    start: startDate,
+    end,
+    days,
+    label: weekLabel(startDate, end),
+    containsToday: days.some((day) => day.isToday),
+  };
 }
 
 /**

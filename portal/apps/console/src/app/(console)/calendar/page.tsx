@@ -112,7 +112,16 @@ export default async function CalendarPage({ searchParams }: PageProps) {
         <div className="week-scroll">
           <div className="week-grid">
             {calendar.columns.map((column) => (
-              <DayColumn key={column.day.date} column={column} />
+              <DayColumn
+                key={column.day.date}
+                column={column}
+                /*
+                 * Recede past days only while this is the week being worked. On a week
+                 * navigated to, all seven days are behind you or none is — dimming every
+                 * column tells the reader nothing and fades the whole screen.
+                 */
+                recedePast={calendar.week.containsToday}
+              />
             ))}
           </div>
         </div>
@@ -199,10 +208,17 @@ function WorkstreamFilterRow({
   );
 }
 
-function DayColumn({ column }: { readonly column: CalendarColumn }) {
+function DayColumn({
+  column,
+  recedePast,
+}: {
+  readonly column: CalendarColumn;
+  readonly recedePast: boolean;
+}) {
   const { day } = column;
+  const past = recedePast && day.isPast;
   return (
-    <section className={day.isPast ? 'week-col week-col--past' : 'week-col'}>
+    <section className={past ? 'week-col week-col--past' : 'week-col'}>
       <h2 className={day.isToday ? 'week-col__head week-col__head--today' : 'week-col__head'}>
         <span className="t-meta-bold week-col__weekday">{day.weekdayLabel}</span>
         <span className="t-meta week-col__date">{day.dayOfMonth}</span>

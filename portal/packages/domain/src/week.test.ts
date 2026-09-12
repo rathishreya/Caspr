@@ -60,6 +60,12 @@ describe('buildWeek', () => {
     expect(week.days.filter((day) => day.isToday)).toHaveLength(1);
   });
 
+  it('knows whether it is the week being worked', () => {
+    expect(week.containsToday).toBe(true);
+    expect(buildWeek('2026-08-17', new Date('2026-09-12T09:00:00+05:30')).containsToday).toBe(false);
+    expect(buildWeek('2026-08-17', new Date('2026-07-01T09:00:00+05:30')).containsToday).toBe(false);
+  });
+
   it('does not read the host clock — the same inputs give the same week anywhere', () => {
     const again = buildWeek('2026-08-17', new Date('2026-08-20T09:00:00+05:30'));
     expect(again).toEqual(week);
