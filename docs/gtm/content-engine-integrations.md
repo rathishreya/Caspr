@@ -231,6 +231,35 @@ appear; an AI answer tells us what a model said. **Neither is evidence that a nu
 **Two rules it does satisfy, and they matter:** licensed API, **not a crawl** — the register's standing
 requirement — and **read-only**. Nothing in this group writes anywhere.
 
+### 5A.4 ⚠ MCP or API — and the answer is a rule, not a preference
+
+**Both exist. The engine uses the API. MCP is a session tool and the engine never depends on it.**
+
+**The reason is the engine's own shape.** `portal-build-spec.md` §5: **EventBridge → Lambda → Step Functions**,
+and §1: *"No laptop dependency. Generation runs on a schedule in AWS. Nothing requires a session to be open or
+a person to be at a machine."*
+
+**MCP is a conversation between a client and a server.** A Lambda firing at 06:00 on a Thursday is not a
+client — nobody is holding the connection, and there is no session for it to live in. **An engine that reads
+its data over MCP is an engine that stops the day nobody opens a chat**, which is precisely the dependency §1
+exists to remove.
+
+| | Route | Used for |
+|---|---|---|
+| **Engine** — ② ③ ⑦ ⑱ ⑳ | **REST API**, credential in Secrets Manager | Every scheduled run. The 340 monthly presence checks, the listening sweep, the dashboards |
+| **A session** — exploration | **MCP**, where a server exists | Checking what a keyword actually returns *before* a basket question is frozen · spot-checking a `p` reading that looks wrong · one-off research |
+
+> **The second row is genuinely useful and should not be dismissed.** Rule 2.2 freezes the `p` basket for a
+> year — **the cheapest moment to discover a badly-phrased question is before it is frozen**, and that is an
+> interactive job, not a scheduled one.
+
+**⛔ The rule that follows, and it applies to every source in this register:** **an integration verified
+through a session's MCP connection is NOT an integration the engine has.** They are different credentials,
+different auth, different failure modes. Writing "connected" on the strength of a session test is how a build
+session discovers in week three that the Lambda has no way in.
+
+---
+
 ### 5A.4 Cost and the one thing to check
 
 **Pay-as-you-go, priced per request.** ⑨'s budget line — *"tens of dollars a month at this volume"* — was

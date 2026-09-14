@@ -292,7 +292,7 @@ contradiction, and it is the real reason the register felt short.
 
 | Source | What it gives | Access |
 |---|---|---|
-| **PredictLeads** ⭐ | **Financing events with amounts** · `has_revenue` · `has_valuation` · `has_earnings` · acquisitions · IPOs · partnerships · layoffs — as **structured, dated, source-linked records** | 🟢 **CONNECTED AND LIVE** — verified 2026-09-11, returning same-day data |
+| **PredictLeads** ⭐ | **Financing events with amounts** · `has_revenue` · `has_valuation` · `has_earnings` · acquisitions · IPOs · partnerships · layoffs — as **structured, dated, source-linked records** | 🟡 **Data verified live 2026-09-11** — returning same-day records. ⚠ **Verified through a session's MCP connection, which is not access the engine has.** The scheduled run needs its own API credential — see the note below |
 | **SEC EDGAR** | **10-K and 10-Q market-size claims, risk factors, segment revenue.** Where a company states its own TAM — and where it disagrees with the analyst report | 🟢 **Free official API** |
 | **US government statistics** — Census · BLS · BEA | The base numbers a consultancy's market size is built on top of | 🟢 **Free APIs** |
 | **Eurostat · ONS · national statistics** | Same, for any non-US sizing | 🟢 Free |
@@ -363,6 +363,14 @@ ICP 6's methodological arguments start in papers before they reach `#mrx`.
 
 **⛔ Every rule above still holds without exception.** Official APIs and licensed feeds only · read-only ·
 **never scraped** · and **an answer engine is never a source of fact.** The register got wider, not looser.
+
+> ⚠ **Corrected 2026-09-14 — "connected" meant two different things.** PredictLeads was recorded as
+> *"CONNECTED AND LIVE"* on the strength of a live query run **in a chat session, over MCP**. That proved the
+> data is real and same-day, which was the point of the test — but **it is not access the engine has.** A
+> Lambda firing on a schedule holds no MCP connection and has nobody to hold one for it
+> (`portal-build-spec.md` §1: *"nothing requires a session to be open"*). **Every source in this register
+> needs an API credential in Secrets Manager, whatever a session was able to reach.**
+> [`content-engine-integrations.md`](content-engine-integrations.md) §5A.4 states the rule.
 
 > ⚠ **The last clause is the one DataForSEO tests.** Granted 2026-09-14, it supplies demand *and* answer-surface
 > data from one credential — so the temptation to let a figure walk from an AI Overview into a generated item
