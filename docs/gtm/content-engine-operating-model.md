@@ -364,6 +364,12 @@ ICP 6's methodological arguments start in papers before they reach `#mrx`.
 **⛔ Every rule above still holds without exception.** Official APIs and licensed feeds only · read-only ·
 **never scraped** · and **an answer engine is never a source of fact.** The register got wider, not looser.
 
+> ⚠ **The last clause is the one DataForSEO tests.** Granted 2026-09-14, it supplies demand *and* answer-surface
+> data from one credential — so the temptation to let a figure walk from an AI Overview into a generated item
+> is now real rather than theoretical. **It feeds ② ③ ⑦ and ⑱. It never touches ⑤.**
+> [`content-engine-integrations.md`](content-engine-integrations.md) §5A.3 names the three specific ways it
+> could go wrong.
+
 ---
 
 ### B · Answer-engine surfaces — measured monthly, never a fact source
@@ -985,7 +991,7 @@ the 85–115 minutes. **Comments and answers never enter the queue** — Joy's r
 | **⚠ Reddit API** | 🟡 **Free tier exists, but** | Read access to subreddits | **⚠ Commercial use is a paid tier since the 2023 change. Verify current terms before building against it** — this is the one number in this table that has moved before and will again |
 | **Perplexity API** | 🟡 Paid, usage | Citation mining — **which pages the engines trust** | Small at monthly cadence |
 | **Ahrefs** | 🟡 **Probably already licensed** | Backlinks, keywords, competitor ranking | ⚠ **A credential for it exists in this folder** — `CLAUDE.md` Rule 7 names it. **⛔ Not opened, and the path is not repeated here.** Confirm the licence with whoever holds it |
-| **⭐ Search-data API** — SerpAPI · DataForSEO · Serper · Bing Web Search | 🟡 **Paid, cheap** | ⭐ **The whole no-API listening layer** — Quora, WSO, PrepLounge, forums, as structured JSON | **Tens of dollars a month at this volume.** ⚠ Verify current pricing — it moves |
+| **⭐ Search-data API** — **DataForSEO, decided 2026-09-14** | 🟢 **ACCESS GRANTED** | ⭐ **The whole no-API listening layer** — Quora, WSO, PrepLounge, forums, as structured JSON. **Plus the two `p` surfaces that had no clean door: AI Overview and the assistants** | **Tens of dollars a month at this volume.** ⚠ Meter it from month one — presence is fixed, listening is the variable half |
 | **⛔ Quora — POSTING** | 🔴 **No API, and no workaround** | — | **A 2-minute human tap, 5×/wk. ⛔ Browser automation is a terms breach and an account ban** |
 | **⛔ X — reading** | 🔴 Paid, and **we skip it** | Search, mentions | **We decided X is publish-only.** Not worth it |
 | ~~**LinkedIn — reading feeds**~~ | ❌ **Dropped entirely** | — | Forces Standard tier onto the whole app, **and it was the weakest source anyway** |

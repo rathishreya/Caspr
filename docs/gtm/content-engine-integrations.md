@@ -67,6 +67,13 @@ and add nothing.
 | E7 | **Image storage + CDN** | ⑪ ⑯ | IAM | Portal | 🔴 **does not exist — §6.7** |
 | E8 | `WATERMARKS_SERVICE_URL` — image metadata | ⑪ ⑮ | service | **Deploys with the portal** | 🔴 **not reachable. Rule 6 is unenforceable for images until it is** |
 | E9 | `anthropic-skills:clean-user-facing-text` — prose | ⑮ | **none** | — | 🟢 **self-contained scripts, no service.** This is the default |
+| **F · Search and answer-surface data — §5A** ||||||
+| F1 | **DataForSEO · SERP API** — Google organic, and **AI Overview as a typed SERP element** | ⑱ `p` · ⑳ · ② | Basic auth, Secrets Manager | Portal | 🟢 **ACCESS GRANTED 2026-09-14** |
+| F2 | **DataForSEO · AI Optimization** — what the assistants answer | ⑱ `p` | same credential | Portal | 🟢 **The ChatGPT leg, which had no clean door** |
+| F3 | **DataForSEO · Labs + Keywords Data** — demand, volume, CPC | ② ③ ⑦ | same credential | Portal | 🟢 **This is the "licensed search index" the source register names** |
+| F4 | **DataForSEO · Backlinks** — who links to the roundups we want into | SEO ㉑ | same credential | Portal | 🟢 Earned-media target list |
+| F5 | **DataForSEO · On-Page** — caspr.ai's own technical audit | SEO | same credential | Portal | 🟢 The orphan pages and the zero-JSON-LD finding, measured rather than asserted |
+| F6 | **DataForSEO · Business Data** — G2 · Capterra review language | A4 · ICP copy | same credential | Portal | 🟢 Replaces "🟢 Search-data API" in source class A4 |
 
 **Read the status column as a plan:** four 🔴 are someone else's (A1, C1, C2 approval, D5) and are asks, not
 work. **The rest of the red is E** — the creative pipeline — and it is ours.
@@ -161,6 +168,78 @@ collector renders "not collected", never 0.**
 The one worth repeating here: **personal-profile post analytics do not exist via API.** v1 takes self-reported
 impressions through a two-field weekly form, rendered marked as self-reported. *"Directional, and honest about
 being directional."*
+
+---
+
+## 5A · Group F — DataForSEO. **Granted 2026-09-14**
+
+**One credential, six product families, and it closes the single worst gap in the measurement plan.**
+
+### 5A.1 ⭐ What it actually unlocks — `p`, which has been unmeasurable
+
+[`presence-metric.md`](presence-metric.md) §6 sets out **340 checks a month across four surfaces** and then
+records, honestly, that **two of the four have no clean programmatic door**:
+
+| Surface | Joy's finding, 2026-08-25 | With F1 / F2 |
+|---|---|---|
+| Perplexity | **Good** — a real API that returns citations | unchanged |
+| Google page one | **Workable** — fetch and parse, *fighting anti-bot* | 🟢 **Licensed. No fight** |
+| **Google AI Overview** | **Poor** — *not reliably present in a normal SERP fetch* | 🟢 **A typed SERP element. Present or absent, and the difference is legible** |
+| **ChatGPT** | **Poor** — *the consumer product's web-search behaviour is not what the API returns* | 🟢 **F2 asks the assistants and returns what they said** |
+
+> ⭐ **And it satisfies §6.2's actual preference, which the tools it named do not.**
+>
+> §6.2 says **"buy the observation, build the definition"**, then notes the flaw in Otterly, Peec, ZipTie and
+> LLMrefs: *"a bought tool tracks **its** definition of presence, not ours. Most return a brand-mention
+> percentage."*
+>
+> **DataForSEO returns the raw answer and the raw SERP.** The three-way definition in §3 — cited in an AI
+> answer · listed on a page-one third-party page · our own page ranks page one — **stays ours, applied by our
+> own code.** That is the document's stated preference, available for the first time.
+
+**⚠ Joy's §6.2 recommendation is now superseded, and that file is hers to change.** Flagged here rather than
+edited. The baseline it depends on is still **partial** — §6's own warning stands: *"the AI-surface leg is
+still to run and is **unrecoverable after launch**."* **That leg is now runnable, and the window closes at
+launch.**
+
+### 5A.2 The rest, in the order it earns its place
+
+| | Feeds | What changes |
+|---|---|---|
+| **F3 Labs + Keywords Data** | ② the Listener · ③ Rank · ⑦ the Topic Board | The source register's *"via licensed search index"* had no named supplier. **Now it has one.** Also the CPC figures rule 2.3 depends on — *"`competitive landscape analysis` carries $300"* — become reproducible rather than a one-off lookup |
+| **F4 Backlinks** | SEO · ㉑ Outreach | The roundup target list (`cybernews`, G2, Datarade, `searchfunder`) stops being a list somebody wrote down and becomes a query |
+| **F5 On-Page** | SEO | `portal-build-spec.md` §8.1 asserts **12 orphan pages** and **zero JSON-LD on any page**. This measures both, and re-measures after the dev round |
+| **F6 Business Data** | source class A4 · ICP copy | Buyer language from G2 and Capterra **in their own words** — which is what A4 was for |
+
+### 5A.3 ⛔ The boundary. This is the part that must not be got wrong
+
+> **DataForSEO is a source of DEMAND and PRESENCE. It is never a source of FACT.**
+
+**It never touches ⑤ the Verifier, and it never feeds a citation.** The source register's rule is unchanged
+and absolute: **an answer engine is never a source of fact.** A SERP tells us what is asked and whether we
+appear; an AI answer tells us what a model said. **Neither is evidence that a number is true** — that is what
+`fact_lookup` and the A1 class (SEC EDGAR, Census, BLS, PredictLeads, trade bodies) are for.
+
+**Three specific ways this could go wrong, named so they do not:**
+
+| ⛔ Never | Why |
+|---|---|
+| A figure lifted from an AI Overview into a generated item | It would carry a citation to a summary of a source, not to the source. `L22` fetches citations — it would pass, and the claim would still be unsourced |
+| A People-Also-Ask question treated as a *verified* demand signal | It is a real signal for ⑦. It is **not** a claim, and ⑧ must not brief against it as though it were |
+| Review text quoted as a testimonial | F6 is **pain language for copy research**, not social proof. Testimonials are collected, with permission |
+
+**Two rules it does satisfy, and they matter:** licensed API, **not a crawl** — the register's standing
+requirement — and **read-only**. Nothing in this group writes anywhere.
+
+### 5A.4 Cost and the one thing to check
+
+**Pay-as-you-go, priced per request.** ⑨'s budget line — *"tens of dollars a month at this volume"* — was
+written against this class of tool and still looks right for **340 presence checks a month plus listening**.
+
+⚠ **The presence run is the recurring cost and it is fixed and predictable; listening is the variable one.**
+Meter it from the first month rather than discovering it in month three. ⑳'s rule applies unchanged: **a
+failed collector renders "not collected", never 0** — a presence reading of zero because the API errored is
+not the same fact as Caspr being absent, and `p` is a metric where that distinction is the whole point.
 
 ---
 
@@ -337,6 +416,12 @@ type. **Open question 21.**
 | X app credential | Portal | ⑯ |
 | GSC + 3 ad-platform OAuth credentials | Portal | ⑳ |
 | `WATERMARKS_SERVICE_URL` + its credential | Deploys with the portal | ⑪ ⑮ |
+| **DataForSEO login + password** — one pair, all six families | Portal | ⑱ ⑳ ② ③ · SEO |
+
+> ⚠ **DataForSEO authenticates with a login and a password, not a revocable token.** That makes it the one
+> credential in this table a person could paste into a chat, a ticket or a screenshot without it looking like
+> a secret. **It is one.** Secrets Manager, same as every row above — and per Rule 7 §2, **no session reads it
+> and no session repeats it**, whoever asks.
 
 **⚠ The portal holds the customer email list, seven people's social tokens and three ad-account
 credentials.** `portal-build-spec.md` §7: *"A company selling ISO 27001 cannot have a leaky marketing
