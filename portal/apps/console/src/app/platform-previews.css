@@ -1,0 +1,644 @@
+/*
+ * Platform previews — the post as LinkedIn, X, Reddit and caspr.ai will show it.
+ *
+ * ⚠ The one file in the console that reproduces somebody else's interface, and the one place
+ * a colour that is not a portal token is allowed. Asked for directly (2026-09-15): "I want to
+ * see the exact post that we are going to post, in that same way." A preview drawn in the
+ * console's palette answers a different question — what the words say — and hides the one
+ * that matters at approval: how the post reads in the feed it is going to.
+ *
+ * The console's own rules still decide *when* each look is used. Design spec §2: "White
+ * means: this needs your decision. Dark means: this is yours to use." Every platform here has
+ * a light and a dark mode of its own, so a post waiting on a decision is shown in the
+ * platform's light mode and a decided one in its dark mode. Both are exact; the semantic
+ * survives.
+ *
+ * Values are each platform's public interface colours, reproduced for preview only. They are
+ * not portal tokens and must never be used outside a `.pv` element.
+ */
+
+.pv {
+  --pv-bg: #ffffff;
+  --pv-stage: #f4f2ee;
+  --pv-text: rgba(0, 0, 0, 0.9);
+  --pv-muted: rgba(0, 0, 0, 0.6);
+  --pv-rule: rgba(140, 140, 140, 0.25);
+  --pv-link: #0a66c2;
+  --pv-avatar: #d9d5cc;
+  --pv-avatar-text: rgba(0, 0, 0, 0.75);
+
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: var(--pv-text);
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── The stage — the feed the post sits in ─────────────────────────────── */
+
+.pv-stage {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-6) var(--space-4);
+  background: var(--pv-stage);
+  border-radius: var(--radius-sm);
+}
+
+/* ── LinkedIn ─────────────────────────────────────────────────────────── */
+
+.pv-li {
+  --pv-bg: #ffffff;
+  --pv-stage: #f4f2ee;
+  --pv-text: rgba(0, 0, 0, 0.9);
+  --pv-muted: rgba(0, 0, 0, 0.6);
+  --pv-rule: rgba(140, 140, 140, 0.25);
+  --pv-link: #0a66c2;
+  --pv-avatar: #d9d5cc;
+  --pv-avatar-text: rgba(0, 0, 0, 0.75);
+}
+
+.pv-li.pv--dark,
+.pv-stage--dark .pv-li {
+  --pv-bg: #1b1f23;
+  --pv-stage: #000000;
+  --pv-text: rgba(255, 255, 255, 0.9);
+  --pv-muted: rgba(255, 255, 255, 0.6);
+  --pv-rule: rgba(255, 255, 255, 0.12);
+  --pv-link: #71b7fb;
+  --pv-avatar: #38434f;
+  --pv-avatar-text: rgba(255, 255, 255, 0.85);
+}
+
+.pv-stage--linkedin {
+  background: #f4f2ee;
+}
+
+.pv-stage--linkedin.pv-stage--dark {
+  background: #000000;
+}
+
+.pv-li {
+  width: 100%;
+  max-width: 555px;
+  background: var(--pv-bg);
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px var(--pv-rule);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.pv-li__head {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  gap: 8px;
+  padding: 12px 16px 0;
+}
+
+.pv-li__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--pv-avatar);
+  color: var(--pv-avatar-text);
+  font-weight: 600;
+  font-size: 17px;
+  white-space: nowrap;
+}
+
+/* LinkedIn draws company logos square with a small radius, people in a circle. */
+.pv-li__avatar--company {
+  border-radius: 4px;
+}
+
+/* Caspr's own logo: the wordmark's C and its red dot. No other company wears the serif. */
+.pv-li__avatar--caspr {
+  background: #0a0a0a;
+  color: #ffffff;
+  font-family: var(--font-wordmark);
+  font-weight: 400;
+  font-size: 26px;
+}
+
+.pv-li__dot {
+  color: #e8453c;
+}
+
+.pv-li__who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pv-li__name {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--pv-text);
+}
+
+.pv-li__headline,
+.pv-li__meta {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--pv-muted);
+}
+
+.pv-li__headline {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pv-li__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pv-li__dots {
+  color: var(--pv-muted);
+  font-weight: 600;
+  letter-spacing: 1px;
+  line-height: 20px;
+}
+
+/*
+ * The fold. LinkedIn shows the first three lines and a "…more" — which is the most useful
+ * thing a reviewer can see, because everything above the fold is the whole of the post for
+ * most readers. A checkbox rather than script: it works before the page hydrates.
+ */
+.pv-li__textwrap {
+  position: relative;
+  padding: 12px 16px 8px;
+}
+
+.pv-li__toggle {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pv-li__text {
+  margin: 0;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.pv-li__text--fold {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pv-li__more {
+  position: absolute;
+  right: 16px;
+  bottom: 8px;
+  padding-left: 24px;
+  background: linear-gradient(to right, transparent, var(--pv-bg) 20px);
+  color: var(--pv-muted);
+  cursor: pointer;
+}
+
+.pv-li__more:hover {
+  color: var(--pv-link);
+  text-decoration: underline;
+}
+
+.pv-li__toggle:checked ~ .pv-li__text--fold {
+  display: block;
+  -webkit-line-clamp: unset;
+}
+
+.pv-li__toggle:checked ~ .pv-li__more {
+  display: none;
+}
+
+.pv-li__toggle:focus-visible ~ .pv-li__more {
+  outline: 2px solid var(--pv-link);
+  outline-offset: 2px;
+}
+
+.pv-li__tag {
+  color: var(--pv-link);
+  font-weight: 600;
+}
+
+.pv-li__card {
+  margin: 4px 0 0;
+  border-top: 1px solid var(--pv-rule);
+  border-bottom: 1px solid var(--pv-rule);
+}
+
+.pv-li__card-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1.91 / 1;
+  max-width: 100%;
+  padding: 24px;
+  background: repeating-linear-gradient(135deg, var(--pv-rule) 0 1px, transparent 1px 12px);
+  color: var(--pv-muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+.pv-li__card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 16px 12px;
+}
+
+.pv-li__card-title {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.pv-li__card-host {
+  font-size: 12px;
+  color: var(--pv-muted);
+}
+
+.pv-li__actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 0 12px;
+  padding: 4px 0;
+  border-top: 1px solid var(--pv-rule);
+}
+
+.pv-li__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 4px;
+  color: var(--pv-muted);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* ── X ────────────────────────────────────────────────────────────────── */
+
+.pv-x {
+  --pv-bg: #ffffff;
+  --pv-text: #0f1419;
+  --pv-muted: #536471;
+  --pv-rule: #eff3f4;
+  --pv-link: #1d9bf0;
+
+  width: 100%;
+  max-width: 598px;
+  background: var(--pv-bg);
+  border: 1px solid var(--pv-rule);
+  font-family: -apple-system, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 20px;
+}
+
+.pv-x.pv--dark,
+.pv-stage--dark .pv-x {
+  --pv-bg: #000000;
+  --pv-text: #e7e9ea;
+  --pv-muted: #71767b;
+  --pv-rule: #2f3336;
+  --pv-link: #1d9bf0;
+}
+
+.pv-stage--x {
+  background: #ffffff;
+}
+
+.pv-stage--x.pv-stage--dark {
+  background: #000000;
+}
+
+.pv-x__post {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px 16px 0;
+}
+
+.pv-x__rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pv-x__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #0a0a0a;
+  color: #ffffff;
+  font-family: var(--font-wordmark);
+  font-size: 22px;
+  white-space: nowrap;
+}
+
+.pv-x.pv--dark .pv-x__avatar,
+.pv-stage--dark .pv-x__avatar {
+  background: #ffffff;
+  color: #0a0a0a;
+}
+
+/* The line that joins a thread's avatars. */
+.pv-x__thread {
+  flex: 1;
+  width: 2px;
+  margin-top: 4px;
+  background: var(--pv-rule);
+}
+
+.pv-x__body {
+  min-width: 0;
+  padding-bottom: 12px;
+}
+
+.pv-x__head {
+  display: flex;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.pv-x__name {
+  font-weight: 700;
+  color: var(--pv-text);
+}
+
+.pv-x__muted {
+  color: var(--pv-muted);
+}
+
+.pv-x__text {
+  margin: 2px 0 0;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.pv-x__card {
+  margin-top: 12px;
+  border: 1px solid var(--pv-rule);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.pv-x__card-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 9;
+  max-width: 100%;
+  padding: 24px;
+  background: repeating-linear-gradient(135deg, var(--pv-rule) 0 1px, transparent 1px 12px);
+  color: var(--pv-muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+.pv-x__card-body {
+  padding: 8px 12px;
+  color: var(--pv-muted);
+  font-size: 13px;
+}
+
+.pv-x__actions {
+  display: flex;
+  justify-content: space-between;
+  max-width: 425px;
+  margin-top: 12px;
+  color: var(--pv-muted);
+}
+
+/* ── A community thread — Reddit, or a forum ─────────────────────────────── */
+
+.pv-rd {
+  --pv-bg: #ffffff;
+  --pv-text: #0f1a1c;
+  --pv-muted: #576f76;
+  --pv-rule: #e5ebee;
+  --pv-link: #0045ac;
+  --pv-thread: #e5ebee;
+
+  width: 100%;
+  max-width: 640px;
+  background: var(--pv-bg);
+  border-radius: 16px;
+  padding: 16px;
+  font-family: 'IBM Plex Sans', -apple-system, system-ui, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.pv-rd.pv--dark,
+.pv-stage--dark .pv-rd {
+  --pv-bg: #0e1113;
+  --pv-text: #eef1f3;
+  --pv-muted: #8ba2ad;
+  --pv-rule: #2a3236;
+  --pv-link: #6fa8ff;
+  --pv-thread: #2a3236;
+}
+
+.pv-stage--community {
+  background: #dae0e6;
+}
+
+.pv-stage--community.pv-stage--dark {
+  background: #030303;
+}
+
+.pv-rd__venue {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  color: var(--pv-text);
+}
+
+.pv-rd__title {
+  margin: 4px 0 0;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+  color: var(--pv-text);
+}
+
+.pv-rd__stand-in {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--pv-muted);
+}
+
+.pv-rd__comment {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--pv-rule);
+}
+
+.pv-rd__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ff4500;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.pv-rd__meta {
+  font-size: 12px;
+  color: var(--pv-muted);
+}
+
+.pv-rd__user {
+  font-weight: 600;
+  color: var(--pv-text);
+}
+
+.pv-rd__text {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 6px;
+  color: var(--pv-text);
+}
+
+.pv-rd__text p {
+  margin: 0;
+}
+
+.pv-rd__actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+  color: var(--pv-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ── caspr.ai — the blog page ─────────────────────────────────────────── */
+
+.pv-blog {
+  --pv-bg: #ffffff;
+  --pv-text: #0a0a0a;
+  --pv-muted: #5c5b58;
+  --pv-rule: #e2e1de;
+
+  width: 100%;
+  max-width: 680px;
+  background: var(--pv-bg);
+  border: 1px solid var(--pv-rule);
+  font-family: var(--font-body);
+  color: var(--pv-text);
+}
+
+.pv-blog.pv--dark,
+.pv-stage--dark .pv-blog {
+  --pv-bg: #0c0b09;
+  --pv-text: #f5f4f0;
+  --pv-muted: #9c9a94;
+  --pv-rule: #2e2c28;
+}
+
+.pv-stage--blog {
+  background: #f6f5f3;
+}
+
+.pv-stage--blog.pv-stage--dark {
+  background: #161512;
+}
+
+.pv-blog__bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 14px 32px;
+  border-bottom: 1px solid var(--pv-rule);
+}
+
+.pv-blog__mark {
+  font-family: var(--font-wordmark);
+  font-size: 22px;
+}
+
+.pv-blog__mark-dot {
+  color: #e8453c;
+}
+
+.pv-blog__nav {
+  font-size: 13px;
+  color: var(--pv-muted);
+}
+
+.pv-blog__page {
+  padding: 32px 32px 40px;
+}
+
+.pv-blog__crumb {
+  margin: 0 0 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--pv-muted);
+}
+
+/* caspr.ai's display face. In the console the serif is the wordmark alone; this is the website. */
+.pv-blog__title {
+  margin: 0;
+  font-family: var(--font-wordmark);
+  font-weight: 400;
+  font-size: 36px;
+  line-height: 40px;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.pv-blog__dek {
+  margin: 16px 0 0;
+  font-size: 18px;
+  line-height: 28px;
+  color: var(--pv-muted);
+}
+
+.pv-blog__body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 28px;
+  padding-top: 28px;
+  border-top: 1px solid var(--pv-rule);
+  font-size: 16px;
+  line-height: 27px;
+}
+
+.pv-blog__body p {
+  margin: 0;
+}
+
+.pv-blog__cta {
+  margin: 28px 0 0;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.pv-blog__cta::after {
+  content: ' →';
+  color: #e8453c;
+}

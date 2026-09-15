@@ -4,6 +4,9 @@ import { DM_Mono, Instrument_Serif, Inter } from 'next/font/google';
 import type { ReactNode } from 'react';
 
 import './globals.css';
+// Kept apart from the console's stylesheet on purpose: it reproduces other companies'
+// interfaces, and nothing in it may leak into the console's own chrome.
+import './platform-previews.css';
 
 /**
  * Three families, and the split between them carries meaning. Design spec §3:

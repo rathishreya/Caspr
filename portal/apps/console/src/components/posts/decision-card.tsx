@@ -35,13 +35,16 @@ export function DecisionCard({
   itemId,
   title,
   platform,
+  checks,
   children,
 }: {
   readonly itemId: string;
   readonly title: string;
   /** The board's current platform filter, carried through so the view survives a decision. */
   readonly platform: string | null;
-  /** The context strip, the artefact and its facts — rendered on the server. */
+  /** The folded checks line — rendered on the server, shown under the actions, never in the post. */
+  readonly checks: ReactNode;
+  /** The context strip and the post as it will publish — rendered on the server. */
   readonly children: ReactNode;
 }) {
   const [state, formAction] = useActionState(decide, INITIAL);
@@ -161,6 +164,8 @@ export function DecisionCard({
 
         <span className="decide__hint t-body-s">No editing — a rejection regenerates the post with your note applied.</span>
       </div>
+
+      <div className="decide__checks">{checks}</div>
 
       {rejecting && (
         <form id={`reject-${itemId}`} className="reject" action={submitWith('reject')}>

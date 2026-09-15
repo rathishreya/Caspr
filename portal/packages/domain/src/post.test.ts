@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
 import { channelChecks, isoWeekId, postText, reviewPost, stampLink, wordCount, type PostVersion } from './post';
-import { REFERENCE_POSTS, referencePostFor } from './reference-posts';
+import { REFERENCE_DAILY_POSTS, REFERENCE_POSTS, referencePostFor } from './reference-posts';
 import { REFERENCE_WEEK } from './reference-week';
 
 const CONTENT_SOCIAL = new Set(['linkedin', 'linkedin_page', 'x', 'blog', 'community']);
 const itemById = new Map(REFERENCE_WEEK.map((item) => [item.id, item]));
+const ALL_POSTS = [...REFERENCE_POSTS, ...REFERENCE_DAILY_POSTS];
 
 describe('the reference posts', () => {
   const contentSocial = REFERENCE_WEEK.filter((item) => CONTENT_SOCIAL.has(item.channel));
@@ -14,12 +15,12 @@ describe('the reference posts', () => {
     for (const item of contentSocial) {
       expect(referencePostFor(item.id), `no post for ${item.id}`).toBeDefined();
     }
-    expect(REFERENCE_POSTS).toHaveLength(contentSocial.length);
+    expect(ALL_POSTS).toHaveLength(contentSocial.length);
   });
 
   it('shape each body for the channel its item goes to', () => {
     const kindFor = { linkedin: 'linkedin', linkedin_page: 'linkedin', x: 'x', blog: 'blog', community: 'community' } as const;
-    for (const version of REFERENCE_POSTS) {
+    for (const version of ALL_POSTS) {
       const item = itemById.get(version.itemId);
       expect(item).toBeDefined();
       expect(version.body.kind).toBe(kindFor[item!.channel as keyof typeof kindFor]);
@@ -31,7 +32,7 @@ describe('the reference posts', () => {
    * break a house rule as anything the engine produces — so it is held to the same rules,
    * by the same code the review surface shows.
    */
-  it.each(REFERENCE_POSTS.map((version) => [version.itemId, version] as const))(
+  it.each(ALL_POSTS.map((version) => [version.itemId, version] as const))(
     '%s passes its channel rules and the deterministic linter',
     (_id, version) => {
       const review = reviewPost(itemById.get(version.itemId)!, version);
@@ -42,7 +43,7 @@ describe('the reference posts', () => {
   );
 
   it('record where every figure-bearing post gets its figures', () => {
-    for (const version of REFERENCE_POSTS) {
+    for (const version of ALL_POSTS) {
       if (/\d/.test(postText(version.body)) && version.researchBasis.length === 0) {
         // Opinion posts from a named person may carry incidental numbers (a date, "10
         // minutes"); they must not carry market figures.
@@ -52,8 +53,15 @@ describe('the reference posts', () => {
   });
 
   it('explain every regenerated version with the rejection that caused it', () => {
-    for (const version of REFERENCE_POSTS) {
+    for (const version of ALL_POSTS) {
       expect(version.versionN > 1).toBe(version.regeneratedAfter !== null);
+    }
+  });
+
+  it('give every daily post the conversation it answers, and every weekly post none', () => {
+    for (const version of ALL_POSTS) {
+      const item = itemById.get(version.itemId)!;
+      expect(version.respondsTo !== undefined).toBe(item.track === 'daily');
     }
   });
 

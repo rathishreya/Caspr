@@ -9,11 +9,13 @@
  * — never lorem, never placeholder. […] a screen filled with plausible-looking nonsense
  * cannot be judged for density, line length, or whether the voice survives the interface."
  *
- * Twenty-three items, which is the real weekly volume (design spec §5A.1: "23 items a week
- * at ninety seconds each").
+ * Twenty-three weekly items, which is the real weekly volume (design spec §5A.1: "23 items a
+ * week at ninety seconds each"), plus two from the daily track, which has no slot and so
+ * never reaches the Calendar.
  *
  * **The state is Monday afternoon, before the 18:00 deadline** (runbook §1). Seventeen
- * items are decided; six Content & Social posts still wait for a reviewer. That is the
+ * weekly items are decided; six Content & Social posts still wait for a reviewer, and the
+ * two daily posts generated at 08:15 wait beside them. That is the
  * moment a review surface exists for — a fixture where everything is already approved
  * would leave the approval flow with nothing to show and the Calendar's banner with
  * nothing to promise.
@@ -49,6 +51,9 @@ export const REFERENCE_WEEK_START = '2026-08-17';
 function slot(date: `2026-08-${string}`, time: string): string {
   return `${date}T${time}:00+05:30`;
 }
+
+/** The weekly queue opens Thursday 06:00 for the following week — runbook §1. */
+const QUEUE_OPENED = slot('2026-08-13', '06:00');
 
 /** Hygiene runs after approval (build spec §3.6a), so only a decided item carries this. */
 const HYGIENE_DONE = slot('2026-08-17', '20:04');
@@ -88,6 +93,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0418-01',
     channel: 'email',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'derivative',
     title: 'The Record — issue 04',
     voiceLane: null,
@@ -106,6 +113,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0418-02',
     channel: 'linkedin',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'personal',
     title: 'Joy — four hours of research',
     voiceLane: 'joy',
@@ -124,6 +133,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0418-03',
     channel: 'blog',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'search_answer',
     title: 'What a category review asks for',
     voiceLane: null,
@@ -142,6 +153,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0418-04',
     channel: 'x',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'derivative',
     title: 'Three sources, one decision',
     voiceLane: null,
@@ -160,6 +173,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0418-05',
     channel: 'linkedin_page',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'derivative',
     title: 'Company — the $600m gap, charted',
     voiceLane: null,
@@ -180,6 +195,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0419-01',
     channel: 'blog',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'search_answer',
     title: 'Market sizing: where the two numbers come from',
     voiceLane: null,
@@ -198,6 +215,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0419-02',
     channel: 'linkedin',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'personal',
     title: 'Jayant — native vs translated',
     voiceLane: 'jayant',
@@ -216,6 +235,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0419-03',
     channel: 'x',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'derivative',
     title: 'The atom — one chart, source-stamped',
     voiceLane: null,
@@ -234,6 +255,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0419-04',
     channel: 'community',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'outreach',
     title: 'r/consulting reply',
     voiceLane: 'joy',
@@ -252,6 +275,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0419-05',
     channel: 'linkedin',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'personal',
     title: 'Keshav — what a freshness job actually does',
     voiceLane: 'keshav',
@@ -272,6 +297,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0420-01',
     channel: 'blog',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     // A search answer, not a published analysis: its basis is buyer research, and the hard
     // gate reserves Type A for "a finding traceable to a real Caspr analysis".
     type: 'search_answer',
@@ -292,6 +319,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0420-02',
     channel: 'linkedin_page',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'derivative',
     title: 'Company — what a category review asks for',
     voiceLane: null,
@@ -310,6 +339,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0420-03',
     channel: 'linkedin',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'personal',
     title: 'Dixit — evaluating retrieval',
     voiceLane: 'dixit',
@@ -328,6 +359,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0420-04',
     channel: 'x',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'derivative',
     title: 'Subcategory gap thread',
     voiceLane: null,
@@ -347,6 +380,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0420-05',
     channel: 'community',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'outreach',
     title: 'WallStreetOasis — diligence thread',
     voiceLane: 'joy',
@@ -367,6 +402,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0421-01',
     channel: 'blog',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'search_answer',
     title: 'What a strategic acquirer reads that a financial one does not',
     voiceLane: null,
@@ -385,6 +422,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0421-02',
     channel: 'linkedin',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'personal',
     title: 'Amit — what shipped this week',
     voiceLane: 'amit',
@@ -403,6 +442,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0421-03',
     channel: 'outreach',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'outreach',
     title: 'Quirks.com pitch',
     voiceLane: 'joy',
@@ -421,6 +462,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0421-04',
     channel: 'x',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'derivative',
     title: 'Three sources, one decision — the thread',
     voiceLane: null,
@@ -441,6 +484,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0422-01',
     channel: 'x',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'derivative',
     title: 'Weekend read — category study',
     voiceLane: null,
@@ -461,6 +506,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0423-01',
     channel: 'email',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'derivative',
     title: 'Weekly digest — the category study',
     voiceLane: null,
@@ -479,6 +526,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0423-02',
     channel: 'outreach',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'outreach',
     title: 'GreenBook — contributor pitch',
     voiceLane: 'joy',
@@ -497,6 +546,8 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0423-03',
     channel: 'linkedin',
+    track: 'weekly',
+    generatedAt: QUEUE_OPENED,
     type: 'personal',
     title: 'Kartikey — reading long documents',
     voiceLane: 'kartikey',
@@ -511,6 +562,53 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     sourceable: 'found',
     hygieneAppliedAt: HYGIENE_DONE,
     topicId: 'long-document-reading',
+  },
+
+  // ── ⏱ THE DAILY TRACK — generated this morning, no slot ──────────────────
+  //
+  // runtime-spec §5A: Type D only, one X post and one LinkedIn post at most, no calendar
+  // slot ("publishes to the next open window"), a badge rather than a notification, and a
+  // 48-hour clock that demotes rather than discards. Generated 08:15 Monday; by 14:00 each
+  // has 42 hours left.
+  {
+    id: 'ci-0417-d1',
+    channel: 'x',
+    track: 'daily',
+    generatedAt: slot('2026-08-17', '08:15'),
+    type: 'derivative',
+    title: 'Today — $153bn, and the work outside it',
+    voiceLane: null,
+    narrative: 'N3',
+    pillar: 'fraction_of_cost',
+    funnelStage: 'awareness',
+    icp: null,
+    status: 'in_review',
+    assignedReviewer: REVIEWERS.social,
+    scheduledFor: null,
+    citations: [CITE.esomar],
+    sourceable: 'found',
+    hygieneAppliedAt: null,
+    topicId: 'industry-size-unbilled',
+  },
+  {
+    id: 'ci-0417-d2',
+    channel: 'linkedin_page',
+    track: 'daily',
+    generatedAt: slot('2026-08-17', '08:15'),
+    type: 'derivative',
+    title: 'Today — a citation that does not open',
+    voiceLane: null,
+    narrative: 'N1',
+    pillar: 'analyst_not_assistant',
+    funnelStage: 'awareness',
+    icp: null,
+    status: 'in_review',
+    assignedReviewer: REVIEWERS.social,
+    scheduledFor: null,
+    citations: [],
+    sourceable: 'found',
+    hygieneAppliedAt: null,
+    topicId: 'dead-citations',
   },
 ];
 

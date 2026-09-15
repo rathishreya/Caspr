@@ -89,6 +89,12 @@ export interface PostVersion {
   readonly researchBasis: readonly string[];
   /** Set on a regenerated version: what the reviewer objected to last time. */
   readonly regeneratedAfter: { readonly code: RejectCode; readonly note: string } | null;
+  /**
+   * Daily track only: the conversation this post answers. A daily item is trend-anchored
+   * (runtime spec §5A), and a reviewer judging a reply without the thing it replies to is
+   * judging half of it.
+   */
+  readonly respondsTo?: { readonly summary: string; readonly illustrative: boolean };
 }
 
 /** Every word a reader will see, joined — what the linter and the word count read. */

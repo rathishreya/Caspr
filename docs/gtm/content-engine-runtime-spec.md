@@ -819,7 +819,7 @@ no sign-off. **What is new is only the post half.**
 | **1** | **Same eighteen stations. A second clock, never a second pipeline** | 🟢 Joy's own pattern — *"review is a mode, not a node."* Two pipelines are two rulesets that will drift |
 | **2** | **Type D only** — one X post, one lane-matched LinkedIn post, plus comment targets. ⛔ Never Type A, Type B, email or a community draft | 🟢 Review cost differs **tenfold**: origination 8–15 min, derivative 1–2. **A daily track carrying origination is the weekly queue with a shorter deadline** |
 | **3** | ⛔ **Zero new notifications.** It appears as a badge on My Week — 🟢 which is already *"every person's landing"* | 🟢 *"Two notifications per week. No more. **A queue that nags gets muted, and a muted queue is a stopped machine**"* |
-| **4** | **⏱ It never expires — after 48 hours unreviewed it DEMOTES.** ⚑ **Changed 2026-09-10: nothing is discarded.** The item stops being a *today* item and joins the weekly queue as an ordinary derivative. **Why not keep it as a today item forever:** a reply arriving a week after the conversation ended is not late, it is embarrassing — but the writing is already paid for, so it becomes a normal derivative rather than being thrown away. **Why not discard:** the user's call, and it is right — a drafted, sourced item has cost real money and real review capacity to produce | 🟢 **Nothing is lost. Nothing publishes into a dead conversation eitue | **This is what stops it becoming queue debt.** A response reviewed three days late is not a response, so nothing is lost by dropping it — and a track that cannot accumulate a backlog cannot nag |
+| **4** | **⏱ It never expires — after 48 hours unreviewed it DEMOTES.** ⚑ **Changed 2026-09-10: nothing is discarded.** The item stops being a *today* item and joins the weekly queue as an ordinary derivative. **Why not keep it as a today item forever:** a reply arriving a week after the conversation ended is not late, it is embarrassing. **Why not discard:** the user's call, and it is right — a drafted, sourced item has cost real money and real review capacity to produce | 🟢 **Nothing is lost, and nothing publishes into a dead conversation.** A today item that is not reviewed in time stops asking to be answered today, so the track still cannot accumulate a backlog or nag |
 | **5** | **Its own budget, stated and capped** — see 5A.5. It never draws on the weekly plan's minutes | 🟢 *"Volume is a function of review capacity, not ambition"* |
 | **6** | ⛔ **Fires only on `confirmed`, `diverges` or `definitional`. Never on `no_data`** | **Case B is the reason.** The highest-velocity trend the engine found was the one that must not become a post. A track keyed to velocity alone would have grabbed exactly that |
 | **7** | **It consumes no calendar slot** and publishes to the next open window, not to a fixed day | 🟢 The Tue/Wed/Thu/Fri/Mon slots belong to the weekly plan. Joy's post lands Tuesday for a reason; a daily item must not displace it |
@@ -862,7 +862,7 @@ EVERY DAY
         ⑬ REVIEW — badge on My Week, no notification
           │   same 3 actions · same 10 codes · same full screen
           │   1–2 min each
-          │   ⏱ unreviewed by 08:00 tomorrow → DISCARDED
+          │   ⏱ unreviewed after 48h → DEMOTES to the weekly queue · never discarded
           ▼
         ⑮⑯  hygiene → publish, same day, next open window
                  stamped utm_* + icp_hint

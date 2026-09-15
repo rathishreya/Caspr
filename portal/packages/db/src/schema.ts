@@ -13,15 +13,18 @@
 
 import {
   CHANNELS,
+  ENGAGEMENT_KINDS,
   FUNNEL_STAGES,
   ICPS,
   ITEM_STATUSES,
   PILLARS,
   REJECT_CODES,
+  TRACKS,
   type PostBody,
 } from '@caspr-portal/domain';
 import { relations } from 'drizzle-orm';
 import {
+  boolean,
   index,
   integer,
   jsonb,
@@ -49,6 +52,9 @@ export const itemTypeEnum = pgEnum('item_type', [
 ]);
 export const sourceableEnum = pgEnum('sourceable', ['found', 'thin', 'not_found']);
 export const reviewActionEnum = pgEnum('review_action', ['approve', 'reject', 'hold']);
+export const trackEnum = pgEnum('track', TRACKS);
+export const engagementKindEnum = pgEnum('engagement_kind', ENGAGEMENT_KINDS);
+export const engagementStatusEnum = pgEnum('engagement_status', ['open', 'done', 'skipped']);
 
 /**
  * `content_items`.
@@ -63,6 +69,8 @@ export const contentItems = pgTable(
   {
     id: uuid('id').primaryKey().defaultRandom(),
     channel: channelEnum('channel').notNull(),
+    /** Which clock produced it — runtime spec §5A. A daily item has no slot until approved. */
+    track: trackEnum('track').notNull().default('weekly'),
     type: itemTypeEnum('type').notNull(),
     title: text('title').notNull(),
     /** Null for company voice. Otherwise a roster lane id. */
@@ -182,6 +190,51 @@ export const publishRecords = pgTable(
     publishedAt: timestamp('published_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [index('publish_records_item_idx').on(table.itemId)],
+);
+
+/**
+ * `engagement_targets` — comments, reposts, tags and reshares.
+ *
+ * Outside the review gate by design (operating model ㉖): nothing here is approved, because
+ * nothing here is written by the engine. A person writes the comment, on the platform. The
+ * row records what was surfaced, why, the fact to bring, and whether the person acted.
+ *
+ * Only surfaced targets are stored. ⑰'s guard rail — no fact to bring, no target — is applied
+ * before insert, so the table cannot hold a target the rules would have dropped.
+ */
+export const engagementTargets = pgTable(
+  'engagement_targets',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    kind: engagementKindEnum('kind').notNull(),
+    platform: text('platform').notNull(),
+    externalPostId: text('external_post_id').notNull(),
+    postUrl: text('post_url'),
+    postAuthor: text('post_author').notNull(),
+    postAuthorDetail: text('post_author_detail').notNull(),
+    postAuthorIsCompany: boolean('post_author_is_company').notNull().default(false),
+    postText: text('post_text').notNull(),
+    postedAt: timestamp('posted_at', { withTimezone: true }).notNull(),
+    /** ㉕ tier of the account, or null when it is not on the register. */
+    accountTier: integer('account_tier'),
+    teamPost: boolean('team_post').notNull().default(false),
+    whyRelevant: text('why_relevant').notNull(),
+    factToBring: text('fact_to_bring'),
+    ourSource: text('our_source'),
+    /** A roster lane id, or `social` for the company's own accounts. */
+    assignedTo: text('assigned_to').notNull(),
+    /** Inbound acts only: who was tagged or reshared. */
+    about: text('about'),
+    status: engagementStatusEnum('status').notNull().default('open'),
+    surfacedAt: timestamp('surfaced_at', { withTimezone: true }).notNull().defaultNow(),
+    actedAt: timestamp('acted_at', { withTimezone: true }),
+  },
+  (table) => [
+    index('engagement_targets_surfaced_idx').on(table.surfacedAt),
+    // A platform notification can arrive twice (LinkedIn redelivers for eight hours); one
+    // act on one post by one kind is one row.
+    uniqueIndex('engagement_targets_post_kind_uq').on(table.externalPostId, table.kind, table.assignedTo),
+  ],
 );
 
 export const contentItemsRelations = relations(contentItems, ({ many }) => ({

@@ -136,9 +136,23 @@ export interface Citation {
  */
 export type SourceableVerdict = 'found' | 'thin' | 'not_found';
 
+/**
+ * Which clock produced the item — `content-engine-runtime-spec.md` §5A.
+ *
+ * "The weekly clock produces what compounds — a published analysis, a search answer.
+ * Calendar-anchored. The daily clock produces what responds — a post on something being
+ * discussed today. Trend-anchored." Same stations, same gates, same review; only the
+ * trigger, the cadence and the deadline differ.
+ */
+export const TRACKS = ['weekly', 'daily'] as const;
+export type Track = (typeof TRACKS)[number];
+
 export interface ContentItem {
   readonly id: string;
   readonly channel: Channel;
+  readonly track: Track;
+  /** When the engine produced it. The daily track's 48-hour clock runs from here. */
+  readonly generatedAt: string;
   /** Type A published analysis · Type B search answer · Type C permission layer. §3.7. */
   readonly type: 'analysis' | 'search_answer' | 'permission' | 'derivative' | 'personal' | 'outreach';
   readonly title: string;
@@ -150,7 +164,11 @@ export interface ContentItem {
   readonly icp: Icp | null;
   readonly status: ItemStatus;
   readonly assignedReviewer: string | null;
-  /** ISO 8601, with offset. Null for an item that has no slot yet. */
+  /**
+   * ISO 8601, with offset. Null for an item that has no slot yet — which is every daily
+   * item until it is approved: §5A.3 rule 7, "it consumes no calendar slot and publishes to
+   * the next open window".
+   */
   readonly scheduledFor: string | null;
   readonly citations: readonly Citation[];
   /** The `fact_lookup` probe, §3.2. */

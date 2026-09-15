@@ -327,7 +327,7 @@ flowchart TD
     end
 
     S14 -.->|"regenerate"| S10
-    S13 -->|"⏱ unreviewed in 24h"| EXP["⬛ DISCARDED<br/><small>never carried forward</small>"]
+    S13 -->|"⏱ unreviewed in 48h"| EXP["⏬ DEMOTED<br/><small>joins the weekly queue · never discarded</small>"]
     S13 -->|"📅 unreviewed by Mon 18:00"| HOLD["⬛ HOLDS<br/><small>skip the week is valid<br/>publishing unreviewed is not</small>"]
 
     S16 --> S17["⑰ COMMENT DESK<br/><small>which post · which fact · who<br/>a human posts, always</small>"]
@@ -425,7 +425,7 @@ flowchart TD
     G4 -->|"pass"| ROUTE
 
     ROUTE{"WHICH CLOCK?"}
-    ROUTE -->|"a post responding to<br/>something said today"| D["⏱ DAILY TRACK<br/><small>Type D only<br/>same day · expires 24h</small>"]
+    ROUTE -->|"a post responding to<br/>something said today"| D["⏱ DAILY TRACK<br/><small>Type D only<br/>no slot · demotes after 48h</small>"]
     ROUTE -->|"an analysis to commission<br/>or an evergreen answer"| W["📅 WEEKLY TRACK<br/><small>Type A / B<br/>topic board → Wed pick</small>"]
     ROUTE -->|"a distribution finding,<br/>not a content one"| O["OUTREACH → ㉑<br/><small>roundups · directories<br/>owner: SEO · ✅ permitted</small>"]
 
@@ -535,7 +535,7 @@ flowchart TD
     HEALTH -->|"5–15%"| H2["healthy"]
     HEALTH -->|"below 2%"| H3["rubber-stamping<br/><small>tighten criteria, audit a sample</small>"]
 
-    RM -.->|"⏱ 24h elapsed"| EX["⬛ DISCARDED"]
+    RM -.->|"⏱ 48h elapsed"| EX["⏬ DEMOTED<br/><small>weekly queue</small>"]
     RM -.->|"📅 Mon 18:00"| HO["⬛ HOLDS<br/><small>TL extends or skips the week<br/>skipping is valid<br/>publishing unreviewed is not</small>"]
 
     NOEDIT["⛔ NO EDITING<br/><small>reviewers do not rewrite</small>"] -.-> ACT

@@ -439,7 +439,58 @@ export const REFERENCE_POSTS: readonly PostVersion[] = [
   },
 ];
 
-const BY_ITEM = new Map(REFERENCE_POSTS.map((version) => [version.itemId, version]));
+/**
+ * The daily track's two posts. Their trigger is illustrative — no listener runs — and their
+ * claims are not: ESOMAR's figure is `icp-personas.md :511`, and the citation rule is the
+ * build spec's own, `§3.3`.
+ */
+export const REFERENCE_DAILY_POSTS: readonly PostVersion[] = [
+  {
+    itemId: 'ci-0417-d1',
+    versionN: 1,
+    modelTier: 'haiku',
+    researchBasis: ['icp-personas.md :511', 'icp-personas.md :527'],
+    regeneratedAfter: null,
+    respondsTo: {
+      summary: 'A thread on agency margins quoting the size of the research industry as if every hour in it were billed.',
+      illustrative: true,
+    },
+    body: {
+      kind: 'x',
+      posts: [
+        "$153bn: the global market research industry, per ESOMAR. The desk research before every study sits outside that figure, because nobody bills for it. Source: ESOMAR, and Caspr's buyer research.",
+      ],
+      link: null,
+      attachment: null,
+    },
+  },
+  {
+    itemId: 'ci-0417-d2',
+    versionN: 1,
+    modelTier: 'haiku',
+    researchBasis: ['portal-build-spec.md §3.3'],
+    regeneratedAfter: null,
+    respondsTo: {
+      summary: 'A widely shared post about research reports whose citations lead nowhere.',
+      illustrative: true,
+    },
+    body: {
+      kind: 'linkedin',
+      paragraphs: [
+        'A citation that does not open is worse than no citation.',
+        'It looks like proof, and it is not. Anyone who relies on a figure and finds its source empty does not conclude that a link broke. They conclude the figure was never sourced.',
+        'So a source counts once it has been fetched and read, not when the field beside the claim has been filled in. A populated citation and a resolved one look identical on the page. Only one of them is evidence.',
+      ],
+      hashtags: [],
+      link: null,
+      attachment: null,
+    },
+  },
+];
+
+const BY_ITEM = new Map(
+  [...REFERENCE_POSTS, ...REFERENCE_DAILY_POSTS].map((version) => [version.itemId, version]),
+);
 
 export function referencePostFor(itemId: string): PostVersion | undefined {
   return BY_ITEM.get(itemId);

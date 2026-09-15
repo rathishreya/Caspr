@@ -55,9 +55,9 @@ export default async function CalendarPage({ searchParams }: PageProps) {
   const all = await repository.itemsForWeek(start);
   const items = all.filter((item) => matchesWorkstream(item.channel, filter));
 
-  // `now` is resolved once, on the server, and threaded through — so "past" and "today"
-  // are the same fact everywhere on the page.
-  const now = new Date();
+  // `now` comes from the repository, resolved once and threaded through — so "past" and
+  // "today" are the same fact on this page and on every other screen reading the same data.
+  const now = repository.clock();
   const calendar = buildCalendarWeek(start, items, now);
   const banner = unreviewedBanner(calendar.counts);
   const collisions = laneCollisions(items);

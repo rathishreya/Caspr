@@ -588,6 +588,40 @@ social and founder content. ⛔ Never a hero, a headline or an ad.**
 |---|---|
 | **→ x** | **Numerator, cheap.** Tier 1 and 2 are reach bought with attention rather than budget — the same argument that makes ⑰ the cheapest station in the engine. |
 
+### ⭐ Inbound — when someone tags us or reshares us · **added 2026-09-15**
+
+**Found missing.** ⑰ and this register decide what we *start* — whose post we comment on, whose we repost.
+**Nothing anywhere said what happens when someone acts on us** — tags the Page, or reshares one of our posts.
+
+**The rule adds no new judgement. An inbound act inherits the tier of the account that made it, and that
+tier's permitted action decides the answer.** The register that governs what we start also governs how we
+answer, so the two can never disagree.
+
+| Who acted | They tagged us | They reshared us |
+|---|---|---|
+| **Tier 1 · Amplify** | **Repost with a line of our own** | Reply on their reshare, with a fact |
+| **Tier 2 · Engage**, or not on the register | **Reply — only with a fact to bring** | Reply — only with a fact to bring |
+| **Tier 3 · Observe · Tier 4 · Competitor** | ⛔ **Read only. Nothing visible** | ⛔ **Read only** |
+| **Anyone, bare reshare with no words** | — | **Nothing.** There is nothing to answer, and reactions are never assigned |
+
+**⑰'s guard rail applies unchanged: no fact to bring, no reply.** A thank-you with nothing in it is the
+applause ㉖ exists to prevent, arriving through the inbox instead of the feed.
+
+**⚠ Where a tag can actually reach us — measured, not assumed:**
+
+| Surface | Reaches the portal | How |
+|---|---|---|
+| **LinkedIn Company Page** | ✅ **Yes** | `organizationalEntityNotifications`: `SHARE_MENTION` (tagged in a post), `SHARE` (reshared), `COMMENT`. Webhook, or a 60-day pull. Needs `rw_organization_admin` — the C4 grant. **Verified 2026-09-15** against LinkedIn's documentation. A tag inside a *comment* is not in the documented action list |
+| **Personal profiles** | ⛔ **No** | No member-notification API exists, and reading member activity needs `r_member_social`, which `portal-build-spec.md` §6.1 forbids requesting. **The person sees it in their own notifications and acts from there** |
+| **X** | ⛔ **No** | Reading mentions is a paid tier; X is publish-only (source register) |
+| **Reddit** | ❓ **Unverified** | The API is understood to expose username mentions for an account we authenticate. **Not confirmed — the documentation could not be fetched.** Check before anyone builds on it |
+
+**Where the act is carried out follows `portal-design-spec.md` §5 rule 4:** a Page tag or reshare is the Social
+specialist's, in the console; anything for a named person is on that person's Personal Queue.
+
+**Implemented** in the portal build — `portal/packages/domain/src/engagement.ts`, with the rule tested. That
+build is staged on the `claude/project-overview-walkthrough-6b3b4l` branch until it moves to `caspr-gtm-portal`.
+
 ---
 
 ## ㉖ The Roster — *"who says what, and who reacts to whom"*

@@ -59,3 +59,27 @@ export async function decide(_previous: DecideState, formData: FormData): Promis
 
   redirect(`/content-social/tasks?${params.toString()}#decide` as Route);
 }
+
+/**
+ * Record that a person acted on an engagement target — or chose not to.
+ *
+ * Not a review decision, and deliberately a separate action: engagement sits outside the
+ * review gate (operating model ㉖), so it carries no reason code, no note and no minutes.
+ * The person has already done the real work on the platform; this only closes the loop so
+ * the target stops asking.
+ */
+export async function markEngagement(_previous: DecideState, formData: FormData): Promise<DecideState> {
+  const id = formData.get('targetId');
+  const status = formData.get('status');
+  if (typeof id !== 'string' || (status !== 'done' && status !== 'skipped')) {
+    return { errors: ['That action did not arrive whole. Reload and try again.'] };
+  }
+
+  const changed = await getRepository().markEngagement(id, status);
+  if (!changed) {
+    return { errors: ['This one was already closed — by you in another tab, or by a teammate.'] };
+  }
+
+  revalidatePath('/content-social', 'layout');
+  redirect('/content-social/tasks#engage' as Route);
+}

@@ -9,6 +9,8 @@ const NOW = new Date('2026-08-20T09:00:00+05:30');
 function item(overrides: Partial<ContentItem> & Pick<ContentItem, 'id'>): ContentItem {
   return {
     channel: 'x',
+    track: 'weekly',
+    generatedAt: '2026-08-13T06:00:00+05:30',
     type: 'derivative',
     title: 'Untitled',
     voiceLane: null,
@@ -40,7 +42,7 @@ describe('the reference week, on Monday afternoon before the deadline', () => {
    * actually reach, rather than a picture of one.
    */
   it('reaches the state the frame was drawn in once five of the six are approved', () => {
-    const waiting = REFERENCE_WEEK.filter((i) => i.status === 'in_review').map((i) => i.id);
+    const waiting = REFERENCE_WEEK.filter((i) => i.status === 'in_review' && i.track === 'weekly').map((i) => i.id);
     const approveFive = new Set(waiting.filter((id) => id !== 'ci-0420-04'));
     const afterReview = REFERENCE_WEEK.map((i) =>
       approveFive.has(i.id) ? { ...i, status: 'approved' as const } : i,
@@ -52,8 +54,9 @@ describe('the reference week, on Monday afternoon before the deadline', () => {
     });
   });
 
-  it('is the full weekly volume the review budget is sized against', () => {
-    expect(REFERENCE_WEEK).toHaveLength(23);
+  it('is the full weekly volume the review budget is sized against, plus the daily track', () => {
+    expect(REFERENCE_WEEK.filter((i) => i.track === 'weekly')).toHaveLength(23);
+    expect(REFERENCE_WEEK.filter((i) => i.track === 'daily')).toHaveLength(2);
   });
 
   it('leaves Monday to the two runbook fixtures and no content', () => {
@@ -72,10 +75,11 @@ describe('the reference week, on Monday afternoon before the deadline', () => {
     }
   });
 
-  it('places every item on a day of the week it was scheduled for', () => {
+  it('places every weekly item on its day, and keeps daily items off the grid', () => {
     const placed = calendar.columns.flatMap((column) => column.cards).length;
-    expect(placed).toBe(REFERENCE_WEEK.length);
-    expect(calendar.unscheduled).toHaveLength(0);
+    expect(placed).toBe(REFERENCE_WEEK.filter((i) => i.track === 'weekly').length);
+    // runtime spec §5A.3 rule 7 — the daily track "consumes no calendar slot".
+    expect(calendar.unscheduled.map((i) => i.track)).toEqual(['daily', 'daily']);
   });
 });
 

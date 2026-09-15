@@ -1420,347 +1420,308 @@ a.card:hover {
   gap: var(--space-2);
 }
 
-/* ── 6e · The artefact — white while it waits on a person, dark once it does not ──
- *
- * One component, two grounds, and the choice between them is design spec §2: "White means:
- * this needs your decision. Dark means: this is yours to use." The post's own colours are
- * local aliases of the tokens, swapped as a set, so no rule below knows which ground it is
- * on — and neither can drift from the other.
- */
+/* ── 6e · The preview inside a decision card ─────────────────────────────── */
 
-.artefact {
-  --ink: var(--text-on-card);
-  --ink-sub: var(--text-on-card-sub);
-  --rule: var(--border-card);
-  --wash: var(--surface-card-sub);
-
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
-  margin: 0 var(--space-4);
-  background: var(--surface-card);
-  color: var(--ink);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
+.decide__preview {
+  padding: 0 var(--space-4);
 }
 
-.artefact--decided {
-  --ink: var(--text-primary);
-  --ink-sub: var(--text-secondary);
-  --rule: var(--border-default);
-  --wash: var(--surface-base);
-
-  margin: 0;
-  background: var(--surface-raised);
-  border: 1px solid var(--border-default);
-}
-
-.artefact__post {
-  padding: var(--space-5) var(--space-6);
-  min-width: 0;
-}
-
-@media (max-width: 1179px) {
-  .artefact {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .artefact__post {
-    padding: var(--space-5);
-  }
-}
-
-/* The post. A reading measure, not the width of the card. */
-.post {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  max-width: 62ch;
-  color: var(--ink);
-}
-
-.post__author {
-  display: grid;
-  grid-template-columns: 40px minmax(0, 1fr) auto;
-  align-items: center;
-  gap: var(--space-3);
-}
-
-/* Square. The console has two radii and a circle is neither. */
-.post__avatar {
-  /* Flex on one line, not grid: a grid puts the wordmark's dot in a row of its own. */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-sm);
-  background: var(--ink);
-  color: var(--surface-card);
-  font-weight: 500;
-  font-size: 16px;
-}
-
-.artefact--decided .post__avatar {
-  background: var(--surface-hover);
-  color: var(--text-primary);
-}
-
-/* The company's own accounts wear the wordmark — the one place the serif is permitted. */
-.post__avatar--company {
-  font-family: var(--font-wordmark);
-  font-weight: 400;
-  font-size: 22px;
-}
-
-.post__avatar-dot {
+.decide__today {
   color: var(--accent-attention);
 }
 
-.post__who {
+.decide__checks {
+  padding: 0 var(--space-4) var(--space-4);
+}
+
+.queue-group {
+  margin: var(--space-2) 0 calc(-1 * var(--space-2));
+  color: var(--text-tertiary);
+}
+
+/* ── 6f · The checks — one line, open on demand ───────────────────────────── */
+
+.checks {
+  border-top: 1px solid var(--border-default);
+}
+
+.checks__summary {
   display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.post__name {
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 20px;
-}
-
-.post__detail {
-  font-size: 13px;
-  line-height: 18px;
-  color: var(--ink-sub);
-}
-
-.post__where {
-  color: var(--ink-sub);
-}
-
-.post__body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  font-size: 14px;
-  line-height: 22px;
-}
-
-.post__tags {
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--ink-sub);
-}
-
-.post__attachment,
-.post__link {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--rule);
-  border-radius: var(--radius-sm);
-  background: var(--wash);
-  font-size: 13px;
-  line-height: 18px;
-}
-
-.post__attachment .t-meta,
-.post__link .t-meta {
-  color: var(--ink-sub);
-  text-transform: none;
-}
-
-.post__pending {
-  color: var(--ink-sub);
-}
-
-/* A thread: each post is its own block, joined by a rule down the left. */
-.post__thread {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  margin: 0;
-  padding: 0;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) 0 0;
+  color: var(--text-secondary);
+  cursor: pointer;
   list-style: none;
 }
 
-.post__tweet {
-  position: relative;
+.checks__summary::-webkit-details-marker {
+  display: none;
+}
+
+.checks__summary:hover {
+  color: var(--text-primary);
+}
+
+.checks__glyph {
+  color: var(--text-tertiary);
+}
+
+.checks--fail .checks__summary,
+.checks--fail .checks__glyph {
+  color: var(--accent-attention);
+}
+
+.checks__chevron {
+  color: var(--text-tertiary);
+}
+
+.checks[open] .checks__chevron {
+  transform: rotate(180deg);
+}
+
+.checks__body {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: var(--space-3);
-  padding-left: var(--space-4);
-  border-left: 1px solid var(--rule);
-  font-size: 14px;
-  line-height: 22px;
-}
-
-.post__thread--single .post__tweet {
-  padding-left: 0;
-  border-left: none;
-}
-
-.post__count {
-  color: var(--ink-sub);
-  align-self: end;
-}
-
-.post__url {
-  color: var(--ink-sub);
-  text-transform: none;
-  letter-spacing: 0;
-}
-
-.post__headline {
-  margin: 0;
-  font-size: 20px;
-  line-height: 28px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  text-wrap: balance;
-}
-
-.post__standfirst {
-  font-size: 16px;
-  line-height: 24px;
-  color: var(--ink-sub);
-}
-
-.post__cta {
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 20px;
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--rule);
-}
-
-.post__question {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  padding: var(--space-3) var(--space-4);
-  background: var(--wash);
-  border-left: 2px solid var(--rule);
-  font-size: 14px;
-  line-height: 20px;
-}
-
-.post__question .t-meta {
-  color: var(--ink-sub);
-}
-
-.post__stand-in {
-  font-style: normal;
-}
-
-/* ── 6f · The facts panel — inside the card, on its tinted sub-surface (§1) ──── */
-
-.facts {
-  display: flex;
-  flex-direction: column;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
   gap: var(--space-5);
-  padding: var(--space-5);
-  background: var(--wash);
-  border-left: 1px solid var(--rule);
-  color: var(--ink);
+  padding: var(--space-4) 0 var(--space-2);
+}
+
+.checks__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
   min-width: 0;
 }
 
-@media (max-width: 1179px) {
-  .facts {
-    border-left: none;
-    border-top: 1px solid var(--rule);
-  }
-}
-
-.facts__group {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.facts__label {
+.checks__label {
   margin: 0;
-  color: var(--ink-sub);
+  color: var(--text-tertiary);
 }
 
-.facts__list {
+.checks__list {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
 }
 
-.fact {
+.check {
   display: grid;
   grid-template-columns: 14px minmax(0, 1fr);
   gap: var(--space-2);
   align-items: start;
   font-size: 13px;
   line-height: 18px;
+  color: var(--text-primary);
 }
 
-.fact__glyph {
+.check__glyph {
   margin-top: 2px;
-  color: var(--ink-sub);
+  color: var(--text-tertiary);
 }
 
-/*
- * A failure is marked by the glyph, in the accent, and said in words in the ink colour.
- * Never red text on white: #E8453C measures 3.93:1 there and fails 4.5:1 for text. A glyph
- * needs 3:1, and passes.
- */
-.fact--fail .fact__glyph {
+.check--fail .check__glyph {
   color: var(--accent-attention);
 }
 
-.fact--unrun .fact__text {
-  color: var(--ink-sub);
+.check--unrun {
+  color: var(--text-secondary);
 }
 
-.fact__value {
-  color: var(--ink-sub);
+.check__value {
+  color: var(--text-secondary);
 }
 
-.facts__source,
-.facts__basis {
-  color: var(--ink-sub);
+.checks__source {
+  color: var(--text-tertiary);
   text-transform: none;
   letter-spacing: 0;
   overflow-wrap: anywhere;
 }
 
-.facts__stamp {
+.checks__citation {
+  font-size: 13px;
+  line-height: 18px;
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--border-strong);
+}
+
+.checks__meta {
+  color: var(--text-secondary);
+}
+
+.checks__stamp {
   font-family: var(--font-mono);
   font-size: 11px;
   line-height: 16px;
-  color: var(--ink-sub);
+  color: var(--text-tertiary);
   overflow-wrap: anywhere;
 }
 
-.facts__next {
-  font-size: 13px;
-  line-height: 18px;
+/* ── 6f2 · The board's two halves ─────────────────────────────────────────── */
+
+.board-jump {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: var(--space-3);
+  margin-top: calc(-1 * var(--space-5));
 }
 
-.citation {
+.board-jump__link {
+  display: grid;
+  gap: 2px;
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+}
+
+.board-jump__link:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-hover);
+}
+
+.board-part {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding-left: var(--space-3);
-  border-left: 2px solid var(--rule);
+  gap: var(--space-7);
+  scroll-margin-top: var(--space-5);
 }
 
-.citation__claim {
-  font-size: 13px;
-  line-height: 18px;
+.board-part__title {
+  margin: 0 0 calc(-1 * var(--space-5));
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border-strong);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
-.citation__meta {
-  color: var(--ink-sub);
-  text-transform: none;
-  letter-spacing: 0;
+.board-part__lede {
+  max-width: 68ch;
+  margin-top: calc(-1 * var(--space-5));
+  color: var(--text-secondary);
+}
+
+/* ── 6f3 · Engagement ─────────────────────────────────────────────────────── */
+
+.engage-board {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+}
+
+.engage-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.engage {
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface-base);
+}
+
+.engage__context {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-secondary);
+}
+
+.engage__kind {
+  color: var(--text-primary);
+}
+
+.engage__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: var(--space-4);
+  padding: 0 var(--space-4) var(--space-4);
+  align-items: start;
+}
+
+@media (max-width: 1179px) {
+  .engage__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.engage__brief {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.engage__row {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: baseline;
+}
+
+.engage__label {
+  color: var(--text-tertiary);
+}
+
+/* The fact to bring is the one thing on the card the person uses. It is set as such. */
+.engage__fact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-strong);
+  border-left: 2px solid var(--text-primary);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+}
+
+.engage__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding-top: var(--space-2);
+}
+
+.engage__error {
+  flex-basis: 100%;
+  color: var(--accent-attention);
+}
+
+.engage-quiet {
+  margin-top: var(--space-3);
+  border-top: 1px solid var(--border-default);
+}
+
+.engage-quiet > summary {
+  padding: var(--space-3) 0 0;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.engage-quiet > summary:hover {
+  color: var(--text-primary);
+}
+
+.engage-quiet ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) 0 0;
+}
+
+.engage-quiet__row {
+  color: var(--text-primary);
+}
+
+.engage-note {
+  margin-top: var(--space-3);
+  color: var(--text-tertiary);
 }
 
 /* ── 6g · Decided posts — one line each, open to read ─────────────────────── */
@@ -1848,7 +1809,7 @@ a.card:hover {
 .row__detail {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-4);
   padding: var(--space-3) var(--space-2) var(--space-6);
 }
 

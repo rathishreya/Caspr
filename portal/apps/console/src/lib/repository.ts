@@ -1,25 +1,32 @@
 import {
   contentItems,
   contentVersions,
+  engagementTargets,
   getDatabase,
   isDatabaseConfigured,
   reviewDecisions,
 } from '@caspr-portal/db';
 import {
   PRIOR_WINDOW_COUNTS,
+  REFERENCE_DAILY_POSTS,
   REFERENCE_DECISIONS,
+  REFERENCE_ENGAGEMENT,
+  REFERENCE_NOW,
   REFERENCE_POSTS,
   REFERENCE_WEEK,
   isDecidable,
   shiftWeek,
   statusAfter,
+  type AmplifyTier,
   type ContentItem,
   type DecisionInput,
+  type EngagementPlatform,
+  type EngagementTarget,
   type PostVersion,
   type RejectCode,
   type ReviewDecisionRecord,
 } from '@caspr-portal/domain';
-import { and, desc, eq, gte, inArray, lt } from 'drizzle-orm';
+import { and, desc, eq, gte, inArray, isNull, lt, or } from 'drizzle-orm';
 
 /**
  * Data access.
@@ -40,7 +47,18 @@ export type DecideResult =
   | { readonly ok: false; readonly reason: 'not_found' | 'already_decided' };
 
 export interface ContentRepository {
-  /** Items whose slot falls in the seven days from `weekStartDate`. */
+  /**
+   * The time the data is true at.
+   *
+   * The reference week is a fixed Monday afternoon, and every clock on screen - the daily
+   * track's 48 hours, "surfaced 2h ago" - has to run from that moment, or a fixture from
+   * August reads as weeks stale. A database is live, so its clock is the real one.
+   */
+  clock(): Date;
+  /**
+   * Items in the seven days from `weekStartDate`: weekly items by their slot, and daily
+   * items, which have no slot until approved, by when they were generated.
+   */
   itemsForWeek(weekStartDate: string): Promise<readonly ContentItem[]>;
   /** The current version of each of those items, keyed by item id. */
   versionsForWeek(weekStartDate: string): Promise<ReadonlyMap<string, PostVersion>>;
@@ -56,13 +74,23 @@ export interface ContentRepository {
    * than overwriting the first.
    */
   decide(input: DecisionInput, reviewer: string): Promise<DecideResult>;
+  /** Comments, reposts, tags and reshares surfaced in the week. Outside the review gate. */
+  engagementsForWeek(weekStartDate: string): Promise<readonly EngagementTarget[]>;
+  /** Record that a person acted on a target, or chose not to. */
+  markEngagement(id: string, status: 'done' | 'skipped'): Promise<boolean>;
   /** Which adapter answered. Surfaced on screen rather than hidden — see `FeedNotice`. */
   readonly kind: 'postgres' | 'reference';
 }
 
 function inWeek(item: ContentItem, weekStartDate: string): boolean {
-  if (item.scheduledFor === null) return false;
-  const date = item.scheduledFor.slice(0, 10);
+  const anchor = item.track === 'daily' && item.scheduledFor === null ? item.generatedAt : item.scheduledFor;
+  if (anchor === null) return false;
+  const date = anchor.slice(0, 10);
+  return date >= weekStartDate && date < shiftWeek(weekStartDate, 1);
+}
+
+function surfacedInWeek(surfacedAt: string, weekStartDate: string): boolean {
+  const date = surfacedAt.slice(0, 10);
   return date >= weekStartDate && date < shiftWeek(weekStartDate, 1);
 }
 
@@ -80,6 +108,11 @@ class ReferenceRepository implements ContentRepository {
 
   readonly #statuses = new Map<string, ContentItem['status']>();
   readonly #decisions: ReviewDecisionRecord[] = [];
+  readonly #engagement = new Map<string, EngagementTarget['status']>();
+
+  clock(): Date {
+    return new Date(REFERENCE_NOW);
+  }
 
   #current(item: ContentItem): ContentItem {
     const status = this.#statuses.get(item.id);
@@ -92,7 +125,9 @@ class ReferenceRepository implements ContentRepository {
 
   async versionsForWeek(weekStartDate: string): Promise<ReadonlyMap<string, PostVersion>> {
     const ids = new Set((await this.itemsForWeek(weekStartDate)).map((item) => item.id));
-    return new Map(REFERENCE_POSTS.filter((v) => ids.has(v.itemId)).map((v) => [v.itemId, v]));
+    return new Map(
+      [...REFERENCE_POSTS, ...REFERENCE_DAILY_POSTS].filter((v) => ids.has(v.itemId)).map((v) => [v.itemId, v]),
+    );
   }
 
   async decisionsForWeek(weekStartDate: string): Promise<readonly ReviewDecisionRecord[]> {
@@ -122,10 +157,28 @@ class ReferenceRepository implements ContentRepository {
 
     return { ok: true, item: this.#current(seed) };
   }
+
+  async engagementsForWeek(weekStartDate: string): Promise<readonly EngagementTarget[]> {
+    return REFERENCE_ENGAGEMENT.filter((t) => surfacedInWeek(t.surfacedAt, weekStartDate)).map((t) => {
+      const status = this.#engagement.get(t.id);
+      return status === undefined ? t : { ...t, status };
+    });
+  }
+
+  async markEngagement(id: string, status: 'done' | 'skipped'): Promise<boolean> {
+    const target = REFERENCE_ENGAGEMENT.find((t) => t.id === id);
+    if (!target || this.#engagement.has(id)) return false;
+    this.#engagement.set(id, status);
+    return true;
+  }
 }
 
 class PostgresRepository implements ContentRepository {
   readonly kind = 'postgres' as const;
+
+  clock(): Date {
+    return new Date();
+  }
 
   async itemsForWeek(weekStartDate: string): Promise<readonly ContentItem[]> {
     const db = getDatabase();
@@ -135,9 +188,63 @@ class PostgresRepository implements ContentRepository {
     const rows = await db
       .select()
       .from(contentItems)
-      .where(and(gte(contentItems.scheduledFor, from), lt(contentItems.scheduledFor, to)));
+      .where(
+        or(
+          and(gte(contentItems.scheduledFor, from), lt(contentItems.scheduledFor, to)),
+          and(
+            eq(contentItems.track, 'daily'),
+            isNull(contentItems.scheduledFor),
+            gte(contentItems.createdAt, from),
+            lt(contentItems.createdAt, to),
+          ),
+        ),
+      );
 
     return rows.map(toDomain);
+  }
+
+  async engagementsForWeek(weekStartDate: string): Promise<readonly EngagementTarget[]> {
+    const db = getDatabase();
+    const from = new Date(`${weekStartDate}T00:00:00+05:30`);
+    const to = new Date(`${shiftWeek(weekStartDate, 1)}T00:00:00+05:30`);
+    const rows = await db
+      .select()
+      .from(engagementTargets)
+      .where(and(gte(engagementTargets.surfacedAt, from), lt(engagementTargets.surfacedAt, to)));
+
+    return rows.map((row) => ({
+      id: row.id,
+      kind: row.kind,
+      surfacedAt: row.surfacedAt.toISOString(),
+      post: {
+        id: row.externalPostId,
+        platform: row.platform as EngagementPlatform,
+        author: row.postAuthor,
+        authorDetail: row.postAuthorDetail,
+        authorIsCompany: row.postAuthorIsCompany,
+        text: row.postText,
+        postedAt: row.postedAt.toISOString(),
+      },
+      accountTier: row.accountTier as AmplifyTier | null,
+      teamPost: row.teamPost,
+      whyRelevant: row.whyRelevant,
+      factToBring: row.factToBring,
+      ourSource: row.ourSource,
+      assignedTo: row.assignedTo,
+      about: row.about,
+      illustrative: false,
+      status: row.status,
+    }));
+  }
+
+  async markEngagement(id: string, status: 'done' | 'skipped'): Promise<boolean> {
+    const db = getDatabase();
+    const updated = await db
+      .update(engagementTargets)
+      .set({ status, actedAt: new Date() })
+      .where(and(eq(engagementTargets.id, id), eq(engagementTargets.status, 'open')))
+      .returning({ id: engagementTargets.id });
+    return updated.length > 0;
   }
 
   async versionsForWeek(weekStartDate: string): Promise<ReadonlyMap<string, PostVersion>> {
@@ -274,6 +381,8 @@ function toDomain(row: Row): ContentItem {
   return {
     id: row.id,
     channel: row.channel,
+    track: row.track,
+    generatedAt: row.createdAt.toISOString(),
     type: row.type,
     title: row.title,
     voiceLane: row.voiceLane,

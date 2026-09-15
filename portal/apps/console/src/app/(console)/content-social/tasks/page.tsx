@@ -3,14 +3,18 @@ import {
   CHANNEL_PUBLISH_MODE,
   REFERENCE_WEEK_START,
   buildWeek,
+  dailyState,
   estimateLabel,
   estimateReviewMinutes,
+  isInbound,
   isUnreviewed,
   milestonesForWeek,
-  narrative,
+  personName,
   platformWeek,
   postText,
   reviewHealth,
+  surfacing,
+  inboundResponse,
   willPublish,
   type ContentItem,
   type PostVersion,
@@ -23,9 +27,10 @@ import { Icon } from '@/components/icons';
 import { FeedNotice } from '@/components/primitives/feed-notice';
 import { State } from '@/components/primitives/state';
 import { DecisionCard } from '@/components/posts/decision-card';
+import { EngagementBoard } from '@/components/posts/engagement-board';
 import { OpenOnHash } from '@/components/posts/open-on-hash';
-import { PostArtefact } from '@/components/posts/post-artefact';
-import { PostFacts, slotLabel } from '@/components/posts/post-facts';
+import { PostChecks, slotLabel } from '@/components/posts/post-facts';
+import { PostPreview } from '@/components/posts/post-preview';
 import { PlatformWeekGrid } from '@/components/posts/platform-week-grid';
 import { authorOf, CONTENT_SOCIAL_CHANNELS, isContentSocialChannel, PLATFORM_NAME } from '@/lib/platforms';
 import { getRepository } from '@/lib/repository';
@@ -38,48 +43,53 @@ interface PageProps {
 }
 
 /**
- * Content & Social ▸ Tasks — every post this week, by platform, and the decision on each.
+ * Content & Social ▸ Tasks — the week's work, split the way the engine splits it.
+ *
+ *   POSTS        what we write. Every one passes review before anything publishes.
+ *                ├ today — the daily clock: no slot, 48 hours, then it demotes
+ *                └ this week — the weekly clock: a slot on the calendar
+ *   ENGAGEMENT   what we do on other people's posts, and what they do on ours.
+ *                No review — "a person, on-platform, always" (operating model ㉖).
+ *                ├ tagged and reshared — inbound
+ *                ├ comment — outbound, with a fact to bring
+ *                └ repost with a line — outbound, tier 1 only
  *
  * ⚠ **A deliberate departure from design spec §5A decision 2**, taken 2026-09-15 at the
  * workstream owner's request ("yaha seedha approval wali chiz honi h"). §5A made My Week the
- * single entry into review and said the workstream Tasks tabs "show items but do not start
- * the flow". This tab now takes a decision.
+ * single entry into review. This tab now takes a decision. What that rule protected is kept:
+ * one decision component and one server action, the ten codes in fixed order, the required
+ * note, no edit affordance, commit on action, and a single queue that the tab badge, the
+ * estimate and the Calendar's banner all read. What is given up is the uninterrupted
+ * full-screen flow, which review mode keeps.
  *
- * What §5A was protecting, and how each is kept:
- *
- *  · *"Two entries mean two mental models of what reviewing is."* — There is one decision
- *    component and one server action. Approve, reject, hold; the ten codes in the fixed
- *    order, keyed `1`–`0`; the required note; no edit affordance. Review mode, when it is
- *    built, uses the same action — two doors, one room.
- *  · *"The '52 minutes left' estimate stops meaning anything."* — Every decision commits to
- *    the same queue. The estimate on this page, the badge on the tab and the Calendar's
- *    banner all read the same data, so a decision here moves all of them.
- *  · *Commit on action, no undo.* — Kept. A decided post is read-only here.
- *
- * What does not survive: the *uninterrupted* flow. A reviewer working this tab sees the
- * rail and the other posts. That is the trade the owner chose — context over a full-screen
- * takeover — and review mode remains the place for clearing a whole queue in one sitting.
- *
- * §2 still decides the surfaces: **only a post waiting on a decision is white.** Decided
- * posts open on the dark ground, because nothing about them needs a person now.
+ * Posts are shown as the platform shows them (2026-09-15: "I want to see the exact post").
+ * §2 survives in the platform's own terms — its light mode while a post waits on a decision,
+ * its dark mode once it does not.
  */
 export default async function ContentSocialTasks({ searchParams }: PageProps) {
   const params = await searchParams;
   const platform = isContentSocialChannel(params.platform) ? params.platform : null;
 
   const repository = getRepository();
+  const now = repository.clock();
   const start = REFERENCE_WEEK_START;
-  const [all, versions, decisions] = await Promise.all([
+  const [all, versions, decisions, engagement] = await Promise.all([
     repository.itemsForWeek(start),
     repository.versionsForWeek(start),
     repository.decisionsForWeek(start),
+    repository.engagementsForWeek(start),
   ]);
 
-  const week = buildWeek(start, new Date());
+  const week = buildWeek(start, now);
   const workstream = all.filter((item) => CHANNEL_WORKSTREAM[item.channel] === 'content-social');
   const visible = platform === null ? workstream : workstream.filter((item) => item.channel === platform);
 
-  const waiting = bySlot(visible.filter(isUnreviewed));
+  const waiting = visible.filter(isUnreviewed);
+  const today = waiting
+    .filter((item) => dailyState(item, now).kind === 'today')
+    .sort((a, b) => a.generatedAt.localeCompare(b.generatedAt));
+  // A demoted daily item "joins the weekly queue as an ordinary derivative" — §5A.3 rule 4.
+  const thisWeek = bySlot(waiting.filter((item) => dailyState(item, now).kind !== 'today'));
   const paused = bySlot(visible.filter((item) => item.status === 'holding' || item.status === 'rejected'));
   const decided = bySlot(visible.filter(willPublish));
 
@@ -89,13 +99,24 @@ export default async function ContentSocialTasks({ searchParams }: PageProps) {
   const deadline = milestonesForWeek(week)[0];
   const monday = week.days[0];
 
+  const openEngagement = engagement.filter(
+    (t) => t.status === 'open' && (isInbound(t.kind) ? !['read_only', 'nothing'].includes(inboundResponse(t)) : surfacing(t).surfaced),
+  ).length;
+
+  const dailyCount = workstream.filter((item) => item.track === 'daily').length;
+  const weeklyCount = workstream.length - dailyCount;
+
+  const firstTeamPost = bySlot(workstream.filter((item) => item.voiceLane !== null && item.channel === 'linkedin'))[0];
+
   return (
     <div className="board">
       <OpenOnHash />
 
       <p className="board-status t-meta">
         <span>{week.label}</span>
-        <span>{workstream.length} posts</span>
+        <span>
+          {weeklyCount} this week · {dailyCount} today
+        </span>
         <span className={queueSize > 0 ? 'text-attention' : undefined}>
           {queueSize === 0 ? 'nothing waiting' : `${queueSize} need${queueSize === 1 ? 's' : ''} a decision`}
         </span>
@@ -107,117 +128,157 @@ export default async function ContentSocialTasks({ searchParams }: PageProps) {
         )}
       </p>
 
-      <section aria-labelledby="week-heading">
-        <div className="board-head">
-          <h2 id="week-heading" className="t-title-m">
-            The week, by platform
-          </h2>
-          <span className="board-hint t-body-s">Every time opens its post.</span>
-        </div>
-        <PlatformWeekGrid week={week} rows={platformWeek(week, workstream, CONTENT_SOCIAL_CHANNELS)} />
-      </section>
+      <nav className="board-jump" aria-label="On this page">
+        <a href="#posts" className="board-jump__link">
+          <span className="t-title-m">Posts</span>
+          <span className="t-body-s text-secondary">Reviewed before anything publishes</span>
+          <span className={queueSize > 0 ? 't-meta text-attention' : 't-meta text-tertiary'}>{queueSize} waiting</span>
+        </a>
+        <a href="#engage" className="board-jump__link">
+          <span className="t-title-m">Engagement</span>
+          <span className="t-body-s text-secondary">No review — a person acts on the platform</span>
+          <span className="t-meta text-tertiary">{openEngagement} to act on</span>
+        </a>
+      </nav>
 
-      <PlatformFilter active={platform} items={workstream} />
+      {/* ── POSTS ──────────────────────────────────────────────────────────── */}
+      <section id="posts" className="board-part" aria-labelledby="posts-heading">
+        <h2 id="posts-heading" className="board-part__title">
+          Posts
+        </h2>
 
-      <section id="decide" aria-labelledby="decide-heading">
-        <div className="board-head">
-          <h2 id="decide-heading" className="t-title-m">
-            Needs your decision <span className="board-count t-meta">{waiting.length}</span>
-          </h2>
-          {waiting.length > 0 && (
-            <span className="board-hint t-body-s">
-              Click a post, then <kbd className="kbd">A</kbd> approve · <kbd className="kbd">R</kbd> reject ·{' '}
-              <kbd className="kbd">H</kbd> hold
-            </span>
-          )}
-        </div>
-
-        <Confirmation done={params.done} did={params.did} items={workstream} decisions={decisions} />
-
-        {waiting.length === 0 ? (
-          <State
-            kind="empty"
-            headline={
-              platform === null
-                ? 'Every post this week has a decision.'
-                : `No ${PLATFORM_NAME[platform]} post is waiting on a decision.`
-            }
-            consequence={
-              platform === null
-                ? 'Finished, not unassigned. The next queue opens Thursday at 06:00, with one notification.'
-                : 'Correctly empty for this platform. Clear the filter to see the rest of the queue.'
-            }
-          />
-        ) : (
-          <div className="decide-list">
-            {waiting.map((item) => {
-              const version = versions.get(item.id);
-              return (
-                <DecisionCard key={item.id} itemId={item.id} title={item.title} platform={platform}>
-                  <ContextStrip item={item} version={version} />
-                  {version === undefined ? (
-                    <MissingVersion />
-                  ) : (
-                    <div className="artefact">
-                      <div className="artefact__post">
-                        <PostArtefact item={item} version={version} />
-                      </div>
-                      <PostFacts item={item} version={version} />
-                    </div>
-                  )}
-                </DecisionCard>
-              );
-            })}
-          </div>
-        )}
-      </section>
-
-      {paused.length > 0 && (
-        <section aria-labelledby="paused-heading">
+        <section aria-labelledby="week-heading">
           <div className="board-head">
-            <h2 id="paused-heading" className="t-title-m">
-              Held and regenerating <span className="board-count t-meta">{paused.length}</span>
-            </h2>
-            <span className="board-hint t-body-s">Off the calendar until they come back with a decision.</span>
+            <h3 id="week-heading" className="t-title-m">
+              The week, by platform
+            </h3>
+            <span className="board-hint t-body-s">Every time opens its post.</span>
           </div>
-          <PostRows items={paused} versions={versions} decisions={decisions} />
+          <PlatformWeekGrid week={week} rows={platformWeek(week, workstream, CONTENT_SOCIAL_CHANNELS)} />
+          {dailyCount > 0 && (
+            <p className="engage-note t-body-s">
+              {dailyCount} daily {dailyCount === 1 ? 'post has' : 'posts have'} no slot. A daily post goes out at the
+              next open window once approved, so it never takes a place on the calendar.
+            </p>
+          )}
         </section>
-      )}
 
-      <section aria-labelledby="decided-heading">
-        <div className="board-head">
-          <h2 id="decided-heading" className="t-title-m">
-            Approved and scheduled <span className="board-count t-meta">{decided.length}</span>
-          </h2>
-          <span className="board-hint t-body-s">Nothing to do. Open any post to read it as it will go out.</span>
-        </div>
+        <PlatformFilter active={platform} items={workstream} />
 
-        {decided.length === 0 ? (
-          <State
-            kind="empty"
-            headline={
-              platform === null ? 'Nothing is approved yet.' : `Nothing on ${PLATFORM_NAME[platform]} is approved yet.`
-            }
-            consequence="Posts arrive here the moment they are approved. Unreviewed posts never publish."
-          />
-        ) : (
-          CONTENT_SOCIAL_CHANNELS.map((channel) => {
-            const group = decided.filter((item) => item.channel === channel);
-            if (group.length === 0) return null;
-            return (
-              <div key={channel} className="platform-group">
-                <h3 className="platform-group__head">
-                  <span className="t-body-s">{PLATFORM_NAME[channel]}</span>
-                  <span className="t-meta text-tertiary">{group.length}</span>
-                  {CHANNEL_PUBLISH_MODE[channel] === 'human_only' && (
-                    <span className="t-meta text-tertiary">· a person posts these, always</span>
-                  )}
-                </h3>
-                <PostRows items={group} versions={versions} decisions={decisions} />
-              </div>
-            );
-          })
+        <section id="decide" aria-labelledby="decide-heading">
+          <div className="board-head">
+            <h3 id="decide-heading" className="t-title-m">
+              Needs your decision <span className="board-count t-meta">{waiting.length}</span>
+            </h3>
+            {waiting.length > 0 && (
+              <span className="board-hint t-body-s">
+                Click a post, then <kbd className="kbd">A</kbd> approve · <kbd className="kbd">R</kbd> reject ·{' '}
+                <kbd className="kbd">H</kbd> hold
+              </span>
+            )}
+          </div>
+
+          <Confirmation done={params.done} did={params.did} items={workstream} decisions={decisions} />
+
+          {waiting.length === 0 ? (
+            <State
+              kind="empty"
+              headline={
+                platform === null
+                  ? 'Every post this week has a decision.'
+                  : `No ${PLATFORM_NAME[platform]} post is waiting on a decision.`
+              }
+              consequence={
+                platform === null
+                  ? 'Finished, not unassigned. The next queue opens Thursday at 06:00, with one notification.'
+                  : 'Correctly empty for this platform. Clear the filter to see the rest of the queue.'
+              }
+            />
+          ) : (
+            <div className="decide-list">
+              {today.length > 0 && (
+                <h4 className="queue-group t-meta">
+                  <span className="text-attention">⏱ Today</span> · the daily clock · {today.length}
+                </h4>
+              )}
+              {today.map((item) => (
+                <Waiting key={item.id} item={item} version={versions.get(item.id)} platform={platform} now={now} />
+              ))}
+              {today.length > 0 && thisWeek.length > 0 && (
+                <h4 className="queue-group t-meta">This week · the weekly clock · {thisWeek.length}</h4>
+              )}
+              {thisWeek.map((item) => (
+                <Waiting key={item.id} item={item} version={versions.get(item.id)} platform={platform} now={now} />
+              ))}
+            </div>
+          )}
+        </section>
+
+        {paused.length > 0 && (
+          <section aria-labelledby="paused-heading">
+            <div className="board-head">
+              <h3 id="paused-heading" className="t-title-m">
+                Held and regenerating <span className="board-count t-meta">{paused.length}</span>
+              </h3>
+              <span className="board-hint t-body-s">Off the calendar until they come back with a decision.</span>
+            </div>
+            <PostRows items={paused} versions={versions} decisions={decisions} />
+          </section>
         )}
+
+        <section aria-labelledby="decided-heading">
+          <div className="board-head">
+            <h3 id="decided-heading" className="t-title-m">
+              Approved and scheduled <span className="board-count t-meta">{decided.length}</span>
+            </h3>
+            <span className="board-hint t-body-s">Nothing to do. Open any post to see it as it goes out.</span>
+          </div>
+
+          {decided.length === 0 ? (
+            <State
+              kind="empty"
+              headline={
+                platform === null ? 'Nothing is approved yet.' : `Nothing on ${PLATFORM_NAME[platform]} is approved yet.`
+              }
+              consequence="Posts arrive here the moment they are approved. Unreviewed posts never publish."
+            />
+          ) : (
+            CONTENT_SOCIAL_CHANNELS.map((channel) => {
+              const group = decided.filter((item) => item.channel === channel);
+              if (group.length === 0) return null;
+              return (
+                <div key={channel} className="platform-group">
+                  <h4 className="platform-group__head">
+                    <span className="t-body-s">{PLATFORM_NAME[channel]}</span>
+                    <span className="t-meta text-tertiary">{group.length}</span>
+                    {CHANNEL_PUBLISH_MODE[channel] === 'human_only' && (
+                      <span className="t-meta text-tertiary">· a person posts these, always</span>
+                    )}
+                  </h4>
+                  <PostRows items={group} versions={versions} decisions={decisions} />
+                </div>
+              );
+            })
+          )}
+        </section>
+      </section>
+
+      {/* ── ENGAGEMENT ─────────────────────────────────────────────────────── */}
+      <section id="engage" className="board-part" aria-labelledby="engage-heading">
+        <h2 id="engage-heading" className="board-part__title">
+          Engagement
+        </h2>
+        <p className="board-part__lede t-body-m">
+          Nothing here goes through review, because nothing here is written by the engine. It finds the post and the
+          one fact worth bringing; a person writes the words, on the platform, under their own name.
+        </p>
+        <EngagementBoard
+          targets={engagement}
+          now={now}
+          firstTeamPost={
+            firstTeamPost === undefined ? null : `${personName(firstTeamPost.voiceLane)}'s, ${slotLabel(firstTeamPost)}`
+          }
+        />
       </section>
 
       <FeedNotice />
@@ -225,42 +286,76 @@ export default async function ContentSocialTasks({ searchParams }: PageProps) {
   );
 }
 
-function bySlot(items: readonly ContentItem[]): ContentItem[] {
-  return [...items].sort((a, b) => (a.scheduledFor ?? '').localeCompare(b.scheduledFor ?? ''));
+function Waiting({
+  item,
+  version,
+  platform,
+  now,
+}: {
+  readonly item: ContentItem;
+  readonly version: PostVersion | undefined;
+  readonly platform: string | null;
+  readonly now: Date;
+}) {
+  return (
+    <DecisionCard
+      itemId={item.id}
+      title={item.title}
+      platform={platform}
+      checks={version === undefined ? null : <PostChecks item={item} version={version} />}
+    >
+      <ContextStrip item={item} version={version} now={now} />
+      {version === undefined ? (
+        <MissingVersion />
+      ) : (
+        <div className="decide__preview">
+          <PostPreview item={item} version={version} mode="light" />
+        </div>
+      )}
+    </DecisionCard>
+  );
 }
 
-const TYPE_LABEL: Readonly<Record<ContentItem['type'], string>> = {
-  analysis: 'Published analysis',
-  search_answer: 'Search answer',
-  permission: 'Permission layer',
-  derivative: 'Derivative',
-  personal: 'Personal post',
-  outreach: 'Reply',
-};
+function bySlot(items: readonly ContentItem[]): ContentItem[] {
+  return [...items].sort((a, b) => (a.scheduledFor ?? '9').localeCompare(b.scheduledFor ?? '9'));
+}
 
 /**
- * Design spec §5A.2 — "context: channel · type · voice lane · scheduled for". On the dark
- * ground, above the white artefact: the console describes the post; the post is the post.
+ * When, where, whose — and nothing else. Everything a reviewer might want to know *about*
+ * the post lives in the folded checks, not on top of the post.
  */
-function ContextStrip({ item, version }: { readonly item: ContentItem; readonly version: PostVersion | undefined }) {
-  const told = narrative(item.narrative);
+function ContextStrip({
+  item,
+  version,
+  now,
+}: {
+  readonly item: ContentItem;
+  readonly version: PostVersion | undefined;
+  readonly now: Date;
+}) {
+  const clock = dailyState(item, now);
   return (
     <div className="decide__context">
-      <span className="decide__slot t-data-m">{slotLabel(item)}</span>
+      {clock.kind === 'today' ? (
+        <span className="decide__today t-meta-bold">⏱ Today · demotes in {clock.hoursLeft}h</span>
+      ) : (
+        <span className="decide__slot t-data-m">{slotLabel(item)}</span>
+      )}
       <span className="t-meta-bold">{CHANNEL_LABEL[item.channel]}</span>
-      <span className="t-meta">{TYPE_LABEL[item.type]}</span>
-      <span className="t-meta">{item.voiceLane === null ? 'Company voice' : `${authorOf(item).name}'s lane`}</span>
-      {told !== undefined && (
-        <span className="t-meta">
-          {told.id} {told.name}
+      <span className="t-meta">{item.voiceLane === null ? 'Company voice' : `${authorOf(item).name}'s post`}</span>
+      {clock.kind === 'demoted' && (
+        <span className="t-meta text-tertiary">Daily post, demoted after 48 hours — now an ordinary derivative</span>
+      )}
+      {version?.respondsTo !== undefined && (
+        <span className="decide__regenerated t-body-s">
+          <span className="t-meta-bold">Responds to</span> {version.respondsTo.summary}
+          {version.respondsTo.illustrative && <span className="text-tertiary"> (illustrative)</span>}
         </span>
       )}
-      <span className="t-meta">{item.funnelStage}</span>
-      <span className="t-meta text-tertiary">{item.assignedReviewer ?? 'Unassigned'}</span>
       {version?.regeneratedAfter != null && (
         <span className="decide__regenerated t-body-s">
           <span className="t-meta-bold">Version {version.versionN}</span> — regenerated after{' '}
-          <span className="t-meta-bold">{version.regeneratedAfter.code}</span>: “{version.regeneratedAfter.note}”
+          <span className="t-meta-bold">{version.regeneratedAfter.code}</span>: &ldquo;{version.regeneratedAfter.note}&rdquo;
         </span>
       )}
     </div>
@@ -282,7 +377,7 @@ function PlatformFilter({ active, items }: { readonly active: string | null; rea
     ({ pathname: '/content-social/tasks', query: channel === null ? {} : { platform: channel } }) as const;
 
   return (
-    <nav className="pills" aria-label="Filter by platform">
+    <nav className="pills" aria-label="Filter posts by platform">
       <Link className="pill" href={link(null)} aria-current={active === null ? 'true' : undefined}>
         All <span className="pill__count">{items.length}</span>
       </Link>
@@ -290,12 +385,7 @@ function PlatformFilter({ active, items }: { readonly active: string | null; rea
         const count = items.filter((item) => item.channel === channel).length;
         const waiting = items.filter((item) => item.channel === channel && isUnreviewed(item)).length;
         return (
-          <Link
-            key={channel}
-            className="pill"
-            href={link(channel)}
-            aria-current={active === channel ? 'true' : undefined}
-          >
+          <Link key={channel} className="pill" href={link(channel)} aria-current={active === channel ? 'true' : undefined}>
             {PLATFORM_NAME[channel]} <span className="pill__count">{count}</span>
             {waiting > 0 && (
               <span className="pill__waiting" aria-label={`${waiting} waiting`}>
@@ -335,7 +425,7 @@ function PostRows({
         return (
           <details key={item.id} className="row" id={`post-${item.id}`}>
             <summary className="row__summary">
-              <span className="row__when t-data-m">{slotLabel(item)}</span>
+              <span className="row__when t-data-m">{item.scheduledFor === null ? 'Next window' : slotLabel(item)}</span>
               <span className="row__who t-body-s">{authorOf(item).name}</span>
               <span className="row__title t-body-s">{item.title}</span>
               <span className="row__lead t-body-s">{lead}</span>
@@ -358,12 +448,10 @@ function PostRows({
               {version === undefined ? (
                 <MissingVersion />
               ) : (
-                <div className="artefact artefact--decided">
-                  <div className="artefact__post">
-                    <PostArtefact item={item} version={version} />
-                  </div>
-                  <PostFacts item={item} version={version} />
-                </div>
+                <>
+                  <PostPreview item={item} version={version} mode="dark" />
+                  <PostChecks item={item} version={version} />
+                </>
               )}
             </div>
           </details>
@@ -401,13 +489,14 @@ function Confirmation({
 
   const handPosted = CHANNEL_PUBLISH_MODE[item.channel] === 'human_only';
   const code = [...decisions].reverse().find((d) => d.itemId === item.id && d.action === 'reject')?.reasonCode;
+  const when = item.scheduledFor === null ? 'the next open window' : slotLabel(item);
 
   const verdict = did === 'approve' ? 'Approved' : did === 'reject' ? `Rejected${code ? ` — ${code}` : ''}` : 'Held';
   const next =
     did === 'approve'
       ? handPosted
-        ? `Surfaced to ${authorOf(item).name} on ${slotLabel(item)} to post by hand.`
-        : `Hygiene pass, then ${PLATFORM_NAME[item.channel]} at ${slotLabel(item)}.`
+        ? `Surfaced to ${authorOf(item).name} on ${when} to post by hand.`
+        : `Hygiene pass, then ${PLATFORM_NAME[item.channel]} at ${when}.`
       : did === 'reject'
         ? 'It regenerates with your note applied and comes back to this queue.'
         : 'Off the calendar until someone decides it.';
@@ -423,3 +512,4 @@ function Confirmation({
     </p>
   );
 }
+

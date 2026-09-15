@@ -47,7 +47,7 @@ export default async function ContentSocialDashboard() {
   ]);
 
   const items = all.filter((item) => CHANNEL_WORKSTREAM[item.channel] === 'content-social');
-  const week = buildWeek(start, new Date());
+  const week = buildWeek(start, repository.clock());
   const health = reviewHealth(decisions.filter((d) => items.some((i) => i.id === d.itemId)));
   const mix = narrativeMix(items, priorCounts);
   const awaiting = items.filter(isUnreviewed).length;
