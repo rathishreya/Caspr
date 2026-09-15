@@ -13,6 +13,9 @@ const nextConfig = {
    * reappears on every dev run is exactly the drift that rule exists to stop.
    */
   agentRules: false,
+  // The dev-mode badge sits over the rail's footer — the one line that names who is signed
+  // in and which workstreams they own (§5 rule 3). Build errors still open their overlay.
+  devIndicators: false,
   // Linting is a workspace-level gate (`npm run gate`), never a step inside the build —
   // a build that lints is a build that fails for a reason nobody deploying cares about.
   async headers() {

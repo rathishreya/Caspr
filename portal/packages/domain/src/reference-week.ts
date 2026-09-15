@@ -10,7 +10,16 @@
  * cannot be judged for density, line length, or whether the voice survives the interface."
  *
  * Twenty-three items, which is the real weekly volume (design spec §5A.1: "23 items a week
- * at ninety seconds each"). Twenty-two will publish; one is awaiting a decision.
+ * at ninety seconds each").
+ *
+ * **The state is Monday afternoon, before the 18:00 deadline** (runbook §1). Seventeen
+ * items are decided; six Content & Social posts still wait for a reviewer. That is the
+ * moment a review surface exists for — a fixture where everything is already approved
+ * would leave the approval flow with nothing to show and the Calendar's banner with
+ * nothing to promise.
+ *
+ * Approve five of the six and the Calendar reads `22 SCHEDULED · 1 HOLDING`, which is the
+ * state the Figma frame was drawn in.
  *
  * Every slot is stored with its offset. Times are the console's zone — see `week.ts`.
  *
@@ -41,44 +50,39 @@ function slot(date: `2026-08-${string}`, time: string): string {
   return `${date}T${time}:00+05:30`;
 }
 
+/** Hygiene runs after approval (build spec §3.6a), so only a decided item carries this. */
+const HYGIENE_DONE = slot('2026-08-17', '20:04');
+
+/**
+ * Citations — and only where a post leans on a published figure.
+ *
+ * Corrected 2026-09-15. An earlier version of this file quoted ESOMAR at **$141.6bn**. The
+ * repository's own source gives **$153bn** (`icp-personas.md :511`, ESOMAR 2025), and
+ * three further citations carried illustrative Census, BLS and EDGAR claims that no post
+ * actually made. A citation attached to a sentence that does not rest on it is the
+ * populated-but-dead citation `L22` exists to catch, so they are gone.
+ *
+ * Posts built on buyer research rather than a published figure carry no citation here;
+ * their basis is recorded against the post version as `file :line` — `reference-posts.ts`.
+ */
 const CITE = {
-  esomar: {
-    url: 'https://esomar.org/global-market-research-report',
-    publisher: 'ESOMAR',
-    publishedOn: '2026-06-11',
-    quotedClaim: 'Global market research turnover reached $141.6bn in 2025.',
+  readyMeals: {
+    url: 'https://caspr.ai/samples',
+    publisher: 'Caspr — UK Ready Meals Market: Sizing and Analysis',
+    publishedOn: '2026-08-11',
+    quotedClaim:
+      'On the same definition and base year, published estimates run from $5.86bn at 4.95% CAGR to $6.46bn at 12.4%.',
     resolvedAt: '2026-08-14T04:02:00+05:30',
   },
-  census: {
-    url: 'https://www.census.gov/programs-surveys/susb.html',
-    publisher: 'US Census Bureau — SUSB',
-    publishedOn: '2026-04-30',
-    quotedClaim: 'Establishment counts by NAICS 5416, management and technical consulting.',
-    resolvedAt: '2026-08-15T09:41:00+05:30',
-  },
-  bls: {
-    url: 'https://www.bls.gov/oes/current/oes131161.htm',
-    publisher: 'US Bureau of Labor Statistics',
-    publishedOn: '2026-05-06',
-    quotedClaim: 'Market research analysts: mean hourly wage, May 2025.',
-    resolvedAt: '2026-08-13T18:20:00+05:30',
-  },
-  edgar: {
-    url: 'https://www.sec.gov/edgar/search/#/q=%22total+addressable+market%22',
-    publisher: 'SEC EDGAR',
-    publishedOn: '2026-07-22',
-    quotedClaim: 'Segment revenue disclosed in the most recent 10-Q.',
-    resolvedAt: '2026-08-16T11:05:00+05:30',
+  esomar: {
+    url: 'https://esomar.org',
+    publisher: 'ESOMAR',
+    publishedOn: '2025',
+    quotedClaim: 'The global market research industry is a $153bn sector.',
+    resolvedAt: '2026-08-14T04:02:00+05:30',
   },
 } as const;
 
-/**
- * ⚠ The one item on this week's grid with no decision.
- *
- * It is here on purpose. The Calendar's banner is the strongest promise the product makes
- * — "nothing publishes unreviewed" — and a fixture where everything is already approved
- * would leave that promise untested at every width and in every screenshot.
- */
 export const REFERENCE_WEEK: readonly ContentItem[] = [
   // ── TUE 18 ────────────────────────────────────────────────────────────────
   {
@@ -96,7 +100,7 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     scheduledFor: slot('2026-08-18', '07:30'),
     citations: [CITE.esomar],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: HYGIENE_DONE,
     topicId: 'category-review-2026-08',
   },
   {
@@ -109,12 +113,12 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     pillar: 'analyst_not_assistant',
     funnelStage: 'awareness',
     icp: 'consulting',
-    status: 'scheduled',
+    status: 'in_review',
     assignedReviewer: REVIEWERS.social,
     scheduledFor: slot('2026-08-18', '09:00'),
-    citations: [CITE.bls],
+    citations: [],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: null,
     topicId: 'unbillable-desk-research',
   },
   {
@@ -130,9 +134,9 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     status: 'scheduled',
     assignedReviewer: REVIEWERS.seo,
     scheduledFor: slot('2026-08-18', '11:00'),
-    citations: [CITE.census, CITE.esomar],
+    citations: [],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: HYGIENE_DONE,
     topicId: 'category-review-2026-08',
   },
   {
@@ -148,9 +152,9 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     status: 'scheduled',
     assignedReviewer: REVIEWERS.social,
     scheduledFor: slot('2026-08-18', '14:00'),
-    citations: [CITE.edgar],
+    citations: [CITE.readyMeals],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: HYGIENE_DONE,
     topicId: 'triangulation-method',
   },
   {
@@ -163,12 +167,12 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     pillar: 'analyst_not_assistant',
     funnelStage: 'consideration',
     icp: 'strategy',
-    status: 'scheduled',
+    status: 'in_review',
     assignedReviewer: REVIEWERS.social,
     scheduledFor: slot('2026-08-18', '16:00'),
-    citations: [CITE.edgar, CITE.esomar],
+    citations: [CITE.readyMeals],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: null,
     topicId: 'tam-gap-teardown',
   },
 
@@ -186,9 +190,9 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     status: 'scheduled',
     assignedReviewer: REVIEWERS.seo,
     scheduledFor: slot('2026-08-19', '08:00'),
-    citations: [CITE.census, CITE.edgar],
+    citations: [CITE.readyMeals],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: HYGIENE_DONE,
     topicId: 'tam-gap-teardown',
   },
   {
@@ -206,7 +210,7 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     scheduledFor: slot('2026-08-19', '09:00'),
     citations: [],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: HYGIENE_DONE,
     topicId: 'native-vs-translated-retrieval',
   },
   {
@@ -222,10 +226,10 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     status: 'scheduled',
     assignedReviewer: REVIEWERS.social,
     scheduledFor: slot('2026-08-19', '11:00'),
-    citations: [CITE.esomar],
+    citations: [],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
-    topicId: 'category-review-2026-08',
+    hygieneAppliedAt: HYGIENE_DONE,
+    topicId: 'definitional-gaps',
   },
   {
     id: 'ci-0419-04',
@@ -237,12 +241,12 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     pillar: 'analyst_not_assistant',
     funnelStage: 'awareness',
     icp: 'consulting',
-    status: 'approved',
+    status: 'in_review',
     assignedReviewer: REVIEWERS.social,
     scheduledFor: slot('2026-08-19', '16:00'),
-    citations: [CITE.bls],
+    citations: [],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: null,
     topicId: 'unbillable-desk-research',
   },
   {
@@ -260,7 +264,7 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     scheduledFor: slot('2026-08-19', '18:00'),
     citations: [],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: HYGIENE_DONE,
     topicId: 'corpus-freshness',
   },
 
@@ -268,19 +272,21 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   {
     id: 'ci-0420-01',
     channel: 'blog',
-    type: 'analysis',
+    // A search answer, not a published analysis: its basis is buyer research, and the hard
+    // gate reserves Type A for "a finding traceable to a real Caspr analysis".
+    type: 'search_answer',
     title: 'The unbillable two days',
     voiceLane: null,
     narrative: 'N3',
     pillar: 'fraction_of_cost',
     funnelStage: 'consideration',
     icp: 'market_research',
-    status: 'scheduled',
+    status: 'in_review',
     assignedReviewer: REVIEWERS.tl,
     scheduledFor: slot('2026-08-20', '08:00'),
-    citations: [CITE.bls, CITE.esomar],
+    citations: [],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: null,
     topicId: 'unbillable-desk-research',
   },
   {
@@ -296,9 +302,9 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     status: 'scheduled',
     assignedReviewer: REVIEWERS.social,
     scheduledFor: slot('2026-08-20', '10:00'),
-    citations: [CITE.census],
+    citations: [],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: HYGIENE_DONE,
     topicId: 'category-review-2026-08',
   },
   {
@@ -316,7 +322,7 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     scheduledFor: slot('2026-08-20', '12:00'),
     citations: [],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: HYGIENE_DONE,
     topicId: 'retrieval-evaluation',
   },
   {
@@ -329,11 +335,11 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     pillar: 'analyst_not_assistant',
     funnelStage: 'awareness',
     icp: 'category_managers',
-    // ⚠ The one undecided item. See the note above the array.
     status: 'in_review',
     assignedReviewer: REVIEWERS.social,
     scheduledFor: slot('2026-08-20', '15:00'),
-    citations: [CITE.census],
+    citations: [],
+    // Thin: subcategory-level figures are exactly what the thread says is missing.
     sourceable: 'thin',
     hygieneAppliedAt: null,
     topicId: 'subcategory-gap',
@@ -351,9 +357,9 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     status: 'approved',
     assignedReviewer: REVIEWERS.social,
     scheduledFor: slot('2026-08-20', '17:00'),
-    citations: [CITE.edgar],
+    citations: [],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: HYGIENE_DONE,
     topicId: 'diligence-desk-work',
   },
 
@@ -371,9 +377,9 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     status: 'scheduled',
     assignedReviewer: REVIEWERS.seo,
     scheduledFor: slot('2026-08-21', '08:30'),
-    citations: [CITE.edgar],
+    citations: [],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: HYGIENE_DONE,
     topicId: 'acquirer-lenses',
   },
   {
@@ -386,12 +392,12 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     pillar: 'analytical_ai',
     funnelStage: 'awareness',
     icp: null,
-    status: 'scheduled',
+    status: 'in_review',
     assignedReviewer: REVIEWERS.social,
     scheduledFor: slot('2026-08-21', '10:00'),
     citations: [],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: null,
     topicId: 'ship-notes-w34',
   },
   {
@@ -409,7 +415,7 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     scheduledFor: slot('2026-08-21', '13:00'),
     citations: [CITE.esomar],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: HYGIENE_DONE,
     topicId: 'earned-media-quirks',
   },
   {
@@ -425,9 +431,9 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     status: 'scheduled',
     assignedReviewer: REVIEWERS.social,
     scheduledFor: slot('2026-08-21', '15:00'),
-    citations: [CITE.edgar, CITE.census],
+    citations: [],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: HYGIENE_DONE,
     topicId: 'triangulation-method',
   },
 
@@ -445,9 +451,9 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     status: 'scheduled',
     assignedReviewer: REVIEWERS.social,
     scheduledFor: slot('2026-08-22', '11:00'),
-    citations: [CITE.census],
+    citations: [],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: HYGIENE_DONE,
     topicId: 'category-review-2026-08',
   },
 
@@ -467,7 +473,7 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     scheduledFor: slot('2026-08-23', '09:00'),
     citations: [CITE.esomar],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: HYGIENE_DONE,
     topicId: 'category-review-2026-08',
   },
   {
@@ -485,7 +491,7 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     scheduledFor: slot('2026-08-23', '12:00'),
     citations: [CITE.esomar],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: HYGIENE_DONE,
     topicId: 'earned-media-greenbook',
   },
   {
@@ -503,19 +509,19 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     scheduledFor: slot('2026-08-23', '18:00'),
     citations: [],
     sourceable: 'found',
-    hygieneAppliedAt: slot('2026-08-17', '20:04'),
+    hygieneAppliedAt: HYGIENE_DONE,
     topicId: 'long-document-reading',
   },
 ];
 
 /**
- * The week's review decisions.
+ * The decisions already taken this week.
  *
- * Twenty-five decisions over twenty-three items: three were rejected with a reason and
+ * Twenty decisions over seventeen decided items: three were rejected with a reason and
  * came back regenerated, which is what §3.4 means by "a rejection with a reason
  * regenerates the item immediately with the correction applied, and the new version
- * returns to the queue". Two of those regenerations were then approved; one item is still
- * awaiting its first decision.
+ * returns to the queue". Two of those regenerations were then approved. The third —
+ * `ci-0420-01`, rejected as WEAK — is back in the queue as version 2, waiting.
  *
  * `secondsSpent` is real-shaped rather than uniform. Build spec §4: it "is not
  * surveillance — it is how the generator sizes next week's volume to the real review
@@ -523,23 +529,18 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
  */
 export const REFERENCE_DECISIONS: readonly ReviewDecisionRecord[] = [
   { itemId: 'ci-0418-01', reviewer: REVIEWERS.tl, action: 'approve', reasonCode: null, secondsSpent: 74 },
-  { itemId: 'ci-0418-02', reviewer: REVIEWERS.social, action: 'approve', reasonCode: null, secondsSpent: 61 },
   { itemId: 'ci-0418-03', reviewer: REVIEWERS.seo, action: 'reject', reasonCode: 'STALE_NUMBER', secondsSpent: 132 },
   { itemId: 'ci-0418-03', reviewer: REVIEWERS.seo, action: 'approve', reasonCode: null, secondsSpent: 58 },
   { itemId: 'ci-0418-04', reviewer: REVIEWERS.social, action: 'approve', reasonCode: null, secondsSpent: 44 },
-  { itemId: 'ci-0418-05', reviewer: REVIEWERS.social, action: 'approve', reasonCode: null, secondsSpent: 96 },
   { itemId: 'ci-0419-01', reviewer: REVIEWERS.seo, action: 'approve', reasonCode: null, secondsSpent: 118 },
   { itemId: 'ci-0419-02', reviewer: REVIEWERS.social, action: 'approve', reasonCode: null, secondsSpent: 70 },
   { itemId: 'ci-0419-03', reviewer: REVIEWERS.social, action: 'approve', reasonCode: null, secondsSpent: 39 },
-  { itemId: 'ci-0419-04', reviewer: REVIEWERS.social, action: 'approve', reasonCode: null, secondsSpent: 105 },
   { itemId: 'ci-0419-05', reviewer: REVIEWERS.social, action: 'approve', reasonCode: null, secondsSpent: 67 },
   { itemId: 'ci-0420-01', reviewer: REVIEWERS.tl, action: 'reject', reasonCode: 'WEAK', secondsSpent: 149 },
-  { itemId: 'ci-0420-01', reviewer: REVIEWERS.tl, action: 'approve', reasonCode: null, secondsSpent: 88 },
   { itemId: 'ci-0420-02', reviewer: REVIEWERS.social, action: 'approve', reasonCode: null, secondsSpent: 52 },
   { itemId: 'ci-0420-03', reviewer: REVIEWERS.social, action: 'approve', reasonCode: null, secondsSpent: 73 },
   { itemId: 'ci-0420-05', reviewer: REVIEWERS.social, action: 'approve', reasonCode: null, secondsSpent: 91 },
   { itemId: 'ci-0421-01', reviewer: REVIEWERS.seo, action: 'approve', reasonCode: null, secondsSpent: 121 },
-  { itemId: 'ci-0421-02', reviewer: REVIEWERS.social, action: 'approve', reasonCode: null, secondsSpent: 46 },
   { itemId: 'ci-0421-03', reviewer: REVIEWERS.tl, action: 'approve', reasonCode: null, secondsSpent: 83 },
   { itemId: 'ci-0421-04', reviewer: REVIEWERS.social, action: 'reject', reasonCode: 'DUPLICATE', secondsSpent: 64 },
   { itemId: 'ci-0421-04', reviewer: REVIEWERS.social, action: 'approve', reasonCode: null, secondsSpent: 37 },

@@ -946,3 +946,934 @@ a.card:hover {
 .mix-row__value--over {
   color: var(--accent-attention);
 }
+
+/* ── 6 · Content & Social ▸ Tasks — the post board ─────────────────────────── */
+
+.board {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+}
+
+.board-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  color: var(--text-secondary);
+  margin-top: calc(-1 * var(--space-2));
+}
+
+.board-status > span + span::before {
+  content: '·';
+  margin-right: var(--space-4);
+  color: var(--text-tertiary);
+}
+
+.board-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  margin-bottom: var(--space-4);
+}
+
+.board-count {
+  margin-left: var(--space-2);
+  color: var(--text-tertiary);
+}
+
+.board-hint {
+  color: var(--text-tertiary);
+}
+
+.kbd {
+  display: inline-block;
+  min-width: 18px;
+  padding: 0 var(--space-1);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 16px;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+/* Confirmation after a decision. Neutral, never red — nothing about it needs attention. */
+.band {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  margin: 0 0 var(--space-4);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-default);
+  border-left: 2px solid var(--text-primary);
+  border-radius: var(--radius-sm);
+}
+
+.band__link {
+  margin-left: auto;
+  color: var(--text-primary);
+}
+
+.banner--link:hover {
+  border-color: var(--accent-hover);
+}
+
+/* ── 6a · The week, by platform ───────────────────────────────────────────── */
+
+.pw-scroll {
+  overflow-x: auto;
+}
+
+.pw {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.pw__corner {
+  width: 148px;
+}
+
+.pw__corner,
+.pw__day {
+  text-align: left;
+  font-weight: 400;
+  color: var(--text-tertiary);
+  padding: 0 var(--space-2) var(--space-2);
+  border-bottom: 1px solid var(--border-default);
+}
+
+.pw__date {
+  color: var(--text-tertiary);
+  opacity: 0.7;
+}
+
+.pw__platform {
+  text-align: left;
+  font-weight: 400;
+  padding: var(--space-3) var(--space-2);
+  border-top: 1px solid var(--border-default);
+  vertical-align: top;
+}
+
+.pw__platform .t-body-s {
+  color: var(--text-primary);
+}
+
+.pw__count {
+  margin-left: var(--space-2);
+  color: var(--text-tertiary);
+}
+
+.pw__cell {
+  padding: var(--space-2);
+  border-top: 1px solid var(--border-default);
+  vertical-align: top;
+}
+
+.pw tbody tr:first-child > * {
+  border-top: none;
+}
+
+.pw__none {
+  color: var(--text-tertiary);
+  padding-left: var(--space-1);
+}
+
+.chip {
+  display: inline-block;
+  margin: 0 var(--space-1) var(--space-1) 0;
+  padding: 2px var(--space-2);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 16px;
+  font-variant-numeric: tabular-nums;
+}
+
+.chip:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.chip--attention {
+  border-color: var(--accent-attention);
+  background: var(--accent-wash);
+  color: var(--accent-attention);
+}
+
+.chip--attention:hover {
+  border-color: var(--accent-hover);
+  color: var(--accent-hover);
+}
+
+/* ── 6b · Platform filter ─────────────────────────────────────────────────── */
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: calc(-1 * var(--space-4));
+}
+
+.pill {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.pill:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.pill[aria-current='true'] {
+  border-color: var(--text-primary);
+  background: var(--surface-raised);
+  color: var(--text-primary);
+}
+
+.pill__count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.pill__waiting {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent-attention);
+}
+
+/* "6 2" reads as sixty-two. The separator makes it two numbers with two meanings. */
+.pill__waiting::before {
+  content: '·';
+  margin-right: var(--space-2);
+  color: var(--text-tertiary);
+}
+
+/* ── 6c · A post waiting on a decision ────────────────────────────────────── */
+
+.decide-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.decide {
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface-base);
+  scroll-margin-top: var(--space-5);
+}
+
+/*
+ * Which card the keys go to must never be a guess. A reviewer pressing A should already
+ * know which post it approves — so the card holding focus is the one that is outlined, and
+ * its key hints brighten.
+ */
+.decide:focus-within {
+  border-color: var(--text-secondary);
+}
+
+.decide:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
+.decide:focus-within .kbd {
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+}
+
+.decide__context {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-secondary);
+}
+
+.decide__slot {
+  color: var(--text-primary);
+}
+
+.decide__regenerated {
+  flex-basis: 100%;
+  color: var(--text-secondary);
+}
+
+.decide__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4);
+}
+
+.decide__hint {
+  margin-left: auto;
+  color: var(--text-tertiary);
+}
+
+.decide__errors {
+  padding: 0 var(--space-4) var(--space-4);
+  color: var(--accent-attention);
+}
+
+/* Buttons. One primary per group, and it is never red — approve is not a warning. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 36px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background: var(--surface-hover);
+}
+
+.btn--active {
+  background: var(--surface-raised);
+  border-color: var(--text-secondary);
+}
+
+.btn--primary {
+  background: var(--text-primary);
+  border-color: var(--text-primary);
+  color: var(--surface-base);
+}
+
+.btn--primary:hover {
+  background: var(--surface-card);
+}
+
+.btn--primary .kbd {
+  color: var(--surface-base);
+  border-color: var(--border-card);
+}
+
+.decide:focus-within .btn--primary .kbd {
+  color: var(--surface-base);
+  border-color: var(--text-on-card-sub);
+}
+
+.btn[disabled] {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* ── 6d · The reject panel — same card, artefact still in view ────────────── */
+
+.reject {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border-top: 1px solid var(--border-default);
+  background: var(--surface-raised);
+}
+
+.reject__legend {
+  display: block;
+  margin-bottom: var(--space-2);
+  color: var(--text-tertiary);
+}
+
+.reject__codes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: none;
+  min-width: 0;
+}
+
+.reject__codes > .reject__legend {
+  grid-column: 1 / -1;
+}
+
+.code {
+  position: relative;
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  gap: 2px var(--space-2);
+  align-content: start;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface-base);
+  cursor: pointer;
+}
+
+.code input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.code:hover {
+  border-color: var(--border-strong);
+}
+
+.code:has(input:checked) {
+  border-color: var(--text-primary);
+  background: var(--surface-hover);
+}
+
+.code:has(input:focus-visible) {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
+.code__key {
+  color: var(--text-tertiary);
+}
+
+.code__name {
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.code__meaning {
+  grid-column: 2;
+  color: var(--text-secondary);
+}
+
+/* §5A.3: BANNED_TERM is visually distinct. It is the machine's failure, surfaced. */
+.code--defect {
+  border-style: dashed;
+}
+
+.code__defect {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--accent-attention);
+}
+
+.reject__note {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.reject__note textarea {
+  width: 100%;
+  min-height: 64px;
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-base);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 20px;
+  resize: vertical;
+}
+
+.reject__note textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+.reject__note textarea:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 0;
+}
+
+.reject__count {
+  justify-self: end;
+  color: var(--text-tertiary);
+}
+
+.reject__count--near {
+  color: var(--text-primary);
+}
+
+.reject__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* ── 6e · The artefact — white while it waits on a person, dark once it does not ──
+ *
+ * One component, two grounds, and the choice between them is design spec §2: "White means:
+ * this needs your decision. Dark means: this is yours to use." The post's own colours are
+ * local aliases of the tokens, swapped as a set, so no rule below knows which ground it is
+ * on — and neither can drift from the other.
+ */
+
+.artefact {
+  --ink: var(--text-on-card);
+  --ink-sub: var(--text-on-card-sub);
+  --rule: var(--border-card);
+  --wash: var(--surface-card-sub);
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
+  margin: 0 var(--space-4);
+  background: var(--surface-card);
+  color: var(--ink);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.artefact--decided {
+  --ink: var(--text-primary);
+  --ink-sub: var(--text-secondary);
+  --rule: var(--border-default);
+  --wash: var(--surface-base);
+
+  margin: 0;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-default);
+}
+
+.artefact__post {
+  padding: var(--space-5) var(--space-6);
+  min-width: 0;
+}
+
+@media (max-width: 1179px) {
+  .artefact {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .artefact__post {
+    padding: var(--space-5);
+  }
+}
+
+/* The post. A reading measure, not the width of the card. */
+.post {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: 62ch;
+  color: var(--ink);
+}
+
+.post__author {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* Square. The console has two radii and a circle is neither. */
+.post__avatar {
+  /* Flex on one line, not grid: a grid puts the wordmark's dot in a row of its own. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: var(--ink);
+  color: var(--surface-card);
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.artefact--decided .post__avatar {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+/* The company's own accounts wear the wordmark — the one place the serif is permitted. */
+.post__avatar--company {
+  font-family: var(--font-wordmark);
+  font-weight: 400;
+  font-size: 22px;
+}
+
+.post__avatar-dot {
+  color: var(--accent-attention);
+}
+
+.post__who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.post__name {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.post__detail {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--ink-sub);
+}
+
+.post__where {
+  color: var(--ink-sub);
+}
+
+.post__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.post__tags {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--ink-sub);
+}
+
+.post__attachment,
+.post__link {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  background: var(--wash);
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.post__attachment .t-meta,
+.post__link .t-meta {
+  color: var(--ink-sub);
+  text-transform: none;
+}
+
+.post__pending {
+  color: var(--ink-sub);
+}
+
+/* A thread: each post is its own block, joined by a rule down the left. */
+.post__thread {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.post__tweet {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  padding-left: var(--space-4);
+  border-left: 1px solid var(--rule);
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.post__thread--single .post__tweet {
+  padding-left: 0;
+  border-left: none;
+}
+
+.post__count {
+  color: var(--ink-sub);
+  align-self: end;
+}
+
+.post__url {
+  color: var(--ink-sub);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.post__headline {
+  margin: 0;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.post__standfirst {
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--ink-sub);
+}
+
+.post__cta {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--rule);
+}
+
+.post__question {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  background: var(--wash);
+  border-left: 2px solid var(--rule);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.post__question .t-meta {
+  color: var(--ink-sub);
+}
+
+.post__stand-in {
+  font-style: normal;
+}
+
+/* ── 6f · The facts panel — inside the card, on its tinted sub-surface (§1) ──── */
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-5);
+  background: var(--wash);
+  border-left: 1px solid var(--rule);
+  color: var(--ink);
+  min-width: 0;
+}
+
+@media (max-width: 1179px) {
+  .facts {
+    border-left: none;
+    border-top: 1px solid var(--rule);
+  }
+}
+
+.facts__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.facts__label {
+  margin: 0;
+  color: var(--ink-sub);
+}
+
+.facts__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.fact {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr);
+  gap: var(--space-2);
+  align-items: start;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.fact__glyph {
+  margin-top: 2px;
+  color: var(--ink-sub);
+}
+
+/*
+ * A failure is marked by the glyph, in the accent, and said in words in the ink colour.
+ * Never red text on white: #E8453C measures 3.93:1 there and fails 4.5:1 for text. A glyph
+ * needs 3:1, and passes.
+ */
+.fact--fail .fact__glyph {
+  color: var(--accent-attention);
+}
+
+.fact--unrun .fact__text {
+  color: var(--ink-sub);
+}
+
+.fact__value {
+  color: var(--ink-sub);
+}
+
+.facts__source,
+.facts__basis {
+  color: var(--ink-sub);
+  text-transform: none;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+
+.facts__stamp {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 16px;
+  color: var(--ink-sub);
+  overflow-wrap: anywhere;
+}
+
+.facts__next {
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.citation {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--rule);
+}
+
+.citation__claim {
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.citation__meta {
+  color: var(--ink-sub);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* ── 6g · Decided posts — one line each, open to read ─────────────────────── */
+
+.platform-group + .platform-group {
+  margin-top: var(--space-6);
+}
+
+.platform-group__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+  font-weight: 400;
+}
+
+.platform-group__head .t-body-s {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* §6: list rows carry a 1px top border and no bottom border. */
+.row {
+  border-top: 1px solid var(--border-default);
+  scroll-margin-top: var(--space-5);
+}
+
+.row__summary {
+  display: grid;
+  /* The slot is `WED 19 · 09:00` in 14px mono. At 104px it ran into the author's name. */
+  grid-template-columns: 136px 88px minmax(0, 1.1fr) minmax(0, 1.6fr) 92px 16px;
+  align-items: baseline;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-2);
+  cursor: pointer;
+  list-style: none;
+}
+
+.row__summary::-webkit-details-marker {
+  display: none;
+}
+
+.row__summary:hover {
+  background: var(--surface-hover);
+}
+
+.row[open] > .row__summary {
+  background: var(--surface-raised);
+}
+
+.row__when {
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.row__who {
+  color: var(--text-secondary);
+}
+
+.row__title {
+  color: var(--text-primary);
+}
+
+.row__lead {
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.row__status {
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+.row__chevron {
+  align-self: center;
+  color: var(--text-tertiary);
+}
+
+.row[open] .row__chevron {
+  transform: rotate(180deg);
+}
+
+.row__detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-2) var(--space-6);
+}
+
+.row__decided {
+  color: var(--text-secondary);
+}
+
+/* Gutters absorb the loss before content does — responsive spec rule 4. */
+@media (max-width: 1179px) {
+  .row__summary {
+    grid-template-columns: 136px minmax(0, 1fr) 84px 16px;
+  }
+
+  .row__who,
+  .row__lead {
+    display: none;
+  }
+
+  .decide__hint {
+    margin-left: 0;
+    flex-basis: 100%;
+  }
+}
+
+.tabs__badge {
+  margin-left: var(--space-2);
+  color: var(--accent-attention);
+}

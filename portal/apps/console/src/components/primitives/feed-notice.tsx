@@ -27,7 +27,8 @@ export function FeedNotice() {
     >
       <span className="t-meta">REFERENCE DATA</span> — no database is configured, so this is the
       23-item reference week from the specification. Every count, hold and percentage on screen is
-      computed from it; none is written down.
+      computed from it; none is written down. Decisions you take are kept in memory and reset when
+      the server restarts.
     </p>
   );
 }

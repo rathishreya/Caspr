@@ -9,7 +9,7 @@ import {
   type CalendarCard,
   type CalendarColumn,
 } from '@caspr-portal/domain';
-import type { Metadata } from 'next';
+import type { Metadata, Route } from 'next';
 import Link from 'next/link';
 
 import { Icon } from '@/components/icons';
@@ -18,6 +18,7 @@ import { State } from '@/components/primitives/state';
 import { ScreenHeader } from '@/components/shell/screen-header';
 import { getRepository } from '@/lib/repository';
 import {
+  CHANNEL_WORKSTREAM,
   WORKSTREAM_FILTERS,
   isWorkstreamFilter,
   matchesWorkstream,
@@ -241,14 +242,13 @@ function DayColumn({
 function ItemCard({ card }: { readonly card: CalendarCard }) {
   const { item } = card;
   const author = item.voiceLane === null ? null : personName(item.voiceLane);
+  const className = card.holding ? 'card card--holding' : 'card';
+  // The reason is on the element rather than in a tooltip-only affordance: "held by a
+  // reviewer" and "nobody has reached it" have the same consequence and different fixes.
+  const title = card.holdingReason ?? undefined;
 
-  return (
-    <article
-      className={card.holding ? 'card card--holding' : 'card'}
-      // The reason is on the element rather than in a tooltip-only affordance: "held by a
-      // reviewer" and "nobody has reached it" have the same consequence and different fixes.
-      title={card.holdingReason ?? undefined}
-    >
+  const contents = (
+    <>
       <div className="card__head">
         <span className="t-data-m card__time">{card.time}</span>
         <span className="t-meta card__channel">{CHANNEL_LABEL[item.channel]}</span>
@@ -267,6 +267,22 @@ function ItemCard({ card }: { readonly card: CalendarCard }) {
           In {author}&rsquo;s voice lane.
         </span>
       )}
+    </>
+  );
+
+  // The Calendar says when; the workstream's Tasks tab says what. A Content & Social card
+  // opens its post there — and a holding one opens it where it can be decided.
+  if (CHANNEL_WORKSTREAM[item.channel] === 'content-social') {
+    return (
+      <Link className={className} title={title} href={`/content-social/tasks#post-${item.id}` as Route}>
+        {contents}
+      </Link>
+    );
+  }
+
+  return (
+    <article className={className} title={title}>
+      {contents}
     </article>
   );
 }

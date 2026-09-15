@@ -18,6 +18,7 @@ import {
   ITEM_STATUSES,
   PILLARS,
   REJECT_CODES,
+  type PostBody,
 } from '@caspr-portal/domain';
 import { relations } from 'drizzle-orm';
 import {
@@ -112,7 +113,16 @@ export const contentVersions = pgTable(
       .notNull()
       .references(() => contentItems.id, { onDelete: 'cascade' }),
     versionN: integer('version_n').notNull(),
+    /** Every word a reader sees, flattened. What `L11` duplication compares against. */
     body: text('body').notNull(),
+    /**
+     * The same words, structured the way the channel renders them — a thread's posts in
+     * order, a blog's headline apart from its body. The review surface previews this; a
+     * reviewer judging a flattened thread cannot see where one post ends.
+     */
+    payload: jsonb('payload').$type<PostBody>().notNull(),
+    /** `file :line` for every claim the version rests on — design spec §9. */
+    researchBasis: jsonb('research_basis').$type<string[]>().notNull().default([]),
     /** Origination is frontier, transformation is cheap — §3.2. Recorded, so the split is auditable. */
     modelUsed: text('model_used').notNull(),
     promptContextHash: text('prompt_context_hash').notNull(),

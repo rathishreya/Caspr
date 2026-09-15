@@ -25,7 +25,11 @@ export type IconName =
   | 'ledger'
   | 'settings'
   | 'chevron-left'
-  | 'chevron-right';
+  | 'chevron-right'
+  | 'chevron-down'
+  | 'check'
+  | 'close'
+  | 'alert';
 
 type IconProps = Omit<SVGProps<SVGSVGElement>, 'children'> & { readonly size?: number };
 
@@ -124,6 +128,17 @@ const PATHS: Record<IconName, React.ReactNode> = {
   ),
   'chevron-left': <path d="m14 6-6 6 6 6" />,
   'chevron-right': <path d="m10 6 6 6-6 6" />,
+  'chevron-down': <path d="m6 10 6 6 6-6" />,
+  // `check`, `close` and `alert` are three of the seventeen the design spec §4 lists as
+  // built; drawn here to the same construction rule.
+  check: <path d="m5 12.5 4.5 4.5L19 7.5" />,
+  close: <path d="M6 6l12 12M18 6 6 18" />,
+  alert: (
+    <>
+      <path d="M12 4 3 20h18z" />
+      <path d="M12 10v4M12 17.2v.1" />
+    </>
+  ),
 };
 
 export function Icon({ name, ...props }: IconProps & { readonly name: IconName }) {

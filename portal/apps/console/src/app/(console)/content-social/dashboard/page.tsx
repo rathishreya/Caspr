@@ -15,6 +15,7 @@ import {
   type NarrativeMixRow,
 } from '@caspr-portal/domain';
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 import { FeedNotice } from '@/components/primitives/feed-notice';
 import { State } from '@/components/primitives/state';
@@ -53,6 +54,17 @@ export default async function ContentSocialDashboard() {
 
   return (
     <>
+      {awaiting > 0 && (
+        // The dashboard is read on Wednesdays (runbook §1). A reviewer who lands here on a
+        // Monday afternoon is one click from the posts that need them, not a tab-hunt away.
+        <Link className="banner banner--link" href="/content-social/tasks#decide">
+          <span className="t-meta-bold banner__headline">
+            {awaiting} {awaiting === 1 ? 'POST NEEDS' : 'POSTS NEED'} A DECISION
+          </span>
+          <span className="t-body-s banner__detail">Read and decide them on Tasks →</span>
+        </Link>
+      )}
+
       <div className="tiles">
         <Tile label={`IN THE WEEK · ${week.label}`} value={String(items.length)} note="Items on this workstream's calendar." />
         <Tile

@@ -8,12 +8,18 @@ import {
 import {
   PRIOR_WINDOW_COUNTS,
   REFERENCE_DECISIONS,
+  REFERENCE_POSTS,
   REFERENCE_WEEK,
+  isDecidable,
   shiftWeek,
+  statusAfter,
   type ContentItem,
+  type DecisionInput,
+  type PostVersion,
+  type RejectCode,
   type ReviewDecisionRecord,
 } from '@caspr-portal/domain';
-import { and, eq, gte, inArray, lt } from 'drizzle-orm';
+import { and, desc, eq, gte, inArray, lt } from 'drizzle-orm';
 
 /**
  * Data access.
@@ -29,36 +35,92 @@ import { and, eq, gte, inArray, lt } from 'drizzle-orm';
  * and gets items.
  */
 
+export type DecideResult =
+  | { readonly ok: true; readonly item: ContentItem }
+  | { readonly ok: false; readonly reason: 'not_found' | 'already_decided' };
+
 export interface ContentRepository {
   /** Items whose slot falls in the seven days from `weekStartDate`. */
   itemsForWeek(weekStartDate: string): Promise<readonly ContentItem[]>;
+  /** The current version of each of those items, keyed by item id. */
+  versionsForWeek(weekStartDate: string): Promise<ReadonlyMap<string, PostVersion>>;
   /** Every decision taken on those items, including the ones that were superseded. */
   decisionsForWeek(weekStartDate: string): Promise<readonly ReviewDecisionRecord[]>;
   /** Narrative counts already spent in the three weeks before `weekStartDate`. */
   priorNarrativeCounts(weekStartDate: string): Promise<ReadonlyMap<string, number>>;
+  /**
+   * Commit a decision against an item's current version.
+   *
+   * One write, and it is final — design spec §5A decision 5, "commit on action, no batch
+   * save, no undo". An item that has already been decided refuses a second decision rather
+   * than overwriting the first.
+   */
+  decide(input: DecisionInput, reviewer: string): Promise<DecideResult>;
   /** Which adapter answered. Surfaced on screen rather than hidden — see `FeedNotice`. */
   readonly kind: 'postgres' | 'reference';
 }
 
+function inWeek(item: ContentItem, weekStartDate: string): boolean {
+  if (item.scheduledFor === null) return false;
+  const date = item.scheduledFor.slice(0, 10);
+  return date >= weekStartDate && date < shiftWeek(weekStartDate, 1);
+}
+
+/**
+ * The reference adapter.
+ *
+ * Decisions are kept in memory, on top of the fixture, so approving a post moves it — off
+ * the queue, onto the Calendar, into the dashboard's reject rate — exactly as it will with a
+ * database. They last as long as the server process, and the footnote on every screen says
+ * so. Nothing is written to disk: the fixture is the seed, and a demo that edited its own
+ * seed would drift from the file everyone else reads.
+ */
 class ReferenceRepository implements ContentRepository {
   readonly kind = 'reference' as const;
 
+  readonly #statuses = new Map<string, ContentItem['status']>();
+  readonly #decisions: ReviewDecisionRecord[] = [];
+
+  #current(item: ContentItem): ContentItem {
+    const status = this.#statuses.get(item.id);
+    return status === undefined ? item : { ...item, status };
+  }
+
   async itemsForWeek(weekStartDate: string): Promise<readonly ContentItem[]> {
-    const end = shiftWeek(weekStartDate, 1);
-    return REFERENCE_WEEK.filter((item) => {
-      if (item.scheduledFor === null) return false;
-      const date = item.scheduledFor.slice(0, 10);
-      return date >= weekStartDate && date < end;
-    });
+    return REFERENCE_WEEK.filter((item) => inWeek(item, weekStartDate)).map((item) => this.#current(item));
+  }
+
+  async versionsForWeek(weekStartDate: string): Promise<ReadonlyMap<string, PostVersion>> {
+    const ids = new Set((await this.itemsForWeek(weekStartDate)).map((item) => item.id));
+    return new Map(REFERENCE_POSTS.filter((v) => ids.has(v.itemId)).map((v) => [v.itemId, v]));
   }
 
   async decisionsForWeek(weekStartDate: string): Promise<readonly ReviewDecisionRecord[]> {
     const ids = new Set((await this.itemsForWeek(weekStartDate)).map((item) => item.id));
-    return REFERENCE_DECISIONS.filter((decision) => ids.has(decision.itemId));
+    return [...REFERENCE_DECISIONS, ...this.#decisions].filter((decision) => ids.has(decision.itemId));
   }
 
   async priorNarrativeCounts(): Promise<ReadonlyMap<string, number>> {
     return PRIOR_WINDOW_COUNTS;
+  }
+
+  async decide(input: DecisionInput, reviewer: string): Promise<DecideResult> {
+    const seed = REFERENCE_WEEK.find((item) => item.id === input.itemId);
+    if (!seed) return { ok: false, reason: 'not_found' };
+
+    const current = this.#current(seed);
+    if (!isDecidable(current)) return { ok: false, reason: 'already_decided' };
+
+    this.#statuses.set(seed.id, statusAfter(input.action));
+    this.#decisions.push({
+      itemId: seed.id,
+      reviewer,
+      action: input.action,
+      reasonCode: input.reasonCode,
+      secondsSpent: input.secondsSpent,
+    });
+
+    return { ok: true, item: this.#current(seed) };
   }
 }
 
@@ -78,12 +140,59 @@ class PostgresRepository implements ContentRepository {
     return rows.map(toDomain);
   }
 
+  async versionsForWeek(weekStartDate: string): Promise<ReadonlyMap<string, PostVersion>> {
+    const items = await this.itemsForWeek(weekStartDate);
+    if (items.length === 0) return new Map();
+
+    const db = getDatabase();
+    const ids = items.map((item) => item.id);
+
+    const versions = await db
+      .select()
+      .from(contentVersions)
+      .where(inArray(contentVersions.itemId, ids))
+      .orderBy(desc(contentVersions.versionN));
+
+    // The rejection that produced a version sits on the version before it.
+    const rejections = await db
+      .select({
+        itemId: contentVersions.itemId,
+        versionN: contentVersions.versionN,
+        reasonCode: reviewDecisions.reasonCode,
+        note: reviewDecisions.note,
+      })
+      .from(reviewDecisions)
+      .innerJoin(contentVersions, eq(reviewDecisions.versionId, contentVersions.id))
+      .where(and(inArray(contentVersions.itemId, ids), eq(reviewDecisions.action, 'reject')));
+
+    const rejectionOn = new Map(rejections.map((r) => [`${r.itemId}:${r.versionN}`, r]));
+    const current = new Map<string, PostVersion>();
+
+    for (const row of versions) {
+      if (current.has(row.itemId)) continue; // ordered newest first; the first seen is current
+      const previous = rejectionOn.get(`${row.itemId}:${row.versionN - 1}`);
+      current.set(row.itemId, {
+        itemId: row.itemId,
+        versionN: row.versionN,
+        modelTier: /haiku/i.test(row.modelUsed) ? 'haiku' : 'frontier',
+        body: row.payload,
+        researchBasis: row.researchBasis,
+        regeneratedAfter:
+          previous?.reasonCode != null
+            ? { code: previous.reasonCode as RejectCode, note: previous.note ?? '' }
+            : null,
+      });
+    }
+
+    return current;
+  }
+
   async decisionsForWeek(weekStartDate: string): Promise<readonly ReviewDecisionRecord[]> {
     const items = await this.itemsForWeek(weekStartDate);
     if (items.length === 0) return [];
 
     const db = getDatabase();
-    const rows = await db
+    return db
       .select({
         itemId: contentVersions.itemId,
         reviewer: reviewDecisions.reviewer,
@@ -99,8 +208,6 @@ class PostgresRepository implements ContentRepository {
           items.map((item) => item.id),
         ),
       );
-
-    return rows;
   }
 
   async priorNarrativeCounts(weekStartDate: string): Promise<ReadonlyMap<string, number>> {
@@ -117,6 +224,47 @@ class PostgresRepository implements ContentRepository {
     const counts = new Map<string, number>();
     for (const row of rows) counts.set(row.narrative, (counts.get(row.narrative) ?? 0) + 1);
     return counts;
+  }
+
+  async decide(input: DecisionInput, reviewer: string): Promise<DecideResult> {
+    const db = getDatabase();
+
+    return db.transaction(async (tx) => {
+      // Lock the item row: two reviewers pressing approve on the same post at the same
+      // moment must produce one decision and one refusal, not two decisions.
+      const [row] = await tx
+        .select()
+        .from(contentItems)
+        .where(eq(contentItems.id, input.itemId))
+        .for('update');
+      if (!row) return { ok: false, reason: 'not_found' } as const;
+      if (!isDecidable(toDomain(row))) return { ok: false, reason: 'already_decided' } as const;
+
+      const [version] = await tx
+        .select({ id: contentVersions.id })
+        .from(contentVersions)
+        .where(eq(contentVersions.itemId, input.itemId))
+        .orderBy(desc(contentVersions.versionN))
+        .limit(1);
+      if (!version) return { ok: false, reason: 'not_found' } as const;
+
+      await tx.insert(reviewDecisions).values({
+        versionId: version.id,
+        reviewer,
+        action: input.action,
+        reasonCode: input.reasonCode,
+        note: input.note,
+        secondsSpent: input.secondsSpent,
+      });
+
+      const [updated] = await tx
+        .update(contentItems)
+        .set({ status: statusAfter(input.action), updatedAt: new Date() })
+        .where(eq(contentItems.id, input.itemId))
+        .returning();
+
+      return { ok: true, item: toDomain(updated ?? row) } as const;
+    });
   }
 }
 
@@ -145,9 +293,18 @@ function toDomain(row: Row): ContentItem {
   };
 }
 
-let cached: ContentRepository | undefined;
+/**
+ * One repository per server process.
+ *
+ * Kept on `globalThis` rather than in a module variable: in development, Next re-evaluates
+ * modules on edit, and a module-level cache would silently discard every decision taken
+ * against the reference adapter the moment a file was saved.
+ */
+const globalStore = globalThis as typeof globalThis & { __casprRepository?: ContentRepository };
 
 export function getRepository(): ContentRepository {
-  cached ??= isDatabaseConfigured() ? new PostgresRepository() : new ReferenceRepository();
-  return cached;
+  globalStore.__casprRepository ??= isDatabaseConfigured()
+    ? new PostgresRepository()
+    : new ReferenceRepository();
+  return globalStore.__casprRepository;
 }

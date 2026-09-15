@@ -27,11 +27,29 @@ function item(overrides: Partial<ContentItem> & Pick<ContentItem, 'id'>): Conten
   };
 }
 
-describe('the reference week matches the frame it was drawn from', () => {
+describe('the reference week, on Monday afternoon before the deadline', () => {
   const calendar = buildCalendarWeek(REFERENCE_WEEK_START, REFERENCE_WEEK, NOW);
 
-  it('reads 22 SCHEDULED · 1 HOLDING, computed rather than stated', () => {
-    expect(calendar.counts).toEqual({ scheduled: 22, holding: 1, unreviewed: 1 });
+  it('reads 17 SCHEDULED · 6 HOLDING, computed rather than stated', () => {
+    expect(calendar.counts).toEqual({ scheduled: 17, holding: 6, unreviewed: 6 });
+  });
+
+  /**
+   * The Figma frame reads `22 SCHEDULED · 1 HOLDING`. That is this week after five of the
+   * six waiting posts are approved — which is what makes the frame a state the console can
+   * actually reach, rather than a picture of one.
+   */
+  it('reaches the state the frame was drawn in once five of the six are approved', () => {
+    const waiting = REFERENCE_WEEK.filter((i) => i.status === 'in_review').map((i) => i.id);
+    const approveFive = new Set(waiting.filter((id) => id !== 'ci-0420-04'));
+    const afterReview = REFERENCE_WEEK.map((i) =>
+      approveFive.has(i.id) ? { ...i, status: 'approved' as const } : i,
+    );
+    expect(buildCalendarWeek(REFERENCE_WEEK_START, afterReview, NOW).counts).toEqual({
+      scheduled: 22,
+      holding: 1,
+      unreviewed: 1,
+    });
   });
 
   it('is the full weekly volume the review budget is sized against', () => {
