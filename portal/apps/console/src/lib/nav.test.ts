@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
-import { CONTENT_SOCIAL_TABS, NAV, NAV_DESTINATIONS, UNBUILT_SLUGS, WORKSTREAM_THIRD_TAB, destinationBySlug } from './nav';
+import {
+  CONTENT_SOCIAL_TABS,
+  NAV,
+  NAV_DESTINATIONS,
+  UNBUILT_SLUGS,
+  WORKSTREAM_TABS,
+  WORKSTREAM_THIRD_TAB,
+  destinationBySlug,
+} from './nav';
 
 /**
  * The navigation tree is design spec §5, and two of its rules are checkable here rather
@@ -52,6 +60,40 @@ describe("Content & Social's tabs", () => {
   it('starts at the workstream destination in the rail', () => {
     const workstream = NAV_DESTINATIONS.find((d) => d.id === 'content-social');
     expect(CONTENT_SOCIAL_TABS[0]?.href).toBe(workstream?.href);
+  });
+});
+
+/**
+ * §12 gives every workstream three tabs, and the third is that workstream's own object.
+ * Four of the five are built; a rail row that is `built` and whose tabs point nowhere is the
+ * one way this tree can lie, so the two are checked against each other.
+ */
+describe('the workstream tabs', () => {
+  it('gives every built workstream three tabs, starting at its rail destination', () => {
+    for (const id of ['content-social', 'seo', 'performance', 'email']) {
+      const tabs = WORKSTREAM_TABS[id];
+      const destination = NAV_DESTINATIONS.find((d) => d.id === id);
+      expect(tabs, id).toHaveLength(3);
+      expect(destination?.built, id).toBe(true);
+      expect(tabs?.[0]?.href, id).toBe(destination?.href);
+    }
+  });
+
+  it('names the third tab the same way in the tabs and in the register', () => {
+    for (const [id, tabs] of Object.entries(WORKSTREAM_TABS)) {
+      expect(WORKSTREAM_THIRD_TAB[id], id).toBe(tabs[2]?.label);
+    }
+  });
+
+  it('keeps every tab under its own workstream’s path', () => {
+    for (const [id, tabs] of Object.entries(WORKSTREAM_TABS)) {
+      for (const tab of tabs) expect(tab.href.startsWith(`/${id}/`), `${id} → ${tab.href}`).toBe(true);
+    }
+  });
+
+  it('leaves Earned Media unbuilt, with its promise recorded', () => {
+    expect(NAV_DESTINATIONS.find((d) => d.id === 'earned-media')?.built).toBe(false);
+    expect(WORKSTREAM_THIRD_TAB['earned-media']).toBe('Pipeline');
   });
 });
 

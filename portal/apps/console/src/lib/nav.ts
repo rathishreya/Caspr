@@ -75,27 +75,28 @@ export const NAV: readonly NavSection[] = [
         id: 'seo',
         label: 'SEO',
         icon: 'search',
-        href: unbuilt('seo'),
-        built: false,
+        href: '/seo/dashboard' as Route,
+        built: true,
         purpose:
-          'Search, plus the two backlink routes that moved here when Relationships dissolved: directories and guest posts.',
+          'p — presence per ICP, frozen for a year — and the rank read-out that says why a question misses. Plus directories and backlink conversations, the two routes that stayed when Relationships dissolved.',
       },
       {
         id: 'performance',
         label: 'Performance',
         icon: 'paid',
-        href: unbuilt('performance'),
-        built: false,
-        purpose: 'Paid and attribution under one node, because the TL is a performance marketer.',
+        href: '/performance/dashboard' as Route,
+        built: true,
+        purpose:
+          'Spend, and the four gates that hold it shut. Dormant by design — the console shows why rather than showing nothing.',
       },
       {
         id: 'email',
         label: 'Email',
         icon: 'email',
-        href: unbuilt('email'),
-        built: false,
+        href: '/email/dashboard' as Route,
+        built: true,
         purpose:
-          'Sequences, suppression and the five send preconditions. No standing owner — it runs once approved, and every exception pauses itself and reaches Joy.',
+          'Four streams, never merged. No standing owner — it runs once approved, and every exception pauses itself and reaches Joy.',
       },
       {
         id: 'earned-media',
@@ -202,18 +203,53 @@ export function destinationBySlug(slug: string): NavDestination | undefined {
  * So the own-object here is now **Today**, which is a real object — the morning queue, the
  * 24-hour clock, and the history of what the window closed on.
  */
-export const CONTENT_SOCIAL_TABS = [
-  { id: 'dashboard', label: 'Dashboard', href: '/content-social/dashboard' as Route },
-  { id: 'tasks', label: 'This week', href: '/content-social/tasks' as Route },
-  { id: 'today', label: 'Today', href: '/content-social/today' as Route },
-] as const;
+export interface WorkstreamTab {
+  readonly id: string;
+  readonly label: string;
+  readonly href: Route;
+}
 
 /**
- * The third tab of each workstream — `activation-framework.md` §12.
+ * Every workstream's tabs — `activation-framework.md` §12.
  *
- * Dashboard and Tasks are universal; the third tab is that workstream's own object. Recorded
- * here while four of the five are unbuilt, because the not-built state names what a
- * destination will be, and "Tasks · Backlog" is a more honest promise than "coming soon".
+ * *"Dashboard and Tasks are universal. The third tab is that workstream's own object."* The
+ * third tab is where each workstream stops looking like the others, and §12 names them:
+ * Backlog · Paid · Sequences · Pipeline.
+ *
+ * ⚑ **Content & Social is the exception and has been since 2026-09-16**: its Tasks split in
+ * two along Joy's own §10 line — 72 hours of shelf life or more is This week, under it is
+ * Today — so its own-object tab is Today rather than a fourth thing.
+ */
+export const WORKSTREAM_TABS: Readonly<Record<string, readonly WorkstreamTab[]>> = {
+  'content-social': [
+    { id: 'dashboard', label: 'Dashboard', href: '/content-social/dashboard' as Route },
+    { id: 'tasks', label: 'This week', href: '/content-social/tasks' as Route },
+    { id: 'today', label: 'Today', href: '/content-social/today' as Route },
+  ],
+  seo: [
+    { id: 'dashboard', label: 'Dashboard', href: '/seo/dashboard' as Route },
+    { id: 'tasks', label: 'Tasks', href: '/seo/tasks' as Route },
+    { id: 'backlog', label: 'Backlog', href: '/seo/backlog' as Route },
+  ],
+  performance: [
+    { id: 'dashboard', label: 'Dashboard', href: '/performance/dashboard' as Route },
+    { id: 'tasks', label: 'Tasks', href: '/performance/tasks' as Route },
+    { id: 'paid', label: 'Paid', href: '/performance/paid' as Route },
+  ],
+  email: [
+    { id: 'dashboard', label: 'Dashboard', href: '/email/dashboard' as Route },
+    { id: 'tasks', label: 'Tasks', href: '/email/tasks' as Route },
+    { id: 'sequences', label: 'Sequences', href: '/email/sequences' as Route },
+  ],
+};
+
+/** Content & Social's tabs, by the name the rest of the app already imports. */
+export const CONTENT_SOCIAL_TABS = WORKSTREAM_TABS['content-social'] as readonly WorkstreamTab[];
+
+/**
+ * The third tab of each workstream — §12. Kept for Earned Media, which is still unbuilt:
+ * the not-built state names what a destination will be, and "Tasks · Pipeline" is a more
+ * honest promise than "coming soon".
  */
 export const WORKSTREAM_THIRD_TAB: Readonly<Record<string, string>> = {
   'content-social': 'Today',

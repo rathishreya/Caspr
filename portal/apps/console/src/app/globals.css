@@ -562,6 +562,28 @@ p {
   white-space: nowrap;
 }
 
+/*
+ * A prose column that must not collapse to its longest word.
+ *
+ * `.fill` takes every remaining pixel, which leaves each other column at min-content —
+ * right for a date or a count, wrong for a sentence. "Signed up, no analysis after 24 hours"
+ * wrapped to five lines in a 60px column beside a description with room to spare.
+ */
+.table .keep {
+  min-width: 22ch;
+}
+
+/* One domain that outranks us, and its position. Several can sit in one cell. */
+.above {
+  display: block;
+}
+
+.above__note {
+  display: block;
+  margin-top: 2px;
+  color: var(--accent-approve);
+}
+
 .table .num {
   font-family: var(--font-mono);
   font-weight: 500;
@@ -630,6 +652,95 @@ p {
   border-radius: var(--radius-sm);
   background: var(--surface-raised);
   padding: var(--space-5);
+}
+
+/*
+ * ── Gates — a condition, whether it holds, and what it is waiting on ──────
+ *
+ * Built for Performance and reused by Email, because the two workstreams have the same
+ * shape: nothing is running, and the useful screen is the one that names what stands in the
+ * way rather than the one that shows an empty chart.
+ *
+ * A gate is not a checklist item. The mark is the smallest thing on the row and the standing
+ * is the largest, because "activation ≥ 25%" tells a reader nothing they cannot already
+ * guess, and "unmeasured, and the old cohort's was never measured either" tells them
+ * everything.
+ */
+.gates {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.gate {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-default);
+  border-left: 2px solid var(--accent-attention);
+  border-radius: var(--radius-sm);
+  background: var(--surface-base);
+}
+
+.gate--met {
+  border-left-color: var(--accent-approve);
+}
+
+.gate__mark {
+  display: flex;
+  justify-content: center;
+  padding-top: 2px;
+  color: var(--accent-attention);
+}
+
+.gate--met .gate__mark {
+  color: var(--accent-approve);
+}
+
+.gate__body {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+/* A label and the sentence under it. Used wherever a panel lists definitions rather than data. */
+.stack-row {
+  display: grid;
+  gap: 2px;
+  padding: var(--space-3) 0;
+  border-top: 1px solid var(--border-default);
+}
+
+.stack-row:first-of-type {
+  border-top: 0;
+  padding-top: var(--space-2);
+}
+
+/* A backlog row: no disclosure, so no chevron column and no pointer. */
+.row--flat {
+  padding-bottom: var(--space-3);
+}
+
+.row__summary--static {
+  grid-template-columns: 104px minmax(0, 1.2fr) minmax(0, 1fr);
+  cursor: default;
+}
+
+.row__note {
+  padding: 0 var(--space-2) 0 calc(104px + var(--space-4));
+  color: var(--text-secondary);
+}
+
+@media (max-width: 899px) {
+  .row__summary--static {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-1);
+  }
+
+  .row__note {
+    padding-left: var(--space-2);
+  }
 }
 
 .panel__title {
