@@ -9,6 +9,8 @@ import {
 import {
   DAILY_WINDOW_HOURS,
   PRIOR_WINDOW_COUNTS,
+  REFERENCE_APPROACHES,
+  REFERENCE_SEO_TASKS,
   REFERENCE_DAILY_HISTORY,
   REFERENCE_DAILY_HISTORY_POSTS,
   REFERENCE_DAILY_POSTS,
@@ -17,11 +19,15 @@ import {
   REFERENCE_NOW,
   REFERENCE_POSTS,
   REFERENCE_WEEK,
+  canAdvance,
   isDecidable,
   shiftWeek,
   statusAfter,
   sweepDaily,
   type AmplifyTier,
+  type Approach,
+  type ApproachState,
+  type SeoTask,
   type ContentItem,
   type DecisionInput,
   type EngagementPlatform,
@@ -95,6 +101,28 @@ export interface ContentRepository {
   engagementsForWeek(weekStartDate: string): Promise<readonly EngagementTarget[]>;
   /** Record that a person acted on a target, chose not to, or sent it back as not theirs. */
   markEngagement(id: string, status: EngagementStatus): Promise<boolean>;
+
+  /**
+   * The discoverability target list, with whatever has happened to each row.
+   *
+   * Approaches are the only thing on this workstream a person moves by hand, and they are
+   * what the presence kill condition reads — 3 inclusions after 25 approaches. So the count
+   * has to be real state rather than a fixture, or the clock on the dashboard is a picture.
+   */
+  approaches(): Promise<readonly Approach[]>;
+  /**
+   * Move one approach along.
+   *
+   * Refuses a move the state machine does not allow, rather than overwriting. A declined
+   * roundup that gets pitched again is a new row, not an edit: the denominator has to keep
+   * its own history or the kill condition means nothing.
+   */
+  advanceApproach(id: string, to: ApproachState): Promise<boolean>;
+  /** This week's SEO tasks — three a week, plus the site's standing debt. */
+  seoTasks(): Promise<readonly SeoTask[]>;
+  /** Tick one off. Idempotent: ticking a done task is not an error, it is a no-op. */
+  completeSeoTask(id: string): Promise<boolean>;
+
   /** Which adapter answered. Surfaced on screen rather than hidden — see `FeedNotice`. */
   readonly kind: 'postgres' | 'reference';
 }
@@ -128,6 +156,8 @@ class ReferenceRepository implements ContentRepository {
   readonly #statuses = new Map<string, ContentItem['status']>();
   readonly #decisions: ReviewDecisionRecord[] = [];
   readonly #engagement = new Map<string, EngagementTarget['status']>();
+  readonly #approaches = new Map<string, { readonly state: ApproachState; readonly on: string }>();
+  readonly #tasksDone = new Set<string>();
 
   clock(): Date {
     return new Date(REFERENCE_NOW);
@@ -213,6 +243,37 @@ class ReferenceRepository implements ContentRepository {
     const target = REFERENCE_ENGAGEMENT.find((t) => t.id === id);
     if (!target || this.#engagement.has(id)) return false;
     this.#engagement.set(id, status);
+    return true;
+  }
+
+  async approaches(): Promise<readonly Approach[]> {
+    return REFERENCE_APPROACHES.map((row) => {
+      const moved = this.#approaches.get(row.id);
+      return moved === undefined ? row : { ...row, state: moved.state, approachedOn: moved.on };
+    });
+  }
+
+  async advanceApproach(id: string, to: ApproachState): Promise<boolean> {
+    const current = (await this.approaches()).find((row) => row.id === id);
+    if (current === undefined || !canAdvance(current.state, to)) return false;
+    this.#approaches.set(id, {
+      state: to,
+      // The date the approach went out is set once, on the move out of `identified`, and
+      // carried forward. An inclusion three weeks later did not happen on the day it landed.
+      on: current.approachedOn ?? this.clock().toISOString().slice(0, 10),
+    });
+    return true;
+  }
+
+  async seoTasks(): Promise<readonly SeoTask[]> {
+    return REFERENCE_SEO_TASKS.map((task) =>
+      this.#tasksDone.has(task.id) ? { ...task, done: true } : task,
+    );
+  }
+
+  async completeSeoTask(id: string): Promise<boolean> {
+    if (!REFERENCE_SEO_TASKS.some((task) => task.id === id)) return false;
+    this.#tasksDone.add(id);
     return true;
   }
 }
@@ -327,6 +388,33 @@ class PostgresRepository implements ContentRepository {
       .where(and(eq(engagementTargets.id, id), eq(engagementTargets.status, 'open')))
       .returning({ id: engagementTargets.id });
     return updated.length > 0;
+  }
+
+  /*
+   * ⚑ Discoverability has no tables yet, and this adapter says so rather than pretending.
+   *
+   * Build spec §0: the portal is a shell that renders, queues and records — build against
+   * mocks for everything BLOCKED, and make the boundary visible. The target list came out of
+   * a reading taken by hand on 2026-08-25; the schema for it lands with the DataForSEO
+   * integration, which is itself gated on a credential rotation (§14 dependency 3).
+   *
+   * Returning the fixture here would be worse than returning nothing: a person on the
+   * database adapter would move an approach, see it move, and lose it on the next deploy.
+   */
+  async approaches(): Promise<readonly Approach[]> {
+    return [];
+  }
+
+  async advanceApproach(): Promise<boolean> {
+    return false;
+  }
+
+  async seoTasks(): Promise<readonly SeoTask[]> {
+    return [];
+  }
+
+  async completeSeoTask(): Promise<boolean> {
+    return false;
   }
 
   async versionsForWeek(weekStartDate: string): Promise<ReadonlyMap<string, PostVersion>> {

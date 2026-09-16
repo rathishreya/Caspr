@@ -150,7 +150,7 @@ export default function EmailDashboard() {
       </section>
 
       <p className="t-body-s text-secondary" style={{ maxWidth: '72ch' }}>
-        <span className="t-meta-bold">On a normal week, nobody touches email.</span> It runs once approved,
+        <strong>On a normal week, nobody touches email.</strong> It runs once approved,
         and every exception pauses itself before it reaches anyone — which is why{' '}
         <Link className="t-label" href="/email/tasks">
           Tasks

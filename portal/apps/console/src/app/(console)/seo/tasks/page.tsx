@@ -1,202 +1,204 @@
 import {
-  CORE_BASKET,
-  CONSULTANTS_BASKET,
-  INVESTORS_BASKET,
-  OVERVIEW_LABEL,
-  PLAYS,
-  REFERENCE_RANKS,
-  rankOrder,
-  rankPlay,
-  rankSummary,
-  type BasketQuestion,
-  type Play,
-  type RankRow,
+  APPROACH_SAMPLE,
+  DIRECTORIES_PER_MONTH,
+  INCLUSION_BAR,
+  SEO_TASKS_PER_WEEK,
+  approachProgress,
+  lapsedApproaches,
+  nextApproaches,
+  openTasks,
 } from '@caspr-portal/domain';
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 import { State } from '@/components/primitives/state';
-import { Tile } from '@/components/primitives/tile';
+import { ApproachRow } from '@/components/seo/approach-row';
+import { TaskRow } from '@/components/seo/task-row';
+import { getRepository } from '@/lib/repository';
 
 export const metadata: Metadata = { title: 'SEO — Tasks' };
 
 /**
- * SEO ▸ Tasks — the rank read-out, and the play each row implies.
+ * SEO ▸ Tasks — the week, and it is the only screen here that writes.
  *
- * `activation-framework.md` §15 item 14 asks for exactly this: *"top-100 positions per
- * question, who ranks above, the Overview flag, and the play it implies."* §4 puts it a
- * second way, describing the presence engine: **misses become tasks.**
+ * ⚑ **Rebuilt 2026-09-16**, on the workstream owner's objection: *"yaha pe sb read only hai"*
+ * — everything was read-only, and a workstream you cannot act on is a report.
  *
- * ⚑ **The play column is derived, never typed in** (`seo.ts` → `rankPlay`). A read-out whose
- * recommendation is free text becomes a column of opinions, and then the question is whose.
- * Four inputs decide it, in a fixed order — do we have a page, does it rank, is there a
- * third-party page above us we could be listed on, did an Overview fire — and the order is
- * the argument: a missing page beats everything, and a listable roundup beats our own
- * ranking work, because that is where 6.5× of citations come from.
+ * Two kinds of work, and they are separated because they move different clocks on different
+ * horizons:
+ *
+ *   APPROACHES  the target list. Each one sent moves the presence clock, which reads in weeks
+ *               and needs nothing published. **This is the fastest thing anybody in this
+ *               workstream can do**, and until today the console had no way to record it
+ *   TASKS       three a week — schema, internal links, metadata. Derivative work at 1–2
+ *               minutes each. Most of the open list is site debt, which is cheap now and
+ *               expensive later
+ *
+ * Both write through `advanceApproach` and `completeSeoTask`, and both are gated on the
+ * Reviewer role. Neither is a review decision: the person has already done the work, and the
+ * console records the outcome so a clock can be read.
  */
-export default function SeoTasks() {
-  const rows = rankOrder(REFERENCE_RANKS);
-  const summary = rankSummary(REFERENCE_RANKS);
-  const questions = new Map<string, BasketQuestion>(
-    [...CORE_BASKET, ...INVESTORS_BASKET, ...CONSULTANTS_BASKET].map((question) => [question.id, question]),
-  );
+export default async function SeoTasks() {
+  const repository = getRepository();
+  const [approaches, tasks] = await Promise.all([repository.approaches(), repository.seoTasks()]);
 
-  const groups = PLAYS.map((play) => ({
-    play,
-    rows: rows.filter((row) => rankPlay(row).play === play),
-  })).filter((group) => group.rows.length > 0);
+  const progress = approachProgress(approaches);
+  const next = nextApproaches(approaches);
+  const inFlight = approaches.filter((row) => row.state === 'approached');
+  const landed = approaches.filter((row) => ['included', 'declined', 'no_reply'].includes(row.state));
+  const lapsed = lapsedApproaches(approaches);
+  const priorityLapsed = lapsed.some((row) => row.priority === true);
+  const open = openTasks(tasks);
+  const done = tasks.filter((task) => task.done);
 
   return (
     <div className="board">
-      <div className="banner">
-        <span className="t-meta-bold banner__headline">ILLUSTRATIVE — NO RANK READING HAS RUN</span>
-        <span className="t-body-s banner__detail">
-          The DataForSEO credential is still to be rotated into AWS Secrets Manager. The questions are the
-          frozen basket&rsquo;s own and the shape is real; the positions are not measured, and every row says so.
+      <p className="board-status t-meta">
+        <span>{progress.approached} of {APPROACH_SAMPLE} approaches</span>
+        <span className={progress.included < INCLUSION_BAR ? 'text-attention' : undefined}>
+          {progress.included} of {INCLUSION_BAR} inclusions
         </span>
-      </div>
+        <span>{open.length} open tasks</span>
+        {progress.lapsed > 0 && <span className="text-tertiary">{progress.lapsed} lapsed — no owner</span>}
+      </p>
 
-      <div className="tiles">
-        <Tile label="QUESTIONS READ" value={String(summary.read)} note="Against the frozen basket, so the read-out and p agree about what is being asked." />
-        <Tile
-          label="NO PAGE AT ALL"
-          value={String(summary.noPage)}
-          attention={summary.noPage > 0}
-          note="Nothing to optimise. Each becomes a search answer — two go out a week."
-        />
-        <Tile
-          label="PAGE ONE"
-          value={String(summary.pageOne)}
-          note={`${summary.topThree} of them in the top three. Page two does not count for p — nobody looks.`}
-        />
-        <Tile
-          label="AI OVERVIEWS"
-          value={`${summary.overviewsOurs} / ${summary.overviewsSeen}`}
-          note="Overviews that cite us, of those that fired at all. A question with no Overview is one where the ranking page still gets the click."
-        />
-      </div>
+      {/* ── APPROACHES ─────────────────────────────────────────────────────── */}
+      <section id="approaches" aria-labelledby="approach-heading">
+        <div className="board-head">
+          <h3 id="approach-heading" className="t-title-m">
+            Send an approach <span className="board-count t-meta">{next.length}</span>
+          </h3>
+          <span className="board-hint t-body-s">
+            The fastest thing this workstream can do, and it needs nothing published. {DIRECTORIES_PER_MONTH}{' '}
+            directory submissions a month is already the runbook target.
+          </span>
+        </div>
 
-      {groups.length === 0 ? (
-        <State
-          kind="empty"
-          headline="No read-out yet."
-          consequence="Correctly empty. The first reading is the baseline, and it comes before Day 1 — a manual month one and an automated month two would bake a methodology change into the first delta."
-        />
-      ) : (
-        groups.map((group) => (
-          <PlaySection key={group.play} play={group.play} rows={group.rows} questions={questions} />
-        ))
+        {next.length === 0 ? (
+          <State
+            kind="empty"
+            headline="Every actionable target has been approached."
+            consequence={`${progress.approached} of ${APPROACH_SAMPLE}. The presence kill condition does not read until 25 have gone out, so the list refills from the next basket questions run.`}
+          />
+        ) : (
+          <div className="targets">
+            {next.map((approach) => (
+              <ApproachRow key={approach.id} approach={approach} />
+            ))}
+          </div>
+        )}
+      </section>
+
+      {inFlight.length > 0 && (
+        <section aria-labelledby="flight-heading">
+          <div className="board-head">
+            <h3 id="flight-heading" className="t-title-m">
+              Sent, waiting <span className="board-count t-meta">{inFlight.length}</span>
+            </h3>
+            <span className="board-hint t-body-s">
+              Log how each one landed. &ldquo;No reply&rdquo; counts toward the sample exactly as a decline
+              does — the denominator is approaches made, not answers received.
+            </span>
+          </div>
+          <div className="targets">
+            {inFlight.map((approach) => (
+              <ApproachRow key={approach.id} approach={approach} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ── TASKS ──────────────────────────────────────────────────────────── */}
+      <section id="tasks" className="board-part" aria-labelledby="task-heading">
+        <h2 id="task-heading" className="board-part__title">
+          This week&rsquo;s tasks
+        </h2>
+        <p className="board-part__lede t-body-m">
+          {SEO_TASKS_PER_WEEK} a week — schema, internal links, metadata. Most of what is open is site debt:
+          cheap now, expensive later, and none of it produces a number this month. Each says which clock it
+          moves, because three tasks on one component is a week that let two clocks stand still.
+        </p>
+
+        {open.length === 0 ? (
+          <State
+            kind="empty"
+            headline="Nothing open."
+            consequence="Finished, not unassigned. The next three arrive with Thursday's generation."
+          />
+        ) : (
+          <div className="tasks">
+            {open.map((task) => (
+              <TaskRow key={task.id} task={task} />
+            ))}
+          </div>
+        )}
+
+        {done.length > 0 && (
+          <details className="register">
+            <summary className="register__summary t-body-s">{done.length} closed this week</summary>
+            <div className="tasks">
+              {done.map((task) => (
+                <TaskRow key={task.id} task={task} />
+              ))}
+            </div>
+          </details>
+        )}
+      </section>
+
+      {/* ── LAPSED ─────────────────────────────────────────────────────────── */}
+      {lapsed.length > 0 && (
+        <section aria-labelledby="lapsed-heading">
+          <div className="board-head">
+            <h3 id="lapsed-heading" className="t-title-m">
+              Lapsed — nobody can do these <span className="board-count t-meta">{lapsed.length}</span>
+            </h3>
+            <span className="board-hint t-body-s">
+              {priorityLapsed
+                ? 'Editorial pitches, waiting on the earned-media hire — and the best target on the whole list is one of them.'
+                : 'Editorial pitches, waiting on the earned-media hire. A decision, not a discovery.'}
+            </span>
+          </div>
+          <div className="targets">
+            {lapsed.map((approach) => (
+              <ApproachRow key={approach.id} approach={approach} />
+            ))}
+          </div>
+          <p className="t-body-s text-secondary" style={{ maxWidth: '72ch', marginTop: 'var(--space-3)' }}>
+            <strong>Why these are not SEO&rsquo;s.</strong> A directory submission is a
+            form; converting an editor at The Drum is a relationship, and the current practitioner is
+            tactical. The hire lands in 8–12 weeks and these accumulate for them. A weak candidate calls all
+            four shapes &ldquo;outreach&rdquo;; a good one separates them — G2 and Datarade are a form and a
+            login, cybernews is a pitch to a named editor, and searchfunder is a forum thread where the only
+            honest move is to become a real participant first.
+          </p>
+        </section>
+      )}
+
+      {landed.length > 0 && (
+        <section aria-labelledby="landed-heading">
+          <div className="board-head">
+            <h3 id="landed-heading" className="t-title-m">
+              Landed <span className="board-count t-meta">{landed.length}</span>
+            </h3>
+            <span className="board-hint t-body-s">
+              {progress.included} included · {progress.declined} declined · {progress.noReply} no reply.
+            </span>
+          </div>
+          <div className="targets">
+            {landed.map((approach) => (
+              <ApproachRow key={approach.id} approach={approach} />
+            ))}
+          </div>
+        </section>
       )}
 
       <p className="t-body-s text-secondary" style={{ maxWidth: '72ch' }}>
-        <span className="t-meta-bold">Rank is outside p, deliberately.</span> Position 34 is not presence —
-        nobody looks at page four. But it is the difference between &ldquo;we have no page for this&rdquo;
-        and &ldquo;we have a page and it does not rank&rdquo;, which are opposite jobs. Folding rank into p
-        would let a page climbing from 60 to 30 flatter a metric that should not have moved at all.
+        Every approach here came out of running the basket questions and writing down who was actually
+        there — not out of a keyword pull.{' '}
+        <Link className="t-label" href="/seo/backlog">
+          What is owed, and what each family is worth →
+        </Link>
       </p>
     </div>
-  );
-}
-
-const PLAY_HEADING: Readonly<Record<Play, { readonly title: string; readonly hint: string }>> = {
-  the_page_does_not_rank: {
-    title: 'The page exists and does not rank',
-    hint: 'The closest thing to a free win in this table — the writing is done.',
-  },
-  get_listed: {
-    title: 'Get listed on the page that outranks us',
-    hint: 'A conversation, not six months of domain authority. 6.5× of citations come from third-party pages.',
-  },
-  write_the_page: {
-    title: 'No page for this question',
-    hint: 'Nothing to optimise. Each of these becomes a search answer in the backlog.',
-  },
-  defend: { title: 'Holding', hint: 'Nothing to do but keep the page true as the numbers behind it move.' },
-  hold: { title: 'Held', hint: 'Waiting on something else.' },
-};
-
-function PlaySection({
-  play,
-  rows,
-  questions,
-}: {
-  readonly play: Play;
-  readonly rows: readonly RankRow[];
-  readonly questions: ReadonlyMap<string, BasketQuestion>;
-}) {
-  const heading = PLAY_HEADING[play];
-
-  return (
-    <section aria-labelledby={`play-${play}`}>
-      <div className="board-head">
-        <h3 id={`play-${play}`} className="t-title-m">
-          {heading.title} <span className="board-count t-meta">{rows.length}</span>
-        </h3>
-        <span className="board-hint t-body-s">{heading.hint}</span>
-      </div>
-
-      {/*
-        The play's own sentence is the section hint above, said once. Repeating it down a
-        column made eight identical cells and buried the two things that actually differ per
-        row — where we sit, and who is above us. "Who ranks above" is §15 item 14's own
-        wording, and it is the column somebody acts on.
-      */}
-      <div className="table-scroll">
-        <table className="table">
-          <thead>
-            <tr>
-              <th className="t-meta keep">Question</th>
-              <th className="t-meta num">Us</th>
-              <th className="t-meta fill">Who ranks above</th>
-              <th className="t-meta nowrap">Overview</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => {
-              const question = questions.get(row.questionId);
-              const reading = rankPlay(row);
-              return (
-                <tr key={row.questionId}>
-                  <td className="t-body-s keep">
-                    <span className="t-meta text-tertiary">{row.questionId}</span>{' '}
-                    {question?.text ?? row.questionId}
-                    {question?.source != null && (
-                      <>
-                        <br />
-                        <span className="t-body-s text-tertiary">{question.source}</span>
-                      </>
-                    )}
-                  </td>
-                  <td className={row.position === null ? 't-body-s num text-tertiary' : 't-body-s num'}>
-                    {row.position ?? '—'}
-                  </td>
-                  <td className="t-body-s text-secondary">
-                    {row.above.length === 0 ? (
-                      row.position === null ? (
-                        'Nobody we recognise — the page one for this question is open.'
-                      ) : (
-                        '—'
-                      )
-                    ) : (
-                      row.above.map((entry) => (
-                        <span key={entry.domain} className="above">
-                          <span className="t-meta">{entry.position}</span> {entry.domain}
-                          <span className="text-tertiary"> {entry.kind}</span>
-                        </span>
-                      ))
-                    )}
-                    {reading.play === 'get_listed' && (
-                      <span className="t-meta-bold above__note"> ← a page we could be on</span>
-                    )}
-                  </td>
-                  <td className={row.overview === 'others' ? 't-meta text-attention nowrap' : 't-meta nowrap'}>
-                    {OVERVIEW_LABEL[row.overview]}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    </section>
   );
 }

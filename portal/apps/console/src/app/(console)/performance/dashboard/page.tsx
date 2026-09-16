@@ -81,7 +81,7 @@ export default function PerformanceDashboard() {
       </section>
 
       <p className="t-body-s text-secondary" style={{ maxWidth: '72ch' }}>
-        <span className="t-meta-bold">Why this workstream is empty and that is the plan.</span> Performance
+        <strong>Why this workstream is empty and that is the plan.</strong> Performance
         is one of five workstreams and the only one whose correct state today is off. The owner is a new
         hire who is also hired explicitly to disagree — to read x and p and argue with the kill conditions —
         which is the function the TL&rsquo;s departure actually removed.{' '}

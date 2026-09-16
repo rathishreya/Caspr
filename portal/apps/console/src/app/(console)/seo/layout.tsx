@@ -1,37 +1,45 @@
-import { REFERENCE_RANKS, openBacklog, rankPlay, REFERENCE_BACKLOG } from '@caspr-portal/domain';
+import { approachProgress, nextApproaches, openTasks } from '@caspr-portal/domain';
 import type { ReactNode } from 'react';
 
 import { Tabs } from '@/components/primitives/tabs';
 import { ScreenHeader } from '@/components/shell/screen-header';
 import { WORKSTREAM_TABS } from '@/lib/nav';
+import { getRepository } from '@/lib/repository';
 
 /**
- * SEO.
+ * SEO — or rather, **discoverability**, which is what the channel turned out to be.
  *
- * Two halves, and they answer different questions. `p` asks *"do we exist at the moment the
- * buyer looks"* — four surfaces, per ICP, monthly, and frozen for a year. The rank read-out
- * asks *"and if not, why not"*, and `activation-framework.md` §0.5 decision 28 keeps it
- * deliberately **outside** `p`.
+ * `docs/seo/decision.md` §1, 2026-08-25: *"The channel is not SEO. It is discoverability —
+ * and its fastest, highest-intent components are not search at all."* Three things were
+ * bundled under one name and they behave nothing alike: presence reads in weeks, citation in
+ * months, ranking in six. Each has its own kill condition, and this workstream's screens are
+ * built around that split rather than around a single health number.
  *
- * The owner also carries `p` reading zero until the earned-media hire lands (§12).
+ * The rail still says SEO because that is what the team calls the seat. The header says what
+ * the seat actually covers.
  */
 export const dynamic = 'force-dynamic';
 
-export default function SeoLayout({ children }: { readonly children: ReactNode }) {
-  // Tasks is what the read-out implies — a question with no page, or a page that does not
-  // rank. Backlog is what someone has already picked up. The two badges are different work.
-  const plays = REFERENCE_RANKS.filter((row) => {
-    const { play } = rankPlay(row);
-    return play === 'write_the_page' || play === 'the_page_does_not_rank' || play === 'get_listed';
-  }).length;
+export default async function SeoLayout({ children }: { readonly children: ReactNode }) {
+  const repository = getRepository();
+  const [approaches, tasks] = await Promise.all([repository.approaches(), repository.seoTasks()]);
+  const progress = approachProgress(approaches);
 
   return (
     <>
-      <ScreenHeader title="SEO" />
+      <ScreenHeader
+        title="SEO"
+        meta={<span className="t-meta text-tertiary">DISCOVERABILITY — PRESENCE · CITATION · RANKING</span>}
+      />
+      {/*
+        Tasks carries what a person can do today: the approaches they can actually send plus
+        the open task list. Backlog carries what is owed. Neither badge counts rows nobody
+        can act on — a lapsed editorial pitch is not work, it is a vacancy.
+      */}
       <Tabs
         tabs={WORKSTREAM_TABS['seo'] ?? []}
         label="SEO"
-        badges={{ tasks: plays, backlog: openBacklog(REFERENCE_BACKLOG).length }}
+        badges={{ tasks: nextApproaches(approaches).length + openTasks(tasks).length, backlog: progress.identified }}
       />
       {children}
     </>

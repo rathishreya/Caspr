@@ -134,7 +134,7 @@ export default function EmailSequences() {
             8.5× and 3.3× — one forward, one trailing, and neither source says which. Here&rsquo;s the
             reconciliation.&rdquo;
           </em>{' '}
-          <span className="t-meta-bold">fact_lookup is a lookup</span>, never an $80 analysis per prospect.
+          <strong>fact_lookup is a lookup</strong>, never an $80 analysis per prospect.
         </p>
       </section>
 
@@ -158,7 +158,7 @@ export default function EmailSequences() {
         <p className="t-body-m text-secondary" style={{ maxWidth: '72ch' }}>
           A welcome — the strongest past issue, their sector&rsquo;s index row, and <em>run it on
           yours</em> — and then the issues.{' '}
-          <span className="t-meta-bold">The subscription is to be told, not to gain access</span>, so
+          <strong>The subscription is to be told, not to gain access</strong>, so
           nothing here pushes them to sign up. An issue&rsquo;s email sends automatically once the issue is
           approved: it was already reviewed as origination, and a second release adds nothing but a delay.
         </p>

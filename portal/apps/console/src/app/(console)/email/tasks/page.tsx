@@ -73,9 +73,9 @@ export default function EmailTasks() {
           The emails are founder-signed, so a reply arrives expecting the founder. The sequence stops for
           that person immediately and the reply reaches Joy&rsquo;s inbox — never a sequence step, never an
           auto-responder.{' '}
-          <span className="t-meta-bold">
+          <strong>
             &ldquo;Replies — never. One exchange and it breaks.&rdquo;
-          </span>{' '}
+          </strong>{' '}
           A founder email that bounces replies into a void is worse than no founder email.
         </p>
       </section>

@@ -1,217 +1,263 @@
 import {
-  APPEARANCE_KINDS,
-  APPEARANCE_LABEL,
-  APPEARANCE_NOTE,
+  BASELINE,
+  BASELINE_TAKEN_ON,
   BASKET_STATUS,
   BASKET_TARGET,
-  CORE_BASKET,
+  CATEGORY_READING,
   JOB_BASKET_TARGET,
-  PRESENCE_SURFACES,
+  LEVERS,
   READINGS_BEFORE_A_THRESHOLD,
-  REFERENCE_RANKS,
   SEO_CADENCE,
-  SURFACE_ACCESS,
-  SURFACE_LABEL,
+  approachProgress,
   basketFor,
-  checksPerMonth,
+  firstApproachOn,
   jobBasket,
-  presenceVerdict,
-  rankSummary,
+  readClock,
+  type ClockInput,
 } from '@caspr-portal/domain';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { State } from '@/components/primitives/state';
-import { Bar, Tile } from '@/components/primitives/tile';
+import { Clocks } from '@/components/seo/clocks';
+import { Bar } from '@/components/primitives/tile';
+import { getRepository } from '@/lib/repository';
 
 export const metadata: Metadata = { title: 'SEO — Dashboard' };
 
 /**
- * SEO ▸ Dashboard.
+ * SEO ▸ Dashboard — three kill conditions on three clocks.
  *
- * The one thing this screen must not do is show a number called `p`. There is no reading
- * yet — `presence-metric.md` §1: *"baseline today is honestly zero. Every test run on
- * 2026-08-25 found Caspr absent."* — and §5.2 sets **no threshold until three readings
- * exist**. A dashboard that filled the gap with a plausible percentage would be the exact
- * failure the metric's construction rules exist to prevent.
+ * ⚑ **Rebuilt 2026-09-16.** The first version showed a basket-completeness table and called
+ * it a dashboard. It was not wrong, it was the wrong screen: it answered *"how ready is the
+ * instrument"* when the question this workstream is judged on is *"is the channel working,
+ * and by when do we find out."*
  *
- * So it shows what actually exists: **how ready the metric is to be read**. The basket's
- * completeness, the surfaces and how cleanly each can be read, and what stands between here
- * and reading zero.
+ * `portal-design-spec.md` §10 records the Figma frame being corrected to exactly this on
+ * 2026-08-25, and `docs/seo/decision.md` §1 is why. **Three clocks, never a summary** — a
+ * summary is the thing being corrected.
+ *
+ * The one fact this screen exists to make unavoidable: **the fastest clock has not started.**
+ * Presence needs nothing published and reads in weeks, and zero approaches have gone out.
  */
-export default function SeoDashboard() {
-  const readingsSoFar = 0;
-  const summary = rankSummary(REFERENCE_RANKS);
+export default async function SeoDashboard() {
+  const repository = getRepository();
+  const now = repository.clock();
+  const approaches = await repository.approaches();
+  const progress = approachProgress(approaches);
+
+  /*
+   * Two of the three clocks are stopped, and it is not an oversight.
+   *
+   * Citation starts when the first page publishes to the AEO standard, and ranking when the
+   * first seeded page is indexed. Nothing is published, so neither has a start date — and
+   * §3A.2's argument is exactly this: a DR-40 domain in month 12 is only available if the
+   * work started in month 1. A clock nobody started is not "on track".
+   *
+   * Presence starts on the first approach sent, so it starts the moment somebody uses Tasks.
+   */
+  const inputs: readonly ClockInput[] = [
+    {
+      component: 'presence',
+      startedOn: firstApproachOn(approaches),
+      have: progress.included,
+      of: progress.sample,
+      sent: progress.approached,
+    },
+    { component: 'citation', startedOn: null, have: 0, of: 10 },
+    { component: 'ranking', startedOn: null, have: 0, of: BASELINE.length },
+  ];
+  const readings = inputs.map((input) => readClock(input, now));
+  const stopped = readings.filter((reading) => reading.state === 'not_started').length;
+
   const live = BASKET_STATUS.filter((status) => status.writeNow);
   const written = live.reduce((sum, status) => sum + jobBasket(status.icp).length, 0);
-  const target = live.length * JOB_BASKET_TARGET;
 
   return (
     <>
-      <div className="banner">
-        <span className="t-meta-bold banner__headline">NO READING YET — READING ZERO COMES BEFORE DAY 1</span>
-        <span className="t-body-s banner__detail">
-          The DataForSEO credential has to be rotated into AWS Secrets Manager before discovery or{' '}
-          <em>p</em> can run at all. Every figure on this screen describes the instrument, not a measurement.
-        </span>
-      </div>
+      {stopped > 0 && (
+        <Link className="banner banner--link" href="/seo/tasks">
+          <span className="t-meta-bold banner__headline">
+            {stopped} OF 3 CLOCKS HAVE NOT STARTED
+          </span>
+          <span className="t-body-s banner__detail">
+            Every day before a clock starts is a day that does not come back — the six-month one most of all.
+            The first approach starts the fastest of them, and it needs nothing published. Open Tasks →
+          </span>
+        </Link>
+      )}
 
-      <div className="tiles">
-        <Tile
-          label="READINGS TAKEN"
-          value={`${readingsSoFar} / ${READINGS_BEFORE_A_THRESHOLD}`}
-          attention
-          note={presenceVerdict(readingsSoFar)}
-        />
-        <Tile
-          label="BASKET WRITTEN"
-          value={`${written} / ${target}`}
-          attention={written < target}
-          note={`${live.length} launch ICPs × ${JOB_BASKET_TARGET} job questions. The remaining ${target - written} extend these shapes across the sectors each buyer actually screens — written once, at basket freeze.`}
-        />
-        <Tile
-          label="SHARED CORE"
-          value={String(CORE_BASKET.length)}
-          note="Asked once and counted for both launch ICPs. The core is what makes the ICPs comparable; the job basket is what makes each one actionable."
-        />
-        <Tile
-          label="CHECKS A MONTH"
-          value={String(checksPerMonth(['investors', 'consultants']))}
-          note={`At today's basket. It doubles when Agencies opens in week 6, which is the point any manual fallback stops being viable.`}
-        />
-        <Tile
-          label="READ-OUT COVERAGE"
-          value={`${summary.read} / ${BASKET_TARGET}`}
-          note="Rank positions read, against one ICP's full basket. Outside p, deliberately — decision 28."
-        />
-      </div>
+      <Clocks readings={readings} />
 
       <div className="grid-2">
-        <BasketPanel />
-        <SurfacePanel />
-        <AppearancePanel />
-        <CadencePanel />
+        <BaselinePanel />
+        <CategoryPanel />
       </div>
 
-      <p className="t-body-s text-secondary" style={{ maxWidth: '72ch', marginTop: 'var(--space-6)' }}>
-        <span className="t-meta-bold">Read p against x.</span> p rising with x flat is a conversion problem,
-        not a reach problem. x rising with p flat means discoverability is not earning its keep. Neither
-        number answers a question on its own, which is why there are two.
-      </p>
+      <LeverPanel />
+
+      <div className="grid-2">
+        <BasketPanel written={written} target={live.length * JOB_BASKET_TARGET} />
+        <CadencePanel />
+      </div>
     </>
   );
 }
 
 /**
- * ⛔ **There is no aggregate row, and there is no total.** `presence-metric.md` §4.1: *"do
- * not average across ICPs […] visible to investors and invisible to consultants is not 'half
- * visible' — it is a specific state with a specific fix. An average is the one number that
- * hides which."* The table is the vector.
+ * The reading itself. `p = 0`, and it was measured rather than assumed.
+ *
+ * *"A pre-launch baseline is perishable. Once The Record publishes, the guerrilla campaign
+ * runs and the rebuilt site goes live, there is no way back to a clean 'before.'"*
  */
-function BasketPanel() {
+function BaselinePanel() {
+  return (
+    <section className="panel">
+      <div className="panel__title">
+        <h2 className="t-title-m">The baseline</h2>
+        <span className="t-meta text-tertiary">MEASURED {BASELINE_TAKEN_ON}</span>
+      </div>
+
+      <p className="baseline__figure">
+        <span className="t-data-l">p = 0</span>
+      </p>
+      <p className="t-body-s text-secondary">
+        Caspr appears in nothing. Not in a result, not in a roundup, not in an answer, on any question tested.
+      </p>
+
+      <div className="stack" style={{ marginTop: 'var(--space-4)' }}>
+        {BASELINE.map((row) => (
+          <div key={row.questionId} className="stack-row">
+            <p className="t-body-s">
+              <span className="t-meta text-tertiary">{row.questionId}</span> {row.question}
+            </p>
+            <p className="t-body-s text-secondary">{row.note}</p>
+          </div>
+        ))}
+      </div>
+
+      <p className="t-body-s text-tertiary" style={{ marginTop: 'var(--space-4)' }}>
+        ⚠ A partial baseline, and labelled as one. The ranking and citation legs were measured; the
+        AI-surface leg — ChatGPT, Perplexity, Gemini — was not reachable from that session. It is roughly an
+        hour and it cannot be reconstructed afterwards, which is why it is the first row on Tasks.
+      </p>
+      <p className="t-body-s text-secondary" style={{ marginTop: 'var(--space-3)' }}>
+        <strong>A zero that was measured is a different object from a zero that was
+        assumed.</strong> Do not re-baseline after publishing starts — append, never overwrite.
+      </p>
+    </section>
+  );
+}
+
+/**
+ * ⚠ The finding that was not the point of the exercise.
+ *
+ * Both readings are carried because picking one would be picking the answer, and the question
+ * that decides it is genuinely open.
+ */
+function CategoryPanel() {
+  return (
+    <section className="panel">
+      <div className="panel__title">
+        <h2 className="t-title-m">Who is answering the category</h2>
+        <span className="t-meta text-tertiary">THE FINDING THAT WAS NOT THE POINT</span>
+      </div>
+
+      <p className="t-body-s text-secondary">
+        The tools named in the answer to <em>&ldquo;best AI tool for market research&rdquo;</em> are GWI
+        Spark, nexos.ai, Yabble, DoReveal, Notably, Manus, Optimo and Glimpse.{' '}
+        <strong>Almost none of them do what Caspr does</strong> — they are qualitative
+        synthesis, trend detection and consumer-data platforms. Manus, and essentially only Manus, generates
+        a market research report.
+      </p>
+
+      <div className="reading">
+        <p className="reading__label t-meta">Opportunity</p>
+        <p className="t-body-s">{CATEGORY_READING.opportunity}</p>
+      </div>
+      <div className="reading reading--problem">
+        <p className="reading__label t-meta">Problem</p>
+        <p className="t-body-s">{CATEGORY_READING.problem}</p>
+      </div>
+
+      <p className="t-body-s text-tertiary" style={{ marginTop: 'var(--space-3)' }}>
+        {CATEGORY_READING.unresolved}
+      </p>
+    </section>
+  );
+}
+
+/**
+ * The six levers — §3B. **Everything starts in the first fortnight.**
+ *
+ * The `scalesOn` column is the correction §3A made: gating the *start* of a six-month lever
+ * on an eight-week test pushes results to month ten for no reason. Only the data pages have a
+ * gate, and it is on scale rather than existence.
+ */
+function LeverPanel() {
   return (
     <section className="panel panel--wide">
       <div className="panel__title">
-        <h2 className="t-title-m">The baskets</h2>
-        <span className="t-meta text-tertiary">ONE PER ICP · FROZEN FOR A YEAR · NEVER AVERAGED</span>
+        <h2 className="t-title-m">The six levers</h2>
+        <span className="t-meta text-tertiary">STARTING IS NOT SCALING</span>
       </div>
 
-      <div className="table-scroll">
-        <table className="table">
-          <thead>
-            <tr>
-              <th className="t-meta nowrap">ICP</th>
-              <th className="t-meta num">Written</th>
-              <th className="t-meta num">Of</th>
-              <th className="t-meta">Complete</th>
-              <th className="t-meta fill">Standing</th>
-            </tr>
-          </thead>
-          <tbody>
-            {BASKET_STATUS.map((status) => {
-              const job = jobBasket(status.icp);
-              const share = job.length / JOB_BASKET_TARGET;
-              return (
-                <tr key={status.icp}>
-                  <td className="t-body-s nowrap">
-                    p_{status.icp}
-                    {status.writeNow && <span className="t-meta text-tertiary"> LAUNCH</span>}
-                  </td>
-                  <td className="t-body-s num">{status.writeNow ? basketFor(status.icp).length : 0}</td>
-                  <td className="t-body-s num">{status.writeNow ? BASKET_TARGET : '—'}</td>
-                  <td>
-                    <Bar fraction={status.writeNow ? share : 0} label={`${status.label} basket`} />
-                  </td>
-                  <td className="t-body-s text-secondary">{status.when}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+      <div className="levers">
+        {LEVERS.map((lever) => (
+          <div key={lever.id} className={lever.started ? 'lever lever--on' : 'lever'}>
+            <div className="lever__head">
+              <span className="t-body-m">{lever.name}</span>
+              <span className={lever.started ? 'tag tag--included t-meta' : 'tag tag--identified t-meta'}>
+                {lever.started ? 'Running' : 'Not started'}
+              </span>
+            </div>
+            <p className="t-body-s text-secondary">{lever.note}</p>
+            <p className="lever__gates t-meta">
+              <span className="text-tertiary">STARTS</span> {lever.starts}
+              {' · '}
+              <span className="text-tertiary">SCALES ON</span> {lever.scalesOn}
+            </p>
+          </div>
+        ))}
       </div>
-
-      <p className="t-body-s text-secondary" style={{ marginTop: 'var(--space-4)' }}>
-        Adding an ICP is 35 questions, not 50 — which is what makes widening a configuration change rather
-        than a project. Agencies and Strategy stay unwritten on purpose: a basket is frozen for a year, so
-        writing questions for an ICP we are not serving would freeze them against a strategy that may well
-        change before we get there.
-      </p>
     </section>
   );
 }
 
-function SurfacePanel() {
+function BasketPanel({ written, target }: { readonly written: number; readonly target: number }) {
   return (
     <section className="panel">
       <div className="panel__title">
-        <h2 className="t-title-m">The four surfaces</h2>
-        <span className="t-meta text-tertiary">RECORDED SEPARATELY · NO WEIGHTING</span>
+        <h2 className="t-title-m">The baskets</h2>
+        <span className="t-meta text-tertiary">FROZEN FOR A YEAR · NEVER AVERAGED</span>
       </div>
 
-      {PRESENCE_SURFACES.map((surface) => {
-        const access = SURFACE_ACCESS[surface];
-        return (
-          <div key={surface} className="mix-row mix-row--reason">
+      <p className="t-body-s text-secondary">
+        {written} of {target} job questions written, over a shared core of 15. The remaining{' '}
+        {target - written} extend these shapes across the sectors each buyer actually screens — written once,
+        at basket freeze. No threshold until {READINGS_BEFORE_A_THRESHOLD} readings exist.
+      </p>
+
+      <div className="stack" style={{ marginTop: 'var(--space-4)' }}>
+        {BASKET_STATUS.map((status) => (
+          <div key={status.icp} className="mix-row mix-row--reason">
             <span className="mix-row__id">
-              <span className="t-body-s">{SURFACE_LABEL[surface]}</span>
+              <span className="t-body-s">p_{status.icp}</span>
             </span>
-            <span className={access.grade === 'poor' ? 't-body-s text-attention' : 't-body-s text-secondary'}>
-              {access.why}
-            </span>
-            <span className={access.grade === 'poor' ? 't-meta mix-row__value mix-row__value--over' : 't-meta mix-row__value'}>
-              {access.grade.toUpperCase()}
+            <Bar
+              fraction={status.writeNow ? jobBasket(status.icp).length / JOB_BASKET_TARGET : 0}
+              label={`${status.label} basket`}
+            />
+            <span className="t-meta mix-row__value">
+              {status.writeNow ? `${basketFor(status.icp).length} / ${BASKET_TARGET}` : '—'}
             </span>
           </div>
-        );
-      })}
-
-      <p className="t-body-s text-secondary" style={{ marginTop: 'var(--space-3)' }}>
-        No weighting between surfaces — we have no basis for one, and an invented weight would be the first
-        thing to argue about when the number is inconvenient. Two of the four have no clean programmatic
-        door, which is why the observation is bought and only the definition is built.
-      </p>
-    </section>
-  );
-}
-
-function AppearancePanel() {
-  return (
-    <section className="panel">
-      <div className="panel__title">
-        <h2 className="t-title-m">What counts as appearing</h2>
-        <span className="t-meta text-tertiary">THREE WAYS · WEIGHTED EQUALLY</span>
+        ))}
       </div>
 
-      {APPEARANCE_KINDS.map((kind) => (
-        <div key={kind} className="stack-row">
-          <p className="t-body-s">{APPEARANCE_LABEL[kind]}</p>
-          <p className="t-body-s text-secondary">{APPEARANCE_NOTE[kind]}</p>
-        </div>
-      ))}
-
-      <p className="t-body-s text-secondary" style={{ marginTop: 'var(--space-3)' }}>
-        They mean the same thing to the buyer: <em>Caspr was there when I looked.</em> A mention with no
-        link still counts. &ldquo;Casper&rdquo; never does — it is logged as a near-miss.
+      <p className="t-body-s text-tertiary" style={{ marginTop: 'var(--space-3)' }}>
+        ⛔ Never averaged into one p. Visible to investors and invisible to consultants is not
+        &ldquo;half visible&rdquo; — it is a specific state with a specific fix, and an average is the one
+        number that hides which.
       </p>
     </section>
   );
@@ -219,43 +265,25 @@ function AppearancePanel() {
 
 function CadencePanel() {
   return (
-    <section className="panel panel--wide">
+    <section className="panel">
       <div className="panel__title">
-        <h2 className="t-title-m">What SEO puts out in a week</h2>
-        <span className="t-meta text-tertiary">ACTIVATION FRAMEWORK §13.2</span>
+        <h2 className="t-title-m">The week</h2>
+        <span className="t-meta text-tertiary">~2.5 HOURS</span>
       </div>
 
-      <div className="table-scroll">
-        <table className="table">
-          <thead>
-            <tr>
-              <th className="t-meta nowrap">What</th>
-              <th className="t-meta num">Per week</th>
-              <th className="t-meta">How</th>
-              <th className="t-meta fill">Note</th>
-            </tr>
-          </thead>
-          <tbody>
-            {SEO_CADENCE.map((row) => (
-              <tr key={row.what}>
-                <td className="t-body-s nowrap">{row.what}</td>
-                <td className="t-body-s num">{row.perWeek}</td>
-                <td className="t-meta">{row.mode === 'auto' ? 'Auto' : 'Manual'}</td>
-                <td className="t-body-s text-secondary">{row.note}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="stack">
+        {SEO_CADENCE.map((row) => (
+          <div key={row.what} className="stack-row">
+            <p className="t-body-s">
+              {row.what}{' '}
+              <span className={row.lapsed === true ? 't-meta text-attention' : 't-meta text-tertiary'}>
+                {row.rate}
+              </span>
+            </p>
+            <p className="t-body-s text-secondary">{row.note}</p>
+          </div>
+        ))}
       </div>
-
-      <State
-        kind="empty"
-        headline="No search answer has published yet."
-        consequence="Nothing is blocked — it is sequenced. The pages come from the misses, which is what Tasks reads."
-      />
-      <Link className="t-label" href="/seo/tasks">
-        See what the read-out implies →
-      </Link>
     </section>
   );
 }

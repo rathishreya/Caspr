@@ -655,6 +655,420 @@ p {
 }
 
 /*
+ * Emphasis inside a sentence.
+ *
+ * ⚑ Added 2026-09-16. `t-meta-bold` was being used for this, and it is not emphasis — it is
+ * an 11px uppercase mono label. Mid-paragraph it shrank the text, shouted it, and changed
+ * typeface, so a clause meant to carry the sentence broke it instead. Emphasis keeps the
+ * size and the family it is sitting in and changes only weight and colour.
+ */
+strong,
+.em {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/*
+ * ══ SEO · the three clocks ═══════════════════════════════════════════════
+ *
+ * `portal-design-spec.md` §10: the SEO dashboard was redrawn on 2026-08-25 to three kill
+ * conditions on three clocks, because one condition measured only the slowest third of the
+ * channel. Three cards, never a summary row — a summary is the thing being corrected.
+ *
+ * A stopped clock is drawn as a stopped clock: dimmed figure, attention-coloured rule down
+ * the side, and the reading replaced by what would start it. That contrast is the whole
+ * point of the screen — the fastest of the three is the one nobody has started.
+ */
+.clocks {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+@media (max-width: 1099px) {
+  .clocks {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.clock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  border: 1px solid var(--border-default);
+  border-top: 2px solid var(--accent-approve);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+}
+
+.clock--stopped {
+  border-top-color: var(--accent-attention);
+}
+
+.clock--killed {
+  border-color: var(--accent-attention);
+  border-top-color: var(--accent-attention);
+  background: var(--accent-wash);
+}
+
+.clock__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.clock__speed {
+  color: var(--text-tertiary);
+}
+
+.clock__what {
+  color: var(--text-secondary);
+  min-height: 3em;
+}
+
+/* The reading. A fraction, never a percentage — the denominator is the work to be done. */
+.clock__figure {
+  display: flex;
+  align-items: baseline;
+  margin-top: var(--space-3);
+}
+
+.clock__have {
+  color: var(--text-primary);
+}
+
+.clock__have--stopped {
+  color: var(--text-tertiary);
+}
+
+.clock__of {
+  color: var(--text-tertiary);
+}
+
+.clock__measure {
+  color: var(--text-tertiary);
+}
+
+.clock__track {
+  height: 3px;
+  margin: var(--space-3) 0 var(--space-2);
+  background: var(--border-default);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.clock__fill {
+  height: 100%;
+  background: var(--text-secondary);
+}
+
+.clock--stopped .clock__fill {
+  background: var(--accent-attention);
+}
+
+.clock__says {
+  display: flex;
+  gap: var(--space-2);
+  color: var(--text-secondary);
+  min-height: 3em;
+}
+
+.clock__says--stopped {
+  color: var(--accent-attention);
+}
+
+.clock__facts {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-default);
+}
+
+.clock__facts dt {
+  color: var(--text-tertiary);
+}
+
+.clock__facts dd {
+  margin: 2px 0 0;
+  color: var(--text-secondary);
+}
+
+/* ── SEO · a target on the list ──────────────────────────────────────────── */
+
+.targets {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.target {
+  display: grid;
+  grid-template-columns: minmax(0, 220px) minmax(0, 1fr) auto;
+  gap: var(--space-4);
+  align-items: start;
+  padding: var(--space-4);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface-base);
+}
+
+.target--closed {
+  background: transparent;
+  border-style: dashed;
+}
+
+.target__domain {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  color: var(--text-primary);
+}
+
+/* The one target confirmed across two independent query families. It earns the mark. */
+.target__priority {
+  color: var(--accent-approve);
+}
+
+.target__meta {
+  margin-top: 2px;
+  color: var(--text-tertiary);
+}
+
+.target__body {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.target__act {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.target__lapsed {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-tertiary);
+}
+
+.target__error {
+  grid-column: 1 / -1;
+  color: var(--accent-attention);
+}
+
+@media (max-width: 1099px) {
+  .target {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-3);
+  }
+
+  .target__act {
+    justify-content: flex-start;
+  }
+}
+
+/* ── SEO · a task ────────────────────────────────────────────────────────── */
+
+.tasks {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.task {
+  display: grid;
+  grid-template-columns: minmax(0, 260px) minmax(0, 1fr) auto;
+  gap: var(--space-4);
+  align-items: start;
+  padding: var(--space-4);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface-base);
+}
+
+.task--done {
+  background: transparent;
+  border-style: dashed;
+}
+
+.task--done .task__title {
+  color: var(--text-tertiary);
+  text-decoration: line-through;
+}
+
+.task__title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+/* Debt is a gap that already exists, not a new thing to build. Worth marking. */
+.task__debt {
+  color: var(--accent-attention);
+}
+
+.task__meta {
+  margin-top: 2px;
+  color: var(--text-tertiary);
+}
+
+.task__what {
+  color: var(--text-secondary);
+  min-width: 0;
+}
+
+.task__closed {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--accent-approve);
+}
+
+@media (max-width: 1099px) {
+  .task {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2);
+  }
+}
+
+/* ── SEO · state tags ────────────────────────────────────────────────────── */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--space-2);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
+
+.tag--identified {
+  color: var(--text-tertiary);
+}
+
+.tag--approached {
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+}
+
+.tag--included,
+.tag--yes {
+  border-color: var(--accent-approve);
+  color: var(--accent-approve);
+}
+
+.tag--declined,
+.tag--dropped {
+  border-color: var(--accent-attention);
+  color: var(--accent-attention);
+}
+
+.tag--no_reply {
+  border-style: dashed;
+}
+
+.tag--one_page,
+.tag--conversion_only {
+  border-color: var(--text-tertiary);
+  color: var(--text-secondary);
+}
+
+/* ── SEO · the six levers ────────────────────────────────────────────────── */
+
+.levers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+@media (max-width: 899px) {
+  .levers {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.lever {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface-base);
+}
+
+.lever--on {
+  border-left: 2px solid var(--accent-approve);
+}
+
+.lever__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.lever__gates {
+  color: var(--text-secondary);
+}
+
+/* ── SEO · two readings of the same finding ──────────────────────────────── */
+
+.reading {
+  display: grid;
+  gap: var(--space-1);
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-left: 2px solid var(--accent-approve);
+  background: var(--surface-base);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.reading--problem {
+  border-left-color: var(--accent-attention);
+}
+
+.reading__label {
+  color: var(--text-tertiary);
+}
+
+.baseline__figure {
+  margin: var(--space-3) 0 var(--space-2);
+  color: var(--accent-attention);
+}
+
+/* ── SEO · the AEO standard ──────────────────────────────────────────────── */
+
+.standard {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.standard__row {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: start;
+}
+
+.standard__mark {
+  padding-top: 3px;
+  color: var(--text-tertiary);
+}
+
+.standard__worth {
+  margin-left: var(--space-2);
+  color: var(--accent-approve);
+}
+
+/*
  * ── Gates — a condition, whether it holds, and what it is waiting on ──────
  *
  * Built for Performance and reused by Email, because the two workstreams have the same
