@@ -2,15 +2,19 @@ import {
   AD_BUDGET_MONTHLY,
   AD_PLATFORM_LABEL,
   AD_PLATFORM_RULES,
-  CAMPAIGN_CHECKLIST,
+  AD_STATES,
+  AD_STATE_LABEL,
   STANCE_LIBRARY,
   checkAdCopy,
-  readAd,
   readSpend,
+  stance,
   type Ad,
   type AdPlatform,
+  type AdState,
+  type StanceAngle,
 } from '@caspr-portal/domain';
-import type { Metadata } from 'next';
+import type { Metadata, Route } from 'next';
+import Link from 'next/link';
 
 import { State } from '@/components/primitives/state';
 import { Tile } from '@/components/primitives/tile';
@@ -19,34 +23,54 @@ import { getRepository } from '@/lib/repository';
 
 export const metadata: Metadata = { title: 'Performance — Ads' };
 
+interface PageProps {
+  readonly searchParams: Promise<{ on?: string; angle?: string; state?: string }>;
+}
+
 /**
  * Performance ▸ Ads — every ad, the angle it tests, and whether it is working.
  *
  * ⚑ **An ad here is an angle under test, not a unit of spend.** `channel-model.md` §3.6:
  * paid is *"a validation instrument, not an acquisition channel — its job is to find out
- * which message converts, cheaply, so the owned engine knows what to amplify."* At ~$850
- * deployable it buys about ten signups a month, which is real and is never the funnel.
+ * which message converts, cheaply, so the owned engine knows what to amplify."*
  *
- * So the screen is organised by **placement**, and every ad names the stance-library angle it
- * is testing. Nine angles, and the count of them that have a reading is the number this
- * workstream is actually judged on — more than the signups are.
+ * ⚑ **Two reference panels came out 2026-09-16** — the campaign checklist and the nine
+ * angles — and a filter went in where they were. The angles are still on every ad's header,
+ * which is where they are useful; a list of nine was a thing to read once. `CAMPAIGN_CHECKLIST`
+ * and `STANCE_LIBRARY` are unchanged and still exported.
+ *
+ * The filter is the workstream's own request: one row of pills to shuffle across every
+ * placement and every angle, because *"different ads per place, different angle"* only reads
+ * as a system if you can slice it both ways.
  */
-export default async function PerformanceAds() {
+export default async function PerformanceAds({ searchParams }: PageProps) {
+  const params = await searchParams;
   const ads = await getRepository().ads();
   const spend = readSpend(ads, AD_BUDGET_MONTHLY);
 
+  const onPlatform = AD_PLATFORM_RULES.some((rule) => rule.id === params.on)
+    ? (params.on as AdPlatform)
+    : null;
+  const onAngle = STANCE_LIBRARY.some((row) => row.id === params.angle)
+    ? (params.angle as StanceAngle)
+    : null;
+  const onState = (AD_STATES as readonly string[]).includes(params.state ?? '')
+    ? (params.state as AdState)
+    : null;
+
+  const visible = ads.filter(
+    (ad) =>
+      (onPlatform === null || ad.platform === onPlatform) &&
+      (onAngle === null || ad.angle === onAngle) &&
+      (onState === null || ad.state === onState),
+  );
+
   const drafts = ads.filter((ad) => ad.state === 'draft');
   const needFixing = drafts.filter((ad) => checkAdCopy(ad).some((problem) => problem.weight === 'blocking'));
-  const notWorking = ads.filter((ad) => ['rewrite', 'pause'].includes(readAd(ad.metrics).verdict) && ad.metrics !== null);
+  const filtered = onPlatform !== null || onAngle !== null || onState !== null;
 
   return (
     <div className="board">
-      <p className="lede t-body-m">
-        Paid is a validation instrument. Its job is to find out which message converts, cheaply, so the
-        owned engine knows what to amplify — which is why every ad here names the angle it is testing, and
-        why nine angles matter more than ten signups.
-      </p>
-
       <div className="tiles">
         <Tile
           label="ANGLES UNDER TEST"
@@ -77,73 +101,135 @@ export default async function PerformanceAds() {
         />
       </div>
 
-      {notWorking.length > 0 && (
-        <section aria-labelledby="notworking-heading">
+      {/* ── FILTERS ────────────────────────────────────────────────────────── */}
+      <div className="filters">
+        <Row label="Where">
+          <Pill href="/ads" active={onPlatform === null} params={params} drop="on" label="Every placement" count={ads.length} />
+          {AD_PLATFORM_RULES.map((rule) => (
+            <Pill
+              key={rule.id}
+              active={onPlatform === rule.id}
+              params={params}
+              set={{ on: rule.id }}
+              label={AD_PLATFORM_LABEL[rule.id]}
+              count={ads.filter((ad) => ad.platform === rule.id).length}
+            />
+          ))}
+        </Row>
+
+        <Row label="Angle">
+          <Pill active={onAngle === null} params={params} drop="angle" label="Every angle" count={ads.length} />
+          {STANCE_LIBRARY.map((row) => {
+            const count = ads.filter((ad) => ad.angle === row.id).length;
+            return (
+              <Pill
+                key={row.id}
+                active={onAngle === row.id}
+                params={params}
+                set={{ angle: row.id }}
+                label={row.angle}
+                count={count}
+              />
+            );
+          })}
+        </Row>
+
+        <Row label="State">
+          <Pill active={onState === null} params={params} drop="state" label="Any" count={ads.length} />
+          {AD_STATES.map((value) => {
+            const count = ads.filter((ad) => ad.state === value).length;
+            return (
+              <Pill
+                key={value}
+                active={onState === value}
+                params={params}
+                set={{ state: value }}
+                label={AD_STATE_LABEL[value]}
+                count={count}
+              />
+            );
+          })}
+        </Row>
+      </div>
+
+      {visible.length === 0 ? (
+        <State
+          kind="empty"
+          headline="Nothing matches that."
+          consequence="Correctly empty for this combination. Clear a filter to see the rest of the ad set."
+        />
+      ) : filtered ? (
+        <section aria-label="Filtered ads">
           <div className="board-head">
-            <h3 id="notworking-heading" className="t-title-m">
-              Not working <span className="board-count t-meta">{notWorking.length}</span>
+            <h3 className="t-title-m">
+              {visible.length} {visible.length === 1 ? 'ad' : 'ads'}
+              {onAngle !== null && <span className="board-count t-meta">{stance(onAngle).angle}</span>}
             </h3>
-            <span className="board-hint t-body-s">
-              A rule has fired. Rewrite the ad or pause it — never raise the bid, which buys more impressions
-              of a message nobody wanted.
-            </span>
           </div>
           <div className="ads">
-            {notWorking.map((ad) => (
+            {visible.map((ad) => (
               <AdCard key={ad.id} ad={ad} />
             ))}
           </div>
         </section>
+      ) : (
+        AD_PLATFORM_RULES.map((rule) => (
+          <PlatformSection key={rule.id} platform={rule.id} ads={visible.filter((ad) => ad.platform === rule.id)} />
+        ))
       )}
-
-      {AD_PLATFORM_RULES.map((rule) => (
-        <PlatformSection key={rule.id} platform={rule.id} ads={ads.filter((ad) => ad.platform === rule.id)} />
-      ))}
-
-      <section className="panel panel--wide">
-        <div className="panel__title">
-          <h2 className="t-title-m">On every campaign, before a dollar moves</h2>
-          <span className="t-meta text-tertiary">FREE, CONTROLLABLE, AND IT IS WHAT PRODUCES THE MULTI-SECTION LOOK</span>
-        </div>
-        <div className="stack">
-          {CAMPAIGN_CHECKLIST.map((check) => (
-            <div key={check.id} className="stack-row">
-              <p className="t-body-s">{check.what}</p>
-              <p className="t-body-s text-secondary">{check.detail}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="panel panel--wide">
-        <div className="panel__title">
-          <h2 className="t-title-m">The nine angles</h2>
-          <span className="t-meta text-tertiary">THE SAME LIBRARY THE DRAFTS DRAW FROM</span>
-        </div>
-        <p className="t-body-s text-secondary" style={{ maxWidth: '72ch' }}>
-          An ad testing a claim the conversation engine may not make would be testing something we could
-          never then amplify. Same library, same claims register.
-        </p>
-        <div className="angles">
-          {STANCE_LIBRARY.map((row) => {
-            const tested = ads.filter((ad) => ad.angle === row.id);
-            const live = tested.filter((ad) => ad.metrics !== null).length;
-            return (
-              <div key={row.id} className={live > 0 ? 'angle angle--tested' : 'angle'}>
-                <p className="t-body-m">{row.angle}</p>
-                <p className="t-meta text-tertiary">
-                  {tested.length === 0
-                    ? 'No ad on it'
-                    : live > 0
-                      ? `${live} reading${live === 1 ? '' : 's'}`
-                      : `${tested.length} drafted, none run`}
-                </p>
-              </div>
-            );
-          })}
-        </div>
-      </section>
     </div>
+  );
+}
+
+/** One filter row: a label and its pills. */
+function Row({ label, children }: { readonly label: string; readonly children: React.ReactNode }) {
+  return (
+    <div className="filters__row">
+      <span className="filters__label t-meta">{label}</span>
+      <nav className="pills" aria-label={`Filter ads by ${label.toLowerCase()}`}>
+        {children}
+      </nav>
+    </div>
+  );
+}
+
+/**
+ * A filter pill that keeps the other filters.
+ *
+ * Every pill carries the current query forward and changes only its own key, so picking a
+ * placement does not silently drop the angle somebody already chose — which is the whole
+ * point of having two axes.
+ */
+function Pill({
+  active,
+  params,
+  set,
+  drop,
+  label,
+  count,
+}: {
+  readonly active: boolean;
+  readonly params: Record<string, string | undefined>;
+  readonly set?: Record<string, string>;
+  readonly drop?: string;
+  readonly label: string;
+  readonly count: number;
+  readonly href?: string;
+}) {
+  const query = new URLSearchParams();
+  for (const [key, value] of Object.entries({ ...params, ...(set ?? {}) })) {
+    if (value !== undefined && key !== drop) query.set(key, value);
+  }
+  const suffix = query.toString();
+
+  return (
+    <Link
+      className={count === 0 ? 'pill pill--empty' : 'pill'}
+      href={`/performance/ads${suffix === '' ? '' : `?${suffix}`}` as Route}
+      aria-current={active ? 'true' : undefined}
+    >
+      {label} <span className="pill__count">{count}</span>
+    </Link>
   );
 }
 

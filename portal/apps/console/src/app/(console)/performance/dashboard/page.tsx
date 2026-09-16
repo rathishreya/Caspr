@@ -1,8 +1,7 @@
-import { CAC_CEILING, LAUNCH_BURST_TOTAL, PAID_CONDITIONS, paidEngine } from '@caspr-portal/domain';
+import { CAC_CEILING, LAUNCH_BURST_TOTAL, paidEngine } from '@caspr-portal/domain';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
-import { Icon } from '@/components/icons';
 import { Tile } from '@/components/primitives/tile';
 
 export const metadata: Metadata = { title: 'Performance — Dashboard' };
@@ -18,6 +17,10 @@ export const metadata: Metadata = { title: 'Performance — Dashboard' };
  * launch burst is not the paid engine.** The burst is one $1,500 line at the peak, safe
  * without a reviewer because it runs on kill rules agreed in advance. The engine is ongoing
  * acquisition, and condition 2 is a person in a seat.
+ *
+ * ⚑ **The four-condition panel came out 2026-09-16.** The conditions have not changed and
+ * `PAID_CONDITIONS` still gates `paidEngine()` — the banner and the first tile read from it.
+ * What went is the list, which a person read once and then scrolled past every time after.
  */
 export default function PerformanceDashboard() {
   const engine = paidEngine();
@@ -52,43 +55,9 @@ export default function PerformanceDashboard() {
         />
       </div>
 
-      <section className="panel panel--wide">
-        <div className="panel__title">
-          <h2 className="t-title-m">The four conditions</h2>
-          <span className="t-meta text-tertiary">ACTIVATION FRAMEWORK §4.1 · ALL FOUR, NOT ANY</span>
-        </div>
-
-        <div className="gates">
-          {PAID_CONDITIONS.map((condition) => (
-            <div key={condition.id} className={condition.met ? 'gate gate--met' : 'gate'}>
-              <span className="gate__mark">
-                <Icon name={condition.met ? 'check' : 'close'} size={16} />
-              </span>
-              <div className="gate__body">
-                <p className="t-title-m">{condition.condition}</p>
-                <p className="t-body-s text-secondary">{condition.standing}</p>
-                <p className="t-meta text-tertiary">{condition.establishedIn}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <p className="t-body-s text-secondary" style={{ marginTop: 'var(--space-4)' }}>
-          ⚠ At the peak, condition 2 may still be unmet — the hire lands in 8&ndash;12 weeks. The burst may
-          run anyway, because it carries its own kill rules. The ongoing engine may not, because a paused
-          campaign with nobody to diagnose it is a paused campaign forever.
-        </p>
-      </section>
-
-      <p className="t-body-s text-secondary" style={{ maxWidth: '72ch' }}>
-        <strong>Why this workstream is empty and that is the plan.</strong> Performance
-        is one of five workstreams and the only one whose correct state today is off. The owner is a new
-        hire who is also hired explicitly to disagree — to read x and p and argue with the kill conditions —
-        which is the function the TL&rsquo;s departure actually removed.{' '}
-        <Link className="t-label" href="/performance/paid">
-          The burst, the kill rules and Meta →
-        </Link>
-      </p>
+      <Link className="t-label" href="/performance/ads">
+        The ads, and which angle each one tests →
+      </Link>
     </>
   );
 }

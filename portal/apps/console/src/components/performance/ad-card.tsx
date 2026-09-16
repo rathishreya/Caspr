@@ -2,7 +2,9 @@
 
 import {
   AD_PLATFORM_LABEL,
+  AD_PROMPT_MAX,
   AD_STATE_LABEL,
+  canReviseAd,
   checkAdCopy,
   ctr,
   platformRule,
@@ -10,10 +12,10 @@ import {
   stance,
   type Ad,
 } from '@caspr-portal/domain';
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 
-import { moveAd, type AdActionState } from '@/app/(console)/performance/actions';
+import { moveAd, reviseAd, type AdActionState } from '@/app/(console)/performance/actions';
 import { Icon } from '@/components/icons';
 
 const INITIAL: AdActionState = { errors: [] };
@@ -32,6 +34,7 @@ const INITIAL: AdActionState = { errors: [] };
  */
 export function AdCard({ ad }: { readonly ad: Ad }) {
   const [state, action] = useActionState(moveAd, INITIAL);
+  const [open, setOpen] = useState(false);
   const rule = platformRule(ad.platform);
   const problems = checkAdCopy(ad);
   const blocking = problems.filter((problem) => problem.weight === 'blocking');
@@ -52,10 +55,18 @@ export function AdCard({ ad }: { readonly ad: Ad }) {
           <p className="ad__where t-meta text-tertiary">
             → {ad.copy.landingPath} · {rule.job}
           </p>
-        </div>
 
-        <div className="ad__side">
           <p className="t-body-s text-secondary">{ad.note}</p>
+
+          {ad.revision !== undefined && (
+            <p className="ad__revision t-body-s">
+              <span className="t-meta">Change asked for {ad.revision.at}</span> &ldquo;{ad.revision.note}&rdquo;
+              <span className="text-tertiary">
+                {' '}
+                — ⑩ the Writer is not built yet, so the instruction is recorded and the ad waits here.
+              </span>
+            </p>
+          )}
 
           {ad.metrics !== null && (
             <div className={reading.verdict === 'working' ? 'ad__reading ad__reading--ok' : 'ad__reading'}>
@@ -85,43 +96,130 @@ export function AdCard({ ad }: { readonly ad: Ad }) {
               ))}
             </div>
           )}
+        </div>
 
-          <div className="ad__act">
-            {ad.state === 'draft' && (
-              <>
-                <Move action={action} id={ad.id} to="approved" label="Approve" kind="approve" disabled={blocking.length > 0} />
-                <span className="t-body-s text-tertiary">
-                  {blocking.length > 0
-                    ? `${blocking.length} blocking ${blocking.length === 1 ? 'problem' : 'problems'} — fix the copy first.`
-                    : 'Approved ads wait for the gates. Nothing spends today.'}
-                </span>
-              </>
-            )}
-            {ad.state === 'approved' && <Move action={action} id={ad.id} to="live" label="Set live" kind="primary" />}
-            {ad.state === 'live' && (
-              <Move action={action} id={ad.id} to="paused" label="Pause" kind="reject" />
-            )}
-            {ad.state === 'paused' && (
-              <>
-                <Move action={action} id={ad.id} to="live" label="Resume" kind="approve" />
-                <Move action={action} id={ad.id} to="killed" label="Kill this angle" kind="reject" />
-              </>
-            )}
-            {ad.state === 'killed' && (
-              <span className="t-body-s text-tertiary">
-                Killed. The angle is a finding — it does not come back, and the owned engine should know.
-              </span>
-            )}
-          </div>
-
-          {state.errors.length > 0 && (
-            <p className="ad__error t-body-s" role="alert">
-              {state.errors.join(' ')}
-            </p>
+        {/*
+          The decisions in a column beside the ad, the same shape the post queue uses. A row
+          of buttons under a creative puts the decision below the fold on anything taller than
+          a search result, and this is the screen a person works down.
+        */}
+        <div className="decide__rail" role="group" aria-label="Decide this ad">
+          {ad.state === 'draft' && (
+            <Move action={action} id={ad.id} to="approved" label="Approve" kind="approve" disabled={blocking.length > 0} />
+          )}
+          {ad.state === 'approved' && <Move action={action} id={ad.id} to="live" label="Set live" kind="primary" />}
+          {ad.state === 'live' && <Move action={action} id={ad.id} to="paused" label="Pause" kind="reject" />}
+          {ad.state === 'paused' && (
+            <>
+              <Move action={action} id={ad.id} to="live" label="Resume" kind="approve" />
+              <Move action={action} id={ad.id} to="killed" label="Kill this angle" kind="reject" />
+            </>
+          )}
+          {canReviseAd(ad.state) && (
+            <button
+              type="button"
+              className={open ? 'btn btn--active' : 'btn'}
+              aria-expanded={open}
+              aria-controls={`revise-${ad.id}`}
+              onClick={() => setOpen((was) => !was)}
+            >
+              Change it…
+            </button>
           )}
         </div>
       </div>
+
+      {ad.state === 'draft' && blocking.length > 0 && (
+        <p className="ad__blocked t-body-s">
+          {blocking.length} blocking {blocking.length === 1 ? 'problem' : 'problems'} — fix the copy before
+          this can be approved.
+        </p>
+      )}
+
+      {ad.state === 'killed' && (
+        <p className="ad__blocked t-body-s text-tertiary">
+          Killed. The angle is a finding — it does not come back, and the owned engine should know.
+        </p>
+      )}
+
+      {open && <RevisePanel ad={ad} onDone={() => setOpen(false)} />}
+
+      {state.errors.length > 0 && (
+        <p className="ad__error t-body-s" role="alert">
+          {state.errors.join(' ')}
+        </p>
+      )}
     </article>
+  );
+}
+
+/**
+ * Say what to change, and the ad is rebuilt.
+ *
+ * ⚑ **The reviewer never types the ad.** They type an instruction; the writer rewrites
+ * against the claims register; the rebuilt ad comes back through the same approval. Money
+ * behind a placement is exactly the wrong place for a human to paste unchecked copy.
+ */
+function RevisePanel({ ad, onDone }: { readonly ad: Ad; readonly onDone: () => void }) {
+  const [state, action] = useActionState(reviseAd, INITIAL);
+  const [note, setNote] = useState('');
+
+  return (
+    <form
+      id={`revise-${ad.id}`}
+      className="reject revise"
+      action={(formData) => {
+        action(formData);
+        onDone();
+      }}
+    >
+      <input type="hidden" name="adId" value={ad.id} />
+      <div className="revise__body">
+        <p className="t-meta reject__legend">Change it</p>
+        <p className="revise__lede t-body-s">
+          Say what to change. The ad is rebuilt from your words and comes back for the same approval — you
+          never type the ad itself.
+          {ad.state === 'live' && ' It comes down while it is rebuilt: what is running is no longer what was approved.'}
+        </p>
+
+        <label className="reject__note">
+          <textarea
+            name="note"
+            value={note}
+            onChange={(event) => setNote(event.target.value)}
+            maxLength={AD_PROMPT_MAX}
+            required
+            rows={3}
+            placeholder="Lead on the four-hours line instead of the price. Keep the $100 free callout."
+          />
+        </label>
+
+        <div className="reject__actions">
+          <ReviseSubmit />
+          <button type="button" className="btn" onClick={onDone}>
+            Cancel
+          </button>
+          <span className={note.length > AD_PROMPT_MAX - 40 ? 'revise__count revise__count--near t-meta' : 'revise__count t-meta'}>
+            {note.length} / {AD_PROMPT_MAX}
+          </span>
+        </div>
+
+        {state.errors.length > 0 && (
+          <p className="ad__error t-body-s" role="alert">
+            {state.errors.join(' ')}
+          </p>
+        )}
+      </div>
+    </form>
+  );
+}
+
+function ReviseSubmit() {
+  const { pending } = useFormStatus();
+  return (
+    <button type="submit" className="btn btn--primary" disabled={pending}>
+      {pending ? 'Sending' : 'Send to the writer'}
+    </button>
   );
 }
 

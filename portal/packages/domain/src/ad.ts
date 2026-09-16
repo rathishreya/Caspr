@@ -176,6 +176,16 @@ export function canMoveAd(from: AdState, to: AdState): boolean {
   return AD_NEXT[from].includes(to);
 }
 
+/**
+ * Whether an ad can be sent back to be rebuilt.
+ *
+ * Anything but a killed one. A live ad being revised is a live ad coming down — which is
+ * correct, because the thing running is no longer the thing anybody approved.
+ */
+export function canReviseAd(state: AdState): boolean {
+  return state !== 'killed';
+}
+
 export interface AdCopy {
   /** Search takes several; social takes one. Each is held to the platform's ceiling. */
   readonly headlines: readonly string[];
@@ -200,7 +210,20 @@ export interface Ad {
   readonly state: AdState;
   readonly metrics: AdMetrics | null;
   readonly note: string;
+  /**
+   * The last instruction somebody gave the writer about this ad.
+   *
+   * ⚑ **A reviewer types an instruction, never the ad.** The same rule the post queue
+   * follows: the words that go out are written against the claims register by the engine, and
+   * a human rewriting them in a text box is how an unchecked claim reaches a placement with
+   * money behind it. So a revision says *what to change*, the ad is rebuilt, and the rebuilt
+   * ad comes back through the same approval.
+   */
+  readonly revision?: { readonly note: string; readonly at: string };
 }
+
+/** The same ceiling the post queue uses, so an instruction means the same length everywhere. */
+export const AD_PROMPT_MAX = 400;
 
 /** What a live ad has done. Null until it has run. */
 export interface AdMetrics {

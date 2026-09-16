@@ -23,6 +23,7 @@ import {
   REFERENCE_WEEK,
   canAdvance,
   canMoveAd,
+  canReviseAd,
   isDecidable,
   shiftWeek,
   statusAfter,
@@ -138,6 +139,13 @@ export interface ContentRepository {
    * that already lost is the one thing that would make it a worthless one.
    */
   moveAd(id: string, to: AdState): Promise<boolean>;
+  /**
+   * Send an ad back to be rebuilt, with the instruction attached.
+   *
+   * It returns to `draft` whatever it was — a live ad being revised is a live ad coming down,
+   * because the thing running is no longer the thing anybody approved.
+   */
+  reviseAd(id: string, note: string): Promise<boolean>;
 
   /** Which adapter answered. Surfaced on screen rather than hidden — see `FeedNotice`. */
   readonly kind: 'postgres' | 'reference';
@@ -175,6 +183,7 @@ class ReferenceRepository implements ContentRepository {
   readonly #approaches = new Map<string, { readonly state: ApproachState; readonly on: string }>();
   readonly #tasksDone = new Set<string>();
   readonly #ads = new Map<string, AdState>();
+  readonly #adRevisions = new Map<string, { readonly note: string; readonly at: string }>();
 
   clock(): Date {
     return new Date(REFERENCE_NOW);
@@ -302,7 +311,8 @@ class ReferenceRepository implements ContentRepository {
       const reading = ILLUSTRATIVE_READINGS[ad.id];
       const metrics =
         reading !== undefined && (state === 'live' || state === 'paused' || state === 'killed') ? reading : null;
-      return { ...ad, state, metrics };
+      const revision = this.#adRevisions.get(ad.id);
+      return revision === undefined ? { ...ad, state, metrics } : { ...ad, state, metrics, revision };
     });
   }
 
@@ -310,6 +320,14 @@ class ReferenceRepository implements ContentRepository {
     const current = (await this.ads()).find((ad) => ad.id === id);
     if (current === undefined || !canMoveAd(current.state, to)) return false;
     this.#ads.set(id, to);
+    return true;
+  }
+
+  async reviseAd(id: string, note: string): Promise<boolean> {
+    const current = (await this.ads()).find((ad) => ad.id === id);
+    if (current === undefined || !canReviseAd(current.state)) return false;
+    this.#ads.set(id, 'draft');
+    this.#adRevisions.set(id, { note, at: this.clock().toISOString().slice(0, 10) });
     return true;
   }
 }
@@ -459,6 +477,10 @@ class PostgresRepository implements ContentRepository {
   }
 
   async moveAd(): Promise<boolean> {
+    return false;
+  }
+
+  async reviseAd(): Promise<boolean> {
     return false;
   }
 

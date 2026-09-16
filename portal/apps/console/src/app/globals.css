@@ -1075,11 +1075,58 @@ strong,
   border-bottom: 1px solid var(--border-default);
 }
 
+/* The ad on the left, the decisions in a column on the right — the post queue's shape. */
 .ad__body {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) 118px;
   gap: var(--space-4);
   padding: var(--space-4);
+}
+
+.ad__revision {
+  padding: var(--space-3);
+  border-left: 2px solid var(--text-secondary);
+  background: var(--surface-raised);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.ad__blocked {
+  padding: 0 var(--space-4) var(--space-4);
+  color: var(--accent-attention);
+}
+
+/*
+ * ── Filters — two axes, and picking one must not drop the other ───────────
+ *
+ * Placement and angle are the two ways the ad set is actually sliced, so every pill carries
+ * the current query forward and changes only its own key. A filter row that resets the other
+ * filter teaches people to use one at a time, which is the opposite of why there are two.
+ */
+.filters {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.filters__row {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: baseline;
+}
+
+.filters__label {
+  color: var(--text-tertiary);
+}
+
+.filters .pills {
+  margin-bottom: 0;
+}
+
+@media (max-width: 767px) {
+  .filters__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-1);
+  }
 }
 
 .ad__preview {

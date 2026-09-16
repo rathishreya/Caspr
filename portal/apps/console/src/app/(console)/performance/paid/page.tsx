@@ -1,18 +1,13 @@
 import {
   KILL_RULES,
   LAUNCH_BURST_TOTAL,
-  META_AUDIENCES,
   META_AUDIENCE_MINIMUM,
   META_DECISION_WEEK,
-  META_GUARDRAILS,
-  META_NEVER,
-  META_REALITY,
   burstSplit,
 } from '@caspr-portal/domain';
 import type { Metadata } from 'next';
 
-import { Icon } from '@/components/icons';
-import { Bar, Tile } from '@/components/primitives/tile';
+import { Tile } from '@/components/primitives/tile';
 
 export const metadata: Metadata = { title: 'Performance — Paid' };
 
@@ -27,6 +22,12 @@ export const metadata: Metadata = { title: 'Performance — Paid' };
  * nothing to an audience under 1,000 people, so money moved there before the audience exists
  * buys delivery we cannot get. That is also why the audiences accumulate from Day 1 at $0 —
  * so the decision at week 8 is a reading rather than a guess.
+ *
+ * ⚑ **Three reference panels came out 2026-09-16** at the workstream owner's request — why
+ * Meta can only be retargeting, the four accumulating audiences, and the three guardrails.
+ * **None of those rules moved**: `META_REALITY`, `META_AUDIENCES`, `META_GUARDRAILS` and
+ * `META_NEVER` are still exported and still tested, and the tag is still enforced in the
+ * build to the marketing site only. What is gone is reading them on every visit.
  */
 export default function PerformancePaid() {
   // No audience exists yet: the Meta tag is a §14 dependency and is not live, so the honest
@@ -83,75 +84,6 @@ export default function PerformancePaid() {
           The two that pause on their own are what make the burst safe while condition 2 — a reviewer in the
           seat — is still unmet. Budget changes are made by the owner and logged. No silent increases.
         </p>
-      </section>
-
-      <div className="grid-2">
-        <section className="panel">
-          <div className="panel__title">
-            <h2 className="t-title-m">Why Meta can only be retargeting</h2>
-            <span className="t-meta text-tertiary">2026 REALITY</span>
-          </div>
-          {META_REALITY.map((row) => (
-            <div key={row.what} className="stack-row">
-              <p className="t-body-s">{row.what}</p>
-              <p className="t-body-s text-secondary">{row.reality}</p>
-            </div>
-          ))}
-          <p className="t-body-s text-attention" style={{ marginTop: 'var(--space-3)' }}>
-            ⛔ {META_NEVER}
-          </p>
-          <p className="t-body-s text-secondary" style={{ marginTop: 'var(--space-3)' }}>
-            LinkedIn and X reach the ICP in analytical mode. Meta reaches the same person at 9pm, with more
-            mind space. Meta is not where they discover Caspr — it is where they remember it.
-          </p>
-        </section>
-
-        <section className="panel">
-          <div className="panel__title">
-            <h2 className="t-title-m">The audiences</h2>
-            <span className="t-meta text-tertiary">ACCUMULATING FROM DAY 1 · AT $0</span>
-          </div>
-          {META_AUDIENCES.map((audience) => (
-            <div key={audience.name} className="stack-row">
-              <p className="t-body-s">
-                {audience.name}{' '}
-                <span className="t-meta text-tertiary">{audience.size === null ? 'NOT YET BUILDING' : audience.size}</span>
-              </p>
-              <p className="t-body-s text-secondary">{audience.how}</p>
-            </div>
-          ))}
-          <div style={{ marginTop: 'var(--space-3)' }}>
-            <Bar fraction={audienceToday / META_AUDIENCE_MINIMUM} label="Meta audience against the 1,000 minimum" />
-          </div>
-          <p className="t-meta text-tertiary" style={{ marginTop: 'var(--space-2)' }}>
-            {audienceToday.toLocaleString('en-US')} of {META_AUDIENCE_MINIMUM.toLocaleString('en-US')} — the point
-            at which Meta will serve anything at all
-          </p>
-        </section>
-      </div>
-
-      <section className="panel panel--wide">
-        <div className="panel__title">
-          <h2 className="t-title-m">Three guardrails</h2>
-          <span className="t-meta text-tertiary">ONE OF THEM IS ENFORCED IN THE BUILD</span>
-        </div>
-
-        <div className="gates">
-          {META_GUARDRAILS.map((guardrail) => (
-            <div key={guardrail.rule} className={guardrail.enforced ? 'gate gate--met' : 'gate'}>
-              <span className="gate__mark">
-                <Icon name={guardrail.enforced ? 'check' : 'alert'} size={16} />
-              </span>
-              <div className="gate__body">
-                <p className="t-title-m">{guardrail.rule}</p>
-                <p className="t-body-s text-secondary">{guardrail.detail}</p>
-                <p className="t-meta text-tertiary">
-                  {guardrail.enforced ? 'Enforced in the build' : 'Held by a person, not by the code'}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
       </section>
     </div>
   );

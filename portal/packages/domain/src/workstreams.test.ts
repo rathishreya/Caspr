@@ -46,6 +46,7 @@ import {
   adApprovable,
   adCreativeSpec,
   canMoveAd,
+  canReviseAd,
   checkAdCopy,
   platformRule,
   readAd,
@@ -846,6 +847,19 @@ describe('ads', () => {
     // Nothing has run, so nothing has been learnt — and the number says so.
     expect(reading.anglesTested).toBe(0);
     expect(reading.spend).toBe(0);
+  });
+
+  /**
+   * A revision is not a state move. It sends the ad back to be rebuilt from an instruction,
+   * from wherever it was — and a live ad being revised is a live ad coming down, because what
+   * is running is no longer what anybody approved.
+   */
+  it('lets any ad but a killed one be sent back to be rebuilt', () => {
+    expect(canReviseAd('draft')).toBe(true);
+    expect(canReviseAd('approved')).toBe(true);
+    expect(canReviseAd('live')).toBe(true);
+    expect(canReviseAd('paused')).toBe(true);
+    expect(canReviseAd('killed')).toBe(false);
   });
 
   it('keeps Meta shut, because a custom audience needs 1,000 people first', () => {

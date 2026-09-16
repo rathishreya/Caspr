@@ -1,71 +1,111 @@
-import { PAID_CONDITIONS, paidEngine } from '@caspr-portal/domain';
+import { checkAdCopy, paidEngine, readAd } from '@caspr-portal/domain';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { State } from '@/components/primitives/state';
+import { AdCard } from '@/components/performance/ad-card';
+import { getRepository } from '@/lib/repository';
 
 export const metadata: Metadata = { title: 'Performance — Tasks' };
 
 /**
- * Performance ▸ Tasks.
+ * Performance ▸ Tasks — the ads that need a person.
  *
- * ⚑ **Correctly empty, and it says which.** Design spec §11A: an empty state must name its
- * kind on the first line — finished, unassigned, or correctly empty — because *"the
- * difference between 'you are done', 'come back in an hour' and 'nothing can publish' is the
- * entire message."*
+ * ⚑ **Rebuilt 2026-09-16.** This was a list of the four conditions the workstream waits on,
+ * which was true and was not work: not one of them closes from here. Now that ads exist there
+ * is real work, and it is the same shape as the content queue — approve, change it, or take
+ * something down.
  *
- * There is no paid work this week because there is no paid spend, and there is no paid spend
- * because four conditions do not hold. None of the four is Performance's to close — they sit
- * with activation, a hire, the testimonial programme and `/samples`. So this screen names
- * them and points at where each is actually moving, rather than inventing a queue to look
- * busy.
+ * Two kinds, and the order is the urgency. **Something a rule has fired on** is money moving
+ * badly right now. **Something waiting on a decision** can be approved today even though
+ * nothing spends until the gates open — and approving early is not premature, it is the only
+ * way the ad set is ready on the day they do.
  */
-export default function PerformanceTasks() {
+export default async function PerformanceTasks() {
+  const ads = await getRepository().ads();
   const engine = paidEngine();
+
+  const firing = ads.filter((ad) => ad.metrics !== null && ['rewrite', 'pause'].includes(readAd(ad.metrics).verdict));
+  const drafts = ads.filter((ad) => ad.state === 'draft');
+  const blocked = drafts.filter((ad) => checkAdCopy(ad).some((problem) => problem.weight === 'blocking'));
+  const clean = drafts.filter((ad) => !blocked.includes(ad));
 
   return (
     <div className="board">
-      <State
-        kind="empty"
-        headline="No paid work this week, and none is missing."
-        consequence={`The engine is dormant on ${engine.blocking.length} of ${engine.total} conditions, and not one of them is closed from this workstream. Tasks appear here the week the engine wakes.`}
-      />
+      <p className="board-status t-meta">
+        <span>{drafts.length} waiting on a decision</span>
+        {blocked.length > 0 && <span className="text-attention">{blocked.length} blocked by their copy</span>}
+        {firing.length > 0 && <span className="text-attention">{firing.length} a rule has fired on</span>}
+        <span>{engine.met} of {engine.total} gates</span>
+      </p>
 
-      <section aria-labelledby="waiting-heading">
+      {firing.length > 0 && (
+        <section aria-labelledby="firing-heading">
+          <div className="board-head">
+            <h3 id="firing-heading" className="t-title-m">
+              A rule has fired <span className="board-count t-meta">{firing.length}</span>
+            </h3>
+            <span className="board-hint t-body-s">
+              Rewrite it or take it down — never raise the bid, which buys more impressions of a message
+              nobody wanted.
+            </span>
+          </div>
+          <div className="ads">
+            {firing.map((ad) => (
+              <AdCard key={ad.id} ad={ad} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {blocked.length > 0 && (
+        <section aria-labelledby="blocked-heading">
+          <div className="board-head">
+            <h3 id="blocked-heading" className="t-title-m">
+              Cannot be approved yet <span className="board-count t-meta">{blocked.length}</span>
+            </h3>
+            <span className="board-hint t-body-s">
+              The copy breaks a rule that would be wrong in public with money behind it. Change it, and it
+              comes back here.
+            </span>
+          </div>
+          <div className="ads">
+            {blocked.map((ad) => (
+              <AdCard key={ad.id} ad={ad} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section aria-labelledby="drafts-heading">
         <div className="board-head">
-          <h3 id="waiting-heading" className="t-title-m">
-            What this is waiting on <span className="board-count t-meta">{engine.blocking.length}</span>
+          <h3 id="drafts-heading" className="t-title-m">
+            Waiting on a decision <span className="board-count t-meta">{clean.length}</span>
           </h3>
-          <span className="board-hint t-body-s">Each sits with another workstream or another person.</span>
+          <span className="board-hint t-body-s">
+            Approving is not premature. Nothing spends until all four gates hold — it is the only way the ad
+            set is ready on the day they do.
+          </span>
         </div>
 
-        <div className="table-scroll">
-          <table className="table">
-            <thead>
-              <tr>
-                <th className="t-meta nowrap">Condition</th>
-                <th className="t-meta fill">Standing today</th>
-                <th className="t-meta nowrap">Established in</th>
-              </tr>
-            </thead>
-            <tbody>
-              {PAID_CONDITIONS.map((condition) => (
-                <tr key={condition.id}>
-                  <td className={condition.met ? 't-body-s' : 't-body-s text-attention'}>{condition.condition}</td>
-                  <td className="t-body-s text-secondary">{condition.standing}</td>
-                  <td className="t-meta text-tertiary nowrap">{condition.establishedIn}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {clean.length === 0 ? (
+          <State
+            kind="empty"
+            headline="Every ad has a decision."
+            consequence="Finished, not unassigned. New ads arrive when an angle needs testing or a rule kills one."
+          />
+        ) : (
+          <div className="ads">
+            {clean.map((ad) => (
+              <AdCard key={ad.id} ad={ad} />
+            ))}
+          </div>
+        )}
       </section>
 
       <p className="t-body-s text-secondary" style={{ maxWidth: '72ch' }}>
-        The one thing that does run before any of this is the launch burst — one $1,500 line at the peak,
-        on the week-4 gate rather than these four.{' '}
-        <Link className="t-label" href="/performance/paid">
-          See Paid →
+        <Link className="t-label" href="/performance/ads">
+          Every ad, filterable by placement and angle →
         </Link>
       </p>
     </div>
