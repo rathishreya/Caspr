@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { NAV, NAV_DESTINATIONS, UNBUILT_SLUGS, destinationBySlug } from './nav';
+import { CONTENT_SOCIAL_TABS, NAV, NAV_DESTINATIONS, UNBUILT_SLUGS, WORKSTREAM_THIRD_TAB, destinationBySlug } from './nav';
 
 /**
  * The navigation tree is design spec §5, and two of its rules are checkable here rather
@@ -30,6 +30,28 @@ describe('the tree', () => {
     for (const destination of NAV_DESTINATIONS) {
       expect(destination.purpose.length).toBeGreaterThan(20);
     }
+  });
+});
+
+/**
+ * The tabs changed on 2026-09-16 and the change is worth holding: the queue split in two, and
+ * the Library was removed. Both were asked for, and neither should come back by accident —
+ * a rebuilt Library tab pointing at a route that no longer exists would 404 in the rail.
+ */
+describe("Content & Social's tabs", () => {
+  it('is Dashboard, This week and Today — the queue split by clock, with no Library', () => {
+    expect(CONTENT_SOCIAL_TABS.map((tab) => tab.id)).toEqual(['dashboard', 'tasks', 'today']);
+    expect(CONTENT_SOCIAL_TABS.map((tab) => tab.label)).toEqual(['Dashboard', 'This week', 'Today']);
+    expect(CONTENT_SOCIAL_TABS.some((tab) => tab.href.includes('library'))).toBe(false);
+  });
+
+  it('names the same third tab in the register the rail reads', () => {
+    expect(WORKSTREAM_THIRD_TAB['content-social']).toBe(CONTENT_SOCIAL_TABS[2]?.label);
+  });
+
+  it('starts at the workstream destination in the rail', () => {
+    const workstream = NAV_DESTINATIONS.find((d) => d.id === 'content-social');
+    expect(CONTENT_SOCIAL_TABS[0]?.href).toBe(workstream?.href);
   });
 });
 

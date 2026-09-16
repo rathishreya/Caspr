@@ -4,8 +4,6 @@ import {
   ENGAGEMENT_STATUS_LABEL,
   INBOUND_RESPONSE_LABEL,
   MAX_PEOPLE_PER_EXTERNAL_POST,
-  MENTION_SOURCES,
-  NEVER_IN_A_DRAFT,
   actedFrom,
   engagementPublishMode,
   inboundResponse,
@@ -33,6 +31,16 @@ import { ExternalPostPreview, relativeTime } from '@/components/posts/post-previ
  *
  * Ordered by who is waiting on whom. Someone who tagged us is waiting on us, so inbound comes
  * first; a comment target waits on nobody.
+ *
+ * ⚑ **Three explanatory folds were removed 2026-09-16** at the workstream owner's request —
+ * *"where a tag can reach this console"* (`MENTION_SOURCES`), the Listener's filtered list in
+ * full, and *"what a draft may never contain"* (`NEVER_IN_A_DRAFT`). Each answered a question
+ * once and then sat on the screen forever, on a board whose job is to get a person onto a
+ * platform in under a minute. **The rules they described are unchanged and still enforced** —
+ * `surfacing()` still stops what it stopped, `NEVER_IN_A_DRAFT` still governs what the engine
+ * may write, and both are documented in `activation-framework.md` §5 and §6. What is gone is
+ * the recital, not the rule. The filtered count survives as one line, because a board that
+ * silently discards work invites the question *"is it even running?"*.
  */
 export function EngagementBoard({
   targets,
@@ -103,20 +111,6 @@ export function EngagementBoard({
             </ul>
           </details>
         )}
-
-        <details className="engage-quiet">
-          <summary className="t-body-s">Where a tag can reach this console</summary>
-          <ul>
-            {MENTION_SOURCES.map((source) => (
-              <li key={source.surface} className="engage-quiet__row t-body-s">
-                <span className={source.reach === 'yes' ? 't-meta' : 't-meta text-tertiary'}>
-                  {source.reach === 'yes' ? 'Arrives' : source.reach === 'no' ? 'Never arrives' : 'Unverified'}
-                </span>{' '}
-                <strong>{source.surface}</strong> — <span className="text-secondary">{source.how}</span>
-              </li>
-            ))}
-          </ul>
-        </details>
       </section>
 
       <section aria-labelledby="comment-heading">
@@ -173,33 +167,10 @@ export function EngagementBoard({
       </section>
 
       {filtered.length > 0 && (
-        <details className="engage-quiet">
-          <summary className="t-body-s">{filtered.length} the Listener found and the rules stopped — and why</summary>
-          <ul>
-            {filtered.map((target) => {
-              const result = surfacing(target);
-              return (
-                <li key={target.id} className="engage-quiet__row t-body-s">
-                  <span className="t-meta">{kindLabel(target)}</span> {target.post.author} —{' '}
-                  <span className="text-secondary">{result.surfaced ? '' : result.why}</span>
-                </li>
-              );
-            })}
-          </ul>
-        </details>
+        <p className="engage-note t-body-s">
+          {filtered.length} more the Listener found and the rules stopped before anyone saw them.
+        </p>
       )}
-
-      <details className="engage-quiet">
-        <summary className="t-body-s">What a draft may never contain</summary>
-        <ul>
-          {NEVER_IN_A_DRAFT.map((rule) => (
-            <li key={rule} className="engage-quiet__row t-body-s">
-              {rule}
-            </li>
-          ))}
-        </ul>
-        <p className="checks__source t-meta">activation framework §5 · the claims register</p>
-      </details>
 
       {closed.length > 0 && (
         <p className="engage-note t-body-s">

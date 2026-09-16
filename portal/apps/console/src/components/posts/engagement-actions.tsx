@@ -24,6 +24,19 @@ const INITIAL: DecideState = { errors: [] };
  * LinkedIn's 2026 enforcement pushes a third-party comment out of *Most relevant* and shows
  * it only to the commenter's own network, "so the creator's audience, the reason we comment,
  * never sees it".
+ *
+ * ⚑ **Edit is now real** (2026-09-16, on request: *"user can interact with the posts and
+ * comments and can change it using prompts"*). A comment and a post are changed in opposite
+ * ways here, deliberately:
+ *
+ *   A POST       the reviewer writes an **instruction**, the writer rewrites, and the new
+ *                version comes back through review. Nobody types published company copy.
+ *   A COMMENT    the person types the **words**, because they were always going to — it goes
+ *                out under their name, from their account, and §6.5 gives them Edit outright.
+ *
+ * What is edited never leaves the browser: it is copied to the clipboard and pasted on the
+ * platform, exactly as an untouched draft is. The draft on record stays what the engine
+ * wrote, so the ledger keeps saying what was drafted rather than what was posted.
  */
 export function EngagementActions({
   targetId,
@@ -42,12 +55,24 @@ export function EngagementActions({
   const [state, action] = useActionState(markEngagement, INITIAL);
   const [chosen, setChosen] = useState(drafts[0]?.id ?? '');
   const [copied, setCopied] = useState(false);
+  /** Edited text, by draft id. Absent means untouched — so "Reset" knows there is nothing to undo. */
+  const [edits, setEdits] = useState<Readonly<Record<string, string>>>({});
+  const [editing, setEditing] = useState(false);
+
   const draft = drafts.find((d) => d.id === chosen) ?? drafts[0];
+  const text = draft === undefined ? '' : (edits[draft.id] ?? draft.text);
+  const changed = draft !== undefined && edits[draft.id] !== undefined && edits[draft.id] !== draft.text;
+
+  function pick(id: string) {
+    setChosen(id);
+    setCopied(false);
+    setEditing(false);
+  }
 
   async function copy() {
     if (draft === undefined) return;
     try {
-      await navigator.clipboard.writeText(draft.text);
+      await navigator.clipboard.writeText(text);
       setCopied(true);
     } catch {
       // Clipboard access can be refused. The text is on screen and selectable either way,
@@ -70,14 +95,30 @@ export function EngagementActions({
                 name={`draft-${targetId}`}
                 value={option.id}
                 checked={option.id === chosen}
-                onChange={() => {
-                  setChosen(option.id);
-                  setCopied(false);
-                }}
+                onChange={() => pick(option.id)}
               />
               <span className="draft__body">
-                <span className="draft__angle t-meta">{stance(option.stance).angle}</span>
-                <span className="draft__text t-body-m">{option.text}</span>
+                <span className="draft__angle t-meta">
+                  {stance(option.stance).angle}
+                  {option.id === chosen && changed && <span className="draft__edited"> · edited by you</span>}
+                </span>
+                {option.id === chosen && editing ? (
+                  <textarea
+                    className="draft__field t-body-m"
+                    value={text}
+                    rows={Math.max(3, Math.ceil(text.length / 64))}
+                    aria-label="Your words for this comment"
+                    onChange={(event) => {
+                      setEdits((current) => ({ ...current, [option.id]: event.target.value }));
+                      setCopied(false);
+                    }}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Escape') setEditing(false);
+                    }}
+                  />
+                ) : (
+                  <span className="draft__text t-body-m">{option.id === chosen ? text : option.text}</span>
+                )}
                 <span className="draft__basis t-meta text-tertiary">{option.basis}</span>
               </span>
             </label>
@@ -86,6 +127,31 @@ export function EngagementActions({
       )}
 
       <div className="engage__actions">
+        {draft !== undefined && (
+          <>
+            <button
+              type="button"
+              className={editing ? 'btn btn--active' : 'btn'}
+              aria-pressed={editing}
+              onClick={() => setEditing((open) => !open)}
+            >
+              {editing ? 'Done editing' : 'Edit'}
+            </button>
+            {changed && (
+              <button
+                type="button"
+                className="btn"
+                onClick={() => {
+                  setEdits(({ [draft.id]: _dropped, ...rest }) => rest);
+                  setCopied(false);
+                }}
+              >
+                Reset to the draft
+              </button>
+            )}
+          </>
+        )}
+
         {draft !== undefined && publishMode === 'one_tap' && (
           <>
             {postUrl === null ? (

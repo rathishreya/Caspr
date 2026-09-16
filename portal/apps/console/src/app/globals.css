@@ -1278,9 +1278,90 @@ a.card:hover {
   padding: var(--space-4);
 }
 
+/*
+ * The post, and the decisions beside it.
+ *
+ * ⚑ 2026-09-16, on request: *"approve, reject, hold — isko vertical krdo side mein."* A row of
+ * buttons under a post puts the decision below the fold on anything taller than a short
+ * LinkedIn draft, so a reviewer reads, scrolls, decides, scrolls back. In a column the actions
+ * stay level with the top of the post and never move, which is what makes a keyboard hint
+ * ("A approve") tell the truth about where the decision is.
+ *
+ * The rail is `sticky` rather than fixed: it follows a long post down and stops with it.
+ */
+.decide__split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 208px;
+  gap: var(--space-4);
+  padding: 0 var(--space-4) var(--space-4);
+}
+
+.decide__post {
+  min-width: 0;
+}
+
+.decide__post .decide__context,
+.decide__post .decide__preview {
+  padding-inline: 0;
+}
+
+.decide__rail {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-2);
+  position: sticky;
+  top: var(--space-4);
+  align-self: start;
+  padding-top: var(--space-3);
+}
+
+/* Each action is its own form (§5A.1 rule 5), so the form must not shrink around its button. */
+.decide__rail form {
+  display: flex;
+}
+
+.decide__rail .btn {
+  flex: 1;
+  justify-content: space-between;
+}
+
 .decide__hint {
-  margin-left: auto;
   color: var(--text-tertiary);
+}
+
+.decide__actions .decide__hint {
+  margin-left: auto;
+}
+
+.decide__failures {
+  margin-top: var(--space-2);
+}
+
+/*
+ * One column under 1100px. Two 208px rails plus a post preview is the point at which the
+ * preview stops being able to show a post at the width the platform shows it.
+ */
+@media (max-width: 1099px) {
+  .decide__split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .decide__rail {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .decide__rail .btn {
+    flex: 0 0 auto;
+  }
+
+  .decide__rail .decide__hint,
+  .decide__rail .decide__failures {
+    flex-basis: 100%;
+  }
 }
 
 .decide__errors {
@@ -1337,6 +1418,78 @@ a.card:hover {
 .btn[disabled] {
   opacity: 0.6;
   cursor: default;
+}
+
+/*
+ * Approve is green and reject is red.
+ *
+ * ⚑ A departure from §1 decision 4 — "one accent, reserved for attention" — taken 2026-09-16
+ * on request. The rule is right about a dashboard and wrong about this card: approve and
+ * reject are both irreversible, both one keystroke, and adjacent. Identical buttons make the
+ * cost of a misfire the same as the cost of a correct press, and this is the screen a person
+ * uses fifty times a week.
+ *
+ * Colour is the second signal, never the only one — each button also carries its own word and
+ * its own key. #2E8B57 measures 4.6:1 on the console's ground, so the text passes without it.
+ */
+.btn--approve {
+  border-color: var(--accent-approve);
+  color: var(--accent-approve);
+}
+
+.btn--approve:hover {
+  background: var(--accent-approve-hover);
+  border-color: var(--accent-approve-hover);
+  color: var(--surface-base);
+}
+
+.btn--approve:hover .kbd {
+  color: var(--surface-base);
+  border-color: var(--surface-base);
+}
+
+.decide:focus-within .btn--approve .kbd {
+  color: var(--accent-approve);
+  border-color: var(--accent-approve);
+}
+
+.btn--reject {
+  border-color: var(--accent-attention);
+  color: var(--accent-attention);
+}
+
+.btn--reject:hover {
+  background: var(--accent-attention);
+  border-color: var(--accent-attention);
+  color: var(--surface-base);
+}
+
+.btn--reject:hover .kbd {
+  color: var(--surface-base);
+  border-color: var(--surface-base);
+}
+
+.decide:focus-within .btn--reject .kbd {
+  color: var(--accent-attention);
+  border-color: var(--accent-attention);
+}
+
+/* Inside the reject panel the commit button is solid: by then the decision is made. */
+.btn--reject-solid {
+  background: var(--accent-attention);
+  border-color: var(--accent-attention);
+  color: var(--surface-base);
+}
+
+.btn--reject-solid:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  color: var(--surface-base);
+}
+
+.btn--approve.btn--active,
+.btn--reject.btn--active {
+  background: var(--surface-raised);
 }
 
 /* ── 6d · The reject panel — same card, artefact still in view ────────────── */
@@ -1488,6 +1641,101 @@ a.card:hover {
 .queue-group {
   margin: var(--space-2) 0 calc(-1 * var(--space-2));
   color: var(--text-tertiary);
+}
+
+/*
+ * What the machine found wrong. Never a list of ticks — see `post-facts.tsx`.
+ *
+ * Attention-coloured, on the wash rather than the base: red text on a light surface fails
+ * 4.5:1 at #E8453C, which is the same reason the console is dark-first.
+ */
+.failures {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--accent-attention);
+  border-radius: var(--radius-sm);
+  background: var(--accent-wash);
+}
+
+.failures__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--accent-attention);
+}
+
+.failures__list {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding-left: var(--space-4);
+  color: var(--text-primary);
+}
+
+/*
+ * ── The reveal — a heavy panel behind one button ──────────────────────────
+ *
+ * ⚑ Added 2026-09-16, on request: *"see if you can make a button which opens this."* The
+ * week-by-platform matrix is a twelve-row grid that answers "what is going out, where" — a
+ * question asked once a week, above a queue answering "what needs me now", asked daily. Behind
+ * a button the queue starts at the top of the screen; open, the matrix is exactly what it was.
+ *
+ * A `<details>` rather than a React toggle: it opens with no JavaScript, it is a real
+ * disclosure button to a screen reader, and browser find-in-page opens it to reach a match.
+ */
+.reveal {
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface-base);
+}
+
+.reveal__summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  list-style: none;
+}
+
+.reveal__summary::-webkit-details-marker {
+  display: none;
+}
+
+.reveal__summary:hover {
+  background: var(--surface-hover);
+}
+
+.reveal__summary:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: -2px;
+}
+
+.reveal__chevron {
+  margin-left: auto;
+  color: var(--text-tertiary);
+}
+
+.reveal[open] .reveal__chevron {
+  transform: rotate(180deg);
+}
+
+.reveal__body {
+  display: grid;
+  gap: var(--space-4);
+  padding: 0 var(--space-4) var(--space-4);
+}
+
+/* The status line's way through to the other queue. */
+.board-status__link {
+  margin-left: auto;
+  color: var(--text-primary);
+}
+
+.board-status__link:hover {
+  text-decoration: underline;
 }
 
 /* ── 6f · The checks — one line, open on demand ───────────────────────────── */
@@ -2048,6 +2296,33 @@ a.card:hover {
 
 .draft__text {
   color: var(--text-primary);
+}
+
+/*
+ * A draft being typed over.
+ *
+ * It is the same box in the same place at the same size as the text it replaces, so pressing
+ * Edit does not move the thing being read. The words go to the clipboard and then to the
+ * platform by hand — nothing here is saved, which is why there is no Save.
+ */
+.draft__field {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--accent-approve);
+  border-radius: var(--radius-sm);
+  background: var(--surface-base);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  resize: vertical;
+}
+
+.draft__field:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 0;
+}
+
+.draft__edited {
+  color: var(--accent-approve);
 }
 
 .drafts__note {

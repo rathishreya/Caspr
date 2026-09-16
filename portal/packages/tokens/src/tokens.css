@@ -29,6 +29,9 @@
 
   /* ⛔ Attention only. Never decoration, never a category. §1 decision 4. */
   --accent-attention: #e8453c;
+  /* ⚑ Approve, and nothing else. See index.ts — a departure recorded there. */
+  --accent-approve: #2e8b57;
+  --accent-approve-hover: #34a065;
   --accent-hover: #f05048;
   --accent-wash: #2a1512;
 

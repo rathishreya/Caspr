@@ -1,181 +1,47 @@
-import {
-  CHANNEL_PUBLISH_MODE,
-  PUBLISH_MODE_LABEL,
-  PUBLISH_MODE_MEANING,
-  creativeFor,
-  dailyDeadline,
-  narrative,
-  personName,
-  reviewPost,
-  stampLink,
-  zonedDate,
-  zonedTime,
-  zonedWeekday,
-  type ContentItem,
-  type PostVersion,
-} from '@caspr-portal/domain';
+import { reviewPost, zonedDate, zonedTime, zonedWeekday, type ContentItem, type PostVersion } from '@caspr-portal/domain';
 
 import { Icon } from '@/components/icons';
-import { PLATFORM_NAME } from '@/lib/platforms';
 
 /**
- * The checks, folded into one line beside the decision.
+ * What the machine found wrong — and nothing else.
  *
- * Asked for directly, 2026-09-15: "ek post mein mujhe ye sb ni dekhna" — the checks are not
- * part of the post, and a reviewer reading the post should read only the post. They are not
- * removed, because design spec §5A.6 is right about why they exist: "Telling someone what
- * they do not have to check is what makes ninety seconds an instruction rather than an
- * aspiration." So they collapse to a single line that says whether anything needs a look,
- * and open by themselves when something does.
+ * ⚑ **The checks panel was removed 2026-09-16**, at the Content & Social owner's request:
+ * the channel-rule roll-call, the linter list, the source block and "about this post" were
+ * noise on a screen whose job is a decision. Design spec §5A.6's argument for showing them —
+ * *"telling someone what they do not have to check is what makes ninety seconds an
+ * instruction rather than an aspiration"* — is answered by the half that is kept: **when the
+ * machine found something, it says so, in one line.** When it found nothing, it says nothing,
+ * which is the same promise made quietly.
+ *
+ * Nothing about the gate changed. Every check still runs, a post that fails one still carries
+ * that failure into the record, and `reviewPost` is still what the tests hold the fixtures to.
  */
-export function PostChecks({ item, version }: { readonly item: ContentItem; readonly version: PostVersion }) {
+export function PostFailures({ item, version }: { readonly item: ContentItem; readonly version: PostVersion }) {
   const review = reviewPost(item, version);
-  const failed = review.checks.filter((check) => !check.pass).length + review.lint.findings.length;
-  const link = linkOf(version);
-  const mode = CHANNEL_PUBLISH_MODE[item.channel];
-  const told = narrative(item.narrative);
+  const failed = review.checks.filter((check) => !check.pass);
+  const total = failed.length + review.lint.findings.length;
+  if (total === 0) return null;
 
   return (
-    <details className={failed > 0 ? 'checks checks--fail' : 'checks'} open={failed > 0}>
-      <summary className="checks__summary t-body-s">
-        <Icon name={failed > 0 ? 'close' : 'check'} size={14} className="checks__glyph" />
-        {failed > 0
-          ? `${failed} check${failed === 1 ? '' : 's'} failed`
-          : `All checks passed — ${plural(review.checks.length, 'channel rule')}, ${plural(review.lint.ran.length, 'linter rule')}`}
-        <Icon name="chevron-down" size={14} className="checks__chevron" />
-      </summary>
-
-      <div className="checks__body">
-        <section className="checks__group">
-          <h4 className="checks__label t-meta">Channel rules</h4>
-          <ul className="checks__list">
-            {review.checks.map((check) => (
-              <li key={check.id} className={check.pass ? 'check' : 'check check--fail'}>
-                <Icon name={check.pass ? 'check' : 'close'} size={14} className="check__glyph" />
-                <span>
-                  {check.label}
-                  <span className="check__value"> — {check.value}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-          <p className="checks__source t-meta">{[...new Set(review.checks.map((c) => c.source))].join(' · ')}</p>
-        </section>
-
-        <section className="checks__group">
-          <h4 className="checks__label t-meta">Linter</h4>
-          {review.lint.findings.length === 0 ? (
-            <p className="check">
-              <Icon name="check" size={14} className="check__glyph" />
-              <span>
-                {review.lint.ran.length} deterministic rules, nothing found
-                <span className="check__value"> — {review.lint.ran.map((r) => r.id).join(' ')}</span>
-              </span>
-            </p>
-          ) : (
-            <ul className="checks__list">
-              {review.lint.findings.map((finding) => (
-                <li key={`${finding.rule}-${finding.index}`} className="check check--fail">
-                  <Icon name="close" size={14} className="check__glyph" />
-                  <span>
-                    {finding.rule} <q>{finding.match}</q>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-          {creativeFor(version) !== null && (
-            <p className="check check--unrun">
-              <Icon name="alert" size={14} className="check__glyph" />
-              <span>
-                Image hygiene not run
-                <span className="check__value">
-                  {' '}
-                  — the metadata service is not reachable, so no image publishes yet
-                  {item.channel === 'meta'
-                    ? ', and the shell has nothing to post without one'
-                    : '; the post goes out as text'}{' '}
-                  (Rule 6 · integrations E8)
-                </span>
-              </span>
-            </p>
-          )}
-          <p className="check check--unrun">
-            <Icon name="alert" size={14} className="check__glyph" />
-            <span>
-              Not run — {review.lint.notRun.map((r) => r.id).join(' ')}
-              <span className="check__value"> — citation fetch, duplication and the semantic pass need the engine</span>
-            </span>
-          </p>
-        </section>
-
-        <section className="checks__group">
-          <h4 className="checks__label t-meta">Source</h4>
-          {item.citations.map((citation) => (
-            <p key={citation.url + citation.quotedClaim} className="checks__citation">
-              {citation.quotedClaim}
-              <span className="check__value t-meta"> {citation.publisher} · {citation.publishedOn}</span>
-            </p>
-          ))}
-          {version.researchBasis.length > 0 ? (
-            <p className="checks__source t-meta">{version.researchBasis.join(' · ')}</p>
-          ) : (
-            item.voiceLane !== null && (
-              <p className="check">
-                <Icon name="check" size={14} className="check__glyph" />
-                <span>
-                  Attributed opinion — {personName(item.voiceLane)}
-                  <span className="check__value"> — the other half of the hard gate</span>
-                </span>
-              </p>
-            )
-          )}
-          {item.sourceable !== 'found' && (
-            <p className="check check--fail">
-              <Icon name="alert" size={14} className="check__glyph" />
-              <span>
-                {item.sourceable === 'thin' ? 'Sourceable, thinly' : 'No credible published source'}
-                <span className="check__value"> — fact_lookup probe</span>
-              </span>
-            </p>
-          )}
-        </section>
-
-        <section className="checks__group">
-          <h4 className="checks__label t-meta">About this post</h4>
-          <p className="checks__meta t-body-s">
-            {told !== undefined && `${told.id} ${told.name} · `}
-            {item.funnelStage} · reviewer {item.assignedReviewer ?? 'unassigned'} ·{' '}
-            {version.modelTier === 'frontier' ? 'frontier model' : 'Haiku'}
-          </p>
-          {link !== null && <p className="checks__stamp">{stampLink(item, link)}</p>}
-          <p className="checks__meta t-body-s">
-            {item.status === 'discarded' ? (
-              <>Discarded {instantLabel(dailyDeadline(item))}, not approved within 24 hours. Nothing was published.</>
-            ) : (
-              <>
-            After approval:{' '}
-            {mode === 'manual'
-              ? `surfaced to ${personName(item.voiceLane)} on ${slotLabel(item)} to post by hand — never automatically.`
-              : `${PUBLISH_MODE_LABEL[mode].toLowerCase()} — ${PUBLISH_MODE_MEANING[mode]}. Hygiene pass, then ${PLATFORM_NAME[item.channel]} ${
-                  item.scheduledFor === null ? 'at the next open window' : `at ${slotLabel(item)}`
-                }.`}
-              </>
-            )}
-          </p>
-        </section>
-      </div>
-    </details>
+    <div className="failures" role="note">
+      <p className="failures__head t-meta-bold">
+        <Icon name="alert" size={14} />
+        {total} to look at before this goes out
+      </p>
+      <ul className="failures__list">
+        {failed.map((check) => (
+          <li key={check.id} className="t-body-s">
+            {check.label} — <span className="text-secondary">{check.value}</span>
+          </li>
+        ))}
+        {review.lint.findings.map((finding) => (
+          <li key={`${finding.rule}-${finding.index}`} className="t-body-s">
+            {finding.rule} <q>{finding.match}</q>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
-}
-
-function plural(count: number, noun: string): string {
-  return `${count} ${noun}${count === 1 ? '' : 's'}`;
-}
-
-function linkOf(version: PostVersion) {
-  const { body } = version;
-  return body.kind === 'linkedin' || body.kind === 'x' ? body.link : null;
 }
 
 /** `TUE 18 · 09:00`, in the console's zone. */

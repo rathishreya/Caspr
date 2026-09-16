@@ -16,6 +16,7 @@ import {
   ENGAGEMENT_KINDS,
   FUNNEL_STAGES,
   ICPS,
+  DECISION_ACTIONS,
   ITEM_STATUSES,
   PILLARS,
   REJECT_CODES,
@@ -53,7 +54,8 @@ export const itemTypeEnum = pgEnum('item_type', [
   'outreach',
 ]);
 export const sourceableEnum = pgEnum('sourceable', ['found', 'thin', 'not_found']);
-export const reviewActionEnum = pgEnum('review_action', ['approve', 'reject', 'hold']);
+// `revise` added 2026-09-16 — a reviewer's instruction, not a rejection. See `decision.ts`.
+export const reviewActionEnum = pgEnum('review_action', DECISION_ACTIONS);
 export const trackEnum = pgEnum('track', TRACKS);
 export const engagementKindEnum = pgEnum('engagement_kind', ENGAGEMENT_KINDS);
 // `not_my_lane` is one of §6.5's four actions and is not a skip — see `engagement.ts`.

@@ -185,13 +185,27 @@ export function destinationBySlug(slug: string): NavDestination | undefined {
 /**
  * Content & Social's tabs.
  *
- * "Dashboard and Tasks are universal. The third tab is that workstream's own object" —
- * §5. For this workstream the own-object is the Library.
+ * ⚑ **Changed 2026-09-16**, both halves at the workstream owner's request.
+ *
+ * **Tasks became two tabs** — *"daily & weekly stuff ko alag rakh, so that it is manageable
+ * for the team."* That is Joy's own split, in `activation-framework.md` §10: **one queue, two
+ * drains**. Weekly is 72 hours of shelf life or more, generated Thursday and reviewed to
+ * Monday 18:00; daily is everything under it, cleared the same day. Two audiences, two
+ * rhythms, and putting them in one list meant the 24-hour clock was buried under posts that
+ * had until Monday.
+ *
+ * **Library was removed** — *"remove library from content & social."* §5 wanted a third tab
+ * that is "that workstream's own object", and the Library was a browse surface for posts
+ * already visible in the queue and the Calendar. A tab nobody opens is worse than no tab: it
+ * competes for the one glance a person gives the row.
+ *
+ * So the own-object here is now **Today**, which is a real object — the morning queue, the
+ * 24-hour clock, and the history of what the window closed on.
  */
 export const CONTENT_SOCIAL_TABS = [
   { id: 'dashboard', label: 'Dashboard', href: '/content-social/dashboard' as Route },
-  { id: 'tasks', label: 'Tasks', href: '/content-social/tasks' as Route },
-  { id: 'library', label: 'Library', href: '/content-social/library' as Route },
+  { id: 'tasks', label: 'This week', href: '/content-social/tasks' as Route },
+  { id: 'today', label: 'Today', href: '/content-social/today' as Route },
 ] as const;
 
 /**
@@ -202,7 +216,7 @@ export const CONTENT_SOCIAL_TABS = [
  * destination will be, and "Tasks · Backlog" is a more honest promise than "coming soon".
  */
 export const WORKSTREAM_THIRD_TAB: Readonly<Record<string, string>> = {
-  'content-social': 'Library',
+  'content-social': 'Today',
   seo: 'Backlog',
   performance: 'Paid',
   email: 'Sequences',

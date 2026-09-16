@@ -192,6 +192,10 @@ class ReferenceRepository implements ContentRepository {
       reviewer,
       action: input.action,
       reasonCode: input.reasonCode,
+      // What the reviewer asked for. On `revise` it is the instruction the writer works from,
+      // so the queue can show it back — "Change asked for by …" — rather than only the fact
+      // that a change was asked for.
+      ...(input.note === null ? {} : { note: input.note }),
       secondsSpent: input.secondsSpent,
     });
 
@@ -381,12 +385,13 @@ class PostgresRepository implements ContentRepository {
     if (items.length === 0) return [];
 
     const db = getDatabase();
-    return db
+    const rows = await db
       .select({
         itemId: contentVersions.itemId,
         reviewer: reviewDecisions.reviewer,
         action: reviewDecisions.action,
         reasonCode: reviewDecisions.reasonCode,
+        note: reviewDecisions.note,
         secondsSpent: reviewDecisions.secondsSpent,
       })
       .from(reviewDecisions)
@@ -397,6 +402,10 @@ class PostgresRepository implements ContentRepository {
           items.map((item) => item.id),
         ),
       );
+
+    // The column is nullable and the field is optional — the same absence, spelled two ways.
+    // Mapping it here keeps `note === undefined` the only thing the console has to test.
+    return rows.map(({ note, ...rest }) => (note === null ? rest : { ...rest, note }));
   }
 
   async priorNarrativeCounts(weekStartDate: string): Promise<ReadonlyMap<string, number>> {

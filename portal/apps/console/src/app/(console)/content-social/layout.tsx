@@ -1,4 +1,4 @@
-import { REFERENCE_WEEK_START, isUnreviewed } from '@caspr-portal/domain';
+import { REFERENCE_WEEK_START, dailyState, isUnreviewed } from '@caspr-portal/domain';
 import type { ReactNode } from 'react';
 
 import { Tabs } from '@/components/primitives/tabs';
@@ -25,15 +25,31 @@ import { CHANNEL_WORKSTREAM } from '@/lib/workstream';
 export const dynamic = 'force-dynamic';
 
 export default async function ContentSocialLayout({ children }: { readonly children: ReactNode }) {
-  const items = await getRepository().itemsForWeek(REFERENCE_WEEK_START);
+  const repository = getRepository();
+  const now = repository.clock();
+  const items = await repository.itemsForWeek(REFERENCE_WEEK_START);
   const waiting = items.filter(
     (item) => CHANNEL_WORKSTREAM[item.channel] === 'content-social' && isUnreviewed(item),
-  ).length;
+  );
+
+  /**
+   * One badge per queue, counted the way each queue counts.
+   *
+   * The queue split in two on 2026-09-16, and a single badge over both would have been the
+   * worse half of the split: a reviewer would see "8", open This week, find six, and stop
+   * trusting the number. **Today counts only what is still inside its 24-hour window** —
+   * a daily post past its deadline is discarded, and asking someone to decide something
+   * that can no longer publish is the one thing a badge must never do.
+   */
+  const badges = {
+    tasks: waiting.filter((item) => item.track === 'weekly').length,
+    today: waiting.filter((item) => item.track === 'daily' && dailyState(item, now).kind === 'today').length,
+  };
 
   return (
     <>
       <ScreenHeader title="Content & Social" />
-      <Tabs tabs={CONTENT_SOCIAL_TABS} label="Content & Social" badges={{ tasks: waiting }} />
+      <Tabs tabs={CONTENT_SOCIAL_TABS} label="Content & Social" badges={badges} />
       {children}
     </>
   );

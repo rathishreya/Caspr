@@ -1,5 +1,5 @@
 /**
- * A review decision — three actions and no fourth.
+ * A review decision — four actions.
  *
  * `portal-build-spec.md` §3.4: "Approve · Reject with reason · Hold for discussion. **No
  * editing.** Reviewers do not rewrite." And the design spec's review-mode rules this file
@@ -14,8 +14,28 @@
 
 import { REJECT_CODES, isUnreviewed, type ContentItem, type ItemStatus, type RejectCode } from './content-item';
 
-export const DECISION_ACTIONS = ['approve', 'reject', 'hold'] as const;
+export const DECISION_ACTIONS = ['approve', 'reject', 'hold', 'revise'] as const;
 export type DecisionAction = (typeof DECISION_ACTIONS)[number];
+
+/**
+ * ⚑ **`revise` added 2026-09-16**, at the Content & Social owner's request: *"user can
+ * interact with the posts and can change it using prompts."*
+ *
+ * It is a departure from §3.4's *"No editing. Reviewers do not rewrite"* — and what that
+ * rule protects is kept: **the reviewer still does not type the post.** They type an
+ * instruction, the writer re-writes, and the new version comes back through the same review.
+ * So the audit trail holds (every version is a version, every instruction is in the ledger),
+ * the voice stays the engine's rather than seven people's, and nobody edits published text
+ * in place.
+ *
+ * It is not a rejection, and the ledger keeps them apart: a rejection says *this was wrong*
+ * and feeds the reject rate that calibrates the generator; a revision says *make it this
+ * instead*. Counting the second as the first would make a well-calibrated queue look broken.
+ *
+ * ⚠ ⑩ the Writer is not built. Until it is, a revision records the instruction and the item
+ * waits — the screen says so rather than implying a rewrite is on its way.
+ */
+export const PROMPT_MAX_CHARS = 400;
 
 /** §3.4: "A required note of ≤200 characters accompanies every rejection." */
 export const NOTE_MAX_CHARS = 200;
@@ -86,7 +106,7 @@ export function validateDecision(raw: {
   if (itemId.length === 0) errors.push('The post this decision belongs to is missing. Reload the page and decide again.');
 
   const action = DECISION_ACTIONS.find((candidate) => candidate === raw.action);
-  if (!action) errors.push('Choose approve, reject or hold.');
+  if (!action) errors.push('Choose approve, reject, hold or revise.');
 
   const note = typeof raw.note === 'string' ? raw.note.trim() : '';
   const code = REJECT_CODES.find((candidate) => candidate === raw.reasonCode) ?? null;
@@ -95,8 +115,12 @@ export function validateDecision(raw: {
     if (code === null) errors.push('Pick the reason for the rejection — one of the ten codes.');
     if (note.length === 0) errors.push('Add a note. It goes into the regeneration prompt and the ledger.');
   }
-  if (note.length > NOTE_MAX_CHARS) {
-    errors.push(`Keep the note to ${NOTE_MAX_CHARS} characters. It is ${note.length}.`);
+  if (action === 'revise' && note.length === 0) {
+    errors.push('Say what to change. The instruction is what the writer works from.');
+  }
+  const limit = action === 'revise' ? PROMPT_MAX_CHARS : NOTE_MAX_CHARS;
+  if (note.length > limit) {
+    errors.push(`Keep it to ${limit} characters. It is ${note.length}.`);
   }
 
   const seconds = Number(raw.secondsSpent);
@@ -119,6 +143,14 @@ export function validateDecision(raw: {
 }
 
 /** What an item's status becomes once a decision commits. */
+/** Which actions carry free text, and what that text is called on screen. */
+export const DECISION_NOTE_LABEL: Readonly<Record<DecisionAction, string | null>> = {
+  approve: null,
+  hold: null,
+  reject: 'Note — it goes into the regeneration prompt and the ledger',
+  revise: 'What to change — this becomes the instruction the writer works from',
+};
+
 export function statusAfter(action: DecisionAction): ItemStatus {
   switch (action) {
     case 'approve':
@@ -127,6 +159,13 @@ export function statusAfter(action: DecisionAction): ItemStatus {
       return 'rejected';
     case 'hold':
       return 'holding';
+    /**
+     * A revision leaves the calendar the same way a rejection does — the version on the
+     * page is not the one that will publish. The ledger keeps which of the two it was, so
+     * the board can say "revising" rather than "rejected" and the reject rate stays honest.
+     */
+    case 'revise':
+      return 'rejected';
   }
 }
 

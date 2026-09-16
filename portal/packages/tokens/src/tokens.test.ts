@@ -33,6 +33,8 @@ describe('tokens.css mirrors index.ts', () => {
     ['text-on-card', colour.textOnCard],
     ['text-on-card-sub', colour.textOnCardSub],
     ['accent-attention', colour.accentAttention],
+    ['accent-approve', colour.accentApprove],
+    ['accent-approve-hover', colour.accentApproveHover],
     ['accent-hover', colour.accentHover],
     ['accent-wash', colour.accentWash],
   ];

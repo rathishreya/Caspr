@@ -36,6 +36,17 @@ export const colour = {
   textOnCard: '#0A0A0A',
   textOnCardSub: '#5C5B58',
   accentAttention: '#E8453C',
+  /**
+   * ⚑ **A departure from §1 decision 4**, taken 2026-09-16 at the Content & Social owner's
+   * request: approve is green, reject is red. §3's palette had one accent and one meaning —
+   * red is attention — and adding a second accent spends part of that clarity.
+   *
+   * What it buys: the two irreversible actions on the busiest screen in the console stop
+   * looking alike. Kept narrow on purpose — this colour appears on the approve control and
+   * nowhere else, so it never becomes a category or a decoration.
+   */
+  accentApprove: '#2E8B57',
+  accentApproveHover: '#34A065',
   accentHover: '#F05048',
   accentWash: '#2A1512',
 } as const;

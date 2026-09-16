@@ -59,7 +59,18 @@ export async function decide(_previous: DecideState, formData: FormData): Promis
   const platform = formData.get('platform');
   if (typeof platform === 'string' && platform.length > 0) params.set('platform', platform);
 
-  redirect(`/content-social/tasks?${params.toString()}#decide` as Route);
+  redirect(`${queuePath(formData.get('from'))}?${params.toString()}#decide` as Route);
+}
+
+/**
+ * Back to the queue the decision was taken from — This week or Today.
+ *
+ * Allow-listed rather than echoed. `from` arrives in a form body, so trusting it would let a
+ * crafted request turn an approval into an open redirect; the two queues are the only two
+ * answers there are.
+ */
+function queuePath(from: FormDataEntryValue | null): string {
+  return from === '/content-social/today' ? '/content-social/today' : '/content-social/tasks';
 }
 
 /** The three endings §6.5 allows once a card is open. `open` is not one of them. */
@@ -88,5 +99,6 @@ export async function markEngagement(_previous: DecideState, formData: FormData)
   }
 
   revalidatePath('/content-social', 'layout');
-  redirect('/content-social/tasks#engage' as Route);
+  // Engagement lives on Today and only on Today — everything it carries is under 72 hours old.
+  redirect('/content-social/today#engage' as Route);
 }

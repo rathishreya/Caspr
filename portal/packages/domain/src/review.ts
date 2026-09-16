@@ -14,12 +14,19 @@
  */
 
 import type { RejectCode } from './content-item';
+import type { DecisionAction } from './decision';
 
 export interface ReviewDecisionRecord {
   readonly itemId: string;
   readonly reviewer: string;
-  readonly action: 'approve' | 'reject' | 'hold';
+  readonly action: DecisionAction;
   readonly reasonCode: RejectCode | null;
+  /**
+   * The reviewer's words — required on `reject` (what is wrong) and on `revise` (what to
+   * change), absent on `approve` and `hold`. Optional here because the four actions do not
+   * all carry one, and a record written before `revise` existed has none.
+   */
+  readonly note?: string;
   /** Measured, never assumed. Build spec §4. */
   readonly secondsSpent: number;
 }
@@ -47,6 +54,11 @@ export interface ReviewHealth {
 
 export function reviewHealth(decisions: readonly ReviewDecisionRecord[]): ReviewHealth {
   const total = decisions.length;
+  // `revise` is not a rejection and must never be counted as one. A revision asks for a
+  // change to a post that is broadly right; a rejection says it should not exist in this
+  // form. Folding them together would push the rate past 20% and call a healthy desk
+  // miscalibrated — the exact defect §3.5's bound exists to catch. It stays in the
+  // denominator, as `hold` does: it is a decision, and it took a reviewer's minutes.
   const rejections = decisions.filter((d) => d.action === 'reject');
   const rate = total === 0 ? 0 : rejections.length / total;
   const seconds = decisions.reduce((sum, d) => sum + d.secondsSpent, 0);
