@@ -264,6 +264,11 @@ export function isUnreviewed(item: Pick<ContentItem, 'status'>): boolean {
  * `linkedin_page` reads `COMPANY` rather than `LINKEDIN PAGE`: at 11px in a 145px calendar
  * column the longer label ellipsises, and a truncated label is worse than a shorter true
  * one. It also matches how the items themselves are titled — "Company — the $600m gap".
+ *
+ * `meta` reads `INSTAGRAM` for the same reason the filter pill does: the channel is the Meta
+ * shell (§11 — the platform is not the channel), but Instagram is the surface a person
+ * recognises and the only one with anything planned or measured on it. The label follows the
+ * pill so the calendar and the queue do not call the same item something the filter does not.
  */
 export const CHANNEL_LABEL: Readonly<Record<Channel, string>> = {
   linkedin: 'LINKEDIN',
@@ -275,5 +280,5 @@ export const CHANNEL_LABEL: Readonly<Record<Channel, string>> = {
   outreach: 'OUTREACH',
   reddit: 'REDDIT',
   quora: 'QUORA',
-  meta: 'META',
+  meta: 'INSTAGRAM',
 };

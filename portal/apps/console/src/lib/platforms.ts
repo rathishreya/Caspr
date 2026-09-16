@@ -29,7 +29,21 @@ export const PLATFORM_NAME: Readonly<Record<Channel, string>> = {
   linkedin: 'LinkedIn',
   linkedin_page: 'LinkedIn Page',
   x: 'X',
-  meta: 'Meta',
+  /*
+   * ⚑ The channel is `meta` and the label is Instagram, and the difference is deliberate.
+   *
+   * `activation-framework.md` §11 names the surface `meta` because the platform is not the
+   * channel — the shell is, and §9.4 has it auto-posting to Instagram and Facebook both. That
+   * is the right model and it stays in the data. But this map's own job is *"names as a person
+   * says them"*, and nobody says "I'll put the atom on Meta". Labelled `Meta`, the filter read
+   * as a surface nobody recognised and the workstream owner asked where Instagram had gone —
+   * it was there, filtering the one post on it, under a name that did not name it.
+   *
+   * ⚠ Instagram is the only Meta surface with anything planned or measured on it (㉛: Facebook
+   * is "not a channel"). **If the Facebook mirror ever carries its own item, this label stops
+   * being true** and the pill has to say Meta again.
+   */
+  meta: 'Instagram',
   reddit: 'Reddit',
   quora: 'Quora',
   blog: 'Blog',
