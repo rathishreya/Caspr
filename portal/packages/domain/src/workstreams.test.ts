@@ -42,6 +42,9 @@ import {
   component,
   readClock,
 } from './discoverability';
+import { checkContent, contentHealth } from './content-seo';
+import type { PostBody } from './post';
+import { REFERENCE_POSTS } from './reference-posts';
 import {
   LINK_ROUTES,
   MIN_INBOUND_LINKS,
@@ -457,6 +460,124 @@ describe('the site', () => {
   it('names what every technical item affects, so a template fix is visible as one', () => {
     expect(TECHNICAL.length).toBeGreaterThan(4);
     for (const item of TECHNICAL) expect(item.fix.length).toBeGreaterThan(20);
+  });
+});
+
+/**
+ * Content SEO — the writing, not the envelope.
+ *
+ * Every rule is `content-engine-runtime-spec.md` §6.1's Type B contract. There is no
+ * keyword-density check and there will not be one, because nobody here ever asked for it —
+ * these hold Joy's rules, not generic SEO folklore.
+ */
+describe('content SEO', () => {
+  const good: PostBody = {
+    kind: 'blog',
+    slug: 'how-much-does-market-research-cost',
+    headline: 'How much does market research cost',
+    standfirst:
+      'Commissioned market research costs $15,000 to $50,000 a study, and a syndicated report sits nearer $4,000. How much you pay is a question of scope rather than quality — and most of it buys desk research you could have had in an afternoon, which is the part nobody quotes separately.',
+    paragraphs: [
+      'The $153bn figure for the global industry comes from ESOMAR, and it counts fieldwork. Source: ESOMAR, 2025.',
+      'Desk research before every study sits outside that figure, because nobody bills for it. According to our own buyer research, four hours is the median.',
+      'What a buyer actually needs is the reconciliation, not another number.',
+    ],
+    cta: 'What does your last study actually cost you, once the desk work is counted?',
+    targetQuery: 'how much does market research cost',
+  };
+
+  /**
+   * ⚠ Depth is deliberately not in this list. A 600-word bar is right for a published search
+   * answer and absurd in a fixture, so it gets its own test rather than 600 words of filler
+   * that would make every other assertion here harder to read.
+   */
+  it('passes a post that meets the contract', () => {
+    const failing = checkContent(good)
+      .filter((check) => !check.pass)
+      .filter((check) => !check.label.startsWith('Enough of an answer'));
+    expect(failing.map((check) => check.label)).toEqual([]);
+  });
+
+  it('fails a post too thin to rank', () => {
+    const depth = checkContent(good).find((check) => check.label.startsWith('Enough of an answer'));
+    expect(depth?.pass).toBe(false);
+    expect(depth?.standing).toMatch(/\d+ words/);
+  });
+
+  /** "Search readers do not scroll to find out whether you know." */
+  it('fails a post that does not answer in the first two sentences', () => {
+    const late = { ...good, standfirst: 'Let us begin with a little history of the industry.', paragraphs: ['Some context.', ...good.paragraphs] };
+    const answered = checkContent(late as PostBody).find((check) => check.label.startsWith('Answers the question'));
+    expect(answered?.pass).toBe(false);
+    expect(answered?.weight).toBe('blocking');
+  });
+
+  /** ⛔ "Nobody searches 'analytical AI'." */
+  it('fails a post that opens on the category rather than the job', () => {
+    const category = { ...good, standfirst: 'Analytical AI is a new category of tool for business research, and it changes how a study is costed.' };
+    const job = checkContent(category as PostBody).find((check) => check.label.startsWith('Meets the reader'));
+    expect(job?.pass).toBe(false);
+    expect(job?.weight).toBe('blocking');
+  });
+
+  it('fails a figure with no source in the same paragraph', () => {
+    const unsourced = { ...good, paragraphs: ['The global industry is worth $153bn.', ...good.paragraphs.slice(1)] };
+    const sourced = checkContent(unsourced as PostBody).find((check) => check.label.startsWith('Every figure'));
+    expect(sourced?.pass).toBe(false);
+    expect(sourced?.standing).toMatch(/\$153bn/);
+  });
+
+  it('does not count a source three paragraphs away as nearby', () => {
+    const far = {
+      ...good,
+      paragraphs: ['A market worth $725m.', 'Unrelated.', 'Source: IMARC, 2025.'],
+    };
+    expect(checkContent(far as PostBody).find((check) => check.label.startsWith('Every figure'))?.pass).toBe(false);
+  });
+
+  it('passes a post with no figures at all', () => {
+    const none = { ...good, standfirst: 'Most buyers are paying for desk research they could have had in an afternoon, and it is the part nobody quotes separately in a proposal they are asked to sign off on today.', paragraphs: ['No numbers here.'] };
+    expect(checkContent(none as PostBody).find((check) => check.label.startsWith('Every figure'))?.standing).toMatch(
+      /No figures/,
+    );
+  });
+
+  /** §6.1: one CTA, at the end, never mid-body. */
+  it('fails a call to action in the middle of the body', () => {
+    const interrupted = {
+      ...good,
+      paragraphs: [good.paragraphs[0]!, 'Sign up to run your own.', good.paragraphs[2]!],
+    };
+    const cta = checkContent(interrupted as PostBody).find((check) => check.label.startsWith('One CTA'));
+    expect(cta?.pass).toBe(false);
+    expect(cta?.standing).toMatch(/mid-body/);
+  });
+
+  it('holds the answer block to 40–60 words', () => {
+    const short = { ...good, standfirst: 'It depends.' };
+    expect(checkContent(short as PostBody).find((check) => check.label.includes('answer block'))?.pass).toBe(false);
+  });
+
+  it('reads nothing on a post that is not a blog', () => {
+    expect(checkContent({ kind: 'x', text: 'hello', link: null, attachment: null } as never)).toEqual([]);
+    expect(contentHealth(undefined).checked).toBe(false);
+  });
+
+  it('uses the same check shape as the page checks, so a row speaks one vocabulary', () => {
+    for (const check of checkContent(good)) {
+      expect(check.fix.length).toBeGreaterThan(20);
+      expect(['blocking', 'quality']).toContain(check.weight);
+    }
+  });
+
+  it('reads every blog post in the reference week without throwing', () => {
+    const posts = REFERENCE_POSTS.filter((version) => version.body.kind === 'blog');
+    expect(posts.length).toBeGreaterThan(0);
+    for (const version of posts) {
+      const health = contentHealth(version.body);
+      expect(health.checked).toBe(true);
+      expect(health.total).toBeGreaterThan(0);
+    }
   });
 });
 

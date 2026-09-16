@@ -2,6 +2,7 @@ import {
   REFERENCE_WEEK_START,
   SITE_PAGES,
   TECHNICAL,
+  checkContent,
   pageHealth,
   postPage,
   siteHealth,
@@ -54,14 +55,32 @@ export default async function SeoPages({ searchParams }: PageProps) {
     repository.versionsForWeek(REFERENCE_WEEK_START),
   ]);
 
+  /*
+   * Posts carry a second set of checks — the writing, not the envelope.
+   *
+   * They are keyed by path rather than carried on the page, because `SitePage` describes
+   * what surrounds a page and a post's body belongs to the content queue. Keeping them apart
+   * in the data and together in the row is the honest arrangement: one screen, two sources.
+   */
   const posts = items
     .filter((item) => item.channel === 'blog')
-    .map((item) => postPage(item, versions.get(item.id)));
-  const all: readonly SitePage[] = [...SITE_PAGES, ...posts];
+    .map((item) => {
+      const version = versions.get(item.id);
+      const page = postPage(item, version);
+      return { page, content: version === undefined ? [] : checkContent(version.body) };
+    });
+
+  const contentByPath = new Map(posts.map(({ page, content }) => [page.path, content]));
+  const all: readonly SitePage[] = [...SITE_PAGES, ...posts.map(({ page }) => page)];
   const health = siteHealth(all);
 
-  const needsWork = all.filter((page) => pageHealth(page).failing.length > 0);
-  const ready = all.filter((page) => pageHealth(page).failing.length === 0);
+  /** Everything wrong with a page: the envelope and, where there is one, the writing. */
+  const failingCount = (page: SitePage) =>
+    pageHealth(page).failing.length + (contentByPath.get(page.path) ?? []).filter((check) => !check.pass).length;
+  const contentGaps = [...contentByPath.values()].flat().filter((check) => !check.pass).length;
+
+  const needsWork = all.filter((page) => failingCount(page) > 0);
+  const ready = all.filter((page) => failingCount(page) === 0);
   const filter = show === 'ready' ? 'ready' : show === 'all' ? 'all' : 'needs_work';
   const visible = filter === 'ready' ? ready : filter === 'all' ? all : needsWork;
 
@@ -112,7 +131,8 @@ export default async function SeoPages({ searchParams }: PageProps) {
               than {health.commonest.count} page fixes.{' '}
             </>
           )}
-          {posts.length > 0 && `${posts.length} of these are posts, read from the content queue.`}
+          {posts.length > 0 &&
+            `${posts.length} of these are posts, read from the content queue — and those carry a second set of checks on the writing itself${contentGaps > 0 ? `, where ${contentGaps} things need a look` : ''}.`}
         </p>
 
         <nav className="pills" aria-label="Filter pages">
@@ -134,7 +154,7 @@ export default async function SeoPages({ searchParams }: PageProps) {
               </div>
               <div className="pages">
                 {rows.map((page) => (
-                  <PageRow key={page.path} page={page} />
+                  <PageRow key={page.path} page={page} content={contentByPath.get(page.path)} />
                 ))}
               </div>
             </div>

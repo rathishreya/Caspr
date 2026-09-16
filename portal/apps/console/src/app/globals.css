@@ -886,6 +886,14 @@ strong,
   background: var(--text-tertiary);
 }
 
+/* The page half and the writing half are two readings. The hairline says so. */
+.page__split {
+  width: 1px;
+  height: 10px;
+  margin: 0 2px;
+  background: var(--border-strong);
+}
+
 .page__detail {
   display: grid;
   gap: var(--space-4);

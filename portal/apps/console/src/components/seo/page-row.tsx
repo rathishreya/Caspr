@@ -1,4 +1,4 @@
-import { checkPage, pageHealth, type SitePage } from '@caspr-portal/domain';
+import { checkPage, pageHealth, type CheckResult, type SitePage } from '@caspr-portal/domain';
 
 import { Icon } from '@/components/icons';
 
@@ -15,11 +15,27 @@ import { Icon } from '@/components/icons';
  *     found; a long title is merely truncated. Marking both red teaches people that red
  *     means nothing.
  */
-export function PageRow({ page }: { readonly page: SitePage }) {
+export function PageRow({
+  page,
+  content = [],
+}: {
+  readonly page: SitePage;
+  /**
+   * What is wrong with the writing, for a page that has any.
+   *
+   * ⚑ Content SEO lives in the same row as the page checks rather than on a screen of its
+   * own. A page can have a faultless title tag and still bury its answer four paragraphs
+   * down, and the person fixing one is the person fixing the other — splitting them would
+   * mean opening two places to find out whether one page is right.
+   */
+  readonly content?: readonly CheckResult[];
+}) {
   const health = pageHealth(page);
   const checks = checkPage(page);
+  const contentFailing = content.filter((check) => !check.pass);
   const blocking = health.failing.filter((check) => check.weight === 'blocking');
   const quality = health.failing.filter((check) => check.weight === 'quality');
+  const toFix = health.failing.length + contentFailing.length;
 
   return (
     <details className="page" id={`page-${page.path.replace(/\//g, '-')}`}>
@@ -37,22 +53,21 @@ export function PageRow({ page }: { readonly page: SitePage }) {
         <span className="page__score">
           {/* One dot per check. Colour only where it is earned, so red keeps meaning. */}
           {checks.map((check) => (
-            <span
-              key={check.id}
-              className={
-                check.pass
-                  ? 'dot dot--pass'
-                  : check.weight === 'blocking'
-                    ? 'dot dot--blocking'
-                    : 'dot dot--quality'
-              }
-              title={`${check.label}: ${check.pass ? 'ok' : check.standing}`}
-            />
+            <Dot key={check.id} check={check} />
           ))}
+          {content.length > 0 && (
+            <>
+              {/* A hairline, so the page half and the writing half read as two things. */}
+              <span className="page__split" />
+              {content.map((check) => (
+                <Dot key={`c-${check.id}`} check={check} />
+              ))}
+            </>
+          )}
         </span>
 
-        <span className={health.failing.length === 0 ? 'page__count t-meta' : 'page__count t-meta text-attention'}>
-          {health.failing.length === 0 ? 'Ready' : `${health.failing.length} to fix`}
+        <span className={toFix === 0 ? 'page__count t-meta' : 'page__count t-meta text-attention'}>
+          {toFix === 0 ? 'Ready' : `${toFix} to fix`}
         </span>
 
         <Icon name="chevron-down" size={16} className="row__chevron" />
@@ -63,9 +78,19 @@ export function PageRow({ page }: { readonly page: SitePage }) {
           <Group title="Stops it working" checks={blocking} kind="blocking" />
         )}
         {quality.length > 0 && <Group title="Makes it work less well" checks={quality} kind="quality" />}
-        {health.failing.length === 0 && (
-          <p className="t-body-s text-secondary">Every check passes. Nothing to do here.</p>
+
+        {contentFailing.length > 0 && (
+          <Group
+            title="The writing"
+            checks={contentFailing}
+            kind={contentFailing.some((check) => check.weight === 'blocking') ? 'blocking' : 'quality'}
+          />
         )}
+        {content.length > 0 && contentFailing.length === 0 && (
+          <p className="t-body-s text-secondary">The writing meets every rule in the Type B contract.</p>
+        )}
+
+        {toFix === 0 && <p className="t-body-s text-secondary">Every check passes. Nothing to do here.</p>}
 
         <dl className="page__facts">
           <div>
@@ -88,13 +113,24 @@ export function PageRow({ page }: { readonly page: SitePage }) {
   );
 }
 
+function Dot({ check }: { readonly check: CheckResult }) {
+  return (
+    <span
+      className={
+        check.pass ? 'dot dot--pass' : check.weight === 'blocking' ? 'dot dot--blocking' : 'dot dot--quality'
+      }
+      title={`${check.label}: ${check.pass ? 'ok' : check.standing}`}
+    />
+  );
+}
+
 function Group({
   title,
   checks,
   kind,
 }: {
   readonly title: string;
-  readonly checks: readonly ReturnType<typeof checkPage>[number][];
+  readonly checks: readonly CheckResult[];
   readonly kind: 'blocking' | 'quality';
 }) {
   return (
