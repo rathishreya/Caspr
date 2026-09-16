@@ -8,6 +8,7 @@ import {
   dailyState,
   isUnreviewed,
   postText,
+  willPublish,
   type ContentItem,
   type PostVersion,
   type ReviewDecisionRecord,
@@ -68,13 +69,18 @@ export function Waiting({
       {version === undefined ? (
         <MissingVersion />
       ) : (
-        <>
-          <div className="decide__preview">
-            <PostPreview item={item} version={version} mode="light" />
-            <CreativeBar item={item} version={version} />
-          </div>
-          <Paste item={item} version={version} />
-        </>
+        /*
+         * ⛔ **No Copy and no Open here.** A post on this card has not been decided, and
+         * putting its words on the clipboard beside a button that opens the platform's
+         * composer is an invitation to publish something that has not passed the gate.
+         *
+         * Design spec §5A: nothing publishes unreviewed. The paste row appears the moment a
+         * post is approved and not before — which is also when a person would want it.
+         */
+        <div className="decide__preview">
+          <PostPreview item={item} version={version} mode="light" />
+          <CreativeBar item={item} version={version} />
+        </div>
       )}
     </DecisionCard>
   );
@@ -271,7 +277,12 @@ export function PostRows({
                 <>
                   <PostPreview item={item} version={version} mode="dark" />
                   <CreativeBar item={item} version={version} />
-                  {item.status !== 'discarded' && <Paste item={item} version={version} />}
+                  {/*
+                    Only once it will actually publish. A held post, a rejected one and a
+                    discarded one all still have words, and none of them should be one click
+                    from a composer.
+                  */}
+                  {willPublish(item) && <Paste item={item} version={version} />}
                   <PostFailures item={item} version={version} />
                 </>
               )}
