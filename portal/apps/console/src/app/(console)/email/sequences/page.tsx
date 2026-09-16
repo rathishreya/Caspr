@@ -1,6 +1,5 @@
 import {
   SEGMENTS,
-  SEND_PRECONDITIONS,
   SEND_WINDOW,
   SEQUENCES,
   checkEmail,
@@ -9,7 +8,6 @@ import {
 } from '@caspr-portal/domain';
 import type { Metadata } from 'next';
 
-import { Icon } from '@/components/icons';
 import { Tile } from '@/components/primitives/tile';
 import { EmailCard } from '@/components/email/email-card';
 import { getRepository } from '@/lib/repository';
@@ -29,6 +27,11 @@ export const metadata: Metadata = { title: 'Email — Sequences' };
  * preconditions decide when anything may send. An email can be right for months before it may
  * go — and collapsing the two would make approving copy the same act as sending to 1,600
  * people.
+ *
+ * ⚑ **The preconditions list came off this screen the same day it went on.** `readSendGate`
+ * still refuses every schedule, the tile still says how many are unmet and why, and each card
+ * names what is holding that email — on the email it is holding, which is where a rule is
+ * worth meeting.
  */
 export default async function EmailSequences() {
   const emails = await getRepository().emails();
@@ -68,34 +71,6 @@ export default async function EmailSequences() {
           note={`Nothing sends until every precondition holds. Send window: ${SEND_WINDOW}.`}
         />
       </div>
-
-      {/* ── WHAT IS HOLDING EVERY SEND ─────────────────────────────────────── */}
-      {gate.blocking.length > 0 && (
-        <section aria-labelledby="gate-heading">
-          <div className="board-head">
-            <h3 id="gate-heading" className="t-title-m">
-              Holding every send <span className="board-count t-meta">{gate.blocking.length}</span>
-            </h3>
-            <span className="board-hint t-body-s">
-              All five, not any. This is a one-shot asset — sending early wastes it.
-            </span>
-          </div>
-          <div className="gates">
-            {SEND_PRECONDITIONS.map((row) => (
-              <div key={row.id} className={row.met ? 'gate gate--met' : 'gate'}>
-                <span className="gate__mark">
-                  <Icon name={row.met ? 'check' : 'close'} size={16} />
-                </span>
-                <div className="gate__body">
-                  <p className="t-title-m">{row.what}</p>
-                  <p className="t-body-s text-secondary">{row.why}</p>
-                  <p className="t-meta text-tertiary">{row.owner}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* ── THE SEQUENCES ──────────────────────────────────────────────────── */}
       {SEQUENCES.map((sequence) => {

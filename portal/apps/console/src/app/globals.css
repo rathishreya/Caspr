@@ -1484,11 +1484,8 @@ strong,
   color: var(--accent-approve);
 }
 
+/* The mail body's own narrow rule lives with the ads', so the two cannot drift apart. */
 @media (max-width: 1099px) {
-  .mail__body {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
   .segments {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1649,13 +1646,31 @@ strong,
   border-style: dashed;
 }
 
+/*
+ * ⚑ The rail stays on the right, and the ad column narrows instead.
+ *
+ * It used to stack below 1100px, which is the common desktop window rather than an edge
+ * case — so the three buttons ended up in a row under the ad on most screens, which is
+ * exactly what the decide card was corrected for a day earlier. Same fix, same breakpoint:
+ * narrow to 100px, and only stack at phone width where a right-hand column would leave the
+ * preview too narrow to read as the platform shows it.
+ */
 @media (max-width: 1099px) {
-  .ad__body {
-    grid-template-columns: minmax(0, 1fr);
+  .ad__body,
+  .mail__body {
+    grid-template-columns: minmax(0, 1fr) 100px;
+    gap: var(--space-3);
   }
 
   .angles {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  .ad__body,
+  .mail__body {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
