@@ -1,7 +1,6 @@
 import {
   REFERENCE_WEEK_START,
   buildWeek,
-  dailyState,
   estimateLabel,
   estimateReviewMinutes,
   isUnreviewed,
@@ -11,7 +10,6 @@ import {
   willPublish,
 } from '@caspr-portal/domain';
 import type { Metadata } from 'next';
-import Link from 'next/link';
 
 import { Icon } from '@/components/icons';
 import { FeedNotice } from '@/components/primitives/feed-notice';
@@ -74,9 +72,6 @@ export default async function ThisWeek({ searchParams }: PageProps) {
   const decided = bySlot(visible.filter(willPublish));
 
   const queueSize = weekly.filter(isUnreviewed).length;
-  const onTodaysClock = workstream.filter(
-    (item) => isUnreviewed(item) && dailyState(item, now).kind === 'today',
-  ).length;
   const health = reviewHealth(decisions.filter((d) => weekly.some((item) => item.id === d.itemId)));
   const minutes = estimateReviewMinutes(queueSize, health.meanSeconds);
   const deadline = milestonesForWeek(week)[0];
@@ -97,11 +92,6 @@ export default async function ThisWeek({ searchParams }: PageProps) {
           <span>
             Review by {monday.weekdayLabel} {monday.dayOfMonth} · {deadline.time}
           </span>
-        )}
-        {onTodaysClock > 0 && (
-          <Link className="board-status__link t-meta-bold" href="/content-social/today">
-            {onTodaysClock} on today&rsquo;s clock →
-          </Link>
         )}
       </p>
 

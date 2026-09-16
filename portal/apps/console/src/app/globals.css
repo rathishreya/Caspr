@@ -1291,13 +1291,16 @@ a.card:hover {
  */
 .decide__split {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 208px;
+  grid-template-columns: minmax(0, 1fr) 118px;
   gap: var(--space-4);
   padding: 0 var(--space-4) var(--space-4);
 }
 
 .decide__post {
   min-width: 0;
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
 }
 
 .decide__post .decide__context,
@@ -1305,18 +1308,28 @@ a.card:hover {
   padding-inline: 0;
 }
 
+/*
+ * Four rows of one control, not four buttons.
+ *
+ * The 1px gap is the divider: the rail's own background shows through it, so each row can
+ * drop its border and there is no last-child seam to special-case — which matters because
+ * two of the four are forms (§5A.1 rule 5, each action commits on its own) and the other
+ * two are buttons, so they cannot be addressed as one set of siblings.
+ */
 .decide__rail {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: var(--space-2);
+  gap: 1px;
   position: sticky;
   top: var(--space-4);
   align-self: start;
-  padding-top: var(--space-3);
+  background: var(--border-default);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
-/* Each action is its own form (§5A.1 rule 5), so the form must not shrink around its button. */
 .decide__rail form {
   display: flex;
 }
@@ -1324,6 +1337,23 @@ a.card:hover {
 .decide__rail .btn {
   flex: 1;
   justify-content: space-between;
+  gap: var(--space-2);
+  min-height: 34px;
+  padding-inline: var(--space-3);
+  border: 0;
+  border-radius: 0;
+  background: var(--surface-base);
+}
+
+/*
+ * No `:hover` rule here on purpose. One at `.decide__rail .btn:hover` would outrank
+ * `.btn--approve:hover` and flatten approve and reject back to the same grey.
+ */
+
+.decide__rail .kbd {
+  /* Inside a tight control the key is a hint, not a second label competing with the word. */
+  color: var(--text-tertiary);
+  border-color: transparent;
 }
 
 .decide__hint {
@@ -1348,12 +1378,7 @@ a.card:hover {
  */
 @media (max-width: 1099px) {
   .decide__split {
-    grid-template-columns: minmax(0, 1fr) 152px;
     gap: var(--space-3);
-  }
-
-  .decide__rail .btn {
-    padding-inline: var(--space-3);
   }
 }
 
@@ -1370,16 +1395,10 @@ a.card:hover {
   .decide__rail {
     position: static;
     flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
   }
 
   .decide__rail .btn {
-    flex: 0 0 auto;
-  }
-
-  .decide__rail .decide__failures {
-    flex-basis: 100%;
+    justify-content: center;
   }
 }
 

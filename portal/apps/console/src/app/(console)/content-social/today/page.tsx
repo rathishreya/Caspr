@@ -9,7 +9,6 @@ import {
   surfacing,
 } from '@caspr-portal/domain';
 import type { Metadata } from 'next';
-import Link from 'next/link';
 
 import { FeedNotice } from '@/components/primitives/feed-notice';
 import { State } from '@/components/primitives/state';
@@ -99,9 +98,6 @@ export default async function Today({ searchParams }: PageProps) {
         </span>
         {soonest !== null && <span>{soonest === 0 ? 'one discards within the hour' : `soonest discards in ${soonest}h`}</span>}
         <span>{openEngagement} conversations to act on</span>
-        <Link className="board-status__link t-meta-bold" href="/content-social/tasks">
-          This week →
-        </Link>
       </p>
 
       {/*

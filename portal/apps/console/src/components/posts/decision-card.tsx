@@ -172,9 +172,19 @@ export function DecisionCard({
       onFocus={markStarted}
     >
       <div className="decide__split">
-        <div className="decide__post">{children}</div>
+        <div className="decide__post">
+          {children}
+          {failures !== null && <div className="decide__failures">{failures}</div>}
+        </div>
 
-        <div className="decide__rail">
+        {/*
+          One control, four rows — not four buttons.
+          ⚑ 2026-09-16, second pass: *"these buttons are taking too much space."* They were
+          full-width slabs in a 208px column, which read as four separate decisions competing
+          with the post. Sharing one border and one hairline between rows makes them one
+          thing — the decision — and gives the post back about 90px of width.
+        */}
+        <div className="decide__rail" role="group" aria-label="Decide this post">
           <form ref={approveForm} action={submitWith('approve')}>
             {hidden}
             <Submit variant="approve" shortcut="A" pendingLabel="Approving">
@@ -206,10 +216,8 @@ export function DecisionCard({
             aria-controls={`revise-${itemId}`}
             onClick={() => setPanel((open) => (open === 'revise' ? 'none' : 'revise'))}
           >
-            Change it… <kbd className="kbd">E</kbd>
+            Change… <kbd className="kbd">E</kbd>
           </button>
-
-          {failures !== null && <div className="decide__failures">{failures}</div>}
         </div>
       </div>
 
