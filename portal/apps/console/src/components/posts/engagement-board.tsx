@@ -16,6 +16,7 @@ import {
 import { State } from '@/components/primitives/state';
 import { EngagementActions } from '@/components/posts/engagement-actions';
 import { ExternalPostPreview, relativeTime } from '@/components/posts/post-preview';
+import { PLATFORM_NAME } from '@/lib/platforms';
 
 /**
  * Engagement — the half of the week that never passes through review.
@@ -206,44 +207,38 @@ function EngagementCard({ target, now }: { readonly target: EngagementTarget; re
       </div>
 
       <div className="engage__grid">
-        <ExternalPostPreview
-          post={target.post}
-          now={now}
-          reshareOf={target.kind === 'reshare' ? 'A Caspr Page post from last week' : undefined}
-        />
+        <div className="engage__found">
+          <ExternalPostPreview
+            post={target.post}
+            now={now}
+            reshareOf={target.kind === 'reshare' ? 'A Caspr Page post from last week' : undefined}
+          />
+          <p className="engage__why t-body-s">{target.whyRelevant}</p>
+        </div>
 
         <div className="engage__brief">
-          {response !== null && (
-            <p className="engage__row">
-              <span className="engage__label t-meta">Do</span>
-              <span className="t-body-s">{INBOUND_RESPONSE_LABEL[response]}</span>
-            </p>
-          )}
-          <p className="engage__row">
-            <span className="engage__label t-meta">Why</span>
-            <span className="t-body-s text-secondary">{target.whyRelevant}</span>
+          {/* What to do, as the heading rather than as a labelled row — it is the one line
+              a person needs before they read anything else on this card. */}
+          <p className="engage__do t-title-m">
+            {response === null ? (target.kind === 'repost' ? 'Repost, with a line of our own' : 'Comment') : INBOUND_RESPONSE_LABEL[response]}
           </p>
+
           {target.factToBring !== null && (
             <div className="engage__fact">
-              <span className="engage__label t-meta">Bring this</span>
+              <p className="engage__fact-label t-meta">The one thing to bring</p>
               <p className="t-body-m">{target.factToBring}</p>
               <p className="t-meta text-tertiary">{target.ourSource}</p>
             </div>
           )}
-          <p className="engage__row">
-            <span className="engage__label t-meta">Who</span>
-            <span className="t-body-s">
-              {who}
-              {where === 'personal_queue' && (
-                <span className="text-tertiary"> — on their Personal Queue, typed by them on LinkedIn</span>
-              )}
-            </span>
-          </p>
+
           <EngagementActions
             targetId={target.id}
             doneLabel={inbound ? 'Replied' : 'Commented'}
             drafts={target.drafts}
             publishMode={engagementPublishMode(target.post.platform)}
+            who={who}
+            fromOwnAccount={where === 'personal_queue'}
+            platformName={PLATFORM_NAME[target.post.platform]}
             // No listener runs yet, so no target carries a real post link — §6.6's one tap
             // needs one, and saying so beats a button that goes nowhere.
             postUrl={null}

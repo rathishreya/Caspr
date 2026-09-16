@@ -113,15 +113,14 @@ export default async function ThisWeek({ searchParams }: PageProps) {
 
       <section id="decide" aria-labelledby="decide-heading">
         <div className="board-head">
+          {/*
+            ⚑ The keyboard legend was removed 2026-09-16 on request. It is not lost: every key
+            is printed on the button it fires, inside the decision control, where a person
+            reads it at the moment they would use it rather than once at the top of a board.
+          */}
           <h3 id="decide-heading" className="t-title-m">
             Needs your decision <span className="board-count t-meta">{waiting.length}</span>
           </h3>
-          {waiting.length > 0 && (
-            <span className="board-hint t-body-s">
-              <kbd className="kbd">A</kbd> approve · <kbd className="kbd">R</kbd> reject · <kbd className="kbd">H</kbd>{' '}
-              hold · <kbd className="kbd">E</kbd> change it
-            </span>
-          )}
         </div>
 
         <Confirmation done={params.done} did={params.did} items={weekly} decisions={decisions} />

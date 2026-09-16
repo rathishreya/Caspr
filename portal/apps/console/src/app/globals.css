@@ -1211,6 +1211,24 @@ a.card:hover {
   color: var(--accent-attention);
 }
 
+/* A platform with nothing on it this week. Present, so the row is the same every time; not a
+ * link, because a filter that finds nothing is a dead end. */
+.pill--empty {
+  border-style: dashed;
+  color: var(--text-tertiary);
+  cursor: default;
+}
+
+.pill--empty .pill__count {
+  color: var(--text-tertiary);
+}
+
+/* `.pill:hover` would otherwise light it up and promise a click that does not exist. */
+.pill--empty:hover {
+  border-color: var(--border-default);
+  color: var(--text-tertiary);
+}
+
 /* "6 2" reads as sixty-two. The separator makes it two numbers with two meanings. */
 .pill__waiting::before {
   content: '·';
@@ -1366,6 +1384,24 @@ a.card:hover {
 
 .decide__failures {
   margin-top: var(--space-2);
+}
+
+/*
+ * Copy the post, and open the box it goes into.
+ *
+ * Five of eight channels reach their platform through a person, so this is not a convenience
+ * on those — it is the last step of the job. It sits directly under the post, because that is
+ * where the eye already is when a person decides they want the words.
+ */
+.paste {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+}
+
+.paste__where {
+  color: var(--text-tertiary);
 }
 
 /*
@@ -2036,15 +2072,32 @@ a.card:hover {
   min-width: 0;
 }
 
-.engage__row {
+/*
+ * ⚑ Rebuilt 2026-09-16, on request — the card had become a form.
+ *
+ * DO / WHY / WHO each sat as a labelled row against a 72px label column, so the eye had to
+ * cross a gutter four times to read four short things, and at narrow widths the column
+ * stranded each label on its own line. Labels earn their place when there are many rows of
+ * one kind; here there was one row of each kind, and the label was longer than some values.
+ *
+ * So: **what to do is the heading**, because it is the one line a person needs first. **Why
+ * it was surfaced sits under the post it is about**, where the evidence is. **Whose lane it
+ * is moved down to the actions**, because it answers "can I press this", not "what is this".
+ * The fact to bring keeps its callout — it is the only thing on the card that must survive
+ * into the comment.
+ */
+.engage__found {
   display: grid;
-  grid-template-columns: 72px minmax(0, 1fr);
   gap: var(--space-3);
-  align-items: baseline;
+  min-width: 0;
 }
 
-.engage__label {
-  color: var(--text-tertiary);
+.engage__why {
+  color: var(--text-secondary);
+}
+
+.engage__do {
+  color: var(--text-primary);
 }
 
 /* The fact to bring is the one thing on the card the person uses. It is set as such. */
@@ -2059,11 +2112,31 @@ a.card:hover {
   background: var(--surface-raised);
 }
 
+.engage__fact-label {
+  color: var(--text-tertiary);
+}
+
 .engage__actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-default);
+}
+
+/*
+ * Take the words, then close the loop — two rows, in that order. The first has no rule above
+ * it because it belongs to the draft it sits under; the second does, because it ends the card.
+ */
+.engage__actions--take {
+  border-top: 0;
   padding-top: var(--space-2);
+}
+
+.engage__who {
+  flex: 1 1 100%;
+  color: var(--text-secondary);
 }
 
 .engage__error {
@@ -2404,8 +2477,15 @@ a.card:hover {
   color: var(--accent-approve);
 }
 
+/*
+ * Why there is no link. It takes the whole row rather than sitting between two buttons —
+ * a sentence wedged into a button row pushes the buttons apart and reads as a caption for
+ * whichever one it lands next to.
+ */
 .drafts__note {
-  align-self: center;
+  flex: 1 1 100%;
+  order: 9;
+  color: var(--text-tertiary);
 }
 
 .engage-caps {

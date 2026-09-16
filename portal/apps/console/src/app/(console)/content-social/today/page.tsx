@@ -105,7 +105,7 @@ export default async function Today({ searchParams }: PageProps) {
         bottom margin tuned to the board's own gap, and nested one level deeper it pulls the
         first decision card up over the pills.
       */}
-      {daily.length > 1 && <PlatformFilter active={platform} items={daily} basePath={BASE} />}
+      <PlatformFilter active={platform} items={daily} basePath={BASE} />
 
       {/* ── POSTS ──────────────────────────────────────────────────────────── */}
       <section id="decide" aria-labelledby="today-heading">
@@ -113,11 +113,6 @@ export default async function Today({ searchParams }: PageProps) {
           <h3 id="today-heading" className="t-title-m">
             Written today <span className="board-count t-meta">{waiting.length}</span>
           </h3>
-          <span className="board-hint t-body-s">
-            No calendar slot — it goes out at the next open window once approved, and is discarded if nobody approves it
-            within {DAILY_WINDOW_HOURS} hours. <kbd className="kbd">A</kbd> approve · <kbd className="kbd">R</kbd>{' '}
-            reject · <kbd className="kbd">H</kbd> hold · <kbd className="kbd">E</kbd> change it.
-          </span>
         </div>
 
         <Confirmation done={params.done} did={params.did} items={daily} decisions={decisions} />

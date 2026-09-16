@@ -19,8 +19,9 @@ import { Icon } from '@/components/icons';
 import { State } from '@/components/primitives/state';
 import { DecisionCard } from '@/components/posts/decision-card';
 import { instantLabel, PostFailures, slotLabel } from '@/components/posts/post-facts';
+import { PasteRow } from '@/components/posts/paste-row';
 import { CreativeBar, PostPreview } from '@/components/posts/post-preview';
-import { authorOf, CONTENT_SOCIAL_CHANNELS, PLATFORM_NAME } from '@/lib/platforms';
+import { authorOf, CONTENT_SOCIAL_CHANNELS, PASTE_TARGET, PLATFORM_NAME } from '@/lib/platforms';
 
 /**
  * The pieces both queues are made of.
@@ -67,13 +68,31 @@ export function Waiting({
       {version === undefined ? (
         <MissingVersion />
       ) : (
-        <div className="decide__preview">
-          <PostPreview item={item} version={version} mode="light" />
-          <CreativeBar item={item} version={version} />
-        </div>
+        <>
+          <div className="decide__preview">
+            <PostPreview item={item} version={version} mode="light" />
+            <CreativeBar item={item} version={version} />
+          </div>
+          <Paste item={item} version={version} />
+        </>
       )}
     </DecisionCard>
   );
+}
+
+/**
+ * The post's words and the box they go into.
+ *
+ * The text is assembled here, on the server, from the same `postText` every preview and every
+ * check reads — so what reaches the clipboard is the post, not a re-render of it. A blog post
+ * carries its headline, because pasting a body without its headline is pasting half of it.
+ */
+export function Paste({ item, version }: { readonly item: ContentItem; readonly version: PostVersion }) {
+  const target = PASTE_TARGET[item.channel];
+  const body = version.body;
+  const text = body.kind === 'blog' ? `${body.headline}\n\n${postText(body)}` : postText(body);
+
+  return <PasteRow text={text} platform={PLATFORM_NAME[item.channel]} where={target.where} url={target.url} />;
 }
 
 export function bySlot(items: readonly ContentItem[]): ContentItem[] {
@@ -153,8 +172,24 @@ export function PlatformFilter({
       </Link>
       {CONTENT_SOCIAL_CHANNELS.map((channel) => {
         const count = items.filter((item) => item.channel === channel).length;
-        if (count === 0) return null;
         const waiting = items.filter((item) => item.channel === channel && isUnreviewed(item)).length;
+
+        /*
+         * ⚑ Every platform shows, including the ones with nothing on them — 2026-09-16, on
+         * request: *"I want all the relevant social media platforms there."* Hiding the empty
+         * ones made the row a different shape on every screen and every filter, so it could
+         * not be learned; worse, "no Reddit post today" and "we do not post to Reddit" looked
+         * identical. An empty platform is a fact about the week, so it is shown as one:
+         * present, greyed, and not a link, because a filter that finds nothing is a dead end.
+         */
+        if (count === 0) {
+          return (
+            <span key={channel} className="pill pill--empty" aria-disabled="true">
+              {PLATFORM_NAME[channel]} <span className="pill__count">0</span>
+            </span>
+          );
+        }
+
         return (
           <Link key={channel} className="pill" href={link(channel)} aria-current={active === channel ? 'true' : undefined}>
             {PLATFORM_NAME[channel]} <span className="pill__count">{count}</span>
@@ -236,6 +271,7 @@ export function PostRows({
                 <>
                   <PostPreview item={item} version={version} mode="dark" />
                   <CreativeBar item={item} version={version} />
+                  {item.status !== 'discarded' && <Paste item={item} version={version} />}
                   <PostFailures item={item} version={version} />
                 </>
               )}

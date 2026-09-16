@@ -5,6 +5,7 @@ import { useActionState, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 
 import { markEngagement, type DecideState } from '@/app/(console)/content-social/tasks/actions';
+import { Icon } from '@/components/icons';
 
 const INITIAL: DecideState = { errors: [] };
 
@@ -43,12 +44,20 @@ export function EngagementActions({
   doneLabel,
   drafts,
   publishMode,
+  who,
+  fromOwnAccount,
+  platformName,
   postUrl,
 }: {
   readonly targetId: string;
   readonly doneLabel: string;
   readonly drafts: readonly EngagementDraft[];
   readonly publishMode: PublishMode;
+  /** Whose lane this is — it goes out under their name, so the card says so. */
+  readonly who: string;
+  readonly fromOwnAccount: boolean;
+  /** The platform the found post is on, as a person says it. */
+  readonly platformName: string;
   /** The post on the platform. Null while no listener runs, which is most of this build. */
   readonly postUrl: string | null;
 }) {
@@ -126,48 +135,58 @@ export function EngagementActions({
         </fieldset>
       )}
 
-      <div className="engage__actions">
-        {draft !== undefined && (
-          <>
+      {/*
+        Two rows, and the order is the order of the work: take the words, go and post them,
+        then tell the console what happened. One flat row of six buttons made the irreversible
+        "Replied" sit beside the harmless "Copy", which is how a queue gets closed by accident.
+      */}
+      {draft !== undefined && (
+        <div className="engage__actions engage__actions--take">
+          <button type="button" className="btn btn--primary" onClick={copy}>
+            <Icon name={copied ? 'check' : 'copy'} size={14} />
+            {copied ? 'Copied' : 'Copy the comment'}
+          </button>
+
+          {postUrl === null ? (
+            <span className="drafts__note t-body-s">
+              Open the post on {platformName} and paste it there. No link yet — the Listener is not running, so this
+              card does not hold the post&rsquo;s own URL.
+            </span>
+          ) : (
+            <a className="btn" href={postUrl} target="_blank" rel="noreferrer" onClick={copy}>
+              Open the post
+              <Icon name="external" size={14} />
+            </a>
+          )}
+
+          <button
+            type="button"
+            className={editing ? 'btn btn--active' : 'btn'}
+            aria-pressed={editing}
+            onClick={() => setEditing((open) => !open)}
+          >
+            {editing ? 'Done editing' : 'Edit'}
+          </button>
+          {changed && (
             <button
               type="button"
-              className={editing ? 'btn btn--active' : 'btn'}
-              aria-pressed={editing}
-              onClick={() => setEditing((open) => !open)}
+              className="btn"
+              onClick={() => {
+                setEdits(({ [draft.id]: _dropped, ...rest }) => rest);
+                setCopied(false);
+              }}
             >
-              {editing ? 'Done editing' : 'Edit'}
+              Reset
             </button>
-            {changed && (
-              <button
-                type="button"
-                className="btn"
-                onClick={() => {
-                  setEdits(({ [draft.id]: _dropped, ...rest }) => rest);
-                  setCopied(false);
-                }}
-              >
-                Reset to the draft
-              </button>
-            )}
-          </>
-        )}
+          )}
+        </div>
+      )}
 
-        {draft !== undefined && publishMode === 'one_tap' && (
-          <>
-            {postUrl === null ? (
-              <span className="drafts__note t-body-s text-tertiary">
-                No post link yet — the listener is not running, so this one cannot open on the platform.
-              </span>
-            ) : (
-              <a className="btn btn--primary" href={postUrl} target="_blank" rel="noreferrer" onClick={copy}>
-                Open and paste
-              </a>
-            )}
-            <button type="button" className="btn" onClick={copy}>
-              {copied ? 'Copied' : 'Copy text'}
-            </button>
-          </>
-        )}
+      <div className="engage__actions">
+        <span className="engage__who t-body-s">
+          Goes out as <strong>{who}</strong>
+          {fromOwnAccount && <span className="text-tertiary"> — typed by them, from their own account</span>}
+        </span>
 
         <form action={action}>
           <input type="hidden" name="targetId" value={targetId} />

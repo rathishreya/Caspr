@@ -43,6 +43,59 @@ export function isContentSocialChannel(value: string | undefined): value is Chan
 }
 
 /**
+ * Where a copied post is pasted — the composer, not the platform's front door.
+ *
+ * ⚑ Added 2026-09-16 on request: *"give me a copy paste option, also a redirection link —
+ * like jaha exactly mujhe isko paste krna ho."* Four channels publish by hand
+ * (`CHANNEL_PUBLISH_MODE === 'manual'`) and one releases by hand, so for five of our eight a
+ * person is the transport. Copy-then-hunt-for-the-box is where that person loses the minute
+ * the whole console is built to save them.
+ *
+ * **`url` is each platform's own generic composer, and nothing else.** Where a post needs a
+ * destination this build does not hold — the Caspr Page's own slug, the subreddit chosen that
+ * day, the Quora question being answered, the forum thread — the link is `null` and `where`
+ * says what is missing. Guessing a URL would send someone to the wrong place with the right
+ * words in their clipboard, which is worse than no link (Rule 5.5: traceable, or absent).
+ */
+export interface PasteTarget {
+  /** The composer to open, or null when the destination is not knowable from here. */
+  readonly url: string | null;
+  /** Where the words go, in a person's terms. Shown whether or not there is a link. */
+  readonly where: string;
+}
+
+export const PASTE_TARGET: Readonly<Record<Channel, PasteTarget>> = {
+  linkedin: {
+    url: 'https://www.linkedin.com/feed/?shareActive=true',
+    where: 'the share box on your own LinkedIn feed',
+  },
+  linkedin_page: {
+    url: null,
+    where: 'the Caspr Page composer — no link yet, because the Page is not connected to this console',
+  },
+  x: { url: 'https://x.com/compose/post', where: 'the post composer on X' },
+  meta: {
+    url: null,
+    where: 'Meta Business Suite — no link yet, because no Business Suite account is connected',
+  },
+  reddit: {
+    url: 'https://www.reddit.com/submit',
+    where: 'Reddit’s submit page — pick the subreddit on the day, from your own account',
+  },
+  quora: {
+    url: null,
+    where: 'the Quora question being answered — the link is the question’s, and no listener supplies it yet',
+  },
+  blog: { url: null, where: 'the CMS — ⑨ not built, so a blog post has nowhere to go by hand' },
+  community: {
+    url: null,
+    where: 'the thread itself — a forum post only exists as a reply to one, and no listener supplies it yet',
+  },
+  email: { url: null, where: 'the sequence tool — Email is not built' },
+  outreach: { url: null, where: 'the pitch itself — Earned Media is not built' },
+};
+
+/**
  * Which platforms, and why — operating model ㉛, "who posts what, where, when".
  *
  * Every platform someone might expect is listed, including the ones deliberately left out,
