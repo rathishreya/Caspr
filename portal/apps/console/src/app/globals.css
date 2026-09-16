@@ -1339,10 +1339,30 @@ a.card:hover {
 }
 
 /*
- * One column under 1100px. Two 208px rails plus a post preview is the point at which the
- * preview stops being able to show a post at the width the platform shows it.
+ * The rail narrows before it ever stacks.
+ *
+ * ⚑ It used to fall back to a row of buttons under 1100px, and that was wrong: a narrow
+ * desktop window is the common case, not the edge one, so the fallback was what most people
+ * saw. Every platform preview is sized with `max-width`, so the post column shrinks rather
+ * than overflowing — which means the column can hold down to a phone.
  */
 @media (max-width: 1099px) {
+  .decide__split {
+    grid-template-columns: minmax(0, 1fr) 152px;
+    gap: var(--space-3);
+  }
+
+  .decide__rail .btn {
+    padding-inline: var(--space-3);
+  }
+}
+
+/*
+ * Below this a right-hand column would leave the post too narrow to read as the platform
+ * shows it, and reading the post is the whole point of the screen. Only here does the rail
+ * become a row — under the post, where a thumb reaches it.
+ */
+@media (max-width: 639px) {
   .decide__split {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -1358,7 +1378,6 @@ a.card:hover {
     flex: 0 0 auto;
   }
 
-  .decide__rail .decide__hint,
   .decide__rail .decide__failures {
     flex-basis: 100%;
   }
