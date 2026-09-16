@@ -1,15 +1,10 @@
 import {
   APPROACH_SAMPLE,
-  CONVERSION_TEST,
-  DATA_PAGE_SEED,
-  DISAGREEMENT_HYPOTHESIS,
   INCLUSION_BAR,
-  SEO_CADENCE,
   SEO_TASKS_PER_WEEK,
   approachProgress,
   nextApproaches,
   openTasks,
-  readConversionTest,
 } from '@caspr-portal/domain';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -23,9 +18,13 @@ export const metadata: Metadata = { title: 'SEO — Tasks' };
 /**
  * SEO ▸ Tasks — what to do today.
  *
- * ⚑ **Slimmed 2026-09-16.** The target list moved to Links, where the routes that explain it
- * are. What is left is the week: three tasks, the cadence they sit inside, and the one test
- * that decides whether the data pages become a channel.
+ * ⚑ **Slimmed twice on 2026-09-16.** The target list moved to Links; then the cadence table
+ * and the T4 panel came out at the owner's request. Both were reference on a queue — the
+ * week's shape does not change from one visit to the next, and the test does not read until
+ * there are a thousand sessions. **Neither moved as a rule**: the cadence is still on the
+ * Dashboard, where a person reads it once, and `readConversionTest` still holds the bar.
+ *
+ * What is left is a queue: what is open, what is debt, what is closed.
  *
  * Every task says **which clock it moves**. With three clocks on three horizons, a week of
  * three tasks all on one component is a week that moved one and let two stand still, and that
@@ -39,7 +38,6 @@ export default async function SeoTasks() {
   const done = tasks.filter((task) => task.done);
   const progress = approachProgress(approaches);
   const toSend = nextApproaches(approaches).length;
-  const conversion = readConversionTest(0, 0);
 
   const debt = open.filter((task) => task.debt === true);
   const rest = open.filter((task) => task.debt !== true);
@@ -123,64 +121,6 @@ export default async function SeoTasks() {
           </div>
         </details>
       )}
-
-      {/* ── THE WEEK, AND THE MONTH ────────────────────────────────────────── */}
-      <section className="panel panel--wide">
-        <div className="panel__title">
-          <h2 className="t-title-m">What the week looks like</h2>
-          <span className="t-meta text-tertiary">~2.5 HOURS</span>
-        </div>
-
-        <div className="table-scroll">
-          <table className="table">
-            <thead>
-              <tr>
-                <th className="t-meta keep">What</th>
-                <th className="t-meta nowrap">How often</th>
-                <th className="t-meta nowrap">Moves</th>
-                <th className="t-meta fill">Note</th>
-              </tr>
-            </thead>
-            <tbody>
-              {SEO_CADENCE.map((row) => (
-                <tr key={row.what}>
-                  <td className="t-body-s keep">{row.what}</td>
-                  <td className={row.lapsed === true ? 't-meta text-attention nowrap' : 't-meta nowrap'}>
-                    {row.rate}
-                  </td>
-                  <td className="t-meta nowrap">{row.serves}</td>
-                  <td className="t-body-s text-secondary">{row.note}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* ── THE TEST ───────────────────────────────────────────────────────── */}
-      <section className="panel panel--wide">
-        <div className="panel__title">
-          <h2 className="t-title-m">The test that decides the data pages</h2>
-          <span className="t-meta text-tertiary">T4</span>
-        </div>
-
-        <p className="t-body-m text-secondary" style={{ maxWidth: '72ch' }}>
-          Three pages on commercial shapes, each showing the figure, every source, and the disagreement
-          stated plainly. <strong>Under 1% reaching a prompt after 1,000 sessions and we do not scale</strong>{' '}
-          — from {DATA_PAGE_SEED} pages to thousands. It does not mean the {DATA_PAGE_SEED} should not exist:
-          the gate is on scale, not on existence.
-        </p>
-
-        <div className="reading" style={{ marginTop: 'var(--space-4)' }}>
-          <p className="reading__label t-meta">What is actually being tested</p>
-          <p className="t-body-s">{DISAGREEMENT_HYPOTHESIS}</p>
-        </div>
-
-        <p className="t-body-s text-tertiary" style={{ marginTop: 'var(--space-3)' }}>
-          {conversion.says} Bar: {CONVERSION_TEST.bar * 100}% of{' '}
-          {CONVERSION_TEST.sessions.toLocaleString('en-US')} sessions.
-        </p>
-      </section>
     </div>
   );
 }

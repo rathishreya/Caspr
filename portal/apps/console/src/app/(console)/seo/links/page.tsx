@@ -1,10 +1,7 @@
 import {
   APPROACH_SAMPLE,
-  ENTITY_SIGNALS,
   INCLUSION_BAR,
-  LINK_ROUTES,
   SHAPE_LABEL,
-  WIKIPEDIA_SHARE_OF_CHATGPT_CITATIONS,
   approachProgress,
   lapsedApproaches,
   nextApproaches,
@@ -20,21 +17,18 @@ import { getRepository } from '@/lib/repository';
 export const metadata: Metadata = { title: 'SEO — Links' };
 
 /**
- * SEO ▸ Links — where authority comes from, and who is allowed to go and get it.
+ * SEO ▸ Links — the target list, and who can actually send each one.
  *
- * Three things, and the order is the argument.
+ * Every row came from running the basket questions and writing down who was there
+ * (`presence-baseline-2026-08.md` §4), not from a keyword pull. Each one sent moves the
+ * presence clock, which is the fastest of the three and needs nothing published.
  *
- *   THE ROUTES   four legitimate ones, and one that is never used. Paid link-building is not
- *                only a penalty risk — it is *"off-brand for a company selling
- *                defensibility"*, and a company whose position is **cited, or it does not
- *                ship** cannot buy its citations
- *   THE TARGETS  the real list, from running the basket questions. Each row moves the
- *                presence clock, and each says who can actually send it
- *   THE ENTITY   the cheapest long lever there is, and the one nobody starts because it
- *                produces no number this month
- *
- * `operations-runbook.md` §6 is the source for the routes and the monthly targets;
- * `presence-baseline-2026-08.md` §4 for the list.
+ * ⚑ **Two panels were removed 2026-09-16**, at the workstream owner's request — the four
+ * link routes and the entity-signal list. Both were reference: true, unchanging, and read
+ * once. **Neither rule moved.** `LINK_ROUTES` still marks paid link-building as never used,
+ * `ENTITY_SIGNALS` still marks a self-authored Wikipedia page as forbidden, and the domain
+ * tests still hold both. What is gone is a person having to scroll past them to reach the
+ * work.
  */
 export default async function SeoLinks() {
   const repository = getRepository();
@@ -80,46 +74,6 @@ export default async function SeoLinks() {
           note="Editorial pitches. A form is a form; converting an editor is a relationship, and that seat is empty."
         />
       </div>
-
-      {/* ── THE ROUTES ─────────────────────────────────────────────────────── */}
-      <section className="panel panel--wide">
-        <div className="panel__title">
-          <h2 className="t-title-m">Where a link can come from</h2>
-          <span className="t-meta text-tertiary">FOUR ROUTES · AND ONE THAT IS NEVER USED</span>
-        </div>
-
-        <div className="routes">
-          {LINK_ROUTES.map((route) => (
-            <div key={route.id} className={route.forbidden === true ? 'route route--never' : 'route'}>
-              <div className="route__head">
-                <span className="t-body-m">
-                  {route.forbidden === true && '⛔ '}
-                  {route.route}
-                </span>
-                <span className={route.forbidden === true ? 'tag tag--declined t-meta' : 'tag t-meta'}>
-                  {route.target}
-                </span>
-              </div>
-              <p className="t-body-s text-secondary">{route.how}</p>
-              <p className="t-meta text-tertiary">
-                {route.owner === 'nobody'
-                  ? 'Nobody — and that is the decision'
-                  : route.owner === 'earned_media'
-                    ? 'Earned Media — lapsed until the hire lands'
-                    : route.owner === 'joy'
-                      ? 'Joy'
-                      : 'SEO'}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        <p className="t-body-s text-secondary" style={{ marginTop: 'var(--space-4)', maxWidth: '72ch' }}>
-          <strong>Caspr&rsquo;s own output is the strongest link magnet available</strong> — a free,
-          fully-cited sector report is a backlink asset, a PR asset and a live product demonstration in one
-          artefact, and it costs a Study.
-        </p>
-      </section>
 
       {/* ── THE TARGETS ────────────────────────────────────────────────────── */}
       <section id="targets" className="board-part" aria-labelledby="targets-heading">
@@ -229,37 +183,6 @@ export default async function SeoLinks() {
         </details>
       )}
 
-      {/* ── THE ENTITY ─────────────────────────────────────────────────────── */}
-      <section className="panel panel--wide">
-        <div className="panel__title">
-          <h2 className="t-title-m">Being a thing the machines recognise</h2>
-          <span className="t-meta text-tertiary">THE CHEAPEST LONG LEVER THERE IS</span>
-        </div>
-
-        <p className="t-body-s text-secondary" style={{ maxWidth: '72ch' }}>
-          AI systems cite entities they recognise, and Wikipedia alone is{' '}
-          <strong>~{(WIKIPEDIA_SHARE_OF_CHATGPT_CITATIONS * 100).toFixed(1)}% of ChatGPT citations</strong>.
-          Caspr has no Wikidata entry, no consistent entity signals, and Organization schema nowhere. It takes
-          months to establish and almost nothing to begin — which is the exact profile of a lever that never
-          gets started.
-        </p>
-
-        <div className="stack" style={{ marginTop: 'var(--space-4)' }}>
-          {ENTITY_SIGNALS.map((signal) => (
-            <div key={signal.id} className="stack-row">
-              <p className={signal.forbidden === true ? 't-body-s text-attention' : 't-body-s'}>
-                {signal.forbidden === true && '⛔ '}
-                {signal.what}
-              </p>
-              <p className="t-body-s text-secondary">{signal.standing}</p>
-            </div>
-          ))}
-        </div>
-
-        <p className="t-body-s text-tertiary" style={{ marginTop: 'var(--space-3)' }}>
-          Earn the citations first; the page follows or it does not.
-        </p>
-      </section>
     </div>
   );
 }

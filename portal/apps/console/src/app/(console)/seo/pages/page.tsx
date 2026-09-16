@@ -1,11 +1,7 @@
 import {
-  AEO_STANDARD,
-  KEYWORD_SHAPES,
   REFERENCE_WEEK_START,
   SITE_PAGES,
   TECHNICAL,
-  AUDIENCE_LABEL,
-  audienceFromCpc,
   pageHealth,
   postPage,
   siteHealth,
@@ -16,7 +12,6 @@ import type { Metadata } from 'next';
 import type { Route } from 'next';
 import Link from 'next/link';
 
-import { Icon } from '@/components/icons';
 import { PageRow } from '@/components/seo/page-row';
 import { getRepository } from '@/lib/repository';
 
@@ -31,6 +26,13 @@ interface PageProps {
  *
  * ⚑ Added 2026-09-16: *"ye pura website, posts ka seo manage krle."* This is the screen an
  * SEO person opens first, and the workstream did not have it.
+ *
+ * ⚑ **The AEO standard and the keyword families were removed from this screen 2026-09-16**,
+ * at the workstream owner's request. Both were documents on a work surface: five checks a
+ * template is held to, and a table of what each family is worth, neither of which changes
+ * from one visit to the next. **The rules are unchanged and still enforced** — `aeo.ts` and
+ * the families still govern what is built, and the domain tests still hold them. What is
+ * gone is the recital.
  *
  * Two things make it readable rather than a wall of 36 rows:
  *
@@ -139,85 +141,6 @@ export default async function SeoPages({ searchParams }: PageProps) {
           );
         })}
       </section>
-
-      {/* ── THE STANDARD ───────────────────────────────────────────────────── */}
-      <section className="panel panel--wide">
-        <div className="panel__title">
-          <h2 className="t-title-m">What a good page looks like</h2>
-          <span className="t-meta text-tertiary">THE AEO STANDARD · EVERY TEMPLATE</span>
-        </div>
-        <p className="t-body-s text-secondary" style={{ maxWidth: '72ch' }}>
-          Five things, on every template rather than chosen per post. Cheap at build time and expensive to
-          retrofit, which is the whole argument — there is no case for leaving them out.
-        </p>
-
-        <div className="standard">
-          {AEO_STANDARD.map((check) => (
-            <div key={check.id} className="standard__row">
-              <span className="standard__mark">
-                <Icon name="close" size={14} />
-              </span>
-              <div>
-                <p className="t-body-m">
-                  {check.label}
-                  {check.worth !== null && <span className="standard__worth t-meta">{check.worth}</span>}
-                </p>
-                <p className="t-body-s text-secondary">{check.what}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── WHAT TO WRITE NEXT ─────────────────────────────────────────────── */}
-      <section className="panel panel--wide">
-        <div className="panel__title">
-          <h2 className="t-title-m">What to write next</h2>
-          <span className="t-meta text-tertiary">CPC, NOT VOLUME</span>
-        </div>
-        <p className="t-body-s text-secondary" style={{ maxWidth: '72ch' }}>
-          <strong>$9 a click is a student. $300 is a buyer.</strong> Advertisers will not pay $300 to reach an
-          undergraduate, and no volume figure tells you that — which is why the largest family in this table
-          is the one that was dropped.
-        </p>
-
-        <div className="table-scroll">
-          <table className="table">
-            <thead>
-              <tr>
-                <th className="t-meta keep">Family</th>
-                <th className="t-meta num">Searches</th>
-                <th className="t-meta num">CPC</th>
-                <th className="t-meta nowrap">Who is asking</th>
-                <th className="t-meta fill">What we do about it</th>
-              </tr>
-            </thead>
-            <tbody>
-              {KEYWORD_SHAPES.map((shape) => {
-                const audience = audienceFromCpc(shape.cpc);
-                return (
-                  <tr key={shape.id}>
-                    <td className="t-body-s keep">
-                      {shape.family}
-                      <br />
-                      <span className="t-body-s text-tertiary">{shape.example}</span>
-                    </td>
-                    <td className="t-body-s num">{shape.volume === 0 ? '—' : shape.volume}</td>
-                    <td className={audience === 'buyer' ? 't-body-s num text-attention' : 't-body-s num'}>
-                      {shape.cpc === null ? '—' : `$${shape.cpc}`}
-                    </td>
-                    <td className="t-meta nowrap">{shape.cpc === null ? '—' : AUDIENCE_LABEL[audience]}</td>
-                    <td className="t-body-s text-secondary">
-                      <span className={`tag tag--${shape.build} t-meta`}>{BUILD_LABEL[shape.build]}</span>{' '}
-                      {shape.verdict}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      </section>
     </div>
   );
 }
@@ -295,9 +218,3 @@ const GROUPS: readonly { readonly id: string; readonly title: string; readonly w
   },
 ];
 
-const BUILD_LABEL: Readonly<Record<string, string>> = {
-  yes: 'BUILD',
-  one_page: 'ONE PAGE',
-  dropped: 'DROPPED',
-  conversion_only: 'CONVERSION ONLY',
-};
