@@ -1,79 +1,97 @@
 import {
   COLD_VOLUME,
   COMPLAINT_CEILING,
-  COMPLAINT_INVESTIGATE,
-  EMAIL_RULES,
-  LIFECYCLE_TRIGGERS,
   SENDING_DOMAINS,
+  SEND_WINDOW,
   STREAMS,
   WARMING_PER_DAY,
   WARMING_WEEKS,
+  checkEmail,
+  readSendGate,
 } from '@caspr-portal/domain';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { Icon } from '@/components/icons';
 import { Tile } from '@/components/primitives/tile';
+import { getRepository } from '@/lib/repository';
 
 export const metadata: Metadata = { title: 'Email — Dashboard' };
 
 /**
- * Email ▸ Dashboard.
+ * Email ▸ Dashboard — what is holding the send, and who has to move it.
  *
- * The two sending domains come first, and not for tidiness: `activation-framework.md` §14
- * dependency 5 calls them **the longest lead time in the project** — ~3 weeks each, and
- * every other row on this screen is waiting on them. A dashboard that led with stream
- * statuses would bury the one fact that determines when any of it starts.
+ * ⚑ **Rebuilt 2026-09-17.** It carried four panels describing the streams, the rules and the
+ * domains. What a person needs on opening this workstream is one thing: **why nothing is
+ * sending, and whose move it is** — so that is the screen.
+ *
+ * The domains lead because §14 dependency 5 calls them the longest lead time in the project
+ * and *"nothing else depends on it, so start it first."* Everything else waits on them.
  */
-export default function EmailDashboard() {
-  const live = STREAMS.filter((stream) => stream.live).length;
+export default async function EmailDashboard() {
+  const emails = await getRepository().emails();
+  const gate = readSendGate();
+  const drafts = emails.filter((email) => email.state === 'draft');
+  const blocked = drafts.filter((email) => checkEmail(email).length > 0);
   const warm = SENDING_DOMAINS.filter((domain) => domain.ready).length;
 
   return (
     <>
-      <div className="banner">
-        <span className="t-meta-bold banner__headline">NOTHING IS SENDING — BOTH DOMAINS ARE STILL COLD</span>
-        <span className="t-body-s banner__detail">
-          ~3 weeks of warming each, at {WARMING_PER_DAY.min}&ndash;{WARMING_PER_DAY.max} a day, and the
-          campaign schedule follows the warming rather than the other way round. It is the longest lead time
-          in the project, so it starts now whatever else does not.
+      <Link className="banner banner--link" href="/email/tasks">
+        <span className="t-meta-bold banner__headline">
+          {drafts.length} EMAILS NEED SIGN-OFF · {gate.blocking.length} PRECONDITIONS UNMET
         </span>
-      </div>
+        <span className="t-body-s banner__detail">
+          Signing off is not sending. It can be done today and should be — the gate and the sign-off are
+          separate on purpose. Open Tasks →
+        </span>
+      </Link>
 
       <div className="tiles">
-        <Tile
-          label="STREAMS LIVE"
-          value={`${live} / ${STREAMS.length}`}
-          attention={live < STREAMS.length}
-          note="Four lists, never merged. Someone who subscribed to be told about research did not ask for product email."
-        />
         <Tile
           label="DOMAINS WARM"
           value={`${warm} / ${SENDING_DOMAINS.length}`}
           attention={warm < SENDING_DOMAINS.length}
-          note={`${WARMING_WEEKS} weeks each. Marketing carries three streams; cold outreach sends from its own domain entirely.`}
+          note={`${WARMING_WEEKS} weeks each at ${WARMING_PER_DAY.min}–${WARMING_PER_DAY.max} a day. The longest lead time in the project, and nothing else depends on it — so it starts first.`}
         />
         <Tile
-          label="LIFECYCLE TRIGGERS"
-          value={String(LIFECYCLE_TRIGGERS.length)}
-          note="Behaviour, never a calendar. A calendar sequence sends the day-3 email whether or not the person did anything."
+          label="PRECONDITIONS"
+          value={`${gate.met} / ${gate.total}`}
+          attention={!gate.canSend}
+          note={gate.says}
         />
         <Tile
-          label="COLD VOLUME"
+          label="NEED SIGN-OFF"
+          value={String(drafts.length)}
+          attention={drafts.length > 0}
+          note={
+            blocked.length > 0
+              ? `${blocked.length} cannot be signed off until the copy is fixed.`
+              : 'Every draft is clean. Joy signs off the first email of any sequence.'
+          }
+        />
+        <Tile
+          label="STREAMS LIVE"
+          value={`${STREAMS.filter((stream) => stream.live).length} / ${STREAMS.length}`}
+          attention
+          note="Four lists, never merged. Someone who subscribed to be told about research did not ask for product email."
+        />
+        <Tile
+          label="COLD, PER WEEK"
           value={`${COLD_VOLUME.min}–${COLD_VOLUME.max}`}
-          note="A week, after one approval. Research-led and low-volume, which is what keeps it inside channel-model §7 rather than against it."
-        />
-        <Tile
-          label="COMPLAINT CEILING"
-          value={`${(COMPLAINT_CEILING * 100).toFixed(1)}%`}
-          note={`Above ${(COMPLAINT_INVESTIGATE * 100).toFixed(1)}% and it is investigated before the next send. Above this, sending pauses itself.`}
+          note={`After one approval from Joy. Complaints held under ${(COMPLAINT_CEILING * 100).toFixed(1)}%, and sending pauses itself above it.`}
         />
       </div>
 
-      <section className="panel panel--wide">
-        <div className="panel__title">
-          <h2 className="t-title-m">The two sending domains</h2>
-          <span className="t-meta text-tertiary">THE LONGEST LEAD TIME IN THE PROJECT</span>
+      {/* ── WHOSE MOVE ─────────────────────────────────────────────────────── */}
+      <section aria-labelledby="blocking-heading">
+        <div className="board-head">
+          <h3 id="blocking-heading" className="t-title-m">
+            Whose move it is <span className="board-count t-meta">{gate.blocking.length}</span>
+          </h3>
+          <span className="board-hint t-body-s">
+            All five, not any. This is a one-shot asset and sending early wastes it.
+          </span>
         </div>
 
         <div className="gates">
@@ -91,71 +109,27 @@ export default function EmailDashboard() {
               </div>
             </div>
           ))}
+          {gate.blocking.map((row) => (
+            <div key={row.id} className="gate">
+              <span className="gate__mark">
+                <Icon name="close" size={16} />
+              </span>
+              <div className="gate__body">
+                <p className="t-title-m">{row.what}</p>
+                <p className="t-body-s text-secondary">{row.why}</p>
+                <p className="t-meta text-tertiary">{row.owner}</p>
+              </div>
+            </div>
+          ))}
         </div>
-
-        <p className="t-body-s text-secondary" style={{ marginTop: 'var(--space-4)' }}>
-          The marketing subdomain only, for the owned streams — never the transactional identity. A
-          deliverability problem on the marketing domain that took the transactional one with it would stop
-          password resets, which is a product outage caused by a marketing send.
-        </p>
-      </section>
-
-      <section className="panel panel--wide">
-        <div className="panel__title">
-          <h2 className="t-title-m">Four streams</h2>
-          <span className="t-meta text-tertiary">NEVER MERGED</span>
-        </div>
-
-        <div className="table-scroll">
-          <table className="table">
-            <thead>
-              <tr>
-                <th className="t-meta keep">Stream</th>
-                <th className="t-meta nowrap">Sends from</th>
-                <th className="t-meta fill">Standing</th>
-                <th className="t-meta keep">Waiting on</th>
-              </tr>
-            </thead>
-            <tbody>
-              {STREAMS.map((stream) => (
-                <tr key={stream.id}>
-                  <td className="t-body-s keep">
-                    {stream.label}
-                    <br />
-                    <span className="t-body-s text-tertiary">{stream.who}</span>
-                  </td>
-                  <td className="t-meta nowrap">{stream.domain === 'cold' ? 'The cold domain' : 'Marketing'}</td>
-                  <td className="t-body-s text-secondary">{stream.status}</td>
-                  <td className={stream.blockedBy === null ? 't-body-s keep' : 't-body-s text-attention keep'}>
-                    {stream.blockedBy ?? 'Nothing'}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <section className="panel panel--wide">
-        <div className="panel__title">
-          <h2 className="t-title-m">The rules across all four</h2>
-          <span className="t-meta text-tertiary">ACTIVATION FRAMEWORK §8.1</span>
-        </div>
-        {EMAIL_RULES.map((rule) => (
-          <div key={rule.rule} className="stack-row">
-            <p className="t-body-s">{rule.rule}</p>
-            <p className="t-body-s text-secondary">{rule.detail}</p>
-          </div>
-        ))}
       </section>
 
       <p className="t-body-s text-secondary" style={{ maxWidth: '72ch' }}>
-        <strong>On a normal week, nobody touches email.</strong> It runs once approved,
-        and every exception pauses itself before it reaches anyone — which is why{' '}
-        <Link className="t-label" href="/email/tasks">
-          Tasks
-        </Link>{' '}
-        holds exceptions rather than work.
+        <strong>On a normal week, nobody touches email.</strong> It runs once approved, every exception
+        pauses itself before it reaches anyone, and the send window is {SEND_WINDOW}.{' '}
+        <Link className="t-label" href="/email/sequences">
+          Every email, as it arrives →
+        </Link>
       </p>
     </>
   );

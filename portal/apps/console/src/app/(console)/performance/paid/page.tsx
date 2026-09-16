@@ -1,5 +1,4 @@
 import {
-  KILL_RULES,
   LAUNCH_BURST_TOTAL,
   META_AUDIENCE_MINIMUM,
   META_DECISION_WEEK,
@@ -23,11 +22,13 @@ export const metadata: Metadata = { title: 'Performance — Paid' };
  * buys delivery we cannot get. That is also why the audiences accumulate from Day 1 at $0 —
  * so the decision at week 8 is a reading rather than a guess.
  *
- * ⚑ **Three reference panels came out 2026-09-16** at the workstream owner's request — why
- * Meta can only be retargeting, the four accumulating audiences, and the three guardrails.
- * **None of those rules moved**: `META_REALITY`, `META_AUDIENCES`, `META_GUARDRAILS` and
- * `META_NEVER` are still exported and still tested, and the tag is still enforced in the
- * build to the marketing site only. What is gone is reading them on every visit.
+ * ⚑ **Four reference panels came out 2026-09-16** at the workstream owner's request — why
+ * Meta can only be retargeting, the four accumulating audiences, the three guardrails, and
+ * the kill-rules table. **None of those rules moved**: `META_REALITY`, `META_AUDIENCES`,
+ * `META_GUARDRAILS`, `META_NEVER` and `KILL_RULES` are still exported and still tested, the
+ * tag is still enforced in the build to the marketing site only, and `readAd` still applies
+ * every kill rule to every live ad — where it fires on a specific ad, with a specific
+ * instruction, which is a better place to meet a rule than a table.
  */
 export default function PerformancePaid() {
   // No audience exists yet: the Meta tag is a §14 dependency and is not live, so the honest
@@ -52,39 +53,6 @@ export default function PerformancePaid() {
           note="The tag is not live yet — a §14 dependency. Audiences accumulate at $0 from Day 1, which is what makes week 8 a reading rather than a guess."
         />
       </div>
-
-      <section className="panel panel--wide">
-        <div className="panel__title">
-          <h2 className="t-title-m">Kill rules, agreed in advance</h2>
-          <span className="t-meta text-tertiary">OPERATIONS RUNBOOK §7</span>
-        </div>
-
-        <div className="table-scroll">
-          <table className="table">
-            <thead>
-              <tr>
-                <th className="t-meta nowrap">Trigger</th>
-                <th className="t-meta fill">Action</th>
-                <th className="t-meta nowrap">Fires</th>
-              </tr>
-            </thead>
-            <tbody>
-              {KILL_RULES.map((rule) => (
-                <tr key={rule.trigger}>
-                  <td className="t-body-s nowrap">{rule.trigger}</td>
-                  <td className="t-body-s text-secondary">{rule.action}</td>
-                  <td className="t-meta nowrap">{rule.automatic ? 'Automatically' : 'As an alert'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <p className="t-body-s text-secondary" style={{ marginTop: 'var(--space-4)' }}>
-          The two that pause on their own are what make the burst safe while condition 2 — a reviewer in the
-          seat — is still unmet. Budget changes are made by the owner and logged. No silent increases.
-        </p>
-      </section>
     </div>
   );
 }

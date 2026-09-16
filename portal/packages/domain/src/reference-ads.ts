@@ -273,9 +273,16 @@ export const REFERENCE_ADS: readonly Ad[] = [
       support: 'The desk research before every study sits outside that figure. Nobody bills for it.',
       source: 'ESOMAR, 2025',
     },
+    video: {
+      seconds: 10,
+      script:
+        'The global market research industry is $153bn a year. That is ESOMAR’s number, and it counts fieldwork. The desk research before every one of those studies sits outside it — four hours, the median, and nobody bills for any of it.',
+      captions: 'Burned in, white on the card. Most of this feed is muted.',
+      cut: null,
+    },
     state: 'draft',
     metrics: null,
-    note: '§9.3: the finding in 10 seconds — one number, source line on screen, captions. The still frame exists now; the cut lands when the editor makes one.',
+    note: '§9.3: the finding in 10 seconds — one number, the source line on screen, captions. The engine wrote the script; the cut is the editor’s.',
   },
   {
     id: 'ad-reel-disagreement',
@@ -293,6 +300,13 @@ export const REFERENCE_ADS: readonly Ad[] = [
       headline: '36% apart',
       support: 'Two credible sources. One market. One base year. And neither says which basis it used.',
       source: 'The Record, issue 1',
+    },
+    video: {
+      seconds: 12,
+      script:
+        'Two credible sources price the same market, the same year, 36% apart. Neither says which basis it used. One is forward, one is trailing — and if you quote either one on its own, the room is right to ask which.',
+      captions: 'Burned in. The two figures hold on screen while the gap is named.',
+      cut: null,
     },
     state: 'draft',
     metrics: null,

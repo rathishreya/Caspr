@@ -214,6 +214,29 @@ export interface Ad {
    * position has none."* A source line under a claim with no number in it is decoration.
    */
   readonly creative: { readonly headline: string; readonly support: string; readonly source: string | null } | null;
+  /**
+   * The video, on a placement that runs one.
+   *
+   * ⚑ **A reel is a video, and this engine does not make videos.** `content-engine-runtime-spec.md`
+   * ⑪ is explicit: *"⛔ Video is out of scope for this engine — video editing, the DM team's
+   * editor owns this."* What the engine writes is the script and the caption; what a person
+   * makes is the cut.
+   *
+   * So a reel ad carries all three, and the one nobody has made yet is `cut: null`. The card
+   * shows the still as the cover frame and says plainly that it is a cover, not the ad — an
+   * image standing in for a video is exactly the kind of thing that gets approved and then
+   * cannot ship.
+   */
+  readonly video?: {
+    /** §9.3: expert micro-cuts run 6–15 seconds vertical. */
+    readonly seconds: number;
+    /** Written by the engine, against the claims register like everything else. */
+    readonly script: string;
+    /** Burned in, because §9.3 specifies captions and most of this feed is muted. */
+    readonly captions: string;
+    /** The file, once an editor has cut one. Null until then, and that is the standing. */
+    readonly cut: string | null;
+  };
   readonly state: AdState;
   readonly metrics: AdMetrics | null;
   readonly note: string;
@@ -471,6 +494,25 @@ export function checkAdCopy(ad: Ad): readonly CopyProblem[] {
 export function adApprovable(ad: Ad): boolean {
   return ad.state === 'draft' && !checkAdCopy(ad).some((problem) => problem.weight === 'blocking');
 }
+
+/**
+ * Whether an ad has everything it needs to run.
+ *
+ * Approval is about the words; this is about the assets. A reel with no cut is approvable —
+ * the script and the caption are right — and it still cannot go live, because the thing that
+ * would run does not exist. Keeping those two apart is what stops "approved" quietly meaning
+ * "ready".
+ */
+export function adMissing(ad: Ad): readonly string[] {
+  const missing: string[] = [];
+  const rule = platformRule(ad.platform);
+  if (rule.creative !== null && ad.creative === null) missing.push('no creative');
+  if (ad.video !== undefined && ad.video.cut === null) missing.push('not cut yet — the editor owns the video');
+  return missing;
+}
+
+/** §9.3 — expert micro-cuts, 6–15 seconds vertical. */
+export const REEL_SECONDS = { min: 6, max: 15 } as const;
 
 /**
  * The ad's image, as a creative spec the existing renderer already draws.

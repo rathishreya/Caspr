@@ -4,7 +4,9 @@ import {
   AD_PLATFORM_LABEL,
   AD_PROMPT_MAX,
   AD_STATE_LABEL,
+  REEL_SECONDS,
   adCanvas,
+  adMissing,
   canReviseAd,
   checkAdCopy,
   ctr,
@@ -35,8 +37,37 @@ const INITIAL: AdActionState = { errors: [] };
 export function AdCard({ ad }: { readonly ad: Ad }) {
   const [state, action] = useActionState(moveAd, INITIAL);
   const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
   const canvas = adCanvas(ad.platform);
   const problems = checkAdCopy(ad);
+  const missing = adMissing(ad);
+
+  /**
+   * Everything the ad account asks for, in the order its form asks for it.
+   *
+   * Field labels included on purpose — a person pasting into three separate boxes needs to
+   * know which block is which, and a wall of unlabelled lines is how a description ends up in
+   * a headline field.
+   */
+  async function copyAll() {
+    const lines = [
+      `${AD_PLATFORM_LABEL[ad.platform]} · ${stance(ad.angle).angle} · ${ad.icp}`,
+      '',
+      ...(ad.copy.headlines.length > 0 ? ['HEADLINES', ...ad.copy.headlines, ''] : []),
+      ...(ad.copy.descriptions.length > 0 ? ['DESCRIPTIONS', ...ad.copy.descriptions, ''] : []),
+      ...(ad.copy.primary === null ? [] : ['PRIMARY TEXT', ad.copy.primary, '']),
+      ...(ad.copy.hashtags.length > 0 ? ['HASHTAGS', ad.copy.hashtags.join(' '), ''] : []),
+      `FINAL URL  https://caspr.ai${ad.copy.landingPath}`,
+    ];
+    try {
+      await navigator.clipboard.writeText(lines.join('\n'));
+      setCopied(true);
+    } catch {
+      // Clipboard access can be refused. Everything here is on screen and selectable, so
+      // this says what happened rather than pretending it worked.
+      setCopied(false);
+    }
+  }
   const blocking = problems.filter((problem) => problem.weight === 'blocking');
   const reading = readAd(ad.metrics);
 
@@ -68,7 +99,28 @@ export function AdCard({ ad }: { readonly ad: Ad }) {
             )}
           </p>
 
+          {ad.video !== undefined && (
+            <div className={ad.video.cut === null ? 'vid vid--uncut' : 'vid'}>
+              <p className="vid__head t-meta">
+                {ad.video.cut === null ? 'No cut yet' : 'Cut'} · {ad.video.seconds}s vertical ·{' '}
+                {REEL_SECONDS.min}–{REEL_SECONDS.max}s
+              </p>
+              <p className="t-body-s">{ad.video.script}</p>
+              <p className="t-body-s text-tertiary">{ad.video.captions}</p>
+              {ad.video.cut === null && (
+                <p className="t-body-s text-attention">
+                  The image above is the cover frame, not the ad. The engine writes the script and the
+                  caption; the DM team&rsquo;s editor makes the cut — and this cannot go live until they do.
+                </p>
+              )}
+            </div>
+          )}
+
           <p className="t-body-s text-secondary">{ad.note}</p>
+
+          {missing.length > 0 && (
+            <p className="t-body-s text-attention">Cannot run — {missing.join(' · ')}.</p>
+          )}
 
           {ad.revision !== undefined && (
             <p className="ad__revision t-body-s">
@@ -119,14 +171,40 @@ export function AdCard({ ad }: { readonly ad: Ad }) {
           {ad.state === 'draft' && (
             <Move action={action} id={ad.id} to="approved" label="Approve" kind="approve" disabled={blocking.length > 0} />
           )}
-          {ad.state === 'approved' && <Move action={action} id={ad.id} to="live" label="Set live" kind="primary" />}
+          {/*
+            ⚑ Publish, not "set live". No ad API is connected, so publishing is a person
+            pasting this into the ad account — the same honesty the engagement queue uses for
+            one tap. The button copies the copy first, so the paste is already loaded.
+          */}
+          {ad.state === 'approved' && (
+            <Move
+              action={action}
+              id={ad.id}
+              to="live"
+              label="Publish"
+              kind="primary"
+              onBefore={copyAll}
+              disabled={missing.length > 0}
+            />
+          )}
           {ad.state === 'live' && <Move action={action} id={ad.id} to="paused" label="Pause" kind="reject" />}
           {ad.state === 'paused' && (
             <>
-              <Move action={action} id={ad.id} to="live" label="Resume" kind="approve" />
+              <Move action={action} id={ad.id} to="live" label="Resume" kind="approve" onBefore={copyAll} />
               <Move action={action} id={ad.id} to="killed" label="Kill this angle" kind="reject" />
             </>
           )}
+
+          <button type="button" className="btn" onClick={copyAll}>
+            {copied ? 'Copied' : 'Copy the copy'}
+          </button>
+
+          {ad.creative !== null && (
+            <a className="btn" href={`/api/ad-creatives/${ad.id}?download=1`} download>
+              Download image
+            </a>
+          )}
+
           {canReviseAd(ad.state) && (
             <button
               type="button"
@@ -314,6 +392,7 @@ function Move({
   label,
   kind,
   disabled = false,
+  onBefore,
 }: {
   readonly action: (formData: FormData) => void;
   readonly id: string;
@@ -321,9 +400,16 @@ function Move({
   readonly label: string;
   readonly kind: 'approve' | 'reject' | 'primary';
   readonly disabled?: boolean;
+  /** Runs as the move commits — Publish loads the clipboard on its way past. */
+  readonly onBefore?: () => void;
 }) {
   return (
-    <form action={action}>
+    <form
+      action={(formData) => {
+        onBefore?.();
+        action(formData);
+      }}
+    >
       <input type="hidden" name="adId" value={id} />
       <input type="hidden" name="to" value={to} />
       <Submit label={label} kind={kind} disabled={disabled} />

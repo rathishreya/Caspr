@@ -1331,6 +1331,202 @@ strong,
   max-width: 300px;
 }
 
+/*
+ * ══ EMAIL · an email, as it arrives ══════════════════════════════════════
+ *
+ * Drawn as an opened inbox row, the same principle the post and ad previews follow. The
+ * sender line and the preview text are given their real prominence because they decide
+ * whether the body is ever read — and a card that shows only the body is a card that hides
+ * the two fields most likely to be wrong.
+ */
+.mails {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.mail {
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface-base);
+}
+
+.mail--scheduled {
+  border-left: 2px solid var(--accent-approve);
+}
+
+.mail--paused {
+  border-left: 2px solid var(--accent-attention);
+}
+
+.mail--sent {
+  border-style: dashed;
+  opacity: 0.72;
+}
+
+.mail__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-default);
+}
+
+.mail__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 118px;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+.mail__preview {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+  min-width: 0;
+}
+
+.mail__purpose {
+  padding-left: var(--space-3);
+  border-left: 1px solid var(--border-default);
+}
+
+/* The email itself, on paper rather than on the console's ground. */
+.inbox {
+  padding: var(--space-5);
+  background: #ffffff;
+  border-radius: var(--radius-sm);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: #202124;
+}
+
+.inbox__from {
+  margin: 0 0 var(--space-2);
+  color: #5f6368;
+  font-size: 13px;
+}
+
+.inbox__subject {
+  margin: 0;
+  font-size: 20px;
+  line-height: 26px;
+  color: #202124;
+}
+
+.inbox__preview {
+  margin: 2px 0 var(--space-4);
+  color: #5f6368;
+  font-size: 14px;
+}
+
+.inbox__body {
+  display: grid;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid #e8eaed;
+}
+
+.inbox__body p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 23px;
+  white-space: pre-line;
+}
+
+.inbox__cta {
+  margin: var(--space-4) 0 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid #e8eaed;
+  color: #1a0dab;
+  font-size: 15px;
+}
+
+/* Who gets which of the five. An operating decision, so it stays on the screen. */
+.segments {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.segment {
+  display: grid;
+  gap: var(--space-1);
+  align-content: start;
+  padding: var(--space-3);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+}
+
+.segment--none {
+  border-style: dashed;
+  opacity: 0.7;
+}
+
+.segment__id {
+  color: var(--text-primary);
+}
+
+.segment__gets {
+  color: var(--accent-approve);
+}
+
+.segment--none .segment__gets {
+  color: var(--text-tertiary);
+}
+
+.tag--sent {
+  border-style: dashed;
+}
+
+.tag--scheduled {
+  border-color: var(--accent-approve);
+  color: var(--accent-approve);
+}
+
+@media (max-width: 1099px) {
+  .mail__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .segments {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .segments {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/*
+ * The video a reel actually is.
+ *
+ * ⚑ The still above it is a cover frame, and the card says so. This engine writes the script
+ * and the caption; the DM team's editor makes the cut — so an uncut reel is drawn as
+ * unfinished rather than as an image ad, because an image standing in for a video is exactly
+ * what gets approved and then cannot ship.
+ */
+.vid {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--border-default);
+  border-left: 2px solid var(--accent-approve);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+}
+
+.vid--uncut {
+  border-left-color: var(--accent-attention);
+  border-style: dashed;
+}
+
+.vid__head {
+  color: var(--text-tertiary);
+}
+
 /* A sponsored LinkedIn post. Its own greys, for the reason the other two use theirs. */
 .liad {
   background: #ffffff;
@@ -2562,7 +2758,23 @@ a.card:hover {
 }
 
 /*
- * No `:hover` rule here on purpose. One at `.decide__rail .btn:hover` would outrank
+ * ⚑ The rail's own background has to give way for the solid button.
+ *
+ * `.decide__rail .btn` is two classes and `.btn--primary` is one, so the rail was winning the
+ * background while `--primary` kept setting the text to `surface-base` — dark on dark, and
+ * the Publish and Schedule buttons rendered as empty boxes.
+ */
+.decide__rail .btn--primary {
+  background: var(--text-primary);
+  color: var(--surface-base);
+}
+
+.decide__rail .btn--primary:hover {
+  background: var(--surface-card);
+}
+
+/*
+ * No `:hover` rule on `.decide__rail .btn` on purpose. One would outrank
  * `.btn--approve:hover` and flatten approve and reject back to the same grey.
  */
 

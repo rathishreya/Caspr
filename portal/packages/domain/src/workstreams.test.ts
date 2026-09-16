@@ -45,7 +45,9 @@ import {
 import {
   AD_KPI,
   PAID_AND_P,
+  REEL_SECONDS,
   adApprovable,
+  adMissing,
   adCanvas,
   adCreativeSpec,
   canMoveAd,
@@ -59,6 +61,15 @@ import {
 import { AD_BUDGET_MONTHLY, REFERENCE_ADS } from './reference-ads';
 import { checkContent, contentHealth } from './content-seo';
 import { creativeOverflow } from './creative';
+import {
+  SEGMENTS,
+  SEND_PRECONDITIONS,
+  canMoveEmail,
+  checkEmail,
+  emailSchedulable,
+  readSendGate,
+} from './email-sequence';
+import { ALL_EMAILS, REENGAGEMENT_EMAILS } from './reference-emails';
 import type { PostBody } from './post';
 import { REFERENCE_POSTS } from './reference-posts';
 import {
@@ -876,6 +887,39 @@ describe('ads', () => {
     }
   });
 
+  /**
+   * ⚑ A reel is a video, and this engine does not make videos. ⑪: *"video editing — the DM
+   * team's editor owns this."* Approval is about the words; running is about the assets, and
+   * conflating them is how "approved" quietly comes to mean "ready".
+   */
+  it('gives every reel a script and a caption, and no cut', () => {
+    const reels = REFERENCE_ADS.filter((ad) => ad.platform === 'meta_reel');
+    expect(reels.length).toBeGreaterThan(0);
+    for (const reel of reels) {
+      expect(reel.video, reel.id).toBeDefined();
+      expect(reel.video!.script.length, reel.id).toBeGreaterThan(60);
+      expect(reel.video!.captions.length, reel.id).toBeGreaterThan(10);
+      expect(reel.video!.cut, reel.id).toBeNull();
+      expect(reel.video!.seconds).toBeGreaterThanOrEqual(REEL_SECONDS.min);
+      expect(reel.video!.seconds).toBeLessThanOrEqual(REEL_SECONDS.max);
+    }
+  });
+
+  it('holds back an approvable reel that has no cut', () => {
+    const reel = REFERENCE_ADS.find((ad) => ad.platform === 'meta_reel')!;
+    // The words are fine — it can be approved.
+    expect(checkAdCopy(reel).some((problem) => problem.weight === 'blocking')).toBe(false);
+    // The thing that would run does not exist — so it cannot.
+    expect(adMissing(reel)).toContain('not cut yet — the editor owns the video');
+  });
+
+  it('asks nothing extra of an ad whose assets are all there', () => {
+    const search = REFERENCE_ADS.find((ad) => ad.platform === 'google_search')!;
+    const feed = REFERENCE_ADS.find((ad) => ad.platform === 'meta_feed')!;
+    expect(adMissing(search)).toEqual([]);
+    expect(adMissing(feed)).toEqual([]);
+  });
+
   it('covers every placement that is buildable today', () => {
     const placements = new Set(REFERENCE_ADS.map((ad) => ad.platform));
     expect([...placements].sort()).toEqual(['google_search', 'linkedin', 'meta_feed', 'meta_reel']);
@@ -936,6 +980,109 @@ describe('ads', () => {
   it('keeps Meta shut, because a custom audience needs 1,000 people first', () => {
     expect(platformRule('meta_feed').open).toBe(false);
     expect(platformRule('google_search').open).toBe(true);
+  });
+});
+
+/**
+ * The email system, as something you run.
+ *
+ * The two rules worth a failing test are the ones a scheduling tool will break on its own:
+ * sign-off is not scheduling, and all five preconditions must hold before anything sends.
+ */
+describe('the email sequences', () => {
+  it('writes every email in both sequences, and none has sent', () => {
+    expect(ALL_EMAILS.length).toBeGreaterThanOrEqual(12);
+    expect(new Set(ALL_EMAILS.map((email) => email.id)).size).toBe(ALL_EMAILS.length);
+    for (const email of ALL_EMAILS) expect(email.state, email.id).toBe('draft');
+  });
+
+  it('gives every email a sender, a preview and a reason it exists', () => {
+    for (const email of ALL_EMAILS) {
+      expect(email.subject.length, email.id).toBeGreaterThan(5);
+      expect(email.preview.length, email.id).toBeGreaterThan(5);
+      expect(email.purpose.length, email.id).toBeGreaterThan(20);
+      expect(email.body.length, email.id).toBeGreaterThan(2);
+    }
+  });
+
+  /**
+   * ⚑ Approval and scheduling are separate moves. An email can be right months before it may
+   * send, and collapsing the two would make approving copy the same act as sending it to
+   * 1,600 people.
+   */
+  it('will not let an email skip from draft to scheduled', () => {
+    expect(canMoveEmail('draft', 'approved')).toBe(true);
+    expect(canMoveEmail('draft', 'scheduled')).toBe(false);
+    expect(canMoveEmail('approved', 'scheduled')).toBe(true);
+    expect(canMoveEmail('sent', 'paused')).toBe(false);
+  });
+
+  it('refuses to schedule a signed-off email while a precondition is unmet', () => {
+    const gate = readSendGate();
+    expect(gate.canSend).toBe(false);
+    const email = { ...ALL_EMAILS[0]!, state: 'approved' as const };
+    expect(emailSchedulable(email, gate).ok).toBe(false);
+    expect(emailSchedulable(email, gate).why).toMatch(/one-shot/i);
+  });
+
+  it('refuses to schedule an unsigned email even when every precondition holds', () => {
+    const open = readSendGate(SEND_PRECONDITIONS.map((row) => ({ ...row, met: true })));
+    expect(open.canSend).toBe(true);
+    expect(emailSchedulable(ALL_EMAILS[0]!, open).ok).toBe(false);
+    expect(emailSchedulable({ ...ALL_EMAILS[0]!, state: 'approved' }, open).ok).toBe(true);
+  });
+
+  it('reads the gate as all five, not any', () => {
+    const four = SEND_PRECONDITIONS.map((row, index) => ({ ...row, met: index < 4 }));
+    expect(readSendGate(four).canSend).toBe(false);
+    expect(readSendGate(four).blocking).toHaveLength(1);
+  });
+
+  /** §5: "No CTA at all, deliberately" on the first email after months of silence. */
+  it('keeps the first founders’ email free of any call to action', () => {
+    const first = REENGAGEMENT_EMAILS[0]!;
+    expect(first.day).toBe(0);
+    expect(first.cta).toBeNull();
+    expect(first.purpose).toMatch(/credibility it has not earned/i);
+  });
+
+  it('carries the S2 variant, because they saw the output and did not return', () => {
+    expect(REENGAGEMENT_EMAILS.some((email) => email.variantFor?.includes('S2'))).toBe(true);
+    const s2 = SEGMENTS.find((segment) => segment.id === 'S2');
+    expect(s2?.treatment).toMatch(/different Email 1/i);
+  });
+
+  it('suppresses S0 and sends nothing to it', () => {
+    expect(SEGMENTS.find((segment) => segment.id === 'S0')?.emails).toBeNull();
+  });
+
+  /** The one a scheduling tool breaks if nobody wrote it down. */
+  it('puts a personal note before anything automated reaches anyone who paid', () => {
+    expect(SEGMENTS.find((segment) => segment.id === 'S4')?.treatment).toMatch(/personal note/i);
+  });
+
+  it('passes every written email through the copy check', () => {
+    for (const email of ALL_EMAILS) {
+      expect(checkEmail(email).map((problem) => `${email.id}: ${problem.what}`)).toEqual([]);
+    }
+  });
+
+  it('catches the budget written as a subscription price', () => {
+    const priced = { ...ALL_EMAILS[0]!, body: ['Analyst-grade research from $200/mo.'] };
+    expect(checkEmail(priced).some((problem) => problem.what.includes('subscription price'))).toBe(true);
+  });
+
+  it('catches a retired line coming back', () => {
+    const retired = { ...ALL_EMAILS[0]!, body: ['Stop Googling. Start analyzing.'] };
+    expect(checkEmail(retired).some((problem) => problem.what.includes('retired line'))).toBe(true);
+  });
+
+  it('catches an exclamation point in the subject', () => {
+    expect(checkEmail({ ...ALL_EMAILS[0]!, subject: 'We rebuilt it!' }).length).toBeGreaterThan(0);
+  });
+
+  it('catches a missing preview, which the inbox shows whether or not one is written', () => {
+    expect(checkEmail({ ...ALL_EMAILS[0]!, preview: '  ' }).some((p) => p.what.includes('preview'))).toBe(true);
   });
 });
 

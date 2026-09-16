@@ -1,9 +1,9 @@
-import { EMAIL_EXCEPTIONS } from '@caspr-portal/domain';
 import type { ReactNode } from 'react';
 
 import { Tabs } from '@/components/primitives/tabs';
 import { ScreenHeader } from '@/components/shell/screen-header';
 import { WORKSTREAM_TABS } from '@/lib/nav';
+import { getRepository } from '@/lib/repository';
 
 /**
  * Email.
@@ -22,10 +22,10 @@ import { WORKSTREAM_TABS } from '@/lib/nav';
  */
 export const dynamic = 'force-dynamic';
 
-export default function EmailLayout({ children }: { readonly children: ReactNode }) {
-  // Nothing is sending, so nothing has raised an exception. The badge counts what has
-  // actually fired — never how many kinds of exception exist.
-  const firing = EMAIL_EXCEPTIONS.filter(() => false).length;
+export default async function EmailLayout({ children }: { readonly children: ReactNode }) {
+  // The badge counts what actually waits on a person: emails needing sign-off. Exceptions
+  // would count too, and none has fired — nothing is sending.
+  const drafts = (await getRepository().emails()).filter((email) => email.state === 'draft').length;
 
   return (
     <>
@@ -33,7 +33,7 @@ export default function EmailLayout({ children }: { readonly children: ReactNode
         title="Email"
         meta={<span className="t-meta text-tertiary">NO STANDING OWNER · EXCEPTIONS ROUTE TO JOY</span>}
       />
-      <Tabs tabs={WORKSTREAM_TABS['email'] ?? []} label="Email" badges={{ tasks: firing }} />
+      <Tabs tabs={WORKSTREAM_TABS['email'] ?? []} label="Email" badges={{ tasks: drafts }} />
       {children}
     </>
   );

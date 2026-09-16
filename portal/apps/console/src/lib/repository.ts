@@ -8,6 +8,7 @@ import {
 } from '@caspr-portal/db';
 import {
   DAILY_WINDOW_HOURS,
+  ALL_EMAILS,
   ILLUSTRATIVE_READINGS,
   PRIOR_WINDOW_COUNTS,
   REFERENCE_ADS,
@@ -23,6 +24,7 @@ import {
   REFERENCE_WEEK,
   canAdvance,
   canMoveAd,
+  canMoveEmail,
   canReviseAd,
   isDecidable,
   shiftWeek,
@@ -31,6 +33,8 @@ import {
   type Ad,
   type AdState,
   type AmplifyTier,
+  type EmailDraft,
+  type EmailState,
   type Approach,
   type ApproachState,
   type SeoTask,
@@ -147,6 +151,19 @@ export interface ContentRepository {
    */
   reviseAd(id: string, note: string): Promise<boolean>;
 
+  /** Every drafted email, across both sequences. */
+  emails(): Promise<readonly EmailDraft[]>;
+  /**
+   * Move one email along.
+   *
+   * ⚑ Approval and scheduling are separate moves on purpose. An email can be signed off
+   * months before the preconditions hold, and collapsing the two would make approving copy
+   * the same act as sending it to 1,600 people.
+   */
+  moveEmail(id: string, to: EmailState): Promise<boolean>;
+  /** Send one back to be rewritten, with the instruction attached. */
+  reviseEmail(id: string, note: string): Promise<boolean>;
+
   /** Which adapter answered. Surfaced on screen rather than hidden — see `FeedNotice`. */
   readonly kind: 'postgres' | 'reference';
 }
@@ -184,6 +201,8 @@ class ReferenceRepository implements ContentRepository {
   readonly #tasksDone = new Set<string>();
   readonly #ads = new Map<string, AdState>();
   readonly #adRevisions = new Map<string, { readonly note: string; readonly at: string }>();
+  readonly #emails = new Map<string, EmailState>();
+  readonly #emailRevisions = new Map<string, { readonly note: string; readonly at: string }>();
 
   clock(): Date {
     return new Date(REFERENCE_NOW);
@@ -328,6 +347,30 @@ class ReferenceRepository implements ContentRepository {
     if (current === undefined || !canReviseAd(current.state)) return false;
     this.#ads.set(id, 'draft');
     this.#adRevisions.set(id, { note, at: this.clock().toISOString().slice(0, 10) });
+    return true;
+  }
+
+  async emails(): Promise<readonly EmailDraft[]> {
+    return ALL_EMAILS.map((email) => {
+      const state = this.#emails.get(email.id) ?? email.state;
+      const revision = this.#emailRevisions.get(email.id);
+      return revision === undefined ? { ...email, state } : { ...email, state, revision };
+    });
+  }
+
+  async moveEmail(id: string, to: EmailState): Promise<boolean> {
+    const current = (await this.emails()).find((email) => email.id === id);
+    if (current === undefined || !canMoveEmail(current.state, to)) return false;
+    this.#emails.set(id, to);
+    return true;
+  }
+
+  async reviseEmail(id: string, note: string): Promise<boolean> {
+    const current = (await this.emails()).find((email) => email.id === id);
+    // A sent email cannot be rewritten — it is in somebody's inbox.
+    if (current === undefined || current.state === 'sent') return false;
+    this.#emails.set(id, 'draft');
+    this.#emailRevisions.set(id, { note, at: this.clock().toISOString().slice(0, 10) });
     return true;
   }
 }
@@ -481,6 +524,19 @@ class PostgresRepository implements ContentRepository {
   }
 
   async reviseAd(): Promise<boolean> {
+    return false;
+  }
+
+  /* Email has no tables either — see the note above. */
+  async emails(): Promise<readonly EmailDraft[]> {
+    return [];
+  }
+
+  async moveEmail(): Promise<boolean> {
+    return false;
+  }
+
+  async reviseEmail(): Promise<boolean> {
     return false;
   }
 
