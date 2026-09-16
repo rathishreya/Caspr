@@ -128,7 +128,133 @@ export const REFERENCE_ADS: readonly Ad[] = [
     note: 'The most universal objection in the persona research, and almost no search volume — which is why it is an ad rather than a page.',
   },
 
+  // ── The launch set · investors and consultants, the two ICPs open on day 1 ──
+  {
+    id: 'ad-gs-librarian',
+    platform: 'google_search',
+    angle: 'icp_wounds',
+    icp: 'Investors',
+    copy: {
+      headlines: ['Not a research librarian', 'You evaluate businesses', 'Sourced in 15 minutes'],
+      descriptions: [
+        'Sector primers and market sizing for a deal you are screening, cited to credible sources.',
+        'A Study is $80. $100 free to start, no card.',
+      ],
+      primary: null,
+      hashtags: [],
+      landingPath: '/investors',
+    },
+    creative: null,
+    state: 'draft',
+    metrics: null,
+    note: 'Carries the argument of the /investors hero — “You were hired to evaluate businesses. Not to be a research librarian.” The line itself is the page’s; this is its shape at 30 characters.',
+  },
+  {
+    id: 'ad-gs-before-the-research',
+    platform: 'google_search',
+    angle: 'the_promise',
+    icp: 'Consultants',
+    copy: {
+      headlines: ['You research for a living', 'Arrive certain.', 'Every source named'],
+      descriptions: [
+        'The desk research before the research, done in 15 minutes and cited to source.',
+        'Defensible in front of a client. $100 free, no credit card.',
+      ],
+      primary: null,
+      hashtags: [],
+      landingPath: '/use-cases/market-research',
+    },
+    creative: null,
+    state: 'draft',
+    metrics: null,
+    note: 'From the /market-research hero — “You research for a living. You still have to research before you can research.” The promise angle, aimed at the ICP that feels it most.',
+  },
+  {
+    id: 'ad-gs-samples',
+    platform: 'google_search',
+    angle: 'sourcing',
+    icp: 'All professional ICPs',
+    copy: {
+      headlines: ['Read a real one first', '100 pages, every source', 'Before you sign up'],
+      descriptions: [
+        'Three real analyses, published free and fully cited. Read one before you decide anything.',
+        'Saudi industrial valves. UK ready meals. Vertical SaaS valuations.',
+      ],
+      primary: null,
+      hashtags: [],
+      landingPath: '/samples',
+    },
+    creative: null,
+    state: 'draft',
+    metrics: null,
+    note: '⚠ Blocked on its own landing page: /samples holding three real reports is one of the four gates. The three are chosen — this ad is ready the day they publish.',
+  },
+  {
+    id: 'ad-gs-alternatives',
+    platform: 'google_search',
+    angle: 'what_research_costs',
+    icp: 'Investors',
+    copy: {
+      headlines: ['An alternative that cites', 'Every figure, sourced', '$80 an analysis'],
+      descriptions: [
+        'Market data with the source and the date on every figure. Not a number with no working.',
+        'No subscription, no seat minimum, no contract.',
+      ],
+      primary: null,
+      hashtags: [],
+      landingPath: '/alternatives/pitchbook-statista',
+    },
+    creative: null,
+    state: 'draft',
+    metrics: null,
+    note: 'The alternatives family is ~490 US searches a month and G2 owns the SERPs end to end. Paid is how we reach that intent while the one page we are building earns nothing.',
+  },
+
   // ── Meta · retargeting only, and only once an audience exists ─────────────
+  {
+    id: 'ad-meta-identity',
+    platform: 'meta_feed',
+    angle: 'identity',
+    icp: 'Anyone who visited the site',
+    copy: {
+      headlines: ['Not an assistant.'],
+      descriptions: ['An analyst.'],
+      primary: 'Purpose-built for business analysis, not conversation. Every source credible, every claim triangulated.',
+      hashtags: ['#marketresearch'],
+      landingPath: '/',
+    },
+    creative: {
+      headline: 'Not an assistant. An analyst.',
+      support: 'Purpose-built for business analysis, not conversation.',
+      source: 'Caspr',
+    },
+    state: 'draft',
+    metrics: null,
+    note: 'The homepage H1 as a recall ad. The identity angle is the one ad allowed to point at the homepage, because the homepage is the identity.',
+  },
+  {
+    id: 'ad-meta-wounds',
+    platform: 'meta_feed',
+    angle: 'icp_wounds',
+    icp: 'Anyone who visited a role page',
+    copy: {
+      headlines: ['Four hours. Three numbers.'],
+      descriptions: ['The median'],
+      primary:
+        'Four hours of desk research for three usable numbers. That is the median, and nobody bills for any of it.',
+      hashtags: ['#consulting', '#marketresearch'],
+      landingPath: '/consulting',
+    },
+    creative: {
+      headline: 'Four hours. Three numbers.',
+      support: 'The median before a single slide is written — and nobody bills for any of it.',
+      source: 'Caspr buyer research, 2026',
+    },
+    state: 'draft',
+    metrics: null,
+    note: 'The wound in the buyer’s own words, sourced to icp-personas.md :57. At 9pm on Meta it is recall, not discovery — which is why it goes to a role page rather than to signup.',
+  },
+
   {
     id: 'ad-meta-record',
     platform: 'meta_feed',

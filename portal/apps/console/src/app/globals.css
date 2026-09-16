@@ -1096,37 +1096,56 @@ strong,
 }
 
 /*
- * ── Filters — two axes, and picking one must not drop the other ───────────
+ * ── The angle filter — a dropdown made of links ───────────────────────────
  *
- * Placement and angle are the two ways the ad set is actually sliced, so every pill carries
- * the current query forward and changes only its own key. A filter row that resets the other
- * filter teaches people to use one at a time, which is the opposite of why there are two.
+ * ⚑ Nine angles as pills wrapped to three lines, and the state row added a fourth: a filter
+ * bar taller than the first ad is not a filter bar, it is a menu. Placement stays as pills
+ * because five fit on one line; the angle folds into this.
+ *
+ * A `<details>` rather than a `<select>`, because every other filter in this console is a
+ * link — so a shared URL keeps the filter and the back button undoes it, neither of which a
+ * select gives without JavaScript.
  */
-.filters {
-  display: grid;
-  gap: var(--space-3);
+.drop {
+  position: relative;
 }
 
-.filters__row {
-  display: grid;
-  grid-template-columns: 56px minmax(0, 1fr);
-  gap: var(--space-3);
-  align-items: baseline;
+.drop__summary {
+  cursor: pointer;
+  list-style: none;
 }
 
-.filters__label {
+.drop__summary::-webkit-details-marker {
+  display: none;
+}
+
+.drop__summary::after {
+  content: '▾';
+  margin-left: var(--space-1);
   color: var(--text-tertiary);
 }
 
-.filters .pills {
-  margin-bottom: 0;
+.drop__menu {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + var(--space-1));
+  left: 0;
+  display: grid;
+  gap: var(--space-1);
+  min-width: 220px;
+  padding: var(--space-2);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
 }
 
-@media (max-width: 767px) {
-  .filters__row {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-1);
-  }
+.drop__menu .pill {
+  justify-content: space-between;
+  border-color: transparent;
+}
+
+.drop__menu .pill:hover {
+  border-color: var(--border-strong);
 }
 
 .ad__preview {

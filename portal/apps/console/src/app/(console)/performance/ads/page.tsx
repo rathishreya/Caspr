@@ -1,16 +1,16 @@
 import {
   AD_BUDGET_MONTHLY,
+  AD_KPI,
   AD_PLATFORM_LABEL,
   AD_PLATFORM_RULES,
-  AD_STATES,
-  AD_STATE_LABEL,
+  PAID_AND_P,
   STANCE_LIBRARY,
+  X_GATE,
   checkAdCopy,
   readSpend,
   stance,
   type Ad,
   type AdPlatform,
-  type AdState,
   type StanceAngle,
 } from '@caspr-portal/domain';
 import type { Metadata, Route } from 'next';
@@ -24,7 +24,7 @@ import { getRepository } from '@/lib/repository';
 export const metadata: Metadata = { title: 'Performance — Ads' };
 
 interface PageProps {
-  readonly searchParams: Promise<{ on?: string; angle?: string; state?: string }>;
+  readonly searchParams: Promise<{ on?: string; angle?: string }>;
 }
 
 /**
@@ -54,20 +54,13 @@ export default async function PerformanceAds({ searchParams }: PageProps) {
   const onAngle = STANCE_LIBRARY.some((row) => row.id === params.angle)
     ? (params.angle as StanceAngle)
     : null;
-  const onState = (AD_STATES as readonly string[]).includes(params.state ?? '')
-    ? (params.state as AdState)
-    : null;
-
   const visible = ads.filter(
-    (ad) =>
-      (onPlatform === null || ad.platform === onPlatform) &&
-      (onAngle === null || ad.angle === onAngle) &&
-      (onState === null || ad.state === onState),
+    (ad) => (onPlatform === null || ad.platform === onPlatform) && (onAngle === null || ad.angle === onAngle),
   );
 
   const drafts = ads.filter((ad) => ad.state === 'draft');
   const needFixing = drafts.filter((ad) => checkAdCopy(ad).some((problem) => problem.weight === 'blocking'));
-  const filtered = onPlatform !== null || onAngle !== null || onState !== null;
+  const filtered = onPlatform !== null || onAngle !== null;
 
   return (
     <div className="board">
@@ -99,58 +92,37 @@ export default async function PerformanceAds({ searchParams }: PageProps) {
               : 'Every draft is clean and can be approved.'
           }
         />
+        {/*
+          §1: every task declares which KPI it serves. This one answers it for the whole
+          workstream, and the interesting half is the half that says no.
+        */}
+        <Tile
+          label="SERVES"
+          value={AD_KPI}
+          note={`Revenue per $1 of spend, read against the x@${X_GATE} gate. ${PAID_AND_P}`}
+        />
       </div>
 
-      {/* ── FILTERS ────────────────────────────────────────────────────────── */}
-      <div className="filters">
-        <Row label="Where">
-          <Pill href="/ads" active={onPlatform === null} params={params} drop="on" label="Every placement" count={ads.length} />
-          {AD_PLATFORM_RULES.map((rule) => (
-            <Pill
-              key={rule.id}
-              active={onPlatform === rule.id}
-              params={params}
-              set={{ on: rule.id }}
-              label={AD_PLATFORM_LABEL[rule.id]}
-              count={ads.filter((ad) => ad.platform === rule.id).length}
-            />
-          ))}
-        </Row>
-
-        <Row label="Angle">
-          <Pill active={onAngle === null} params={params} drop="angle" label="Every angle" count={ads.length} />
-          {STANCE_LIBRARY.map((row) => {
-            const count = ads.filter((ad) => ad.angle === row.id).length;
-            return (
-              <Pill
-                key={row.id}
-                active={onAngle === row.id}
-                params={params}
-                set={{ angle: row.id }}
-                label={row.angle}
-                count={count}
-              />
-            );
-          })}
-        </Row>
-
-        <Row label="State">
-          <Pill active={onState === null} params={params} drop="state" label="Any" count={ads.length} />
-          {AD_STATES.map((value) => {
-            const count = ads.filter((ad) => ad.state === value).length;
-            return (
-              <Pill
-                key={value}
-                active={onState === value}
-                params={params}
-                set={{ state: value }}
-                label={AD_STATE_LABEL[value]}
-                count={count}
-              />
-            );
-          })}
-        </Row>
-      </div>
+      {/*
+        ⚑ One row, not three. Nine angles as pills wrapped across three lines and the state
+        row added a fourth — a filter bar taller than the first ad is not a filter bar, it is
+        a menu. Placement stays as pills because there are five and they fit; the angle became
+        a select because nine long labels never will.
+      */}
+      <nav className="pills" aria-label="Filter ads">
+        <Pill active={onPlatform === null} params={params} drop="on" label="Every placement" count={ads.length} />
+        {AD_PLATFORM_RULES.map((rule) => (
+          <Pill
+            key={rule.id}
+            active={onPlatform === rule.id}
+            params={params}
+            set={{ on: rule.id }}
+            label={AD_PLATFORM_LABEL[rule.id]}
+            count={ads.filter((ad) => ad.platform === rule.id).length}
+          />
+        ))}
+        <AngleFilter params={params} ads={ads} active={onAngle} />
+      </nav>
 
       {visible.length === 0 ? (
         <State
@@ -181,15 +153,43 @@ export default async function PerformanceAds({ searchParams }: PageProps) {
   );
 }
 
-/** One filter row: a label and its pills. */
-function Row({ label, children }: { readonly label: string; readonly children: React.ReactNode }) {
+/**
+ * The angle filter, as links inside a disclosure.
+ *
+ * ⚑ Not a `<select>`. A native select would need JavaScript to navigate, and every other
+ * filter in this console is a link — so a bookmarked or shared URL keeps the filter, and the
+ * back button undoes it. A `<details>` gives the compactness of a dropdown with none of that
+ * given up.
+ */
+function AngleFilter({
+  params,
+  ads,
+  active,
+}: {
+  readonly params: Record<string, string | undefined>;
+  readonly ads: readonly Ad[];
+  readonly active: StanceAngle | null;
+}) {
   return (
-    <div className="filters__row">
-      <span className="filters__label t-meta">{label}</span>
-      <nav className="pills" aria-label={`Filter ads by ${label.toLowerCase()}`}>
-        {children}
-      </nav>
-    </div>
+    <details className="drop">
+      <summary className="pill drop__summary" aria-label="Filter ads by angle">
+        {active === null ? 'Any angle' : stance(active).angle}
+        <span className="pill__count">{active === null ? ads.length : ads.filter((ad) => ad.angle === active).length}</span>
+      </summary>
+      <div className="drop__menu">
+        <Pill active={active === null} params={params} drop="angle" label="Any angle" count={ads.length} />
+        {STANCE_LIBRARY.map((row) => (
+          <Pill
+            key={row.id}
+            active={active === row.id}
+            params={params}
+            set={{ angle: row.id }}
+            label={row.angle}
+            count={ads.filter((ad) => ad.angle === row.id).length}
+          />
+        ))}
+      </div>
+    </details>
   );
 }
 

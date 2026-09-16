@@ -498,6 +498,28 @@ export function adCreativeSpec(ad: Ad): {
   };
 }
 
+/**
+ * Which KPI paid serves — framework §1: *"Every task declares which KPI it serves. A task
+ * that serves neither is not generated."*
+ *
+ * ⚑ **Every ad serves `x`. None serves `p`, and that is not an oversight.**
+ * `presence-metric.md` §3 counts three ways of appearing — cited in an AI answer, listed on a
+ * third-party page that ranks page one, or our own page ranking page one. **A paid placement
+ * is none of them.** Buying the slot above the result does not put us in the result, and an
+ * impression we paid for is the one kind of visibility the metric was built to exclude.
+ *
+ * The link to `p` is real, second-order, and runs the other way: paid finds **which message
+ * converts, cheaply**, and the message that wins is the one the owned engine amplifies — and
+ * the owned engine is what earns `p`. **Paid moves `p` by teaching, never by spending.**
+ */
+export const AD_KPI = 'x' as const;
+
+export const PAID_AND_P =
+  'No ad moves p. A paid placement is not one of the three ways presence counts — buying the slot above the result does not put us in the result. Paid moves p by teaching the owned engine which message won.';
+
+/** `plan.md` §5 — the scale decision, and what paid is ultimately read against. */
+export const X_GATE = 2;
+
 export interface SpendReading {
   readonly spend: number;
   readonly budget: number;

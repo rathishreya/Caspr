@@ -43,6 +43,8 @@ import {
   readClock,
 } from './discoverability';
 import {
+  AD_KPI,
+  PAID_AND_P,
   adApprovable,
   adCreativeSpec,
   canMoveAd,
@@ -860,6 +862,37 @@ describe('ads', () => {
     expect(canReviseAd('live')).toBe(true);
     expect(canReviseAd('paused')).toBe(true);
     expect(canReviseAd('killed')).toBe(false);
+  });
+
+  /**
+   * ⚑ The half of the KPI declaration that says no.
+   *
+   * §1 requires every task to declare which KPI it serves. Paid serves `x`. It does **not**
+   * serve `p`, and the temptation to claim it does is real — a paid placement looks like
+   * presence. `presence-metric.md` §3 counts three ways of appearing and a bought slot is
+   * none of them.
+   */
+  it('serves x and says plainly that it does not serve p', () => {
+    expect(AD_KPI).toBe('x');
+    expect(PAID_AND_P).toMatch(/does not put us in the result/i);
+    expect(PAID_AND_P).toMatch(/by teaching/i);
+  });
+
+  it('covers both launch ICPs, and every ad names one', () => {
+    const icps = REFERENCE_ADS.map((ad) => ad.icp.toLowerCase());
+    expect(icps.some((icp) => icp.includes('investor'))).toBe(true);
+    expect(icps.some((icp) => icp.includes('consultant'))).toBe(true);
+    for (const ad of REFERENCE_ADS) expect(ad.icp.length, ad.id).toBeGreaterThan(3);
+  });
+
+  it('sends every ad somewhere specific, and only the identity ad to the homepage', () => {
+    const homepage = REFERENCE_ADS.filter((ad) => ad.copy.landingPath === '/');
+    expect(homepage.every((ad) => ad.angle === 'identity')).toBe(true);
+    for (const ad of REFERENCE_ADS) expect(ad.copy.landingPath.startsWith('/'), ad.id).toBe(true);
+  });
+
+  it('gives every ad a reason it exists, not just copy', () => {
+    for (const ad of REFERENCE_ADS) expect(ad.note.length, ad.id).toBeGreaterThan(40);
   });
 
   it('keeps Meta shut, because a custom audience needs 1,000 people first', () => {
