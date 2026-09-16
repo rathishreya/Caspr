@@ -255,6 +255,118 @@ export const REFERENCE_ADS: readonly Ad[] = [
     note: 'The wound in the buyer’s own words, sourced to icp-personas.md :57. At 9pm on Meta it is recall, not discovery — which is why it goes to a role page rather than to signup.',
   },
 
+  // ── Meta reel · 1080 × 1920 · the finding in ten seconds ──────────────────
+  {
+    id: 'ad-reel-finding',
+    platform: 'meta_reel',
+    angle: 'what_research_costs',
+    icp: 'Anyone who visited the site',
+    copy: {
+      headlines: ['$153bn a year'],
+      descriptions: [],
+      primary: 'The industry is $153bn a year. The desk work before every study is not in that number.',
+      hashtags: ['#marketresearch'],
+      landingPath: '/answers/how-much-does-market-research-cost',
+    },
+    creative: {
+      headline: '$153bn',
+      support: 'The desk research before every study sits outside that figure. Nobody bills for it.',
+      source: 'ESOMAR, 2025',
+    },
+    state: 'draft',
+    metrics: null,
+    note: '§9.3: the finding in 10 seconds — one number, source line on screen, captions. The still frame exists now; the cut lands when the editor makes one.',
+  },
+  {
+    id: 'ad-reel-disagreement',
+    platform: 'meta_reel',
+    angle: 'sourcing',
+    icp: 'Anyone who visited a role page',
+    copy: {
+      headlines: ['36% apart'],
+      descriptions: [],
+      primary: 'Two credible sources, the same market, the same base year — and a 36% gap nobody reconciles.',
+      hashtags: ['#duediligence'],
+      landingPath: '/data/saas-revenue-multiples',
+    },
+    creative: {
+      headline: '36% apart',
+      support: 'Two credible sources. One market. One base year. And neither says which basis it used.',
+      source: 'The Record, issue 1',
+    },
+    state: 'draft',
+    metrics: null,
+    note: 'The disagreement is the conversion mechanic, not the number — a reader who wanted one figure now has a problem they did not know they had.',
+  },
+
+  // ── LinkedIn · 1200 × 628 · retargeting, and the ICPs search misses ───────
+  {
+    id: 'ad-li-investor',
+    platform: 'linkedin',
+    angle: 'icp_wounds',
+    icp: 'Investors',
+    copy: {
+      headlines: ['You were hired to evaluate businesses'],
+      descriptions: ['Not to be a research librarian'],
+      primary:
+        'Sector primers and market sizing for a deal you are screening — sourced, dated, and defensible in an IC memo.',
+      hashtags: ['#privateequity'],
+      landingPath: '/investors',
+    },
+    creative: {
+      headline: 'Not a research librarian',
+      support: 'You were hired to evaluate businesses. The desk work before the memo is not the job.',
+      source: null,
+    },
+    state: 'draft',
+    metrics: null,
+    note: 'The /investors hero, at LinkedIn’s 70-character headline where it fits whole. This is the placement search does not reach — a partner who was not looking today.',
+  },
+  {
+    id: 'ad-li-strategy',
+    platform: 'linkedin',
+    angle: 'the_promise',
+    icp: 'Strategy teams',
+    copy: {
+      headlines: ['Arrive certain'],
+      descriptions: ['Every source credible. Every claim triangulated.'],
+      primary:
+        'Any question your board will ask — answered, sourced, and ready before they ask it. Fifteen minutes, not three weeks.',
+      hashtags: ['#strategy'],
+      landingPath: '/strategy',
+    },
+    creative: {
+      headline: 'Arrive certain.',
+      support: 'Any question your board will ask — answered, sourced, and ready before they ask it.',
+      source: null,
+    },
+    state: 'draft',
+    metrics: null,
+    note: 'Strategy opens in week 8 and search reaches it badly — “AI for strategy teams” is a category term, and nobody searches the category. LinkedIn is where that ICP is addressable.',
+  },
+  {
+    id: 'ad-li-record',
+    platform: 'linkedin',
+    angle: 'the_record',
+    icp: 'All professional ICPs',
+    copy: {
+      headlines: ['The Record'],
+      descriptions: ['Free. Every issue, every source.'],
+      primary:
+        'We take a number the room keeps arguing about, reconcile the sources, and publish the working. Free, every issue.',
+      hashtags: ['#marketresearch'],
+      landingPath: '/blog',
+    },
+    creative: {
+      headline: 'The number the room argues about',
+      support: 'We reconcile the sources and publish the working. Free, every issue.',
+      source: null,
+    },
+    state: 'draft',
+    metrics: null,
+    note: 'Subscribing is a lower ask than signing up, and on LinkedIn it reaches people mid-scroll rather than mid-search. The subscription is to be told, not to gain access.',
+  },
+
   {
     id: 'ad-meta-record',
     platform: 'meta_feed',

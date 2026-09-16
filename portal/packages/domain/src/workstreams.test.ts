@@ -46,6 +46,7 @@ import {
   AD_KPI,
   PAID_AND_P,
   adApprovable,
+  adCanvas,
   adCreativeSpec,
   canMoveAd,
   canReviseAd,
@@ -57,6 +58,7 @@ import {
 } from './ad';
 import { AD_BUDGET_MONTHLY, REFERENCE_ADS } from './reference-ads';
 import { checkContent, contentHealth } from './content-seo';
+import { creativeOverflow } from './creative';
 import type { PostBody } from './post';
 import { REFERENCE_POSTS } from './reference-posts';
 import {
@@ -835,12 +837,48 @@ describe('ads', () => {
     expect(adApprovable({ ...base, state: 'live' })).toBe(false);
   });
 
-  it('draws every social ad from the house card, and no card for a search ad', () => {
+  /**
+   * ⚑ Each placement gets the canvas it actually serves. A square card stretched into a reel
+   * is what an ad account rejects — and what a person notices before the account does.
+   */
+  it('draws each placement on its own canvas, and no image for a search ad', () => {
+    const template: Record<string, string | null> = {
+      google_search: null,
+      meta_feed: 'card',
+      meta_reel: 'story',
+      linkedin: 'hero',
+    };
+    for (const ad of REFERENCE_ADS) {
+      expect(adCreativeSpec(ad)?.template ?? null, ad.id).toBe(template[ad.platform] ?? null);
+    }
+  });
+
+  it('gives every placement with a creative a real canvas, and search none', () => {
+    expect(adCanvas('google_search')).toBeNull();
+    expect(adCanvas('meta_feed')).toEqual({ width: 1080, height: 1080 });
+    expect(adCanvas('meta_reel')).toEqual({ width: 1080, height: 1920 });
+    expect(adCanvas('linkedin')).toEqual({ width: 1200, height: 628 });
+  });
+
+  it('gives every ad on a visual placement a creative to draw', () => {
+    for (const ad of REFERENCE_ADS) {
+      if (ad.platform === 'google_search') continue;
+      expect(ad.creative, ad.id).not.toBeNull();
+    }
+  });
+
+  /** Nothing overflows its frame — the renderer refuses, so the ad set must not rely on it. */
+  it('fits every ad creative inside its own canvas', () => {
     for (const ad of REFERENCE_ADS) {
       const spec = adCreativeSpec(ad);
-      if (ad.platform === 'google_search') expect(spec, ad.id).toBeNull();
-      else expect(spec?.template, ad.id).toBe('card');
+      if (spec === null) continue;
+      expect(creativeOverflow(spec), ad.id).toEqual([]);
     }
+  });
+
+  it('covers every placement that is buildable today', () => {
+    const placements = new Set(REFERENCE_ADS.map((ad) => ad.platform));
+    expect([...placements].sort()).toEqual(['google_search', 'linkedin', 'meta_feed', 'meta_reel']);
   });
 
   it('counts angles under test rather than signups', () => {

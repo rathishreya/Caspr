@@ -279,7 +279,12 @@ export function PostPreview({
 export function CreativeBar({ item, version }: { readonly item: ContentItem; readonly version: PostVersion }) {
   const spec = creativeFor(version);
   if (spec === null) return null;
-  const canvas = spec.template === 'hero' ? CREATIVE_CANVASES.hero : CREATIVE_CANVASES.social;
+  const canvas =
+    spec.template === 'hero'
+      ? CREATIVE_CANVASES.hero
+      : spec.template === 'story'
+        ? CREATIVE_CANVASES.story
+        : CREATIVE_CANVASES.social;
   const name = spec.template === 'atom' ? 'The atom' : spec.template === 'hero' ? 'Hero image' : 'Card';
   return (
     <p className="creative-bar t-body-s">
@@ -352,7 +357,12 @@ function srcOf(item: ContentItem, version: PostVersion): string {
 function pictureFor(item: ContentItem, version: PostVersion): Picture | null {
   const spec = creativeFor(version);
   if (spec === null) return null;
-  const canvas = spec.template === 'hero' ? CREATIVE_CANVASES.hero : CREATIVE_CANVASES.social;
+  const canvas =
+    spec.template === 'hero'
+      ? CREATIVE_CANVASES.hero
+      : spec.template === 'story'
+        ? CREATIVE_CANVASES.story
+        : CREATIVE_CANVASES.social;
   return { src: srcOf(item, version), alt: altText(spec), ...canvas };
 }
 
@@ -370,6 +380,8 @@ function altText(spec: CreativeSpec): string {
       ].join('. ');
     case 'hero':
       return `${spec.headline}. ${spec.standfirst}`;
+    case 'story':
+      return [spec.headline, spec.standfirst, spec.source].filter(Boolean).join('. ');
   }
 }
 

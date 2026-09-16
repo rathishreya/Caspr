@@ -29,6 +29,15 @@ export const CREATIVE_CANVASES = {
    * Graph ratio, not a size any document here specifies — flagged under Rule 5.5.
    */
   hero: { width: 1200, height: 630 },
+  /**
+   * Vertical — a reel or a story.
+   *
+   * ⚠ 1080 × 1920 is the placement's ratio, not a size any Caspr document specifies, so it is
+   * flagged under Rule 5.5 exactly as the hero is. Framework §9.3 does specify what goes on
+   * it: *"expert micro-cuts, 6–15s vertical"* and *"the finding in 10 seconds — one number,
+   * source line on screen, captions."* This canvas is the still frame of that.
+   */
+  story: { width: 1080, height: 1920 },
 } as const;
 export type CreativeCanvas = keyof typeof CREATIVE_CANVASES;
 
@@ -67,6 +76,26 @@ export type CreativeSpec =
       readonly eyebrow: string;
       readonly headline: string;
       readonly standfirst: string;
+      /**
+       * What the footer prints. Defaults to the blog, because that is what this template was
+       * drawn for — but a LinkedIn ad on the same canvas does not come from the blog, and a
+       * footer that says it does is a small lie printed at 1200 × 628.
+       */
+      readonly host?: string;
+    }
+  /**
+   * Vertical — the still frame of a reel or story.
+   *
+   * §9.3's format, drawn rather than filmed: one number, its source line on screen, and
+   * nothing else. The engine writes the script and the caption and does not make video, so
+   * this is what exists until an editor cuts one.
+   */
+  | {
+      readonly template: 'story';
+      readonly eyebrow: string;
+      readonly headline: string;
+      readonly standfirst: string;
+      readonly source: string | null;
     };
 
 export type CreativeNeed = 'required' | 'optional' | 'never';
@@ -129,6 +158,12 @@ export const CREATIVE_FIT = {
   card: { eyebrow: { perLine: 44, lines: 1 }, headline: { perLine: 24, lines: 3 }, standfirst: { perLine: 60, lines: 4 } },
   atom: { eyebrow: { perLine: 44, lines: 1 }, headline: { perLine: 24, lines: 2 }, standfirst: { perLine: 60, lines: 0 } },
   hero: { eyebrow: { perLine: 50, lines: 1 }, headline: { perLine: 38, lines: 3 }, standfirst: { perLine: 76, lines: 3 } },
+  /**
+   * Vertical is narrow and tall, so the headline wraps sooner and the standfirst has room —
+   * the opposite trade from the hero, and the reason each template has its own row rather
+   * than sharing one.
+   */
+  story: { eyebrow: { perLine: 40, lines: 1 }, headline: { perLine: 20, lines: 4 }, standfirst: { perLine: 46, lines: 5 } },
 } as const;
 
 /** Lines a string takes when wrapped at word boundaries. A word longer than a line is one line. */

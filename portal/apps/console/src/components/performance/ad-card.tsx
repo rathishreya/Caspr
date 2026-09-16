@@ -4,10 +4,10 @@ import {
   AD_PLATFORM_LABEL,
   AD_PROMPT_MAX,
   AD_STATE_LABEL,
+  adCanvas,
   canReviseAd,
   checkAdCopy,
   ctr,
-  platformRule,
   readAd,
   stance,
   type Ad,
@@ -35,7 +35,7 @@ const INITIAL: AdActionState = { errors: [] };
 export function AdCard({ ad }: { readonly ad: Ad }) {
   const [state, action] = useActionState(moveAd, INITIAL);
   const [open, setOpen] = useState(false);
-  const rule = platformRule(ad.platform);
+  const canvas = adCanvas(ad.platform);
   const problems = checkAdCopy(ad);
   const blocking = problems.filter((problem) => problem.weight === 'blocking');
   const reading = readAd(ad.metrics);
@@ -51,9 +51,21 @@ export function AdCard({ ad }: { readonly ad: Ad }) {
 
       <div className="ad__body">
         <div className="ad__preview">
-          {ad.platform === 'google_search' ? <SearchPreview ad={ad} /> : <SocialPreview ad={ad} />}
+          {ad.platform === 'google_search' ? (
+            <SearchPreview ad={ad} />
+          ) : ad.platform === 'linkedin' ? (
+            <LinkedInPreview ad={ad} />
+          ) : (
+            <SocialPreview ad={ad} />
+          )}
           <p className="ad__where t-meta text-tertiary">
-            → {ad.copy.landingPath} · {rule.job}
+            → {ad.copy.landingPath}
+            {canvas !== null && ad.creative !== null && (
+              <>
+                {' · '}
+                {canvas.width} × {canvas.height}
+              </>
+            )}
           </p>
 
           <p className="t-body-s text-secondary">{ad.note}</p>
@@ -236,10 +248,43 @@ function SearchPreview({ ad }: { readonly ad: Ad }) {
   );
 }
 
+/**
+ * A sponsored LinkedIn post: the company line, the copy, a 1.91:1 image, then the strip.
+ *
+ * Its own greys, for the same reason the other two use theirs — approving it in the house
+ * palette would hide how it reads where it appears.
+ */
+function LinkedInPreview({ ad }: { readonly ad: Ad }) {
+  return (
+    <div className="liad">
+      <div className="liad__head">
+        <span className="liad__mark">C.</span>
+        <span>
+          <span className="liad__name">Caspr</span>
+          <span className="liad__sub t-body-s">Promoted</span>
+        </span>
+      </div>
+      <p className="liad__primary">{ad.copy.primary}</p>
+      {ad.creative !== null && (
+        /* Already exactly 1200 × 628 from the renderer — next/image would re-encode it. */
+        <img className="liad__image" src={`/api/ad-creatives/${ad.id}`} alt={ad.creative.headline} />
+      )}
+      <div className="liad__strip">
+        <span className="liad__headline">{ad.copy.headlines[0]}</span>
+        <span className="liad__desc t-body-s">
+          caspr.ai · {ad.copy.descriptions[0]}
+        </span>
+      </div>
+      {ad.copy.hashtags.length > 0 && <p className="liad__tags t-body-s">{ad.copy.hashtags.join(' ')}</p>}
+    </div>
+  );
+}
+
 /** A feed post, as Meta renders it: primary text, image, then the headline strip. */
 function SocialPreview({ ad }: { readonly ad: Ad }) {
+  const vertical = ad.platform === 'meta_reel';
   return (
-    <div className="feedad">
+    <div className={vertical ? 'feedad feedad--reel' : 'feedad'}>
       <p className="feedad__primary">{ad.copy.primary}</p>
       {ad.creative !== null && (
         /*

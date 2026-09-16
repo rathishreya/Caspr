@@ -1298,6 +1298,91 @@ strong,
   background: #ffffff;
 }
 
+/*
+ * A reel is 9:16, and showing it at the width of a feed post would make it taller than the
+ * card it sits in. Held to a phone's width, which is also how it will be seen.
+ */
+.feedad--reel {
+  max-width: 300px;
+}
+
+/* A sponsored LinkedIn post. Its own greys, for the reason the other two use theirs. */
+.liad {
+  background: #ffffff;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+.liad__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4) var(--space-2);
+}
+
+.liad__mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #000000;
+  color: #ffffff;
+  font-family: var(--font-serif);
+  font-size: 18px;
+}
+
+.liad__name {
+  display: block;
+  color: #000000e6;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.liad__sub {
+  display: block;
+  color: #00000099;
+}
+
+.liad__primary {
+  margin: 0;
+  padding: 0 var(--space-4) var(--space-3);
+  color: #000000e6;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.liad__image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.liad__strip {
+  display: grid;
+  gap: 2px;
+  padding: var(--space-3) var(--space-4);
+  background: #edf3f8;
+}
+
+.liad__headline {
+  color: #000000e6;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.liad__desc {
+  color: #00000099;
+}
+
+.liad__tags {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  color: #0a66c2;
+  background: #ffffff;
+}
+
 /* The nine angles, and which have a reading. */
 .angles {
   display: grid;

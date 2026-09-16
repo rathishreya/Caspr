@@ -60,8 +60,15 @@ function bytes(buffer: Buffer): ArrayBuffer {
 }
 
 export async function renderCreative(spec: CreativeSpec, init?: ResponseInit): Promise<ImageResponse> {
-  const canvas = spec.template === 'hero' ? CREATIVE_CANVASES.hero : CREATIVE_CANVASES.social;
-  return new ImageResponse(spec.template === 'hero' ? <Hero spec={spec} /> : <Social spec={spec} />, {
+  const canvas =
+    spec.template === 'hero'
+      ? CREATIVE_CANVASES.hero
+      : spec.template === 'story'
+        ? CREATIVE_CANVASES.story
+        : CREATIVE_CANVASES.social;
+  const frame =
+    spec.template === 'hero' ? <Hero spec={spec} /> : spec.template === 'story' ? <Story spec={spec} /> : <Social spec={spec} />;
+  return new ImageResponse(frame, {
     ...canvas,
     fonts: await loadFonts(),
     ...init,
@@ -127,6 +134,64 @@ function Social({ spec }: { readonly spec: Extract<CreativeSpec, { template: 'ca
 }
 
 /** 1200 × 630. The same card, reflowed to the link-preview ratio. */
+/**
+ * 1080 × 1920 — the still frame of a reel or a story.
+ *
+ * §9.3's format drawn rather than filmed: **one number, its source line on screen**, and
+ * nothing else. The type is larger than any other canvas here because it is read at arm's
+ * length on a phone, in a feed that moves — and the whole frame sits inside a safe area,
+ * because both ends of a vertical placement are covered by the platform's own chrome.
+ */
+function Story({ spec }: { readonly spec: Extract<CreativeSpec, { template: 'story' }> }) {
+  const { width, height } = CREATIVE_CANVASES.story;
+  const gutter = 96;
+  return (
+    <div
+      style={{
+        width,
+        height,
+        display: 'flex',
+        flexDirection: 'column',
+        background: card.ground,
+        // 320 clears the caption and the account chrome at the top; the footer sits well
+        // above the reply bar at the bottom.
+        padding: `320px ${gutter}px 0`,
+        position: 'relative',
+      }}
+    >
+      <Eyebrow text={spec.eyebrow} size={26} />
+      <Headline text={spec.headline} size={104} lineHeight={112} marginTop={56} dot={14} />
+      <div
+        style={{
+          marginTop: 48,
+          maxWidth: width - gutter * 2,
+          fontFamily: SANS,
+          fontSize: 38,
+          lineHeight: '52px',
+          color: card.muted,
+        }}
+      >
+        {spec.standfirst}
+      </div>
+      {spec.source !== null && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 1480,
+            left: gutter,
+            fontFamily: SANS,
+            fontSize: 26,
+            color: card.muted,
+          }}
+        >
+          {spec.source}
+        </div>
+      )}
+      <Footer top={1580} width={width} gutter={gutter} host="caspr.ai" lockup={48} />
+    </div>
+  );
+}
+
 function Hero({ spec }: { readonly spec: Extract<CreativeSpec, { template: 'hero' }> }) {
   const { width, height } = CREATIVE_CANVASES.hero;
   const gutter = 80;
@@ -156,7 +221,7 @@ function Hero({ spec }: { readonly spec: Extract<CreativeSpec, { template: 'hero
       >
         {spec.standfirst}
       </div>
-      <Footer top={540} width={width} gutter={gutter} host="caspr.ai/blog" lockup={34} />
+      <Footer top={540} width={width} gutter={gutter} host={spec.host ?? 'caspr.ai/blog'} lockup={34} />
     </div>
   );
 }

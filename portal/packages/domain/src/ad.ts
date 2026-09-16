@@ -21,6 +21,7 @@
  * cost per click, where *"LinkedIn charges $8–18 to interrupt someone who wasn't looking."*
  */
 
+import type { CreativeSpec } from './creative';
 import { STANCE_ANGLES, type StanceAngle } from './stance';
 
 /** Where an ad can run, in the order paid opens them. */
@@ -205,8 +206,14 @@ export interface Ad {
   /** Who it is aimed at. Paid runs narrow while `x@6` is unread. */
   readonly icp: string;
   readonly copy: AdCopy;
-  /** The image or video this ad carries, where the placement has one. */
-  readonly creative: { readonly headline: string; readonly support: string; readonly source: string } | null;
+  /**
+   * The image this ad carries, where the placement has one.
+   *
+   * `source` is null on a creative that states a position rather than a figure — the card's
+   * own rule (`creative.ts`): *"required once the card carries a figure. A card that states a
+   * position has none."* A source line under a claim with no number in it is decoration.
+   */
+  readonly creative: { readonly headline: string; readonly support: string; readonly source: string | null } | null;
   readonly state: AdState;
   readonly metrics: AdMetrics | null;
   readonly note: string;
@@ -481,21 +488,32 @@ export function adApprovable(ad: Ad): boolean {
  * Meta's feed takes exactly the canvas the card already uses. A reel is 1080×1920 and is not
  * drawn here, because the engine writes the script and the caption and does not make video.
  */
-export function adCreativeSpec(ad: Ad): {
-  readonly template: 'card';
-  readonly eyebrow: string;
-  readonly headline: string;
-  readonly standfirst: string;
-  readonly source: string | null;
-} | null {
+export function adCreativeSpec(ad: Ad): CreativeSpec | null {
   if (ad.creative === null) return null;
-  return {
-    template: 'card',
+  const common = {
     eyebrow: AD_PLATFORM_LABEL[ad.platform].toUpperCase(),
     headline: ad.creative.headline,
     standfirst: ad.creative.support,
-    source: ad.creative.source,
   };
+
+  // Each placement gets the canvas it actually serves. A square card stretched into a reel
+  // is what an ad account rejects, and what a person notices before the account does.
+  switch (ad.platform) {
+    case 'meta_reel':
+      return { template: 'story', ...common, source: ad.creative.source };
+    case 'linkedin':
+      // The hero's canvas, not the blog's footer — this ad does not come from the blog.
+      return { template: 'hero', ...common, host: 'caspr.ai' };
+    case 'meta_feed':
+      return { template: 'card', ...common, source: ad.creative.source };
+    default:
+      return null;
+  }
+}
+
+/** The canvas a placement's creative is drawn on, for the label beside it. */
+export function adCanvas(platform: AdPlatform): { readonly width: number; readonly height: number } | null {
+  return platformRule(platform).creative;
 }
 
 /**
