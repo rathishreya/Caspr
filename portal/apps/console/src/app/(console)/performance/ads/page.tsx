@@ -124,6 +124,23 @@ export default async function PerformanceAds({ searchParams }: PageProps) {
         <AngleFilter params={params} ads={ads} active={onAngle} />
       </nav>
 
+      {/*
+        ⚑ Added 2026-09-16, after a filtered URL read as "where did the other ads go".
+        A filter that hides 17 of 18 rows and says so only in the label of a collapsed
+        dropdown is a filter that looks like a bug. This line always says how many of the
+        whole set are showing, and carries the way out.
+      */}
+      {filtered && (
+        <p className="showing t-body-s">
+          Showing <strong>{visible.length}</strong> of {ads.length} ads
+          {onPlatform !== null && <> on {AD_PLATFORM_LABEL[onPlatform]}</>}
+          {onAngle !== null && <> · {stance(onAngle).angle}</>}
+          <Link className="showing__clear t-label" href="/performance/ads">
+            Show every ad →
+          </Link>
+        </p>
+      )}
+
       {visible.length === 0 ? (
         <State
           kind="empty"
@@ -132,12 +149,6 @@ export default async function PerformanceAds({ searchParams }: PageProps) {
         />
       ) : filtered ? (
         <section aria-label="Filtered ads">
-          <div className="board-head">
-            <h3 className="t-title-m">
-              {visible.length} {visible.length === 1 ? 'ad' : 'ads'}
-              {onAngle !== null && <span className="board-count t-meta">{stance(onAngle).angle}</span>}
-            </h3>
-          </div>
           <div className="ads">
             {visible.map((ad) => (
               <AdCard key={ad.id} ad={ad} />
@@ -172,7 +183,15 @@ function AngleFilter({
 }) {
   return (
     <details className="drop">
-      <summary className="pill drop__summary" aria-label="Filter ads by angle">
+      {/*
+        `aria-current` when an angle is set, so a chosen filter looks chosen. Collapsed, this
+        summary is the only thing on screen that says one is on.
+      */}
+      <summary
+        className="pill drop__summary"
+        aria-label="Filter ads by angle"
+        aria-current={active === null ? undefined : 'true'}
+      >
         {active === null ? 'Any angle' : stance(active).angle}
         <span className="pill__count">{active === null ? ads.length : ads.filter((ad) => ad.angle === active).length}</span>
       </summary>
