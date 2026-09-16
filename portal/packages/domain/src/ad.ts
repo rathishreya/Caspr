@@ -227,16 +227,7 @@ export interface Ad {
    * image standing in for a video is exactly the kind of thing that gets approved and then
    * cannot ship.
    */
-  readonly video?: {
-    /** §9.3: expert micro-cuts run 6–15 seconds vertical. */
-    readonly seconds: number;
-    /** Written by the engine, against the claims register like everything else. */
-    readonly script: string;
-    /** Burned in, because §9.3 specifies captions and most of this feed is muted. */
-    readonly captions: string;
-    /** The file, once an editor has cut one. Null until then, and that is the standing. */
-    readonly cut: string | null;
-  };
+  readonly video?: AdVideo;
   readonly state: AdState;
   readonly metrics: AdMetrics | null;
   readonly note: string;
@@ -254,6 +245,76 @@ export interface Ad {
 
 /** The same ceiling the post queue uses, so an instruction means the same length everywhere. */
 export const AD_PROMPT_MAX = 400;
+
+/**
+ * One frame of a reel — a card the generator can draw, and a line that plays over it.
+ *
+ * ⚑ **This is the part the engine can actually make.** It cannot cut video, but it can write
+ * the script and draw every frame the cut is built from, on the vertical canvas, from the
+ * brand tokens. A storyboard is not a placeholder for a video — it is the thing an editor
+ * works from, and it is the only artefact here that can exist before one does.
+ */
+export interface VideoFrame {
+  /** Seconds into the reel. The frame holds until the next one starts. */
+  readonly at: number;
+  readonly headline: string;
+  readonly support: string;
+  /** Required on any frame carrying a figure — the card's own rule. */
+  readonly source: string | null;
+  /** The line spoken or captioned over this frame. */
+  readonly line: string;
+}
+
+export interface AdVideo {
+  /** §9.3: expert micro-cuts run 6–15 seconds vertical. */
+  readonly seconds: number;
+  /** Written by the engine, against the claims register like everything else. */
+  readonly script: string;
+  /** Burned in, because §9.3 specifies captions and most of this feed is muted. */
+  readonly captions: string;
+  /** Every frame, in order. What the editor cuts from. */
+  readonly frames: readonly VideoFrame[];
+  /** The file, once an editor has cut one. Null until then, and that is the standing. */
+  readonly cut: string | null;
+}
+
+/** How long a frame is on screen — until the next one, or until the reel ends. */
+export function frameDuration(video: AdVideo, index: number): number {
+  const next = video.frames[index + 1];
+  return (next?.at ?? video.seconds) - (video.frames[index]?.at ?? 0);
+}
+
+/** Which frame is showing at a given second. */
+export function frameAt(video: AdVideo, second: number): number {
+  let index = 0;
+  video.frames.forEach((frame, i) => {
+    if (frame.at <= second) index = i;
+  });
+  return index;
+}
+
+/**
+ * What is wrong with a storyboard, before anybody approves it.
+ *
+ * A frame past the end of the reel never plays; frames out of order mean the editor is
+ * reading a different sequence from the one the script describes. Both are silent failures
+ * on a page, and neither survives contact with an edit.
+ */
+export function checkVideo(video: AdVideo): readonly string[] {
+  const problems: string[] = [];
+  if (video.frames.length === 0) problems.push('no frames — there is nothing to cut from');
+  if (video.seconds < REEL_SECONDS.min || video.seconds > REEL_SECONDS.max) {
+    problems.push(`${video.seconds}s, and a micro-cut runs ${REEL_SECONDS.min}–${REEL_SECONDS.max}s`);
+  }
+  video.frames.forEach((frame, index) => {
+    const previous = video.frames[index - 1];
+    if (previous !== undefined && frame.at <= previous.at) {
+      problems.push(`frame ${index + 1} starts at ${frame.at}s, at or before the one before it`);
+    }
+    if (frame.at >= video.seconds) problems.push(`frame ${index + 1} starts at ${frame.at}s, after the reel ends`);
+  });
+  return problems;
+}
 
 /** What a live ad has done. Null until it has run. */
 export interface AdMetrics {
@@ -530,24 +591,29 @@ export const REEL_SECONDS = { min: 6, max: 15 } as const;
  * Meta's feed takes exactly the canvas the card already uses. A reel is 1080×1920 and is not
  * drawn here, because the engine writes the script and the caption and does not make video.
  */
-export function adCreativeSpec(ad: Ad): CreativeSpec | null {
+export function adCreativeSpec(ad: Ad, frame?: number): CreativeSpec | null {
   if (ad.creative === null) return null;
+
+  // A frame index draws that frame of the storyboard instead of the cover — same canvas,
+  // same generator, so what the editor cuts from is what everybody approved.
+  const still = frame === undefined ? undefined : ad.video?.frames[frame];
   const common = {
     eyebrow: AD_PLATFORM_LABEL[ad.platform].toUpperCase(),
-    headline: ad.creative.headline,
-    standfirst: ad.creative.support,
+    headline: still?.headline ?? ad.creative.headline,
+    standfirst: still?.support ?? ad.creative.support,
   };
+  const source = still === undefined ? ad.creative.source : still.source;
 
   // Each placement gets the canvas it actually serves. A square card stretched into a reel
   // is what an ad account rejects, and what a person notices before the account does.
   switch (ad.platform) {
     case 'meta_reel':
-      return { template: 'story', ...common, source: ad.creative.source };
+      return { template: 'story', ...common, source };
     case 'linkedin':
       // The hero's canvas, not the blog's footer — this ad does not come from the blog.
       return { template: 'hero', ...common, host: 'caspr.ai' };
     case 'meta_feed':
-      return { template: 'card', ...common, source: ad.creative.source };
+      return { template: 'card', ...common, source };
     default:
       return null;
   }

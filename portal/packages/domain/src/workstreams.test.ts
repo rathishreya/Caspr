@@ -53,6 +53,9 @@ import {
   canMoveAd,
   canReviseAd,
   checkAdCopy,
+  checkVideo,
+  frameAt,
+  frameDuration,
   platformRule,
   readAd,
   readSpend,
@@ -903,6 +906,54 @@ describe('ads', () => {
       expect(reel.video!.seconds).toBeGreaterThanOrEqual(REEL_SECONDS.min);
       expect(reel.video!.seconds).toBeLessThanOrEqual(REEL_SECONDS.max);
     }
+  });
+
+  /**
+   * ⚑ The storyboard is the part the engine *can* make, so it is held to the same standard as
+   * anything else that gets approved: in order, inside the runtime, drawable, and sourced.
+   */
+  it('gives every reel a storyboard that plays', () => {
+    const reels = REFERENCE_ADS.filter((ad) => ad.platform === 'meta_reel');
+    for (const reel of reels) {
+      const video = reel.video!;
+      expect(checkVideo(video), reel.id).toEqual([]);
+      expect(video.frames.length, reel.id).toBeGreaterThan(1);
+      // Every frame is a card the generator actually draws, on the vertical canvas.
+      video.frames.forEach((_frame, index) => {
+        const spec = adCreativeSpec(reel, index)!;
+        expect(spec, `${reel.id} frame ${index}`).not.toBeNull();
+        expect(creativeOverflow(spec), `${reel.id} frame ${index}`).toEqual([]);
+      });
+      // The holds add up to the reel. A frame that never plays is a frame nobody reviewed.
+      const held = video.frames.reduce((total, _frame, index) => total + frameDuration(video, index), 0);
+      expect(held, reel.id).toBe(video.seconds);
+    }
+  });
+
+  /** Rule 5.5 reaches inside the video: a figure on screen carries its source on screen. */
+  it('sources every figure a reel frame puts on screen', () => {
+    for (const reel of REFERENCE_ADS.filter((ad) => ad.platform === 'meta_reel')) {
+      for (const frame of reel.video!.frames) {
+        if (/\d/.test(frame.headline)) expect(frame.source, `${reel.id}: ${frame.headline}`).not.toBeNull();
+      }
+    }
+  });
+
+  it('holds a frame until the next one starts', () => {
+    const video = REFERENCE_ADS.find((ad) => ad.platform === 'meta_reel')!.video!;
+    expect(frameAt(video, 0)).toBe(0);
+    expect(frameAt(video, video.frames[1]!.at - 0.25)).toBe(0);
+    expect(frameAt(video, video.frames[1]!.at)).toBe(1);
+    expect(frameAt(video, video.seconds)).toBe(video.frames.length - 1);
+  });
+
+  it('names a storyboard that could not be cut as written', () => {
+    const video = REFERENCE_ADS.find((ad) => ad.platform === 'meta_reel')!.video!;
+    const backwards = { ...video, frames: [video.frames[1]!, video.frames[0]!] };
+    expect(checkVideo(backwards).join(' ')).toContain('before the one before it');
+    const overrun = { ...video, frames: [{ ...video.frames[0]!, at: video.seconds + 1 }] };
+    expect(checkVideo(overrun).join(' ')).toContain('after the reel ends');
+    expect(checkVideo({ ...video, seconds: 45 }).join(' ')).toContain('micro-cut runs');
   });
 
   it('holds back an approvable reel that has no cut', () => {

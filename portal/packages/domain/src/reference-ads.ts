@@ -278,6 +278,29 @@ export const REFERENCE_ADS: readonly Ad[] = [
       script:
         'The global market research industry is $153bn a year. That is ESOMAR’s number, and it counts fieldwork. The desk research before every one of those studies sits outside it — four hours, the median, and nobody bills for any of it.',
       captions: 'Burned in, white on the card. Most of this feed is muted.',
+      frames: [
+        {
+          at: 0,
+          headline: '$153bn',
+          support: 'The global market research industry, a year.',
+          source: 'ESOMAR, 2025',
+          line: 'The global market research industry is $153bn a year.',
+        },
+        {
+          at: 3,
+          headline: 'That counts fieldwork',
+          support: 'Surveys, panels, interviews — the part somebody invoices for.',
+          source: null,
+          line: 'That is ESOMAR’s number, and it counts fieldwork.',
+        },
+        {
+          at: 6,
+          headline: 'Four hours',
+          support: 'The desk research before every study. The median, and it is in nobody’s invoice.',
+          source: 'Caspr buyer research, 2026',
+          line: 'The desk research before every one of those studies sits outside it — four hours, the median.',
+        },
+      ],
       cut: null,
     },
     state: 'draft',
@@ -305,7 +328,45 @@ export const REFERENCE_ADS: readonly Ad[] = [
       seconds: 12,
       script:
         'Two credible sources price the same market, the same year, 36% apart. Neither says which basis it used. One is forward, one is trailing — and if you quote either one on its own, the room is right to ask which.',
-      captions: 'Burned in. The two figures hold on screen while the gap is named.',
+      captions: 'Burned in. The gap holds on screen while the reason for it is named.',
+      /*
+       * ⚑ The only figure on screen is the one the ad is built on — 36%, from The Record — and
+       * it carries its source on the frame that shows it. An earlier cut of this storyboard
+       * opened on two invented multiples (8.5× and 3.3×) to dramatise the gap; they were not
+       * observed anywhere, and 3.3 against 8.5 is not a 36% gap, so the reel contradicted its
+       * own headline three seconds in. Rule 5.5 reaches inside the video, and the test
+       * "sources every figure a reel frame puts on screen" is what caught it.
+       */
+      frames: [
+        {
+          at: 0,
+          headline: 'Two credible sources',
+          support: 'The same market. The same base year.',
+          source: null,
+          line: 'Two credible sources size the same market, the same base year.',
+        },
+        {
+          at: 3,
+          headline: '36% apart',
+          support: 'That is the gap, and nobody reconciles it.',
+          source: 'The Record, issue 1',
+          line: 'Their numbers are 36 percent apart.',
+        },
+        {
+          at: 6,
+          headline: 'Neither says why',
+          support: 'One is forward. One is trailing. Neither page says which.',
+          source: null,
+          line: 'Neither says which basis it used. One is forward, one is trailing.',
+        },
+        {
+          at: 9,
+          headline: 'The room will ask',
+          support: 'Quote either one alone and the question is fair. We show the range and the working.',
+          source: null,
+          line: 'Quote either one on its own and the room is right to ask which.',
+        },
+      ],
       cut: null,
     },
     state: 'draft',

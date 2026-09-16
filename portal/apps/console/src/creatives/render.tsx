@@ -152,10 +152,17 @@ function Story({ spec }: { readonly spec: Extract<CreativeSpec, { template: 'sto
         height,
         display: 'flex',
         flexDirection: 'column',
+        // Centred between the two safe edges rather than hung from the top. A 1080 × 1920
+        // canvas is tall enough that a top-aligned block leaves two thirds of the frame
+        // empty, which reads as a broken asset on a phone — and on a reel it reads as one
+        // three times over, because every frame does it.
+        justifyContent: 'center',
         background: card.ground,
-        // 320 clears the caption and the account chrome at the top; the footer sits well
-        // above the reply bar at the bottom.
-        padding: `320px ${gutter}px 0`,
+        // 320 clears the caption and the account chrome at the top; 580 keeps the block off
+        // the source line and the footer, which in turn sit clear of the bottom fifth — the
+        // strip every vertical placement covers with the account name, the caption and the
+        // call to action. A lockup drawn into that band is a lockup with a username over it.
+        padding: `320px ${gutter}px 580px`,
         position: 'relative',
       }}
     >
@@ -177,7 +184,7 @@ function Story({ spec }: { readonly spec: Extract<CreativeSpec, { template: 'sto
         <div
           style={{
             position: 'absolute',
-            top: 1480,
+            top: 1380,
             left: gutter,
             fontFamily: SANS,
             fontSize: 26,
@@ -187,7 +194,7 @@ function Story({ spec }: { readonly spec: Extract<CreativeSpec, { template: 'sto
           {spec.source}
         </div>
       )}
-      <Footer top={1580} width={width} gutter={gutter} host="caspr.ai" lockup={48} />
+      <Footer top={1470} width={width} gutter={gutter} host="caspr.ai" lockup={48} />
     </div>
   );
 }

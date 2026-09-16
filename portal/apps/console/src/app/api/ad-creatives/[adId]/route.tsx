@@ -24,7 +24,19 @@ export async function GET(request: Request, { params }: { params: Promise<{ adId
   const url = new URL(request.url);
 
   const ad = (await getRepository().ads()).find((candidate) => candidate.id === adId);
-  const spec = ad === undefined ? null : adCreativeSpec(ad);
+
+  /*
+   * `?frame=N` draws frame N of the storyboard instead of the cover — same canvas, same
+   * generator. What the editor cuts from is what everybody approved, rather than a second
+   * set of artwork made somewhere else.
+   */
+  const raw = url.searchParams.get('frame');
+  const frame = raw === null ? undefined : Number(raw);
+  if (frame !== undefined && (!Number.isInteger(frame) || frame < 0 || frame >= (ad?.video?.frames.length ?? 0))) {
+    return new Response('No such frame.', { status: 404 });
+  }
+
+  const spec = ad === undefined ? null : adCreativeSpec(ad, frame);
   if (spec === null) {
     return new Response('This ad has no image. Search ads carry text only.', { status: 404 });
   }
@@ -40,7 +52,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ adId
       // cached for the request and no longer.
       'cache-control': 'no-store',
       ...(url.searchParams.get('download') === '1'
-        ? { 'content-disposition': `attachment; filename="${adId}.png"` }
+        ? { 'content-disposition': `attachment; filename="${adId}${frame === undefined ? '' : `-frame-${frame + 1}`}.png"` }
         : {}),
     },
   });

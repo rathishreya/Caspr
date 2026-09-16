@@ -1180,6 +1180,33 @@ strong,
   min-width: 0;
 }
 
+/*
+ * A vertical creative sits beside its reading, not above it.
+ *
+ * A reel is 300px wide and 530 tall in this column. Stacked, it pushes everything that
+ * matters — the kill reading, the numbers, what is missing — a screen down, and leaves two
+ * thirds of the card empty next to it. A square or a SERP preview is wide, so it keeps the
+ * stack. `.ad__detail` exists for exactly this: one block that can move.
+ */
+.ad__preview:has(.reel) {
+  grid-template-columns: 300px minmax(0, 1fr);
+  column-gap: var(--space-5);
+  align-items: start;
+}
+
+.ad__detail {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+  min-width: 0;
+}
+
+@media (max-width: 860px) {
+  .ad__preview:has(.reel) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .ad__where {
   overflow-wrap: anywhere;
 }
@@ -1498,12 +1525,12 @@ strong,
 }
 
 /*
- * The video a reel actually is.
+ * The script a reel is written from.
  *
- * ⚑ The still above it is a cover frame, and the card says so. This engine writes the script
- * and the caption; the DM team's editor makes the cut — so an uncut reel is drawn as
- * unfinished rather than as an image ad, because an image standing in for a video is exactly
- * what gets approved and then cannot ship.
+ * ⚑ This engine writes the script and the caption; the DM team's editor makes the cut — so an
+ * uncut reel is drawn as unfinished rather than as an image ad, because an image standing in
+ * for a video is exactly what gets approved and then cannot ship. The frames themselves play
+ * in `.reel` above; this block is the words they are built from.
  */
 .vid {
   display: grid;
@@ -1522,6 +1549,197 @@ strong,
 
 .vid__head {
   color: var(--text-tertiary);
+}
+
+/*
+ * ══ REEL · the storyboard, playing ═══════════════════════════════════════
+ *
+ * ⚠ The one place in this console that moves, and the exception is argued in `reel-player.tsx`:
+ * §14.2 rule 1 is about the interface, and this is the artefact. It plays only when asked.
+ *
+ * The stage is a phone: the frames are drawn 1080×1920 and held to a 9:16 box at feed width,
+ * so what a reviewer judges is the proportion the placement actually shows.
+ */
+.reel {
+  display: grid;
+  gap: var(--space-2);
+  max-width: 300px;
+}
+
+.reel__stage {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  max-width: 100%;
+  background: var(--surface-base);
+  /* The frame is near-black and so is the page. Without an edge the phone has no shape. */
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.reel__frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* A reel's progress bar. Thin, top of the frame, and it is how the pacing is read. */
+.reel__progress {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: rgb(255 255 255 / 0.28);
+}
+
+.reel__progress span {
+  display: block;
+  height: 100%;
+  background: #ffffff;
+}
+
+/*
+ * Burned-in caption, sat where the platform burns it: the lower third, centred, over a scrim
+ * — clear of the account block below it rather than across it.
+ */
+.reel__caption {
+  position: absolute;
+  inset: auto var(--space-3) 30%;
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: rgb(0 0 0 / 0.66);
+  color: #ffffff;
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: center;
+  text-wrap: balance;
+}
+
+/*
+ * The account block, where a reel puts it: bottom left, over a scrim, white on the video.
+ * These are the platform's colours rather than the console's, for the reason every other
+ * preview here uses the platform's — a reviewer is judging how it will look, not how the
+ * console looks.
+ */
+.reel__overlay {
+  position: absolute;
+  inset: auto 0 0;
+  display: grid;
+  gap: 4px;
+  padding: var(--space-6) var(--space-3) var(--space-3);
+  background: linear-gradient(to top, rgb(0 0 0 / 0.78), rgb(0 0 0 / 0));
+  color: #ffffff;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+.reel__account {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.reel__primary {
+  margin: 0;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.reel__tags {
+  margin: 0;
+  font-size: 12px;
+  color: rgb(255 255 255 / 0.76);
+}
+
+/* Meta's call-to-action bar: the headline, and the button, under the video. */
+.reel__cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: #f0f2f5;
+  border-radius: var(--radius-sm);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+.reel__cta-head {
+  min-width: 0;
+  color: #050505;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.reel__cta-btn {
+  flex: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: #e4e6eb;
+  color: #050505;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.reel__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.reel__time {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+}
+
+/*
+ * The filmstrip is the scrubber. Each cell is as wide as its frame is long — flex-grow is set
+ * from frameDuration() — so the strip is a picture of the pacing, not just a row of buttons.
+ */
+.reel__strip {
+  display: flex;
+  gap: 2px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.reel__cell {
+  flex: 1 1 0;
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+  padding: var(--space-2);
+  text-align: left;
+  border: 0;
+  border-right: 1px solid var(--border-default);
+  background: var(--surface-raised);
+  color: var(--text-tertiary);
+  cursor: pointer;
+}
+
+.reel__cell:last-child {
+  border-right: 0;
+}
+
+.reel__cell:hover {
+  background: var(--surface-hover);
+}
+
+.reel__cell--on {
+  background: var(--accent-wash);
+  color: var(--text-primary);
+}
+
+.reel__cell-head {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reel__note {
+  margin: 0;
+  color: var(--text-secondary);
 }
 
 /* A sponsored LinkedIn post. Its own greys, for the reason the other two use theirs. */
@@ -2770,6 +2988,14 @@ a.card:hover {
   border: 0;
   border-radius: 0;
   background: var(--surface-base);
+  /*
+   * The label wraps rather than being cut off. At the 100px rail — every window under 1100px
+   * — "Download image" was a pixel or two over and rendered as "Download imag", which reads
+   * as a broken button rather than a narrow one.
+   */
+  white-space: normal;
+  text-align: left;
+  padding-block: var(--space-2);
 }
 
 /*

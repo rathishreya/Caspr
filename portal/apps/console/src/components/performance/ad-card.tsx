@@ -19,6 +19,7 @@ import { useFormStatus } from 'react-dom';
 
 import { moveAd, reviseAd, type AdActionState } from '@/app/(console)/performance/actions';
 import { Icon } from '@/components/icons';
+import { ReelPlayer } from '@/components/performance/reel-player';
 
 const INITIAL: AdActionState = { errors: [] };
 
@@ -89,77 +90,81 @@ export function AdCard({ ad }: { readonly ad: Ad }) {
           ) : (
             <SocialPreview ad={ad} />
           )}
-          <p className="ad__where t-meta text-tertiary">
-            → {ad.copy.landingPath}
-            {canvas !== null && ad.creative !== null && (
-              <>
-                {' · '}
-                {canvas.width} × {canvas.height}
-              </>
-            )}
-          </p>
-
-          {ad.video !== undefined && (
-            <div className={ad.video.cut === null ? 'vid vid--uncut' : 'vid'}>
-              <p className="vid__head t-meta">
-                {ad.video.cut === null ? 'No cut yet' : 'Cut'} · {ad.video.seconds}s vertical ·{' '}
-                {REEL_SECONDS.min}–{REEL_SECONDS.max}s
-              </p>
-              <p className="t-body-s">{ad.video.script}</p>
-              <p className="t-body-s text-tertiary">{ad.video.captions}</p>
-              {ad.video.cut === null && (
-                <p className="t-body-s text-attention">
-                  The image above is the cover frame, not the ad. The engine writes the script and the
-                  caption; the DM team&rsquo;s editor makes the cut — and this cannot go live until they do.
-                </p>
+          {/*
+           * Everything that is not the rendering, in one block. It reads underneath a feed or
+           * a SERP preview and beside a vertical one — a reel is 300px wide and 530 tall, and
+           * stacking the reading under it leaves most of the card empty.
+           */}
+          <div className="ad__detail">
+            <p className="ad__where t-meta text-tertiary">
+              → {ad.copy.landingPath}
+              {canvas !== null && ad.creative !== null && (
+                <>
+                  {' · '}
+                  {canvas.width} × {canvas.height}
+                </>
               )}
-            </div>
-          )}
-
-          <p className="t-body-s text-secondary">{ad.note}</p>
-
-          {missing.length > 0 && (
-            <p className="t-body-s text-attention">Cannot run — {missing.join(' · ')}.</p>
-          )}
-
-          {ad.revision !== undefined && (
-            <p className="ad__revision t-body-s">
-              <span className="t-meta">Change asked for {ad.revision.at}</span> &ldquo;{ad.revision.note}&rdquo;
-              <span className="text-tertiary">
-                {' '}
-                — ⑩ the Writer is not built yet, so the instruction is recorded and the ad waits here.
-              </span>
             </p>
-          )}
 
-          {ad.metrics !== null && (
-            <div className={reading.verdict === 'working' ? 'ad__reading ad__reading--ok' : 'ad__reading'}>
-              <p className="t-meta">{reading.rule === null ? 'Reading' : reading.rule}</p>
-              <p className="t-body-m">{reading.says}</p>
-              <p className="t-body-s text-secondary">{reading.act}</p>
-              <p className="ad__numbers t-meta text-tertiary">
-                {ad.metrics.impressions.toLocaleString('en-US')} impressions ·{' '}
-                {ad.metrics.clicks} clicks · {(ctr(ad.metrics) * 100).toFixed(2)}% ·{' '}
-                {ad.metrics.conversions} signups · ${ad.metrics.spend}
-              </p>
-            </div>
-          )}
+            {ad.video !== undefined && (
+              <div className={ad.video.cut === null ? 'vid vid--uncut' : 'vid'}>
+                <p className="vid__head t-meta">
+                  Script · {ad.video.frames.length} frames · {REEL_SECONDS.min}–{REEL_SECONDS.max}s
+                </p>
+                <p className="t-body-s">{ad.video.script}</p>
+                <p className="t-body-s text-tertiary">{ad.video.captions}</p>
+                {/*
+                 * The standing on the cut is stated on the player, where somebody is looking at
+                 * the frames — not twice. ⑪ is still the rule and adMissing() is still the gate.
+                 */}
+              </div>
+            )}
 
-          {problems.length > 0 && (
-            <div className="ad__problems">
-              <p className="t-meta text-attention">
-                <Icon name="alert" size={13} /> {problems.length} before it can run
+            <p className="t-body-s text-secondary">{ad.note}</p>
+
+            {missing.length > 0 && (
+              <p className="t-body-s text-attention">Cannot run — {missing.join(' · ')}.</p>
+            )}
+
+            {ad.revision !== undefined && (
+              <p className="ad__revision t-body-s">
+                <span className="t-meta">Change asked for {ad.revision.at}</span> &ldquo;{ad.revision.note}&rdquo;
+                <span className="text-tertiary">
+                  {' '}
+                  — ⑩ the Writer is not built yet, so the instruction is recorded and the ad waits here.
+                </span>
               </p>
-              {problems.map((problem) => (
-                <div key={`${problem.field}-${problem.what}`} className="ad__problem">
-                  <p className="t-body-s">
-                    {problem.field} — {problem.what}
-                  </p>
-                  <p className="t-body-s text-tertiary">{problem.fix}</p>
-                </div>
-              ))}
-            </div>
-          )}
+            )}
+
+            {ad.metrics !== null && (
+              <div className={reading.verdict === 'working' ? 'ad__reading ad__reading--ok' : 'ad__reading'}>
+                <p className="t-meta">{reading.rule === null ? 'Reading' : reading.rule}</p>
+                <p className="t-body-m">{reading.says}</p>
+                <p className="t-body-s text-secondary">{reading.act}</p>
+                <p className="ad__numbers t-meta text-tertiary">
+                  {ad.metrics.impressions.toLocaleString('en-US')} impressions ·{' '}
+                  {ad.metrics.clicks} clicks · {(ctr(ad.metrics) * 100).toFixed(2)}% ·{' '}
+                  {ad.metrics.conversions} signups · ${ad.metrics.spend}
+                </p>
+              </div>
+            )}
+
+            {problems.length > 0 && (
+              <div className="ad__problems">
+                <p className="t-meta text-attention">
+                  <Icon name="alert" size={13} /> {problems.length} before it can run
+                </p>
+                {problems.map((problem) => (
+                  <div key={`${problem.field}-${problem.what}`} className="ad__problem">
+                    <p className="t-body-s">
+                      {problem.field} — {problem.what}
+                    </p>
+                    <p className="t-body-s text-tertiary">{problem.fix}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/*
@@ -360,9 +365,16 @@ function LinkedInPreview({ ad }: { readonly ad: Ad }) {
 
 /** A feed post, as Meta renders it: primary text, image, then the headline strip. */
 function SocialPreview({ ad }: { readonly ad: Ad }) {
-  const vertical = ad.platform === 'meta_reel';
+  /*
+   * A reel is a video, so it plays — and a reel is not a feed post, so it does not get the
+   * feed's white card. Meta runs the video full-bleed with the primary text over it and the
+   * call to action in a bar beneath; drawing it inside a card would be the wrong placement,
+   * rendered confidently. `ReelPlayer` draws it the way the placement does.
+   */
+  if (ad.video !== undefined) return <ReelPlayer ad={ad} video={ad.video} />;
+
   return (
-    <div className={vertical ? 'feedad feedad--reel' : 'feedad'}>
+    <div className="feedad">
       <p className="feedad__primary">{ad.copy.primary}</p>
       {ad.creative !== null && (
         /*
