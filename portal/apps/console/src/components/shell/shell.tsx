@@ -36,22 +36,20 @@ function NarrowRoute() {
         <span className="t-meta narrow-route__team">TEAM</span>
       </div>
       <div className="stack">
-        <h1 className="t-title-l">The console is a desk instrument.</h1>
+        <h1 className="t-title-l">Open the console on a laptop or desktop.</h1>
         <p className="t-body-m text-secondary">
-          Review is a desk act — the densest screen in the product, and designing it for a phone
-          would compromise it. Open this on a screen 900px or wider.
+          Reviewing posts is done at a desk. It is the densest screen in the product, and squeezing it
+          onto a phone would make every decision on it worse.
         </p>
         <p className="t-body-m text-secondary">
-          If you came here to approve your own posts or leave your comments for the week, that lives
-          on the Personal Queue, which is built for a phone.
+          Approving your own posts and leaving your comments for the week will live on the Personal
+          Queue, which is built for a phone. It is specified and not built yet.
         </p>
         {/*
-          A real destination, not a dead end. The Personal Queue is a separate surface for
-          the seven core-team members who never open the console (§5 rule 4).
+          Corrected 2026-09-15: this was a link to /personal-queue, which does not exist, so a
+          screen meant to route instead ended on a 404. Until the queue is built the honest
+          thing is to say so — design spec §11A: an empty state must say which kind it is.
         */}
-        <a className="t-label" href="/personal-queue" style={{ color: 'var(--accent-attention)' }}>
-          Go to the Personal Queue →
-        </a>
       </div>
     </div>
   );

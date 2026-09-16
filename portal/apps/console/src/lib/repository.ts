@@ -7,7 +7,10 @@ import {
   reviewDecisions,
 } from '@caspr-portal/db';
 import {
+  DAILY_WINDOW_HOURS,
   PRIOR_WINDOW_COUNTS,
+  REFERENCE_DAILY_HISTORY,
+  REFERENCE_DAILY_HISTORY_POSTS,
   REFERENCE_DAILY_POSTS,
   REFERENCE_DECISIONS,
   REFERENCE_ENGAGEMENT,
@@ -17,6 +20,7 @@ import {
   isDecidable,
   shiftWeek,
   statusAfter,
+  sweepDaily,
   type AmplifyTier,
   type ContentItem,
   type DecisionInput,
@@ -26,7 +30,7 @@ import {
   type RejectCode,
   type ReviewDecisionRecord,
 } from '@caspr-portal/domain';
-import { and, desc, eq, gte, inArray, isNull, lt, or } from 'drizzle-orm';
+import { and, desc, eq, gte, inArray, isNull, lt, ne, or } from 'drizzle-orm';
 
 /**
  * Data access.
@@ -44,14 +48,14 @@ import { and, desc, eq, gte, inArray, isNull, lt, or } from 'drizzle-orm';
 
 export type DecideResult =
   | { readonly ok: true; readonly item: ContentItem }
-  | { readonly ok: false; readonly reason: 'not_found' | 'already_decided' };
+  | { readonly ok: false; readonly reason: 'not_found' | 'already_decided' | 'window_closed' };
 
 export interface ContentRepository {
   /**
    * The time the data is true at.
    *
    * The reference week is a fixed Monday afternoon, and every clock on screen - the daily
-   * track's 48 hours, "surfaced 2h ago" - has to run from that moment, or a fixture from
+   * track's 24 hours, "surfaced 2h ago" - has to run from that moment, or a fixture from
    * August reads as weeks stale. A database is live, so its clock is the real one.
    */
   clock(): Date;
@@ -62,6 +66,17 @@ export interface ContentRepository {
   itemsForWeek(weekStartDate: string): Promise<readonly ContentItem[]>;
   /** The current version of each of those items, keyed by item id. */
   versionsForWeek(weekStartDate: string): Promise<ReadonlyMap<string, PostVersion>>;
+  /** The current version of each named item, keyed by item id. */
+  versionsFor(itemIds: readonly string[]): Promise<ReadonlyMap<string, PostVersion>>;
+  /** One item and its current version, wherever it sits in time — what a rendered image needs. */
+  post(itemId: string): Promise<{ readonly item: ContentItem; readonly version: PostVersion } | null>;
+  /**
+   * Daily posts whose 24-hour window closed without an approval, newest first.
+   *
+   * The history the Content & Social owner asked to keep (2026-09-15). Not scoped to a week:
+   * a post generated on Sunday is discarded on Monday, and it belongs to both.
+   */
+  dailyHistory(limit?: number): Promise<readonly ContentItem[]>;
   /** Every decision taken on those items, including the ones that were superseded. */
   decisionsForWeek(weekStartDate: string): Promise<readonly ReviewDecisionRecord[]>;
   /** Narrative counts already spent in the three weeks before `weekStartDate`. */
@@ -71,7 +86,8 @@ export interface ContentRepository {
    *
    * One write, and it is final — design spec §5A decision 5, "commit on action, no batch
    * save, no undo". An item that has already been decided refuses a second decision rather
-   * than overwriting the first.
+   * than overwriting the first. A daily post whose window has closed refuses too
+   * (`window_closed`), even if the sweep has not written `discarded` yet.
    */
   decide(input: DecisionInput, reviewer: string): Promise<DecideResult>;
   /** Comments, reposts, tags and reshares surfaced in the week. Outside the review gate. */
@@ -88,6 +104,8 @@ function inWeek(item: ContentItem, weekStartDate: string): boolean {
   const date = anchor.slice(0, 10);
   return date >= weekStartDate && date < shiftWeek(weekStartDate, 1);
 }
+
+const ALL_REFERENCE_ITEMS: readonly ContentItem[] = [...REFERENCE_WEEK, ...REFERENCE_DAILY_HISTORY];
 
 function surfacedInWeek(surfacedAt: string, weekStartDate: string): boolean {
   const date = surfacedAt.slice(0, 10);
@@ -114,9 +132,10 @@ class ReferenceRepository implements ContentRepository {
     return new Date(REFERENCE_NOW);
   }
 
+  /** The fixture, the decisions taken on it, then the daily sweep — in that order. */
   #current(item: ContentItem): ContentItem {
     const status = this.#statuses.get(item.id);
-    return status === undefined ? item : { ...item, status };
+    return sweepDaily(status === undefined ? item : { ...item, status }, this.clock());
   }
 
   async itemsForWeek(weekStartDate: string): Promise<readonly ContentItem[]> {
@@ -124,10 +143,29 @@ class ReferenceRepository implements ContentRepository {
   }
 
   async versionsForWeek(weekStartDate: string): Promise<ReadonlyMap<string, PostVersion>> {
-    const ids = new Set((await this.itemsForWeek(weekStartDate)).map((item) => item.id));
+    return this.versionsFor((await this.itemsForWeek(weekStartDate)).map((item) => item.id));
+  }
+
+  async versionsFor(itemIds: readonly string[]): Promise<ReadonlyMap<string, PostVersion>> {
+    const ids = new Set(itemIds);
     return new Map(
-      [...REFERENCE_POSTS, ...REFERENCE_DAILY_POSTS].filter((v) => ids.has(v.itemId)).map((v) => [v.itemId, v]),
+      [...REFERENCE_POSTS, ...REFERENCE_DAILY_POSTS, ...REFERENCE_DAILY_HISTORY_POSTS]
+        .filter((v) => ids.has(v.itemId))
+        .map((v) => [v.itemId, v]),
     );
+  }
+
+  async post(itemId: string) {
+    const seed = ALL_REFERENCE_ITEMS.find((item) => item.id === itemId);
+    const version = (await this.versionsFor([itemId])).get(itemId);
+    return seed === undefined || version === undefined ? null : { item: this.#current(seed), version };
+  }
+
+  async dailyHistory(limit = 50): Promise<readonly ContentItem[]> {
+    return ALL_REFERENCE_ITEMS.map((item) => this.#current(item))
+      .filter((item) => item.track === 'daily' && item.status === 'discarded')
+      .sort((a, b) => b.generatedAt.localeCompare(a.generatedAt))
+      .slice(0, limit);
   }
 
   async decisionsForWeek(weekStartDate: string): Promise<readonly ReviewDecisionRecord[]> {
@@ -140,10 +178,11 @@ class ReferenceRepository implements ContentRepository {
   }
 
   async decide(input: DecisionInput, reviewer: string): Promise<DecideResult> {
-    const seed = REFERENCE_WEEK.find((item) => item.id === input.itemId);
+    const seed = ALL_REFERENCE_ITEMS.find((item) => item.id === input.itemId);
     if (!seed) return { ok: false, reason: 'not_found' };
 
     const current = this.#current(seed);
+    if (current.status === 'discarded') return { ok: false, reason: 'window_closed' };
     if (!isDecidable(current)) return { ok: false, reason: 'already_decided' };
 
     this.#statuses.set(seed.id, statusAfter(input.action));
@@ -200,7 +239,44 @@ class PostgresRepository implements ContentRepository {
         ),
       );
 
-    return rows.map(toDomain);
+    const now = this.clock();
+    return rows.map((row) => sweepDaily(toDomain(row), now));
+  }
+
+  async post(itemId: string) {
+    const db = getDatabase();
+    const [row] = await db.select().from(contentItems).where(eq(contentItems.id, itemId)).limit(1);
+    if (!row) return null;
+    const version = (await this.versionsFor([itemId])).get(itemId);
+    return version === undefined ? null : { item: sweepDaily(toDomain(row), this.clock()), version };
+  }
+
+  async dailyHistory(limit = 50): Promise<readonly ContentItem[]> {
+    const db = getDatabase();
+    const closedBefore = new Date(this.clock().getTime() - DAILY_WINDOW_HOURS * 3_600_000);
+    // Written `discarded` by the sweep, or past the window and not yet swept. Approved posts
+    // are excluded by status, so the second arm cannot pull in anything that published.
+    const rows = await db
+      .select()
+      .from(contentItems)
+      .where(
+        and(
+          eq(contentItems.track, 'daily'),
+          or(
+            eq(contentItems.status, 'discarded'),
+            and(
+              lt(contentItems.createdAt, closedBefore),
+              ne(contentItems.status, 'approved'),
+              ne(contentItems.status, 'scheduled'),
+              ne(contentItems.status, 'published'),
+            ),
+          ),
+        ),
+      )
+      .orderBy(desc(contentItems.createdAt))
+      .limit(limit);
+    const now = this.clock();
+    return rows.map((row) => sweepDaily(toDomain(row), now));
   }
 
   async engagementsForWeek(weekStartDate: string): Promise<readonly EngagementTarget[]> {
@@ -248,11 +324,14 @@ class PostgresRepository implements ContentRepository {
   }
 
   async versionsForWeek(weekStartDate: string): Promise<ReadonlyMap<string, PostVersion>> {
-    const items = await this.itemsForWeek(weekStartDate);
-    if (items.length === 0) return new Map();
+    return this.versionsFor((await this.itemsForWeek(weekStartDate)).map((item) => item.id));
+  }
+
+  async versionsFor(itemIds: readonly string[]): Promise<ReadonlyMap<string, PostVersion>> {
+    if (itemIds.length === 0) return new Map();
 
     const db = getDatabase();
-    const ids = items.map((item) => item.id);
+    const ids = [...itemIds];
 
     const versions = await db
       .select()
@@ -284,6 +363,7 @@ class PostgresRepository implements ContentRepository {
         modelTier: /haiku/i.test(row.modelUsed) ? 'haiku' : 'frontier',
         body: row.payload,
         researchBasis: row.researchBasis,
+        creative: row.creative,
         regeneratedAfter:
           previous?.reasonCode != null
             ? { code: previous.reasonCode as RejectCode, note: previous.note ?? '' }
@@ -345,7 +425,19 @@ class PostgresRepository implements ContentRepository {
         .where(eq(contentItems.id, input.itemId))
         .for('update');
       if (!row) return { ok: false, reason: 'not_found' } as const;
-      if (!isDecidable(toDomain(row))) return { ok: false, reason: 'already_decided' } as const;
+
+      const swept = sweepDaily(toDomain(row), this.clock());
+      if (swept.status === 'discarded') {
+        // Write what every read already shows, so the sweep and the refusal agree.
+        if (row.status !== 'discarded') {
+          await tx
+            .update(contentItems)
+            .set({ status: 'discarded', updatedAt: new Date() })
+            .where(eq(contentItems.id, input.itemId));
+        }
+        return { ok: false, reason: 'window_closed' } as const;
+      }
+      if (!isDecidable(swept)) return { ok: false, reason: 'already_decided' } as const;
 
       const [version] = await tx
         .select({ id: contentVersions.id })

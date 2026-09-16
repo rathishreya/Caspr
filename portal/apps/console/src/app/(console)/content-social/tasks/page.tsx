@@ -3,6 +3,7 @@ import {
   CHANNEL_PUBLISH_MODE,
   REFERENCE_WEEK_START,
   buildWeek,
+  dailyDeadline,
   dailyState,
   estimateLabel,
   estimateReviewMinutes,
@@ -29,10 +30,16 @@ import { State } from '@/components/primitives/state';
 import { DecisionCard } from '@/components/posts/decision-card';
 import { EngagementBoard } from '@/components/posts/engagement-board';
 import { OpenOnHash } from '@/components/posts/open-on-hash';
-import { PostChecks, slotLabel } from '@/components/posts/post-facts';
-import { PostPreview } from '@/components/posts/post-preview';
+import { instantLabel, PostChecks, slotLabel } from '@/components/posts/post-facts';
+import { CreativeBar, PostPreview } from '@/components/posts/post-preview';
 import { PlatformWeekGrid } from '@/components/posts/platform-week-grid';
-import { authorOf, CONTENT_SOCIAL_CHANNELS, isContentSocialChannel, PLATFORM_NAME } from '@/lib/platforms';
+import {
+  authorOf,
+  CONTENT_SOCIAL_CHANNELS,
+  isContentSocialChannel,
+  PLATFORM_NAME,
+  PLATFORM_REGISTER,
+} from '@/lib/platforms';
 import { getRepository } from '@/lib/repository';
 import { CHANNEL_WORKSTREAM } from '@/lib/workstream';
 
@@ -46,7 +53,8 @@ interface PageProps {
  * Content & Social ▸ Tasks — the week's work, split the way the engine splits it.
  *
  *   POSTS        what we write. Every one passes review before anything publishes.
- *                ├ today — the daily clock: no slot, 48 hours, then it demotes
+ *                ├ today — the daily clock: no slot, 24 hours to approve, then discarded
+ *                │         and kept in the history
  *                └ this week — the weekly clock: a slot on the calendar
  *   ENGAGEMENT   what we do on other people's posts, and what they do on ours.
  *                No review — "a person, on-platform, always" (operating model ㉖).
@@ -73,12 +81,17 @@ export default async function ContentSocialTasks({ searchParams }: PageProps) {
   const repository = getRepository();
   const now = repository.clock();
   const start = REFERENCE_WEEK_START;
-  const [all, versions, decisions, engagement] = await Promise.all([
+  const [all, versions, decisions, engagement, discardedAll] = await Promise.all([
     repository.itemsForWeek(start),
     repository.versionsForWeek(start),
     repository.decisionsForWeek(start),
     repository.engagementsForWeek(start),
+    repository.dailyHistory(),
   ]);
+  const discarded = discardedAll.filter(
+    (item) => CHANNEL_WORKSTREAM[item.channel] === 'content-social' && (platform === null || item.channel === platform),
+  );
+  const discardedVersions = await repository.versionsFor(discarded.map((item) => item.id));
 
   const week = buildWeek(start, now);
   const workstream = all.filter((item) => CHANNEL_WORKSTREAM[item.channel] === 'content-social');
@@ -88,8 +101,8 @@ export default async function ContentSocialTasks({ searchParams }: PageProps) {
   const today = waiting
     .filter((item) => dailyState(item, now).kind === 'today')
     .sort((a, b) => a.generatedAt.localeCompare(b.generatedAt));
-  // A demoted daily item "joins the weekly queue as an ordinary derivative" — §5A.3 rule 4.
-  const thisWeek = bySlot(waiting.filter((item) => dailyState(item, now).kind !== 'today'));
+  // A daily post past its window is `discarded` by the time it is read, so it is never here.
+  const thisWeek = bySlot(waiting.filter((item) => item.track === 'weekly'));
   const paused = bySlot(visible.filter((item) => item.status === 'holding' || item.status === 'rejected'));
   const decided = bySlot(visible.filter(willPublish));
 
@@ -158,9 +171,11 @@ export default async function ContentSocialTasks({ searchParams }: PageProps) {
           {dailyCount > 0 && (
             <p className="engage-note t-body-s">
               {dailyCount} daily {dailyCount === 1 ? 'post has' : 'posts have'} no slot. A daily post goes out at the
-              next open window once approved, so it never takes a place on the calendar.
+              next open window once approved, so it never takes a place on the calendar — and if it is not approved
+              within 24 hours of being written, it is discarded.
             </p>
           )}
+          <PlatformRegister />
         </section>
 
         <PlatformFilter active={platform} items={workstream} />
@@ -223,6 +238,20 @@ export default async function ContentSocialTasks({ searchParams }: PageProps) {
               <span className="board-hint t-body-s">Off the calendar until they come back with a decision.</span>
             </div>
             <PostRows items={paused} versions={versions} decisions={decisions} />
+          </section>
+        )}
+
+        {discarded.length > 0 && (
+          <section id="discarded" aria-labelledby="discarded-heading">
+            <div className="board-head">
+              <h3 id="discarded-heading" className="t-title-m">
+                Discarded — not approved in 24 hours <span className="board-count t-meta">{discarded.length}</span>
+              </h3>
+              <span className="board-hint t-body-s">
+                Daily posts only. Kept with their words, never published, never brought back.
+              </span>
+            </div>
+            <PostRows items={discarded} versions={discardedVersions} decisions={decisions} />
           </section>
         )}
 
@@ -310,9 +339,65 @@ function Waiting({
       ) : (
         <div className="decide__preview">
           <PostPreview item={item} version={version} mode="light" />
+          <CreativeBar item={item} version={version} />
         </div>
       )}
     </DecisionCard>
+  );
+}
+
+/**
+ * Which platforms, and why — every one someone might expect, including the ones left out.
+ * Folded: it answers a question once, and the board is for the week's work.
+ */
+function PlatformRegister() {
+  const ON_LABEL = {
+    posts: 'We post',
+    posts_by_hand: 'A person posts',
+    engagement: 'Replies only',
+    not_a_channel: 'Not a channel',
+  } as const;
+  return (
+    <details className="register">
+      <summary className="register__summary t-body-s">
+        Which platforms, and why — {PLATFORM_REGISTER.filter((p) => p.on !== 'not_a_channel').length} in use,{' '}
+        {PLATFORM_REGISTER.filter((p) => p.on === 'not_a_channel').length} left out on purpose
+        <Icon name="chevron-down" size={14} className="register__chevron" />
+      </summary>
+      <div className="table-scroll">
+        <table className="register__table">
+          <thead>
+            <tr>
+              <th className="t-meta" scope="col">
+                Platform
+              </th>
+              <th className="t-meta" scope="col">
+                How
+              </th>
+              <th className="t-meta" scope="col">
+                Why it is here
+              </th>
+              <th className="t-meta" scope="col">
+                Cadence
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {PLATFORM_REGISTER.map((platform) => (
+              <tr key={platform.name} className={platform.on === 'not_a_channel' ? 'register__row--out' : undefined}>
+                <th scope="row" className="t-body-s">
+                  {platform.name}
+                </th>
+                <td className="t-meta">{ON_LABEL[platform.on]}</td>
+                <td className="t-body-s">{platform.role}</td>
+                <td className="t-body-s text-secondary">{platform.cadence}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="checks__source t-meta">operating model ㉛ · flowcharts/I-platforms.mmd</p>
+    </details>
   );
 }
 
@@ -337,15 +422,14 @@ function ContextStrip({
   return (
     <div className="decide__context">
       {clock.kind === 'today' ? (
-        <span className="decide__today t-meta-bold">⏱ Today · demotes in {clock.hoursLeft}h</span>
+        <span className="decide__today t-meta-bold">
+          ⏱ Today · {clock.hoursLeft === 0 ? 'discarded within the hour' : `${clock.hoursLeft}h left to approve`}
+        </span>
       ) : (
         <span className="decide__slot t-data-m">{slotLabel(item)}</span>
       )}
       <span className="t-meta-bold">{CHANNEL_LABEL[item.channel]}</span>
       <span className="t-meta">{item.voiceLane === null ? 'Company voice' : `${authorOf(item).name}'s post`}</span>
-      {clock.kind === 'demoted' && (
-        <span className="t-meta text-tertiary">Daily post, demoted after 48 hours — now an ordinary derivative</span>
-      )}
       {version?.respondsTo !== undefined && (
         <span className="decide__regenerated t-body-s">
           <span className="t-meta-bold">Responds to</span> {version.respondsTo.summary}
@@ -405,6 +489,7 @@ const STATUS_LABEL: Partial<Record<ContentItem['status'], string>> = {
   published: 'Published',
   holding: 'Held',
   rejected: 'Regenerating',
+  discarded: 'Discarded',
 };
 
 function PostRows({
@@ -425,7 +510,13 @@ function PostRows({
         return (
           <details key={item.id} className="row" id={`post-${item.id}`}>
             <summary className="row__summary">
-              <span className="row__when t-data-m">{item.scheduledFor === null ? 'Next window' : slotLabel(item)}</span>
+              <span className="row__when t-data-m">
+                {item.status === 'discarded'
+                  ? instantLabel(dailyDeadline(item))
+                  : item.scheduledFor === null
+                    ? 'Next window'
+                    : slotLabel(item)}
+              </span>
               <span className="row__who t-body-s">{authorOf(item).name}</span>
               <span className="row__title t-body-s">{item.title}</span>
               <span className="row__lead t-body-s">{lead}</span>
@@ -435,7 +526,9 @@ function PostRows({
 
             <div className="row__detail">
               <p className="row__decided t-body-s">
-                {item.status === 'rejected'
+                {item.status === 'discarded'
+                  ? `Written ${instantLabel(item.generatedAt)} and not approved by ${instantLabel(dailyDeadline(item))}, so it was discarded. It stays here as a record; it cannot be approved or published.`
+                  : item.status === 'rejected'
                   ? `Rejected${last?.reasonCode ? ` — ${last.reasonCode}` : ''}. It regenerates with the note applied and returns to the queue. ⑩ the Writer is not built yet, so in this build it waits here.`
                   : item.status === 'holding'
                     ? 'Held for discussion. It stays off the calendar until someone decides it.'
@@ -450,6 +543,7 @@ function PostRows({
               ) : (
                 <>
                   <PostPreview item={item} version={version} mode="dark" />
+                  <CreativeBar item={item} version={version} />
                   <PostChecks item={item} version={version} />
                 </>
               )}

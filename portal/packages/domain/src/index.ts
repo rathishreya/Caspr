@@ -7,6 +7,7 @@ export * from './library';
 export * from './review';
 export * from './lint';
 export * from './post';
+export * from './creative';
 export * from './decision';
 export * from './platform-week';
 export * from './daily';

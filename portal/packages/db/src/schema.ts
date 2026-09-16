@@ -20,6 +20,7 @@ import {
   PILLARS,
   REJECT_CODES,
   TRACKS,
+  type CreativeSpec,
   type PostBody,
 } from '@caspr-portal/domain';
 import { relations } from 'drizzle-orm';
@@ -131,6 +132,11 @@ export const contentVersions = pgTable(
     payload: jsonb('payload').$type<PostBody>().notNull(),
     /** `file :line` for every claim the version rests on — design spec §9. */
     researchBasis: jsonb('research_basis').$type<string[]>().notNull().default([]),
+    /**
+     * The image the version goes out with, as data — `creative.ts`. Null for a text post; a
+     * blog's hero is derived from its payload rather than stored twice.
+     */
+    creative: jsonb('creative').$type<CreativeSpec>(),
     /** Origination is frontier, transformation is cheap — §3.2. Recorded, so the split is auditable. */
     modelUsed: text('model_used').notNull(),
     promptContextHash: text('prompt_context_hash').notNull(),

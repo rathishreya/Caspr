@@ -59,12 +59,12 @@ and add nothing.
 | D5 | Product event stream | ⑱ ⑳ ㉑ | internal | Product | 🔴 needs the app live |
 | **E · Creative & rendering — §6** ||||||
 | E1 | `propose_visuals` — chart **data** | ⑪ | A1's principal | Jayant | 🔴 with A1 · ✅ **route decided — Q5** |
-| E2 | **Chart renderer** — data → SVG | ⑪ | — | Portal | 🔴 **does not exist. Not named in any document** |
-| E3 | **Template layer** — the house card | ⑪ | — | Portal | 🟡 **more exists than ⑪ claims — §6.1** |
-| E4 | **Text measurement** — for the red dot | ⑪ | — | Portal | 🔴 **§6.3, and it is the fiddly one** |
-| E5 | **Rasteriser** — SVG/HTML → PNG | ⑪ | — | Portal | 🟡 **Chromium is already in the org's stack — §6.4** |
-| E6 | **Fonts** — Instrument Serif · Inter | ⑪ | licence | Portal | ✅ **ship the files, pinned — Q20.** Licence is a confirmation, not a decision |
-| E7 | **Image storage + CDN** | ⑪ ⑯ | IAM | Portal | 🔴 **does not exist — §6.7** |
+| E2 | **Chart renderer** — data → bars | ⑪ | — | Portal | 🟢 **built 2026-09-15 — §6.8.** Two bars from a shared zero, publisher and period on each |
+| E3 | **Template layer** — the house card | ⑪ | — | Portal | 🟢 **built 2026-09-15 — §6.8.** Three templates: card · atom · hero |
+| E4 | **Text measurement** — for the red dot | ⑪ | — | Portal | 🟢 **built 2026-09-15 — §6.8.** The layout engine measures; the dot is an element after the last word, never a `cx` |
+| E5 | **Rasteriser** — SVG/HTML → PNG | ⑪ | — | Portal | 🟢 **built 2026-09-15 — §6.8.** Satori + resvg inside Next, not Chromium. ⚠ **Q19 is still open** — this is the fallback route, taken because it adds no dependency |
+| E6 | **Fonts** — Instrument Serif · Inter | ⑪ | licence | Portal | 🟢 **shipped 2026-09-15**, pinned in the portal repo beside their licences. **Q20 answered: both are SIL Open Font License 1.1**, read from the licence files themselves, which permit embedding and redistribution with software |
+| E7 | **Image storage + CDN** | ⑪ ⑯ | IAM | Portal | 🔴 **does not exist — §6.7.** The console renders on request, behind sign-in. **LinkedIn and X cannot fetch that**, so nothing publishes with an image until this exists |
 | E8 | `WATERMARKS_SERVICE_URL` — image metadata | ⑪ ⑮ | service | **Deploys with the portal** | 🔴 **not reachable. Rule 6 is unenforceable for images until it is** |
 | E9 | `anthropic-skills:clean-user-facing-text` — prose | ⑮ | **none** | — | 🟢 **self-contained scripts, no service.** This is the default |
 | **F · Search and answer-surface data — §5A** ||||||
@@ -425,6 +425,31 @@ A generated card needs a **stable public URL**, because:
 **⚠ The last row is the one to notice.** ⑲ currently sweeps **text** for a superseded fact. **A wrong number
 baked into a PNG is invisible to it** — and a card is exactly where a number like `25M+` gets set in 76pt
 type. **Open question 21.**
+
+### 6.8 · What is built, 2026-09-15 — and what it does not solve
+
+**Pieces 2, 3, 4 and 5 are done, in the portal**, because the review screen needed the image
+to be real: a card described in words cannot be approved. `apps/console/src/creatives/`.
+
+| | |
+|---|---|
+| **The spec** | Data, never a picture — ⑪ route (b). `CreativeSpec` is one of three: **card** (§6.1's anatomy), **atom** (the same card with the figures drawn), **hero** (1200 × 630, built from the blog headline and standfirst, and the page's `og:image`) |
+| **The engine** | **Satori → resvg, via `next/og`.** It is inside Next already, so no Chromium in the web process and no new dependency. ⚠ **§6.4 recommends headless Chromium and Q19 is Joy's to close** — this is the lighter route, and it does not foreclose the other |
+| **Piece 4** | Solved by using a layout engine rather than writing one: **the red dot is an element after the last word**, so it follows that word wherever the line breaks. `cx="582.16"` never has to exist |
+| **The refusal** | §6.3, and it happens **before** anything is drawn: text is wrapped against the house sizes and a headline over its lines returns **`VISUAL_OVERFLOW`** rather than a broken card. ⚠ The measure is estimated from the type sizes, not glyph by glyph — it errs short, so it refuses a card that would have fitted rather than drawing one that does not |
+| **Fonts** | Inter and Instrument Serif, pinned in the repo beside their OFL 1.1 licences — §6.6, and **Q20 is closed with the licence text** |
+| **The ground** | Dark, always, and the accent is never body text — §6.5, which is the accessibility finding, not a taste |
+
+**Three things this does not solve, and none of them is small:**
+
+1. **E7 — storage.** The route renders on request behind the console's sign-in. **LinkedIn, X and
+   an `og:image` all fetch from a public URL**, so an image cannot publish until the bucket exists.
+2. **E8 — hygiene.** A resvg PNG carries no C2PA, EXIF or XMP of its own, which is **not** the same
+   as having passed `remove-ai-marks`. Rule 6 is unenforceable for images until the service deploys,
+   and the review screen says so on every post that carries one rather than implying a pass.
+3. **E1 — chart data.** The figures on the atom are written into the item by hand today. `propose_visuals`
+   is still blocked with A1, and **⑪'s source-stamp rule is enforced here instead**: a figure without a
+   publisher and a period fails its check, so the card cannot be drawn as the atom.
 
 ---
 

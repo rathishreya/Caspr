@@ -101,6 +101,8 @@ describe('where a tag can reach us', () => {
       'Personal LinkedIn profiles': 'no',
       X: 'no',
       Reddit: 'unverified',
+      Instagram: 'unverified',
+      Quora: 'no',
     });
   });
 

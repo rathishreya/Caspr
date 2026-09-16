@@ -1,15 +1,23 @@
 import { describe, expect, it } from 'vitest';
 
 import { channelChecks, isoWeekId, postText, reviewPost, stampLink, wordCount, type PostVersion } from './post';
-import { REFERENCE_DAILY_POSTS, REFERENCE_POSTS, referencePostFor } from './reference-posts';
-import { REFERENCE_WEEK } from './reference-week';
+import {
+  REFERENCE_DAILY_HISTORY_POSTS,
+  REFERENCE_DAILY_POSTS,
+  REFERENCE_POSTS,
+  referencePostFor,
+} from './reference-posts';
+import { REFERENCE_DAILY_HISTORY, REFERENCE_WEEK } from './reference-week';
 
-const CONTENT_SOCIAL = new Set(['linkedin', 'linkedin_page', 'x', 'blog', 'community']);
-const itemById = new Map(REFERENCE_WEEK.map((item) => [item.id, item]));
-const ALL_POSTS = [...REFERENCE_POSTS, ...REFERENCE_DAILY_POSTS];
+const CONTENT_SOCIAL = new Set(['linkedin', 'linkedin_page', 'x', 'instagram', 'reddit', 'quora', 'blog', 'community']);
+const ALL_ITEMS = [...REFERENCE_WEEK, ...REFERENCE_DAILY_HISTORY];
+const itemById = new Map(ALL_ITEMS.map((item) => [item.id, item]));
+// A discarded post is held to the same rules as a live one: the history is only worth
+// keeping if what it records was fit to publish on the day.
+const ALL_POSTS = [...REFERENCE_POSTS, ...REFERENCE_DAILY_POSTS, ...REFERENCE_DAILY_HISTORY_POSTS];
 
 describe('the reference posts', () => {
-  const contentSocial = REFERENCE_WEEK.filter((item) => CONTENT_SOCIAL.has(item.channel));
+  const contentSocial = ALL_ITEMS.filter((item) => CONTENT_SOCIAL.has(item.channel));
 
   it('give every Content & Social item in the week its words', () => {
     for (const item of contentSocial) {
@@ -19,7 +27,16 @@ describe('the reference posts', () => {
   });
 
   it('shape each body for the channel its item goes to', () => {
-    const kindFor = { linkedin: 'linkedin', linkedin_page: 'linkedin', x: 'x', blog: 'blog', community: 'community' } as const;
+    const kindFor = {
+      linkedin: 'linkedin',
+      linkedin_page: 'linkedin',
+      x: 'x',
+      instagram: 'instagram',
+      reddit: 'community',
+      quora: 'community',
+      blog: 'blog',
+      community: 'community',
+    } as const;
     for (const version of ALL_POSTS) {
       const item = itemById.get(version.itemId);
       expect(item).toBeDefined();

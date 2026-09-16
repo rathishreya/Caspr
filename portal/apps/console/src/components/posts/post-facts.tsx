@@ -1,5 +1,7 @@
 import {
   CHANNEL_PUBLISH_MODE,
+  creativeFor,
+  dailyDeadline,
   narrative,
   personName,
   reviewPost,
@@ -80,6 +82,22 @@ export function PostChecks({ item, version }: { readonly item: ContentItem; read
               ))}
             </ul>
           )}
+          {creativeFor(version) !== null && (
+            <p className="check check--unrun">
+              <Icon name="alert" size={14} className="check__glyph" />
+              <span>
+                Image hygiene not run
+                <span className="check__value">
+                  {' '}
+                  — the metadata service is not reachable, so no image publishes yet
+                  {item.channel === 'instagram'
+                    ? ', and Instagram cannot post without one'
+                    : '; the post goes out as text'}{' '}
+                  (Rule 6 · integrations E8)
+                </span>
+              </span>
+            </p>
+          )}
           <p className="check check--unrun">
             <Icon name="alert" size={14} className="check__glyph" />
             <span>
@@ -130,12 +148,18 @@ export function PostChecks({ item, version }: { readonly item: ContentItem; read
           </p>
           {link !== null && <p className="checks__stamp">{stampLink(item, link)}</p>}
           <p className="checks__meta t-body-s">
+            {item.status === 'discarded' ? (
+              <>Discarded {instantLabel(dailyDeadline(item))}, not approved within 24 hours. Nothing was published.</>
+            ) : (
+              <>
             After approval:{' '}
             {handPosted
               ? `surfaced to ${personName(item.voiceLane)} on ${slotLabel(item)} to post by hand — never automatically.`
               : item.scheduledFor === null
                 ? `hygiene pass, then ${PLATFORM_NAME[item.channel]} at the next open window.`
                 : `hygiene pass, then ${PLATFORM_NAME[item.channel]} at ${slotLabel(item)}.`}
+              </>
+            )}
           </p>
         </section>
       </div>
@@ -154,7 +178,11 @@ function linkOf(version: PostVersion) {
 
 /** `TUE 18 · 09:00`, in the console's zone. */
 export function slotLabel(item: ContentItem): string {
-  if (item.scheduledFor === null) return 'no slot yet';
-  const day = Number(zonedDate(item.scheduledFor).slice(8, 10));
-  return `${zonedWeekday(item.scheduledFor)} ${day} · ${zonedTime(item.scheduledFor)}`;
+  return item.scheduledFor === null ? 'no slot yet' : instantLabel(item.scheduledFor);
+}
+
+/** Any instant as `TUE 18 · 09:00`, in the console's zone. */
+export function instantLabel(instant: string): string {
+  const day = Number(zonedDate(instant).slice(8, 10));
+  return `${zonedWeekday(instant)} ${day} · ${zonedTime(instant)}`;
 }

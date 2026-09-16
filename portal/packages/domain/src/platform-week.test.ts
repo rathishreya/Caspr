@@ -5,7 +5,7 @@ import { REFERENCE_WEEK, REFERENCE_WEEK_START } from './reference-week';
 import { buildWeek } from './week';
 
 const WEEK = buildWeek(REFERENCE_WEEK_START, new Date('2026-08-17T14:00:00+05:30'));
-const CHANNELS = ['linkedin', 'linkedin_page', 'x', 'blog', 'community'] as const;
+const CHANNELS = ['linkedin', 'linkedin_page', 'x', 'instagram', 'reddit', 'quora', 'blog', 'community'] as const;
 
 describe('platformWeek', () => {
   const rows = platformWeek(WEEK, REFERENCE_WEEK, CHANNELS);
@@ -19,9 +19,12 @@ describe('platformWeek', () => {
     expect(Object.fromEntries(rows.map((row) => [row.channel, row.count]))).toEqual({
       linkedin: 6,
       linkedin_page: 2,
-      x: 5,
+      x: 3,
+      instagram: 1,
+      reddit: 1,
+      quora: 1,
       blog: 4,
-      community: 2,
+      community: 1,
     });
   });
 
@@ -55,7 +58,7 @@ describe('platformWeek', () => {
 
   it('keeps a row for a platform with nothing this week', () => {
     const empty = platformWeek(WEEK, [], CHANNELS);
-    expect(empty).toHaveLength(5);
+    expect(empty).toHaveLength(8);
     expect(empty.every((row) => row.count === 0)).toBe(true);
   });
 });

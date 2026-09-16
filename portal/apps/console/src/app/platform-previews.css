@@ -1,5 +1,6 @@
 /*
- * Platform previews — the post as LinkedIn, X, Reddit and caspr.ai will show it.
+ * Platform previews — the post as LinkedIn, X, Instagram, Reddit, Quora, a forum and caspr.ai
+ * will show it.
  *
  * ⚠ The one file in the console that reproduces somebody else's interface, and the one place
  * a colour that is not a portal token is allowed. Asked for directly (2026-09-15): "I want to
@@ -449,11 +450,11 @@
   --pv-thread: #2a3236;
 }
 
-.pv-stage--community {
+.pv-stage--reddit {
   background: #dae0e6;
 }
 
-.pv-stage--community.pv-stage--dark {
+.pv-stage--reddit.pv-stage--dark {
   background: #030303;
 }
 
@@ -641,4 +642,525 @@
 .pv-blog__cta::after {
   content: ' →';
   color: #e8453c;
+}
+
+/* ── Images — the rendered creative, wherever a platform places one ─────── */
+
+.pv-li__image,
+.pv-x__image,
+.pv-ig__image,
+.pv-blog__hero-image {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  background: #0b0b09;
+}
+
+.pv-li__image {
+  margin-top: 4px;
+}
+
+/* ── LinkedIn — the first comment, where A1 puts the link ────────────────── */
+
+.pv-li__comments {
+  padding: 4px 16px 12px;
+}
+
+.pv-li__comment {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+}
+
+.pv-li__avatar--small {
+  width: 32px;
+  height: 32px;
+  font-size: 13px;
+}
+
+.pv-li__avatar--small.pv-li__avatar--caspr {
+  font-size: 18px;
+}
+
+.pv-li__bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 8px 12px;
+  background: color-mix(in srgb, var(--pv-text) 5%, transparent);
+  border-radius: 0 8px 8px 8px;
+}
+
+.pv-li__comment-name {
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.pv-li__author-badge {
+  margin-left: 4px;
+  padding: 0 4px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--pv-text) 10%, transparent);
+  color: var(--pv-muted);
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.pv-li__comment-text {
+  font-size: 14px;
+  line-height: 20px;
+  overflow-wrap: anywhere;
+}
+
+.pv-li__comment-note {
+  display: block;
+  margin: 6px 0 0 40px;
+  font-size: 12px;
+  color: var(--pv-muted);
+}
+
+/* ── Instagram ───────────────────────────────────────────────────────── */
+
+.pv-ig {
+  --pv-bg: #ffffff;
+  --pv-text: #000000;
+  --pv-muted: #737373;
+  --pv-rule: #dbdbdb;
+  --pv-link: #00376b;
+
+  width: 100%;
+  max-width: 468px;
+  background: var(--pv-bg);
+  border: 1px solid var(--pv-rule);
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.pv-ig.pv--dark,
+.pv-stage--dark .pv-ig {
+  --pv-bg: #000000;
+  --pv-text: #f5f5f5;
+  --pv-muted: #a8a8a8;
+  --pv-rule: #262626;
+  --pv-link: #e0f1ff;
+}
+
+.pv-stage--instagram {
+  background: #fafafa;
+}
+
+.pv-stage--instagram.pv-stage--dark {
+  background: #000000;
+}
+
+.pv-ig__head {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+}
+
+/* The story ring: the platform's gradient, around the wordmark's C. */
+.pv-ig__ring {
+  display: flex;
+  padding: 2px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+}
+
+.pv-ig__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--pv-bg);
+  border-radius: 50%;
+  background: #0a0a0a;
+  color: #ffffff;
+  font-family: var(--font-wordmark);
+  font-size: 17px;
+  white-space: nowrap;
+}
+
+.pv-ig__user {
+  font-weight: 600;
+  color: var(--pv-text);
+}
+
+.pv-ig__dots {
+  color: var(--pv-text);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.pv-ig__missing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  max-width: 100%;
+  padding: 24px;
+  background: repeating-linear-gradient(135deg, var(--pv-rule) 0 1px, transparent 1px 12px);
+  color: var(--pv-muted);
+  text-align: center;
+}
+
+.pv-ig__actions {
+  display: flex;
+  gap: 14px;
+  padding: 10px 12px 6px;
+  color: var(--pv-text);
+}
+
+.pv-ig__save {
+  margin-left: auto;
+}
+
+.pv-ig__captionwrap {
+  position: relative;
+}
+
+.pv-ig__caption {
+  margin: 0;
+  padding: 0 12px;
+  color: var(--pv-text);
+  overflow-wrap: anywhere;
+}
+
+.pv-ig__caption--full {
+  display: none;
+}
+
+.pv-li__toggle:checked ~ .pv-ig__caption--short {
+  display: none;
+}
+
+.pv-li__toggle:checked ~ .pv-ig__caption--full {
+  display: block;
+}
+
+.pv-ig__more {
+  color: var(--pv-muted);
+  cursor: pointer;
+}
+
+.pv-li__toggle:focus-visible ~ .pv-ig__caption--short .pv-ig__more {
+  outline: 2px solid var(--pv-link);
+  outline-offset: 2px;
+}
+
+.pv-ig__when {
+  margin: 6px 0 0;
+  padding: 0 12px 12px;
+  font-size: 12px;
+  color: var(--pv-muted);
+}
+
+/* ── Links inside a reply ─────────────────────────────────────────────── */
+
+.pv-rd__link,
+.pv-fm__link,
+.pv-qa__link {
+  color: var(--pv-link);
+  text-decoration: underline;
+  overflow-wrap: anywhere;
+}
+
+/* ── Quora ───────────────────────────────────────────────────────────── */
+
+.pv-qa {
+  --pv-bg: #ffffff;
+  --pv-text: #282829;
+  --pv-muted: #636466;
+  --pv-rule: #dee0e1;
+  --pv-link: #2e69ff;
+
+  width: 100%;
+  max-width: 600px;
+  background: var(--pv-bg);
+  border: 1px solid var(--pv-rule);
+  border-radius: 3px;
+  font-family: -apple-system, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--pv-text);
+}
+
+.pv-qa.pv--dark,
+.pv-stage--dark .pv-qa {
+  --pv-bg: #262626;
+  --pv-text: #d5d6d6;
+  --pv-muted: #939598;
+  --pv-rule: #393839;
+  --pv-link: #5a8dff;
+}
+
+.pv-stage--quora {
+  background: #f1f2f2;
+}
+
+.pv-stage--quora.pv-stage--dark {
+  background: #181818;
+}
+
+.pv-qa__question {
+  margin: 0;
+  padding: 16px 16px 0;
+  font-size: 21px;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+.pv-qa__stand-in {
+  display: block;
+  padding: 4px 16px 0;
+  font-size: 12px;
+  color: var(--pv-muted);
+}
+
+.pv-qa__answer {
+  margin-top: 12px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--pv-rule);
+}
+
+.pv-qa__head {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+
+.pv-qa__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #d9d5cc;
+  color: rgba(0, 0, 0, 0.75);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.pv-qa__who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pv-qa__name {
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.pv-qa__credential {
+  font-weight: 400;
+  color: var(--pv-muted);
+}
+
+.pv-qa__meta {
+  font-size: 13px;
+  color: var(--pv-muted);
+}
+
+.pv-qa__text {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.pv-qa__text p {
+  margin: 0;
+}
+
+.pv-qa__actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+  color: var(--pv-muted);
+  font-size: 13px;
+}
+
+.pv-qa__vote {
+  display: inline-flex;
+  border: 1px solid var(--pv-rule);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.pv-qa__vote > span {
+  padding: 4px 12px;
+}
+
+.pv-qa__down {
+  border-left: 1px solid var(--pv-rule);
+}
+
+/* ── A forum — Wall Street Oasis, PrepLounge and the like ─────────────────
+ * No one forum's interface: the classic thread layout they share, author on the left. */
+
+.pv-fm {
+  --pv-bg: #ffffff;
+  --pv-text: #1f2328;
+  --pv-muted: #656d76;
+  --pv-rule: #d0d7de;
+  --pv-link: #0969da;
+  --pv-panel: #f6f8fa;
+
+  width: 100%;
+  max-width: 680px;
+  background: var(--pv-bg);
+  border: 1px solid var(--pv-rule);
+  border-radius: 6px;
+  font-family: -apple-system, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--pv-text);
+}
+
+.pv-fm.pv--dark,
+.pv-stage--dark .pv-fm {
+  --pv-bg: #0d1117;
+  --pv-text: #e6edf3;
+  --pv-muted: #8d96a0;
+  --pv-rule: #30363d;
+  --pv-link: #4493f8;
+  --pv-panel: #161b22;
+}
+
+.pv-stage--forum {
+  background: #eaeef2;
+}
+
+.pv-stage--forum.pv-stage--dark {
+  background: #010409;
+}
+
+.pv-fm__crumb {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--pv-rule);
+  font-size: 12px;
+  color: var(--pv-muted);
+}
+
+.pv-fm__title {
+  margin: 0;
+  padding: 12px 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.pv-fm__stand-in {
+  display: block;
+  padding: 2px 16px 0;
+  font-size: 12px;
+  color: var(--pv-muted);
+}
+
+.pv-fm__post {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  margin: 12px 16px 16px;
+  border: 1px solid var(--pv-rule);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.pv-fm__author {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 8px;
+  background: var(--pv-panel);
+  border-right: 1px solid var(--pv-rule);
+  text-align: center;
+}
+
+.pv-fm__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  background: #d9d5cc;
+  color: rgba(0, 0, 0, 0.75);
+  font-weight: 600;
+}
+
+.pv-fm__name {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.pv-fm__rank {
+  font-size: 11px;
+  color: var(--pv-muted);
+}
+
+.pv-fm__content {
+  min-width: 0;
+  padding: 10px 14px 12px;
+}
+
+.pv-fm__meta {
+  font-size: 12px;
+  color: var(--pv-muted);
+}
+
+.pv-fm__text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.pv-fm__text p {
+  margin: 0;
+}
+
+.pv-fm__actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pv-muted);
+}
+
+@media (max-width: 559px) {
+  .pv-fm__post {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pv-fm__author {
+    flex-direction: row;
+    border-right: 0;
+    border-bottom: 1px solid var(--pv-rule);
+  }
+}
+
+/* ── caspr.ai — the hero ─────────────────────────────────────────────── */
+
+.pv-blog__hero {
+  margin: 24px 0 0;
+}
+
+.pv-blog__hero-caption {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--pv-muted);
 }

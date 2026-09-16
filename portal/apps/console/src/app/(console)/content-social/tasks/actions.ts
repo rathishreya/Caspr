@@ -43,7 +43,9 @@ export async function decide(_previous: DecideState, formData: FormData): Promis
       errors: [
         result.reason === 'already_decided'
           ? 'Someone decided this post while it was open. Their decision stands — decisions commit on action and are not overwritten.'
-          : 'This post is no longer in the week. Reload to see the current queue.',
+          : result.reason === 'window_closed'
+            ? 'This daily post was not approved within 24 hours, so it has been discarded. It is kept in the history below and cannot be published.'
+            : 'This post is no longer in the week. Reload to see the current queue.',
       ],
     };
   }

@@ -79,6 +79,8 @@ function holdingReasonFor(item: ContentItem): string | null {
       return 'Held for discussion by its reviewer';
     case 'rejected':
       return 'Rejected — regenerating with the correction applied';
+    case 'discarded':
+      return 'A daily post not approved within 24 hours. It cannot be published';
     default:
       return 'Not yet decided. It rolls at the deadline rather than publishing';
   }

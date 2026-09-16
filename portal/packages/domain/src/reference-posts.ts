@@ -25,10 +25,40 @@
  * test, not a hope — `reference-posts.test.ts`.
  */
 
+import type { CreativeSpec } from './creative';
 import type { PostVersion } from './post';
 
 const SAMPLES = 'https://caspr.ai/samples';
 const BLOG = 'https://caspr.ai/blog';
+
+/**
+ * The week's cards. Figures and sources as the posts that carry them state them.
+ *
+ * Only the valves card is drawn as **the atom**, because only the valves figures have a
+ * publisher and a period in this repository: IMARC Group, $725.0M, 2025 (`Reports-md/Saudi
+ * Arabia Industrial Valves Market v1.md` :70, `index-engine.md` §6.1) and MarkNtel Advisors,
+ * $990M, 2025 (same line; `seo/hybrid-validation.md` :17, "same market, same year"). The
+ * ready meals figures have neither on record, so they go out as a card with the post's own
+ * source line — ⑪: "a chart that drops the publisher is not the atom".
+ */
+const READY_MEALS_CARD: CreativeSpec = {
+  template: 'card',
+  eyebrow: 'UK ready meals · same basis, same year',
+  headline: '$5.86bn or $6.46bn',
+  standfirst: 'Two published estimates of one market: a $600m gap in size and a 2.5× gap in growth. It does not close.',
+  source: "Source: Caspr's ready meals reconciliation",
+};
+
+const VALVES_ATOM: CreativeSpec = {
+  template: 'atom',
+  eyebrow: 'Industrial valves · Saudi Arabia',
+  headline: '36% apart',
+  figures: [
+    { display: '$725.0M', value: 725, publisher: 'IMARC Group', period: '2025' },
+    { display: '$990M', value: 990, publisher: 'MarkNtel Advisors', period: '2025' },
+  ],
+  source: 'Source: IMARC Group; MarkNtel Advisors. Market size, 2025.',
+};
 
 export const REFERENCE_POSTS: readonly PostVersion[] = [
   // ── TUE 18 ────────────────────────────────────────────────────────────────
@@ -95,6 +125,7 @@ export const REFERENCE_POSTS: readonly PostVersion[] = [
       link: null,
       attachment: null,
     },
+    creative: READY_MEALS_CARD,
   },
   {
     itemId: 'ci-0418-05',
@@ -113,8 +144,9 @@ export const REFERENCE_POSTS: readonly PostVersion[] = [
       ],
       hashtags: [],
       link: { url: SAMPLES, label: 'UK ready meals — the full reconciliation, free to read' },
-      attachment: { kind: 'visual', label: 'The atom — both estimates on one chart, basis printed on it' },
+      attachment: null,
     },
+    creative: READY_MEALS_CARD,
   },
 
   // ── WED 19 ────────────────────────────────────────────────────────────────
@@ -163,16 +195,13 @@ export const REFERENCE_POSTS: readonly PostVersion[] = [
     itemId: 'ci-0419-03',
     versionN: 1,
     modelTier: 'haiku',
-    researchBasis: ['index-engine.md §1', 'index-engine.md §2'],
+    researchBasis: ['index-engine.md §1', 'seo/hybrid-validation.md :17'],
     regeneratedAfter: null,
     body: {
-      kind: 'x',
-      posts: [
-        "China: 48% of refined copper. Chile: the largest mine producer. Both are cited as copper production by country, and they measure different stages of it. Source: Caspr's review of page-one market figures.",
-      ],
-      link: null,
-      attachment: { kind: 'visual', label: 'The atom — the two measures on one chart, each labelled with its basis' },
+      kind: 'instagram',
+      caption: 'Source: IMARC Group; MarkNtel Advisors. Saudi Arabia industrial valves, market size, 2025.',
     },
+    creative: VALVES_ATOM,
   },
   {
     itemId: 'ci-0419-04',
@@ -194,6 +223,7 @@ export const REFERENCE_POSTS: readonly PostVersion[] = [
         'Once you stop treating each number as an answer and start treating it as a claim with a basis, the first pass takes an afternoon rather than a week.',
         'Disclosure, since it is relevant here: I run Caspr, which reconciles published figures this way. The method works without it.',
       ],
+      link: null,
     },
   },
   {
@@ -269,6 +299,13 @@ export const REFERENCE_POSTS: readonly PostVersion[] = [
       },
       attachment: null,
     },
+    creative: {
+      template: 'card',
+      eyebrow: 'Category reviews',
+      headline: 'Six weeks. The research can take four',
+      standfirst: 'How category managers describe the cycle of a forty-page review.',
+      source: "Source: Caspr's buyer research with category managers",
+    },
   },
   {
     itemId: 'ci-0420-03',
@@ -327,6 +364,7 @@ export const REFERENCE_POSTS: readonly PostVersion[] = [
         'Where you can, anchor the range to something structural: filings from the largest players, or official statistics for the sector.',
         'Full disclosure: I run Caspr, which reconciles published figures this way. The approach is the same with or without it.',
       ],
+      link: null,
     },
   },
 
@@ -392,6 +430,8 @@ export const REFERENCE_POSTS: readonly PostVersion[] = [
       link: null,
       attachment: null,
     },
+    // B1: "card on the FIRST post".
+    creative: VALVES_ATOM,
   },
 
   // ── SAT 22 ────────────────────────────────────────────────────────────────
@@ -399,18 +439,23 @@ export const REFERENCE_POSTS: readonly PostVersion[] = [
     itemId: 'ci-0422-01',
     versionN: 1,
     modelTier: 'haiku',
-    researchBasis: ['icp-personas.md :634'],
+    researchBasis: ['icp-personas.md :618', 'icp-personas.md :622', 'icp-personas.md :634'],
     regeneratedAfter: null,
     body: {
-      kind: 'x',
-      posts: [
-        "4 of the 6 weeks before a category review can go to research. A short read on the four questions a review has to answer, and where syndicated coverage stops. Source: Caspr's buyer research.",
+      kind: 'community',
+      venue: 'Quora',
+      threadQuestion: 'What should a category review include?',
+      illustrative: true,
+      paragraphs: [
+        'Four things, in this order: how big the market is and how fast it is growing, who competes in it, what shoppers are doing differently, and what all of that means for the range.',
+        'The first three are research and the fourth is the recommendation. A recommendation is only as defensible as the three beneath it, so most of the effort belongs there.',
+        'The trap is depth in the wrong place. Syndicated reports usually cover the category well and the subcategory the ranging decision is about poorly, so the last mile gets built by hand from shelf walks and trade press.',
+        'We set out the four questions, and where the usual sources stop, at Caspr.',
       ],
       link: {
         url: `${BLOG}/what-a-category-review-asks-for`,
         label: 'What a category review asks for, and where the research runs out',
       },
-      attachment: null,
     },
   },
 
@@ -463,6 +508,13 @@ export const REFERENCE_DAILY_POSTS: readonly PostVersion[] = [
       link: null,
       attachment: null,
     },
+    creative: {
+      template: 'card',
+      eyebrow: 'The global market research industry',
+      headline: '$153bn',
+      standfirst: 'The desk research before every study sits outside that figure, because nobody bills for it.',
+      source: "Source: ESOMAR, 2025. Caspr's buyer research.",
+    },
   },
   {
     itemId: 'ci-0417-d2',
@@ -485,11 +537,71 @@ export const REFERENCE_DAILY_POSTS: readonly PostVersion[] = [
       link: null,
       attachment: null,
     },
+    // A position, not a figure — so no source line, as on the house card it follows (§6.1).
+    creative: {
+      template: 'card',
+      eyebrow: 'Citations',
+      headline: 'A citation that does not open is worse than none',
+      standfirst: 'A source counts once it has been fetched and read, not when the field beside the claim is filled in.',
+      source: null,
+    },
+  },
+];
+
+/**
+ * The words of the two discarded weekend posts — kept, because the history is of what was
+ * written and not approved, not just that something was. Both figures are `index-engine.md`
+ * §1; the point both make is its §2: "The finding is that nobody says so."
+ */
+export const REFERENCE_DAILY_HISTORY_POSTS: readonly PostVersion[] = [
+  {
+    itemId: 'ci-0416-d1',
+    versionN: 1,
+    modelTier: 'haiku',
+    researchBasis: ['index-engine.md §1', 'index-engine.md §2'],
+    regeneratedAfter: null,
+    respondsTo: {
+      summary: 'A post ranking copper producers by country from a single chart, without saying which stage it counted.',
+      illustrative: true,
+    },
+    body: {
+      kind: 'linkedin',
+      paragraphs: [
+        'Chile is the largest copper producer. China accounts for 48% of refined copper.',
+        'Both are cited as copper production by country, and both are true. They count different stages: one what comes out of the mine, the other what comes out of the refinery.',
+        'A ranking built on one and read as the other is not a rounding error. It names a different country.',
+      ],
+      hashtags: [],
+      link: null,
+      attachment: null,
+    },
+  },
+  {
+    itemId: 'ci-0415-d1',
+    versionN: 1,
+    modelTier: 'haiku',
+    researchBasis: ['index-engine.md §1', 'index-engine.md §2'],
+    regeneratedAfter: null,
+    respondsTo: {
+      summary: 'A thread comparing SaaS valuations across two reports without saying which revenue each multiple is based on.',
+      illustrative: true,
+    },
+    body: {
+      kind: 'x',
+      posts: [
+        "8.5x or 3.3x. Both are quoted as SaaS revenue multiples. One is on forward revenue, the other on trailing, and neither page says which. Source: Caspr's review of page-one market figures.",
+      ],
+      link: null,
+      attachment: null,
+    },
   },
 ];
 
 const BY_ITEM = new Map(
-  [...REFERENCE_POSTS, ...REFERENCE_DAILY_POSTS].map((version) => [version.itemId, version]),
+  [...REFERENCE_POSTS, ...REFERENCE_DAILY_POSTS, ...REFERENCE_DAILY_HISTORY_POSTS].map((version) => [
+    version.itemId,
+    version,
+  ]),
 );
 
 export function referencePostFor(itemId: string): PostVersion | undefined {

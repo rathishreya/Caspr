@@ -197,4 +197,14 @@ export const MENTION_SOURCES: readonly MentionSource[] = [
     reach: 'unverified',
     how: 'The Reddit API is understood to expose username mentions for an account we authenticate. Not confirmed — its documentation could not be fetched on 2026-09-15. Check before building.',
   },
+  {
+    surface: 'Instagram',
+    reach: 'unverified',
+    how: 'The Instagram Graph API is understood to send a mentions webhook to a Business account when a caption or comment tags it. Not checked against Meta’s documentation on 2026-09-15 — and Instagram is a repost surface we expect nothing from (I-platforms C1), so it waits behind the others.',
+  },
+  {
+    surface: 'Quora',
+    reach: 'no',
+    how: 'Quora offers no public API that we know of, for posting or for notifications. The person who answered sees replies in their own notifications, as on a personal LinkedIn profile.',
+  },
 ];

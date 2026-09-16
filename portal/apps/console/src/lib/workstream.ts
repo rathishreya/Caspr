@@ -24,6 +24,10 @@ export const CHANNEL_WORKSTREAM: Readonly<Record<Channel, string>> = {
   x: 'content-social',
   blog: 'content-social',
   community: 'content-social',
+  // ㉛: the social platforms are one workstream's — the same people run all of them.
+  instagram: 'content-social',
+  reddit: 'content-social',
+  quora: 'content-social',
   outreach: 'seo',
   email: 'email',
 };

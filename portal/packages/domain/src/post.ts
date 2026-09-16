@@ -18,6 +18,7 @@ import {
   type ContentItem,
   type RejectCode,
 } from './content-item';
+import { creativeChecks, type CreativeSpec } from './creative';
 import { lintDeterministic, type LintReport } from './lint';
 
 export interface PostLink {
@@ -69,6 +70,20 @@ export type PostBody =
        */
       readonly illustrative: boolean;
       readonly paragraphs: readonly string[];
+      /**
+       * A Quora answer carries one: ㉛ — "a short answer + a link to our own page". A Reddit
+       * reply almost never does, and never first: "never link-first".
+       */
+      readonly link: PostLink | null;
+    }
+  | {
+      readonly kind: 'instagram';
+      /**
+       * ㉛: Instagram is "a repost surface only" — the atom card is the post, so the image
+       * lives on the version (`creative`) and a missing one fails a check.
+       */
+      /** "No copy written for it." The caption is the source line and nothing else. */
+      readonly caption: string;
     };
 
 export interface PostVersion {
@@ -95,6 +110,12 @@ export interface PostVersion {
    * judging half of it.
    */
   readonly respondsTo?: { readonly summary: string; readonly illustrative: boolean };
+  /**
+   * The image this version goes out with, as data (`creative.ts`). On the version rather
+   * than the body because a regeneration can change the card without changing the words,
+   * and integrations §6.7 keys a rendered card by item *and* version for exactly that reason.
+   */
+  readonly creative?: CreativeSpec | null;
 }
 
 /** Every word a reader will see, joined — what the linter and the word count read. */
@@ -108,6 +129,8 @@ export function postText(body: PostBody): string {
       return [body.headline, body.standfirst, ...body.paragraphs, body.cta].join('\n\n');
     case 'community':
       return body.paragraphs.join('\n\n');
+    case 'instagram':
+      return body.caption;
   }
 }
 
@@ -162,6 +185,10 @@ function endsOnConclusion(paragraphs: readonly string[]): ChannelCheck {
  * would take the job away without doing it.
  */
 export function channelChecks(item: ContentItem, version: PostVersion): readonly ChannelCheck[] {
+  return [...textChecks(item, version), ...creativeChecks(item, version)];
+}
+
+function textChecks(item: ContentItem, version: PostVersion): readonly ChannelCheck[] {
   const { body } = version;
 
   switch (body.kind) {
@@ -246,11 +273,36 @@ export function channelChecks(item: ContentItem, version: PostVersion): readonly
       ];
     }
 
+    case 'instagram': {
+      const sourced = /^source:/i.test(body.caption.trim());
+      return [
+        {
+          id: 'caption-source',
+          label: 'Caption is the source line, and nothing else',
+          value: sourced ? 'source line' : 'written copy',
+          pass: sourced && body.caption.length <= 140,
+          source: 'operating model ㉛',
+        },
+      ];
+    }
+
     case 'community': {
       const text = body.paragraphs.join('\n\n');
       const mentions = [...text.matchAll(/\bCaspr\b/g)];
       const firstAt = mentions[0]?.index ?? null;
+      const ownPage = body.link !== null && new URL(body.link.url).hostname.endsWith('caspr.ai');
       return [
+        ...(item.channel === 'quora'
+          ? [
+              {
+                id: 'own-page',
+                label: 'Links to our own page',
+                value: body.link === null ? 'no link' : new URL(body.link.url).hostname,
+                pass: ownPage,
+                source: 'operating model ㉛',
+              },
+            ]
+          : []),
         {
           id: 'mentions',
           label: 'Caspr mentioned at most once',
@@ -268,6 +320,7 @@ export function channelChecks(item: ContentItem, version: PostVersion): readonly
           pass: firstAt === null || firstAt >= text.length / 2,
           source: `${PROMPTS} §4.3`,
         },
+        linkMatchesStage(item, body.link),
       ];
     }
   }
@@ -310,6 +363,9 @@ const UTM_SOURCE: Readonly<Record<Channel, string>> = {
   email: 'email',
   community: 'community',
   outreach: 'outreach',
+  reddit: 'reddit',
+  quora: 'quora',
+  instagram: 'instagram',
 };
 
 /**

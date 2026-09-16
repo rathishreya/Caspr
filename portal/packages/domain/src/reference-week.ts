@@ -234,7 +234,10 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   },
   {
     id: 'ci-0419-03',
-    channel: 'x',
+    // Was an X post on the copper split. Moved to Instagram 2026-09-15 so the platform has its
+    // item without changing the 23-item week the Figma frame counts. flowcharts/I-platforms
+    // C1: Instagram is "a repost surface only — the atom card. NOTHING is written for it."
+    channel: 'instagram',
     track: 'weekly',
     generatedAt: QUEUE_OPENED,
     type: 'derivative',
@@ -254,7 +257,7 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   },
   {
     id: 'ci-0419-04',
-    channel: 'community',
+    channel: 'reddit',
     track: 'weekly',
     generatedAt: QUEUE_OPENED,
     type: 'outreach',
@@ -483,17 +486,19 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   // ── SAT 22 ────────────────────────────────────────────────────────────────
   {
     id: 'ci-0422-01',
-    channel: 'x',
+    // ㉛: "Quora ⭐ — the one that compounds. A good answer earns for years." A short answer
+    // that links to the category-review search answer published on Tuesday.
+    channel: 'quora',
     track: 'weekly',
     generatedAt: QUEUE_OPENED,
-    type: 'derivative',
-    title: 'Weekend read — category study',
-    voiceLane: null,
+    type: 'outreach',
+    title: 'Quora — what goes into a category review',
+    voiceLane: 'joy',
     narrative: 'N1',
     pillar: 'analyst_not_assistant',
     funnelStage: 'consideration',
     icp: 'category_managers',
-    status: 'scheduled',
+    status: 'approved',
     assignedReviewer: REVIEWERS.social,
     scheduledFor: slot('2026-08-22', '11:00'),
     citations: [],
@@ -567,9 +572,9 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   // ── ⏱ THE DAILY TRACK — generated this morning, no slot ──────────────────
   //
   // runtime-spec §5A: Type D only, one X post and one LinkedIn post at most, no calendar
-  // slot ("publishes to the next open window"), a badge rather than a notification, and a
-  // 48-hour clock that demotes rather than discards. Generated 08:15 Monday; by 14:00 each
-  // has 42 hours left.
+  // slot ("publishes to the next open window"), a badge rather than a notification, and —
+  // since 2026-09-15 — a 24-hour window after which an unapproved post is discarded
+  // (`daily.ts`). Generated 08:15 Monday; by 14:00 each has 18 hours left.
   {
     id: 'ci-0417-d1',
     channel: 'x',
@@ -609,6 +614,61 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
     sourceable: 'found',
     hygieneAppliedAt: null,
     topicId: 'dead-citations',
+  },
+];
+
+/**
+ * Daily posts from the weekend whose 24-hour window closed without an approval.
+ *
+ * Not part of the week — they were generated before it began — and not deleted either: the
+ * history is what shows whether the window is too short or the reviewers too few, which is
+ * the question the 24-hour rule has to answer for itself.
+ *
+ * The two arrive at `discarded` differently, and both routes are real. Saturday's was
+ * written `discarded` by the engine's sweep. Sunday's is still `in_review` in storage, as a
+ * post would be if the sweep had not yet run, and every read discards it anyway
+ * (`sweepDaily`).
+ */
+export const REFERENCE_DAILY_HISTORY: readonly ContentItem[] = [
+  {
+    id: 'ci-0416-d1',
+    channel: 'linkedin_page',
+    track: 'daily',
+    generatedAt: slot('2026-08-16', '08:15'),
+    type: 'derivative',
+    title: 'Today — copper, counted at two different stages',
+    voiceLane: null,
+    narrative: 'N1',
+    pillar: 'analyst_not_assistant',
+    funnelStage: 'awareness',
+    icp: null,
+    status: 'in_review',
+    assignedReviewer: REVIEWERS.social,
+    scheduledFor: null,
+    citations: [],
+    sourceable: 'found',
+    hygieneAppliedAt: null,
+    topicId: 'definitional-gaps',
+  },
+  {
+    id: 'ci-0415-d1',
+    channel: 'x',
+    track: 'daily',
+    generatedAt: slot('2026-08-15', '08:15'),
+    type: 'derivative',
+    title: 'Today — 8.5x or 3.3x',
+    voiceLane: null,
+    narrative: 'N1',
+    pillar: 'analyst_not_assistant',
+    funnelStage: 'awareness',
+    icp: null,
+    status: 'discarded',
+    assignedReviewer: REVIEWERS.social,
+    scheduledFor: null,
+    citations: [],
+    sourceable: 'found',
+    hygieneAppliedAt: null,
+    topicId: 'definitional-gaps',
   },
 ];
 

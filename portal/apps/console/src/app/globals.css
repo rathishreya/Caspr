@@ -402,17 +402,27 @@ p {
 }
 
 /*
- * < 900: the console does not render. It routes.
+ * The phone message — shown to phones, not to narrow desktop windows.
  *
- * §10 and frame 65:1584 — "routes to the Personal Queue rather than dead-ending", because
- * that is what a phone user is almost always there to do. Both trees are in the document
- * and CSS chooses; no JavaScript, no measurement, no flash of the wrong one.
+ * ⚠ Corrected 2026-09-15, a departure from `portal-responsive-spec.md` §3, which sends every
+ * viewport under 900px to the message. That rule assumed a width under 900 is a phone. **It
+ * is not.** A laptop at 125–150% display scaling, a browser zoomed in, or a window sharing
+ * the screen with an editor all land under 900 CSS pixels — and the Marketing team's own
+ * laptop hit it, reaching a message that told a desk user to use a phone.
+ *
+ * What §10 actually protects is kept: **review is not designed for a phone.** So the message
+ * now keys on the device as well as the width — a coarse primary pointer (a touch screen)
+ * under 900px, or any device under 560px, where no desktop layout holds. A narrow window
+ * with a mouse gets the console, with the rail collapsed and the gutters compressed.
+ *
+ * Both trees are still in the document and CSS still chooses: no script, no measurement, no
+ * flash of the wrong one.
  */
 .narrow-route {
   display: none;
 }
 
-@media (max-width: 899px) {
+@media (max-width: 899px) and (pointer: coarse), (max-width: 559px) {
   .shell {
     display: none;
   }
@@ -424,6 +434,35 @@ p {
     gap: var(--space-5);
     min-height: 100vh;
     padding: var(--space-6) var(--space-5);
+  }
+}
+
+/* A narrow desktop window: the console, tightened. Gutters give way before content does. */
+@media (max-width: 899px) and (pointer: fine), (max-width: 899px) and (pointer: none) {
+  .work {
+    padding-inline: var(--space-4);
+  }
+
+  .pv-stage {
+    padding: var(--space-4) var(--space-2);
+  }
+
+  .decide__preview,
+  .decide__checks {
+    padding-inline: var(--space-2);
+  }
+
+  .decide__context,
+  .decide__actions {
+    padding-inline: var(--space-3);
+  }
+
+  .row__summary {
+    grid-template-columns: minmax(0, 1fr) 84px 16px;
+  }
+
+  .row__when {
+    grid-column: 1 / -1;
   }
 }
 
@@ -458,6 +497,18 @@ p {
 }
 
 /* A table scrolls; it never squashes. Responsive spec rule 1. */
+.table-scroll,
+.week-scroll,
+.pw-scroll {
+  /*
+   * Positioned, so it contains its absolutely positioned descendants. Without this, a
+   * visually-hidden label inside the table escapes the scroll box — its containing block is
+   * an ancestor outside — and widens the whole page by its offset. Found at 620px, where the
+   * page scrolled sideways by 8px for exactly that reason.
+   */
+  position: relative;
+}
+
 .table-scroll {
   overflow-x: auto;
   /* The page body never scrolls sideways — the container does. */
@@ -1837,4 +1888,101 @@ a.card:hover {
 .tabs__badge {
   margin-left: var(--space-2);
   color: var(--accent-attention);
+}
+
+/* ── The creative bar — what the image is, and the one download button ────── */
+
+.creative-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+  margin: var(--space-2) 0 0;
+  padding: var(--space-2) 0;
+}
+
+.creative-bar__download {
+  margin-left: auto;
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.creative-bar__download:hover {
+  border-color: var(--text-secondary);
+}
+
+.creative-bar__download:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
+/* ── Which platforms, and why ─────────────────────────────────────────────── */
+
+.register {
+  margin-top: var(--space-3);
+  border-top: 1px solid var(--border-default);
+}
+
+.register__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) 0;
+  color: var(--text-secondary);
+  cursor: pointer;
+  list-style: none;
+}
+
+.register__summary::-webkit-details-marker {
+  display: none;
+}
+
+.register__summary:hover {
+  color: var(--text-primary);
+}
+
+.register__chevron {
+  color: var(--text-tertiary);
+}
+
+.register[open] .register__chevron {
+  transform: rotate(180deg);
+}
+
+.register__table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+}
+
+.register__table th,
+.register__table td {
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  border-bottom: 1px solid var(--border-default);
+  text-align: left;
+  vertical-align: top;
+}
+
+.register__table thead th {
+  color: var(--text-tertiary);
+  font-weight: 400;
+}
+
+.register__table tbody th {
+  color: var(--text-primary);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.register__table td:nth-child(2) {
+  white-space: nowrap;
+  color: var(--text-secondary);
+}
+
+.register__row--out th,
+.register__row--out td {
+  color: var(--text-tertiary);
 }

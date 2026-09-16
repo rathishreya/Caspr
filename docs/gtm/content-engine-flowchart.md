@@ -52,7 +52,7 @@ STOP["⛔ <b>NOTHING GOES OUT</b><br/>no source, no item<br/><i>the model REFUSE
 
 CLK{"<b>⑥ WHICH CLOCK?</b>"}
 
-DLY["<b>DAILY</b> — what is happening<br/>3/day · live within the hour<br/><i>48h unreviewed → DEMOTES<br/>to weekly, never discarded</i>"]
+DLY["<b>DAILY</b> — what is happening<br/>3/day · live within the hour<br/><i>not approved in 24h → DISCARDED<br/>kept in the history, never published</i>"]
 
 BRD["<b>⑦ TOPIC BOARD</b><br/>⚠ <b>A HUMAN PICKS</b><br/><i>never the machine</i>"]
 
@@ -212,7 +212,7 @@ flowchart LR
 
     D --> D1["says WHAT IS HAPPENING"]
     D --> D2["live in under an hour"]
-    D --> D3["1–2 min to approve<br/>48h unreviewed → demotes,<br/>never discarded"]
+    D --> D3["1–2 min to approve<br/>not approved in 24h → discarded,<br/>kept in the history"]
 
     W --> W1["says WHAT IS TRUE"]
     W --> W2["one analysis = 20 pieces"]
@@ -327,7 +327,7 @@ flowchart TD
     end
 
     S14 -.->|"regenerate"| S10
-    S13 -->|"⏱ unreviewed in 48h"| EXP["⏬ DEMOTED<br/><small>joins the weekly queue · never discarded</small>"]
+    S13 -->|"⏱ not approved in 24h"| EXP["🗑 DISCARDED<br/><small>kept in the history · never published</small>"]
     S13 -->|"📅 unreviewed by Mon 18:00"| HOLD["⬛ HOLDS<br/><small>skip the week is valid<br/>publishing unreviewed is not</small>"]
 
     S16 --> S17["⑰ COMMENT DESK<br/><small>which post · which fact · who<br/>a human posts, always</small>"]
@@ -425,7 +425,7 @@ flowchart TD
     G4 -->|"pass"| ROUTE
 
     ROUTE{"WHICH CLOCK?"}
-    ROUTE -->|"a post responding to<br/>something said today"| D["⏱ DAILY TRACK<br/><small>Type D only<br/>no slot · demotes after 48h</small>"]
+    ROUTE -->|"a post responding to<br/>something said today"| D["⏱ DAILY TRACK<br/><small>Type D only<br/>no slot · discarded after 24h</small>"]
     ROUTE -->|"an analysis to commission<br/>or an evergreen answer"| W["📅 WEEKLY TRACK<br/><small>Type A / B<br/>topic board → Wed pick</small>"]
     ROUTE -->|"a distribution finding,<br/>not a content one"| O["OUTREACH → ㉑<br/><small>roundups · directories<br/>owner: SEO · ✅ permitted</small>"]
 
@@ -535,7 +535,7 @@ flowchart TD
     HEALTH -->|"5–15%"| H2["healthy"]
     HEALTH -->|"below 2%"| H3["rubber-stamping<br/><small>tighten criteria, audit a sample</small>"]
 
-    RM -.->|"⏱ 48h elapsed"| EX["⏬ DEMOTED<br/><small>weekly queue</small>"]
+    RM -.->|"⏱ 24h elapsed"| EX["🗑 DISCARDED<br/><small>kept in the history</small>"]
     RM -.->|"📅 Mon 18:00"| HO["⬛ HOLDS<br/><small>TL extends or skips the week<br/>skipping is valid<br/>publishing unreviewed is not</small>"]
 
     NOEDIT["⛔ NO EDITING<br/><small>reviewers do not rewrite</small>"] -.-> ACT

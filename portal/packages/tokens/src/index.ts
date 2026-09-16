@@ -100,5 +100,34 @@ export const motion = {
   reviewAdvanceCrossFade: '120ms',
 } as const;
 
+/**
+ * The social card — `content-engine-integrations.md` §6.1, read off
+ * `content/assets/visuals/social/a09_no_card.svg`.
+ *
+ * Not the console's palette, and deliberately kept apart from it: these are marketing
+ * artefacts that leave the building, and their values are the house card's, not design spec
+ * §3's. Integrations §6.5 makes the ground a compliance fact rather than a taste — `#e8453c`
+ * measures 3.93:1 and may never be text on a light surface, so the card stays dark.
+ */
+export const card = {
+  ground: '#0B0B09',
+  text: '#FFFFFF',
+  accent: '#E8453C',
+  muted: '#8A8984',
+  rule: '#2A2A27',
+} as const;
+
+/** The card's geometry, same source: 100px gutter, 76px serif headline, footer rule at y=960. */
+export const cardLayout = {
+  gutter: 100,
+  eyebrowSize: 22,
+  eyebrowTracking: 3,
+  headlineSize: 76,
+  standfirstSize: 26,
+  footerRuleY: 960,
+  lockupSize: 40,
+  hostSize: 24,
+} as const;
+
 export type Colour = keyof typeof colour;
 export type TypeStyle = keyof typeof type;

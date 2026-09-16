@@ -10,9 +10,19 @@
 /**
  * Where an item goes.
  *
- * `community` and `outreach` are here and they are deliberately never automated —
- * build spec §3.6: "Automated posting here gets accounts banned and burns the channel
- * permanently." The portal surfaces the thread and drafts the reply; a person posts it.
+ * The platform set is operating model ㉛, the Platform Matrix: LinkedIn is the spine,
+ * Reddit is highest trust and lowest tolerance, Quora is the one that compounds, X is
+ * secondary, Instagram is a repost surface for the atom only. `community` is the forums —
+ * Wall Street Oasis, PrepLounge, ESOMAR — which are neither Reddit nor Quora.
+ *
+ * Four are deliberately never automated — build spec §3.6: "Automated posting here gets
+ * accounts banned and burns the channel permanently." The portal surfaces the thread and
+ * drafts the reply; a person posts it.
+ *
+ * Absent on purpose: Facebook (㉛ — "not a channel"; the Page mirrors LinkedIn Page, and
+ * nothing is planned or measured on it) and video platforms (content inventory G2 — video is
+ * out of scope, owned by the DM team's editor). Hacker News is engagement only — Jayant,
+ * Dixit and Keshav as themselves — so it is never a publishing channel.
  */
 export const CHANNELS = [
   'linkedin',
@@ -22,19 +32,28 @@ export const CHANNELS = [
   'email',
   'community',
   'outreach',
+  'reddit',
+  'quora',
+  'instagram',
 ] as const;
 export type Channel = (typeof CHANNELS)[number];
 
-/** How a channel is published. Build spec §3.6. */
+/** How a channel is published. Build spec §3.6, operating model ㉛. */
 export const CHANNEL_PUBLISH_MODE: Readonly<Record<Channel, 'automated' | 'assisted' | 'human_only'>> = {
   blog: 'automated',
   email: 'automated',
   linkedin_page: 'automated',
   linkedin: 'automated',
   x: 'automated',
+  /** ㉛: "The atom card, auto, no copy written for it." */
+  instagram: 'automated',
   /** ⛔ Permanently out of scope for automation — build spec §11. */
   community: 'human_only',
   outreach: 'human_only',
+  /** ⛔ ㉛: "A human posts. Always" — capped at one a day, rotating person and subreddit. */
+  reddit: 'human_only',
+  /** ⛔ Decided 2026-09-10: Reddit and Quora never flip to automated, whatever else does. */
+  quora: 'human_only',
 };
 
 /**
@@ -43,6 +62,10 @@ export const CHANNEL_PUBLISH_MODE: Readonly<Record<Channel, 'automated' | 'assis
  * `holding` is a first-class status, not an absence of one. Runbook §1: "Unreviewed items
  * hold — nothing publishes unreviewed", and build spec §3.6: "There is no timeout that
  * pushes it live."
+ *
+ * `discarded` is the daily track's only ending besides approval (`daily.ts`): a timeout that
+ * takes a post off the queue, never one that publishes it. Appended last so the Postgres
+ * enum grows with `ADD VALUE` rather than a rebuild.
  */
 export const ITEM_STATUSES = [
   'generated',
@@ -53,6 +76,7 @@ export const ITEM_STATUSES = [
   'holding',
   'scheduled',
   'published',
+  'discarded',
 ] as const;
 export type ItemStatus = (typeof ITEM_STATUSES)[number];
 
@@ -211,6 +235,9 @@ export const CHANNEL_LABEL: Readonly<Record<Channel, string>> = {
   x: 'X',
   blog: 'BLOG',
   email: 'EMAIL',
-  community: 'COMMUNITY',
+  community: 'FORUM',
   outreach: 'OUTREACH',
+  reddit: 'REDDIT',
+  quora: 'QUORA',
+  instagram: 'INSTAGRAM',
 };

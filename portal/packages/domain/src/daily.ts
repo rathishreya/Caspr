@@ -1,34 +1,68 @@
 /**
  * The daily track's clock.
  *
- * `content-engine-runtime-spec.md` §5A.3 rule 4, as decided 2026-09-10:
+ * ⚠ **Reverses the 2026-09-10 decision** recorded in `content-engine-runtime-spec.md` §5A.3
+ * rule 4 ("after 48 hours unreviewed it DEMOTES. Nothing is discarded"). Changed 2026-09-15
+ * at the Content & Social owner's instruction:
  *
- *   "It never expires — after 48 hours unreviewed it DEMOTES. Nothing is discarded. The item
- *    stops being a *today* item and joins the weekly queue as an ordinary derivative."
+ *   "for daily stuff, if it's not approved in 24hr discard it but keep a history of such thing."
  *
- * Why both halves hold: a reply that arrives a week after the conversation ended is not
- * late, it is embarrassing — so it stops being a today item. But the writing and the
- * sourcing are already paid for, so it becomes a normal derivative rather than waste.
+ * What the old rule protected is kept in a different form. It demoted rather than discarded
+ * because the writing and the sourcing were already paid for. Now the post leaves the queue
+ * but not the record: a discarded item keeps its words and its version, and the board lists
+ * it under its own heading. What is given up is reuse — a reply to a conversation that has
+ * moved on is not published later as a derivative.
+ *
+ * The window runs from generation, not from when someone first opened it. A daily post
+ * answers something happening today; the conversation does not wait for the reviewer.
  */
 
-import { isUnreviewed, type ContentItem } from './content-item';
+import { willPublish, type ContentItem } from './content-item';
 
-export const DAILY_DEMOTE_HOURS = 48;
+export const DAILY_WINDOW_HOURS = 24;
 
 export type DailyState =
   | { readonly kind: 'weekly' }
-  /** Still a today item. `hoursLeft` is whole hours, rounded down, never negative. */
+  /**
+   * Not approved yet, and inside the window — waiting, held or regenerating alike.
+   * `hoursLeft` is whole hours, rounded down, never negative.
+   */
   | { readonly kind: 'today'; readonly hoursLeft: number }
-  /** Past 48 hours with no decision: it waits in the weekly queue now, and says why. */
-  | { readonly kind: 'demoted' }
-  /** Decided in time. The clock no longer matters. */
+  /** Not approved inside the window. Off the queue for good; kept in the history. */
+  | { readonly kind: 'discarded'; readonly discardedAt: string }
+  /** Approved in time. The clock no longer matters. */
   | { readonly kind: 'decided' };
 
-export function dailyState(item: Pick<ContentItem, 'track' | 'generatedAt' | 'status'>, now: Date): DailyState {
-  if (item.track === 'weekly') return { kind: 'weekly' };
-  if (!isUnreviewed(item)) return { kind: 'decided' };
+type Clocked = Pick<ContentItem, 'track' | 'generatedAt' | 'status'>;
 
-  const ageHours = (now.getTime() - new Date(item.generatedAt).getTime()) / 3_600_000;
-  if (ageHours >= DAILY_DEMOTE_HOURS) return { kind: 'demoted' };
-  return { kind: 'today', hoursLeft: Math.max(0, Math.floor(DAILY_DEMOTE_HOURS - ageHours)) };
+/** When the window closes, as an ISO instant. */
+export function dailyDeadline(item: Pick<ContentItem, 'generatedAt'>): string {
+  return new Date(new Date(item.generatedAt).getTime() + DAILY_WINDOW_HOURS * 3_600_000).toISOString();
+}
+
+export function dailyState(item: Clocked, now: Date): DailyState {
+  if (item.track === 'weekly') return { kind: 'weekly' };
+  if (willPublish(item)) return { kind: 'decided' };
+
+  const deadline = dailyDeadline(item);
+  const msLeft = new Date(deadline).getTime() - now.getTime();
+  if (item.status === 'discarded' || msLeft <= 0) return { kind: 'discarded', discardedAt: deadline };
+  return { kind: 'today', hoursLeft: Math.max(0, Math.floor(msLeft / 3_600_000)) };
+}
+
+/**
+ * The sweep, as a pure function.
+ *
+ * The engine writes `discarded` when the window closes. Until that job exists — and in the
+ * gap between the window closing and the job running — every read applies the same rule, so
+ * no screen can show a post as approvable after its window has closed.
+ */
+export function sweepDaily<T extends Clocked>(item: T, now: Date): T {
+  if (item.status === 'discarded') return item;
+  return dailyState(item, now).kind === 'discarded' ? { ...item, status: 'discarded' } : item;
+}
+
+/** A daily post that was waiting, held or regenerating when its window closed. */
+export function wasDiscarded(item: Clocked): boolean {
+  return item.track === 'daily' && item.status === 'discarded';
 }
