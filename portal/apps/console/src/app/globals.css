@@ -1033,6 +1033,266 @@ strong,
   }
 }
 
+/*
+ * ══ PERFORMANCE · an ad ══════════════════════════════════════════════════
+ *
+ * ⚑ The ad is drawn as the placement draws it — a search result, or a feed post. Same
+ * principle as the post previews: a reviewer approving a rendering of the thing is approving
+ * the thing, where a reviewer approving a table of fields is approving their own imagination
+ * of it. The two previews use the platforms' own colours, which is the one place in this
+ * console where the house palette gives way.
+ */
+.ads {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.ad {
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface-base);
+}
+
+.ad--killed {
+  border-style: dashed;
+  opacity: 0.72;
+}
+
+.ad--live {
+  border-left: 2px solid var(--accent-approve);
+}
+
+.ad--paused {
+  border-left: 2px solid var(--accent-attention);
+}
+
+.ad__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-default);
+}
+
+.ad__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+.ad__preview {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+  min-width: 0;
+}
+
+.ad__where {
+  overflow-wrap: anywhere;
+}
+
+.ad__side {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+  min-width: 0;
+}
+
+.ad__reading {
+  display: grid;
+  gap: 2px;
+  padding: var(--space-3);
+  border-left: 2px solid var(--accent-attention);
+  background: var(--surface-raised);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.ad__reading--ok {
+  border-left-color: var(--accent-approve);
+}
+
+.ad__numbers {
+  margin-top: var(--space-2);
+}
+
+.ad__problems {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.ad__problem {
+  display: grid;
+  gap: 2px;
+  padding-left: var(--space-3);
+  border-left: 1px solid var(--border-default);
+}
+
+.ad__act {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border-default);
+}
+
+.ad__error {
+  color: var(--accent-attention);
+}
+
+/*
+ * A Google result. Its own colours, because approving it in ours would hide the one thing
+ * this preview exists to show: how it reads in the place it appears.
+ */
+.serp {
+  padding: var(--space-4);
+  background: #ffffff;
+  border-radius: var(--radius-sm);
+  font-family: arial, sans-serif;
+}
+
+.serp__url {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 2px;
+  color: #202124;
+  font-size: 14px;
+}
+
+.serp__badge {
+  color: #202124;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.serp__title {
+  margin: 0 0 4px;
+  color: #1a0dab;
+  font-size: 20px;
+  line-height: 26px;
+}
+
+.serp__desc {
+  margin: 0;
+  color: #4d5156;
+  font-size: 14px;
+  line-height: 21px;
+}
+
+/* A Meta feed post. */
+.feedad {
+  background: #ffffff;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+.feedad__primary {
+  margin: 0;
+  padding: var(--space-4);
+  color: #050505;
+  font-size: 15px;
+  line-height: 20px;
+}
+
+.feedad__image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.feedad__strip {
+  display: grid;
+  gap: 2px;
+  padding: var(--space-3) var(--space-4);
+  background: #f0f2f5;
+}
+
+.feedad__domain {
+  color: #65676b;
+}
+
+.feedad__headline {
+  color: #050505;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.feedad__desc {
+  color: #65676b;
+}
+
+.feedad__tags {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  color: #1877f2;
+  background: #ffffff;
+}
+
+/* The nine angles, and which have a reading. */
+.angles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.angle {
+  display: grid;
+  gap: 2px;
+  padding: var(--space-3);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+}
+
+.angle--tested {
+  border-color: var(--accent-approve);
+}
+
+.tag--draft {
+  border-color: var(--accent-attention);
+  color: var(--accent-attention);
+}
+
+.tag--approved {
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+}
+
+.tag--live {
+  border-color: var(--accent-approve);
+  color: var(--accent-approve);
+}
+
+.tag--paused {
+  border-color: var(--accent-attention);
+  color: var(--accent-attention);
+  border-style: dashed;
+}
+
+.tag--killed {
+  border-style: dashed;
+}
+
+@media (max-width: 1099px) {
+  .ad__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .angles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .angles {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* ── SEO · a target on the list ──────────────────────────────────────────── */
 
 .targets {

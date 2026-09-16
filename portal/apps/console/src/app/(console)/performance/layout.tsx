@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { Tabs } from '@/components/primitives/tabs';
 import { ScreenHeader } from '@/components/shell/screen-header';
 import { WORKSTREAM_TABS } from '@/lib/nav';
+import { getRepository } from '@/lib/repository';
 
 /**
  * Performance.
@@ -14,8 +15,9 @@ import { WORKSTREAM_TABS } from '@/lib/nav';
  */
 export const dynamic = 'force-dynamic';
 
-export default function PerformanceLayout({ children }: { readonly children: ReactNode }) {
+export default async function PerformanceLayout({ children }: { readonly children: ReactNode }) {
   const engine = paidEngine();
+  const drafts = (await getRepository().ads()).filter((ad) => ad.state === 'draft').length;
 
   return (
     <>
@@ -28,12 +30,13 @@ export default function PerformanceLayout({ children }: { readonly children: Rea
         }
       />
       {/*
-        ⛔ No badge, on any tab. A badge means "this needs you", and nothing here does: the
-        four unmet conditions are activation, a hire, the testimonial programme and
-        /samples — not one of them closes from this workstream. The count belongs in the
-        header, as a standing, which is where it is.
+        ⛔ No badge on Tasks or Paid. A badge means "this needs you", and the four unmet
+        conditions do not: activation, a hire, the testimonial programme and /samples close
+        from other workstreams. The standing belongs in the header, which is where it is.
+        ✅ Ads does carry one — a drafted ad genuinely waits on a person here, and it can be
+        approved today even though nothing spends until the gates open.
       */}
-      <Tabs tabs={WORKSTREAM_TABS['performance'] ?? []} label="Performance" />
+      <Tabs tabs={WORKSTREAM_TABS['performance'] ?? []} label="Performance" badges={{ ads: drafts }} />
       {children}
     </>
   );

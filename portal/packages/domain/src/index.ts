@@ -21,6 +21,8 @@ export * from './page-seo';
 export * from './content-seo';
 export * from './reference-pages';
 export * from './paid';
+export * from './ad';
+export * from './reference-ads';
 export * from './email';
 export * from './reference-week';
 export * from './reference-posts';

@@ -250,8 +250,15 @@ export const WORKSTREAM_TABS: Readonly<Record<string, readonly WorkstreamTab[]>>
     { id: 'links', label: 'Links', href: '/seo/links' as Route },
     { id: 'tasks', label: 'Tasks', href: '/seo/tasks' as Route },
   ],
+  /**
+   * ⚑ **Ads joined Performance 2026-09-16.** §12 gives it Dashboard · Tasks · Paid, and Paid
+   * is the money — the burst, the kill rules, Meta's reality. The ads themselves had nowhere
+   * to live, and they are the workstream's actual object: every ad we would run, the angle it
+   * tests, its copy, its creative and whether it is working.
+   */
   performance: [
     { id: 'dashboard', label: 'Dashboard', href: '/performance/dashboard' as Route },
+    { id: 'ads', label: 'Ads', href: '/performance/ads' as Route },
     { id: 'tasks', label: 'Tasks', href: '/performance/tasks' as Route },
     { id: 'paid', label: 'Paid', href: '/performance/paid' as Route },
   ],
@@ -275,7 +282,8 @@ export const WORKSTREAM_THIRD_TAB: Readonly<Record<string, string>> = {
   // SEO's own object is the site. §12 said "Backlog"; that turned out to be a to-do list
   // beside the to-do list, and the thing actually missing was every page and post.
   seo: 'Pages',
-  performance: 'Paid',
+  // Performance's own object is the ad set; Paid is the money around it.
+  performance: 'Ads',
   email: 'Sequences',
   'earned-media': 'Pipeline',
 };

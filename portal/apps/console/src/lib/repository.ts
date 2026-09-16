@@ -8,7 +8,9 @@ import {
 } from '@caspr-portal/db';
 import {
   DAILY_WINDOW_HOURS,
+  ILLUSTRATIVE_READINGS,
   PRIOR_WINDOW_COUNTS,
+  REFERENCE_ADS,
   REFERENCE_APPROACHES,
   REFERENCE_SEO_TASKS,
   REFERENCE_DAILY_HISTORY,
@@ -20,10 +22,13 @@ import {
   REFERENCE_POSTS,
   REFERENCE_WEEK,
   canAdvance,
+  canMoveAd,
   isDecidable,
   shiftWeek,
   statusAfter,
   sweepDaily,
+  type Ad,
+  type AdState,
   type AmplifyTier,
   type Approach,
   type ApproachState,
@@ -123,6 +128,17 @@ export interface ContentRepository {
   /** Tick one off. Idempotent: ticking a done task is not an error, it is a no-op. */
   completeSeoTask(id: string): Promise<boolean>;
 
+  /** Every ad, drafted or running, with whatever it has done. */
+  ads(): Promise<readonly Ad[]>;
+  /**
+   * Move one ad along its lifecycle.
+   *
+   * Refuses a move the lifecycle does not allow — and `killed` has no exits, so a failed
+   * angle cannot quietly come back. Paid is a validation instrument; re-running a message
+   * that already lost is the one thing that would make it a worthless one.
+   */
+  moveAd(id: string, to: AdState): Promise<boolean>;
+
   /** Which adapter answered. Surfaced on screen rather than hidden — see `FeedNotice`. */
   readonly kind: 'postgres' | 'reference';
 }
@@ -158,6 +174,7 @@ class ReferenceRepository implements ContentRepository {
   readonly #engagement = new Map<string, EngagementTarget['status']>();
   readonly #approaches = new Map<string, { readonly state: ApproachState; readonly on: string }>();
   readonly #tasksDone = new Set<string>();
+  readonly #ads = new Map<string, AdState>();
 
   clock(): Date {
     return new Date(REFERENCE_NOW);
@@ -274,6 +291,25 @@ class ReferenceRepository implements ContentRepository {
   async completeSeoTask(id: string): Promise<boolean> {
     if (!REFERENCE_SEO_TASKS.some((task) => task.id === id)) return false;
     this.#tasksDone.add(id);
+    return true;
+  }
+
+  async ads(): Promise<readonly Ad[]> {
+    return REFERENCE_ADS.map((ad) => {
+      const state = this.#ads.get(ad.id) ?? ad.state;
+      // An ad only has numbers once it is live or past it. A draft showing a click-through
+      // rate would be showing a reading of something that never ran.
+      const reading = ILLUSTRATIVE_READINGS[ad.id];
+      const metrics =
+        reading !== undefined && (state === 'live' || state === 'paused' || state === 'killed') ? reading : null;
+      return { ...ad, state, metrics };
+    });
+  }
+
+  async moveAd(id: string, to: AdState): Promise<boolean> {
+    const current = (await this.ads()).find((ad) => ad.id === id);
+    if (current === undefined || !canMoveAd(current.state, to)) return false;
+    this.#ads.set(id, to);
     return true;
   }
 }
@@ -414,6 +450,15 @@ class PostgresRepository implements ContentRepository {
   }
 
   async completeSeoTask(): Promise<boolean> {
+    return false;
+  }
+
+  /* Ads have no tables either, and for the same reason — see the note above. */
+  async ads(): Promise<readonly Ad[]> {
+    return [];
+  }
+
+  async moveAd(): Promise<boolean> {
     return false;
   }
 

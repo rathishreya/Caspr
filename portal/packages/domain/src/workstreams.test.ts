@@ -42,6 +42,17 @@ import {
   component,
   readClock,
 } from './discoverability';
+import {
+  adApprovable,
+  adCreativeSpec,
+  canMoveAd,
+  checkAdCopy,
+  platformRule,
+  readAd,
+  readSpend,
+  type AdMetrics,
+} from './ad';
+import { AD_BUDGET_MONTHLY, REFERENCE_ADS } from './reference-ads';
 import { checkContent, contentHealth } from './content-seo';
 import type { PostBody } from './post';
 import { REFERENCE_POSTS } from './reference-posts';
@@ -688,6 +699,158 @@ describe('the paid engine', () => {
       'CAC above $300',
       'Zero conversions after 100 clicks',
     ]);
+  });
+});
+
+/**
+ * Ads.
+ *
+ * Paid is a validation instrument, and these hold the two things that make it one: a kill
+ * rule that reads only when its sample exists, and a killed angle that stays killed.
+ */
+describe('ads', () => {
+  const metrics = (over: Partial<AdMetrics> = {}): AdMetrics => ({
+    impressions: 1000,
+    clicks: 40,
+    conversions: 2,
+    spend: 200,
+    ...over,
+  });
+
+  it('reads nothing on an ad that has not run', () => {
+    expect(readAd(null).verdict).toBe('no_reading');
+    expect(readAd(metrics({ impressions: 0, clicks: 0 })).verdict).toBe('no_reading');
+  });
+
+  it('will not judge an ad before its sample exists', () => {
+    const early = readAd(metrics({ impressions: 80, clicks: 1, conversions: 0, spend: 12 }));
+    expect(early.verdict).toBe('no_reading');
+    expect(early.act).toMatch(/too early/i);
+  });
+
+  it('pauses on CAC over the ceiling', () => {
+    const reading = readAd(metrics({ conversions: 1, spend: 400 }));
+    expect(reading.verdict).toBe('pause');
+    expect(reading.rule).toMatch(/CAC/);
+  });
+
+  it('pauses on 100 clicks and no conversions — the page or the targeting, not the ad', () => {
+    const reading = readAd(metrics({ clicks: 120, conversions: 0, spend: 240 }));
+    expect(reading.verdict).toBe('pause');
+    expect(reading.act).toMatch(/landing page or the targeting/i);
+  });
+
+  /** "Rewrite the ad, do not raise the bid." */
+  it('asks for a rewrite on a low click-through, never a bigger bid', () => {
+    const reading = readAd(metrics({ impressions: 5000, clicks: 20, conversions: 1, spend: 90 }));
+    expect(reading.verdict).toBe('rewrite');
+    expect(reading.act).toMatch(/do not raise the bid/i);
+  });
+
+  it('calls a healthy ad working, and says what to do with it', () => {
+    const reading = readAd(metrics({ impressions: 2400, clicks: 61, conversions: 2, spend: 214 }));
+    expect(reading.verdict).toBe('working');
+    expect(reading.act).toMatch(/owned engine/i);
+  });
+
+  it('reads CAC before click-through — the rule that fires on an ad that looks healthy', () => {
+    // Good CTR, terrible economics. CAC must win.
+    expect(readAd(metrics({ impressions: 1000, clicks: 90, conversions: 1, spend: 500 })).rule).toMatch(/CAC/);
+  });
+
+  /** ⚑ A killed angle is a finding. It does not come back. */
+  it('lets an ad move only the way the lifecycle allows, and never out of killed', () => {
+    expect(canMoveAd('draft', 'approved')).toBe(true);
+    expect(canMoveAd('draft', 'live')).toBe(false);
+    expect(canMoveAd('live', 'paused')).toBe(true);
+    expect(canMoveAd('paused', 'killed')).toBe(true);
+    expect(canMoveAd('killed', 'live')).toBe(false);
+    expect(canMoveAd('killed', 'approved')).toBe(false);
+  });
+
+  /**
+   * ⚑ Every problem, not just the blocking ones. A quality problem on a shipped ad is copy
+   * that gets truncated in front of a buyer with money behind it — the ad set should be
+   * clean, and this is what catches it drifting.
+   */
+  it('holds every reference ad to its placement’s limits and to the brand rules', () => {
+    for (const ad of REFERENCE_ADS) {
+      expect(checkAdCopy(ad).map((problem) => `${ad.id}: ${problem.field} — ${problem.what}`)).toEqual([]);
+    }
+  });
+
+  it('catches a headline over the platform ceiling', () => {
+    const base = REFERENCE_ADS[0]!;
+    const long = { ...base, copy: { ...base.copy, headlines: ['x'.repeat(40)] } };
+    expect(checkAdCopy(long).some((problem) => problem.what.includes('over 30'))).toBe(true);
+  });
+
+  /** ⛔ Naming them concedes we are in the same category. */
+  it('refuses a competitor named in ad copy', () => {
+    const base = REFERENCE_ADS[0]!;
+    const named = { ...base, copy: { ...base.copy, descriptions: ['A better ChatGPT for research.'] } };
+    const problem = checkAdCopy(named).find((row) => row.field === 'Lead copy');
+    expect(problem?.weight).toBe('blocking');
+  });
+
+  /** ⛔ COPY-11a: the budget is never a subscription price. */
+  it('refuses the Research Budget written as a subscription price', () => {
+    const base = REFERENCE_ADS[0]!;
+    const priced = { ...base, copy: { ...base.copy, descriptions: ['Analyst-grade research from $200/mo.'] } };
+    expect(checkAdCopy(priced).some((row) => row.field === 'The figure')).toBe(true);
+  });
+
+  it('refuses an exclamation point anywhere', () => {
+    const base = REFERENCE_ADS[0]!;
+    const shouty = { ...base, copy: { ...base.copy, headlines: ['Arrive certain!'] } };
+    expect(checkAdCopy(shouty).some((row) => row.field === 'Tone')).toBe(true);
+  });
+
+  it('refuses hashtags on a search ad, where the field does not exist', () => {
+    const base = REFERENCE_ADS[0]!;
+    const tagged = { ...base, copy: { ...base.copy, hashtags: ['#research'] } };
+    const problem = checkAdCopy(tagged).find((row) => row.field === 'Hashtags');
+    expect(problem?.weight).toBe('blocking');
+  });
+
+  /** §7: never point a use-case ad at the homepage. */
+  it('refuses a use-case ad pointed at the homepage, and allows the identity ad there', () => {
+    const useCase = REFERENCE_ADS.find((ad) => ad.angle === 'icp_wounds')!;
+    const misdirected = { ...useCase, copy: { ...useCase.copy, landingPath: '/' } };
+    expect(checkAdCopy(misdirected).some((row) => row.field === 'Landing page')).toBe(true);
+
+    const identity = REFERENCE_ADS.find((ad) => ad.angle === 'identity')!;
+    expect(identity.copy.landingPath).toBe('/');
+    expect(checkAdCopy(identity).some((row) => row.field === 'Landing page')).toBe(false);
+  });
+
+  it('cannot approve an ad with a blocking copy problem', () => {
+    const base = REFERENCE_ADS[0]!;
+    expect(adApprovable(base)).toBe(true);
+    expect(adApprovable({ ...base, copy: { ...base.copy, headlines: ['Arrive certain!'] } })).toBe(false);
+    // Only a draft is approvable at all.
+    expect(adApprovable({ ...base, state: 'live' })).toBe(false);
+  });
+
+  it('draws every social ad from the house card, and no card for a search ad', () => {
+    for (const ad of REFERENCE_ADS) {
+      const spec = adCreativeSpec(ad);
+      if (ad.platform === 'google_search') expect(spec, ad.id).toBeNull();
+      else expect(spec?.template, ad.id).toBe('card');
+    }
+  });
+
+  it('counts angles under test rather than signups', () => {
+    const reading = readSpend(REFERENCE_ADS, AD_BUDGET_MONTHLY);
+    expect(reading.anglesTotal).toBe(9);
+    // Nothing has run, so nothing has been learnt — and the number says so.
+    expect(reading.anglesTested).toBe(0);
+    expect(reading.spend).toBe(0);
+  });
+
+  it('keeps Meta shut, because a custom audience needs 1,000 people first', () => {
+    expect(platformRule('meta_feed').open).toBe(false);
+    expect(platformRule('google_search').open).toBe(true);
   });
 });
 
