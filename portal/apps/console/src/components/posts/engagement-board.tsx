@@ -1,8 +1,13 @@
 import {
   AMPLIFY_TIERS,
+  DAILY_APPROVAL_CAP,
+  ENGAGEMENT_STATUS_LABEL,
   INBOUND_RESPONSE_LABEL,
+  MAX_PEOPLE_PER_EXTERNAL_POST,
   MENTION_SOURCES,
+  NEVER_IN_A_DRAFT,
   actedFrom,
+  engagementPublishMode,
   inboundResponse,
   isInbound,
   personName,
@@ -18,8 +23,13 @@ import { ExternalPostPreview, relativeTime } from '@/components/posts/post-previ
  * Engagement — the half of the week that never passes through review.
  *
  * Operating model ㉖: creation goes through review, always; engagement does not, because "a
- * person, on-platform, always" writes it. The board shows what was surfaced, why, and the
- * one fact to bring — and never a drafted comment (⑰ rule 1).
+ * person, on-platform, always" writes it. The board shows what was surfaced, why, the one
+ * fact to bring — and, since 2026-09-14, the drafts.
+ *
+ * ⚑ The drafts are Joy's reversal of ⑰ rule 1, not a loosening of it
+ * (`activation-framework.md` §0.3 decision 14): "The portal drafts; nobody writes from
+ * scratch." Two variants per target, each in one person's lane, each carrying its own
+ * finding — and the words still reach the platform through a person, one tap at a time.
  *
  * Ordered by who is waiting on whom. Someone who tagged us is waiting on us, so inbound comes
  * first; a comment target waits on nobody.
@@ -41,12 +51,20 @@ export function EngagementBoard({
   const reposts = outbound.filter((t) => t.kind === 'repost' && surfacing(t).surfaced);
   const filtered = outbound.filter((t) => !surfacing(t).surfaced);
   const closed = targets.filter((t) => t.status !== 'open');
+  const actedToday = closed.filter((t) => t.status === 'done').length;
 
   const needsNothing = inbound.filter((t) => ['read_only', 'nothing'].includes(inboundResponse(t)));
   const needsAct = inbound.filter((t) => !needsNothing.includes(t));
 
   return (
     <div className="engage-board">
+      <p className="engage-caps t-body-s">
+        <span className="t-meta-bold">Caps</span> {actedToday} of {DAILY_APPROVAL_CAP} approvals used today ·{' '}
+        at most {MAX_PEOPLE_PER_EXTERNAL_POST} of us on any one external post · no third-party engagement tools,
+        ever. <span className="text-tertiary">Ten a day is what a real professional does; more is what pod
+        detection looks for.</span>
+      </p>
+
       <section aria-labelledby="inbound-heading">
         <div className="board-head">
           <h3 id="inbound-heading" className="t-title-m">
@@ -171,10 +189,25 @@ export function EngagementBoard({
         </details>
       )}
 
+      <details className="engage-quiet">
+        <summary className="t-body-s">What a draft may never contain</summary>
+        <ul>
+          {NEVER_IN_A_DRAFT.map((rule) => (
+            <li key={rule} className="engage-quiet__row t-body-s">
+              {rule}
+            </li>
+          ))}
+        </ul>
+        <p className="checks__source t-meta">activation framework §5 · the claims register</p>
+      </details>
+
       {closed.length > 0 && (
         <p className="engage-note t-body-s">
-          {closed.length} closed this week — {closed.filter((t) => t.status === 'done').length} acted on,{' '}
-          {closed.filter((t) => t.status === 'skipped').length} skipped.
+          {closed.length} closed this week —{' '}
+          {(['done', 'skipped', 'not_my_lane'] as const)
+            .map((status) => `${closed.filter((t) => t.status === status).length} ${ENGAGEMENT_STATUS_LABEL[status].toLowerCase()}`)
+            .join(', ')}
+          .
         </p>
       )}
     </div>
@@ -235,7 +268,15 @@ function EngagementCard({ target, now }: { readonly target: EngagementTarget; re
               )}
             </span>
           </p>
-          <EngagementActions targetId={target.id} doneLabel={inbound ? 'Replied' : 'Commented'} />
+          <EngagementActions
+            targetId={target.id}
+            doneLabel={inbound ? 'Replied' : 'Commented'}
+            drafts={target.drafts}
+            publishMode={engagementPublishMode(target.post.platform)}
+            // No listener runs yet, so no target carries a real post link — §6.6's one tap
+            // needs one, and saying so beats a button that goes nowhere.
+            postUrl={null}
+          />
         </div>
       </div>
     </article>

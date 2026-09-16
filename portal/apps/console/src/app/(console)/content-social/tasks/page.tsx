@@ -1,6 +1,8 @@
 import {
   CHANNEL_LABEL,
   CHANNEL_PUBLISH_MODE,
+  PUBLISH_MODE_LABEL,
+  PUBLISH_MODE_MEANING,
   REFERENCE_WEEK_START,
   buildWeek,
   dailyDeadline,
@@ -280,9 +282,10 @@ export default async function ContentSocialTasks({ searchParams }: PageProps) {
                   <h4 className="platform-group__head">
                     <span className="t-body-s">{PLATFORM_NAME[channel]}</span>
                     <span className="t-meta text-tertiary">{group.length}</span>
-                    {CHANNEL_PUBLISH_MODE[channel] === 'human_only' && (
-                      <span className="t-meta text-tertiary">· a person posts these, always</span>
-                    )}
+                    <span className="t-meta text-tertiary">
+                      · {PUBLISH_MODE_LABEL[CHANNEL_PUBLISH_MODE[channel]].toLowerCase()} —{' '}
+                      {PUBLISH_MODE_MEANING[CHANNEL_PUBLISH_MODE[channel]]}
+                    </span>
                   </h4>
                   <PostRows items={group} versions={versions} decisions={decisions} />
                 </div>
@@ -581,16 +584,18 @@ function Confirmation({
   const item = items.find((candidate) => candidate.id === done);
   if (item === undefined || (did !== 'approve' && did !== 'reject' && did !== 'hold')) return null;
 
-  const handPosted = CHANNEL_PUBLISH_MODE[item.channel] === 'human_only';
+  const mode = CHANNEL_PUBLISH_MODE[item.channel];
   const code = [...decisions].reverse().find((d) => d.itemId === item.id && d.action === 'reject')?.reasonCode;
   const when = item.scheduledFor === null ? 'the next open window' : slotLabel(item);
 
   const verdict = did === 'approve' ? 'Approved' : did === 'reject' ? `Rejected${code ? ` — ${code}` : ''}` : 'Held';
   const next =
     did === 'approve'
-      ? handPosted
+      ? mode === 'manual'
         ? `Surfaced to ${authorOf(item).name} on ${when} to post by hand.`
-        : `Hygiene pass, then ${PLATFORM_NAME[item.channel]} at ${when}.`
+        : mode === 'release'
+          ? `Hygiene pass, then a person releases it to ${PLATFORM_NAME[item.channel]} at ${when}.`
+          : `Hygiene pass, then ${PLATFORM_NAME[item.channel]} at ${when}.`
       : did === 'reject'
         ? 'It regenerates with your note applied and comes back to this queue.'
         : 'Off the calendar until someone decides it.';

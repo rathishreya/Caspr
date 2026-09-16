@@ -160,14 +160,17 @@ function ChannelPanel({ items }: { readonly items: readonly ContentItem[] }) {
  */
 function publishNote(channel: Channel): string {
   switch (CHANNEL_PUBLISH_MODE[channel]) {
-    case 'automated':
-      return 'Automatically, on schedule';
-    case 'assisted':
-      return 'Packed for a person to post';
-    case 'human_only':
-      return 'A person posts it. Never automated';
+    case 'auto':
+      return 'publishes once approved';
+    case 'release':
+      return 'a person releases it, then the system sends';
+    case 'one_tap':
+      return 'approved here, posted natively in one tap';
+    case 'manual':
+      return 'a person posts it, always';
   }
 }
+
 
 function NarrativePanel({ mix }: { readonly mix: readonly NarrativeMixRow[] }) {
   const used = mix.filter((row) => row.count > 0);

@@ -9,7 +9,7 @@ import {
 } from './reference-posts';
 import { REFERENCE_DAILY_HISTORY, REFERENCE_WEEK } from './reference-week';
 
-const CONTENT_SOCIAL = new Set(['linkedin', 'linkedin_page', 'x', 'instagram', 'reddit', 'quora', 'blog', 'community']);
+const CONTENT_SOCIAL = new Set(['linkedin', 'linkedin_page', 'x', 'meta', 'reddit', 'quora', 'blog', 'community']);
 const ALL_ITEMS = [...REFERENCE_WEEK, ...REFERENCE_DAILY_HISTORY];
 const itemById = new Map(ALL_ITEMS.map((item) => [item.id, item]));
 // A discarded post is held to the same rules as a live one: the history is only worth
@@ -31,7 +31,7 @@ describe('the reference posts', () => {
       linkedin: 'linkedin',
       linkedin_page: 'linkedin',
       x: 'x',
-      instagram: 'instagram',
+      meta: 'meta',
       reddit: 'community',
       quora: 'community',
       blog: 'blog',

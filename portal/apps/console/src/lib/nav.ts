@@ -94,7 +94,17 @@ export const NAV: readonly NavSection[] = [
         icon: 'email',
         href: unbuilt('email'),
         built: false,
-        purpose: 'Sequences, suppression and the five send preconditions.',
+        purpose:
+          'Sequences, suppression and the five send preconditions. No standing owner — it runs once approved, and every exception pauses itself and reaches Joy.',
+      },
+      {
+        id: 'earned-media',
+        label: 'Earned Media',
+        icon: 'earned',
+        href: unbuilt('earned-media'),
+        built: false,
+        purpose:
+          'The fifth workstream, added 2026-09-14. Exclusives, pitches, podcasts, expert practitioners and the creator pipeline — every author who replies to one of our comments. Owned by the earned-media hire; until they land, editorial pitching lapses and the pipeline accumulates.',
       },
     ],
   },
@@ -183,3 +193,18 @@ export const CONTENT_SOCIAL_TABS = [
   { id: 'tasks', label: 'Tasks', href: '/content-social/tasks' as Route },
   { id: 'library', label: 'Library', href: '/content-social/library' as Route },
 ] as const;
+
+/**
+ * The third tab of each workstream — `activation-framework.md` §12.
+ *
+ * Dashboard and Tasks are universal; the third tab is that workstream's own object. Recorded
+ * here while four of the five are unbuilt, because the not-built state names what a
+ * destination will be, and "Tasks · Backlog" is a more honest promise than "coming soon".
+ */
+export const WORKSTREAM_THIRD_TAB: Readonly<Record<string, string>> = {
+  'content-social': 'Library',
+  seo: 'Backlog',
+  performance: 'Paid',
+  email: 'Sequences',
+  'earned-media': 'Pipeline',
+};

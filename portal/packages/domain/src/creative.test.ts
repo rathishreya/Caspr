@@ -19,7 +19,7 @@ const version = (overrides: Partial<PostVersion>): PostVersion => ({
   modelTier: 'haiku',
   researchBasis: [],
   regeneratedAfter: null,
-  body: { kind: 'instagram', caption: 'Source: somewhere.' },
+  body: { kind: 'meta', caption: 'Source: somewhere.' },
   ...overrides,
 });
 
@@ -35,15 +35,15 @@ const failed = (checks: ReturnType<typeof creativeChecks>) => checks.filter((c) 
 
 describe('which platforms take an image — flowcharts/I-platforms.mmd', () => {
   it('requires one where the image is the post, and refuses one where a card reads as an advert', () => {
-    expect(CHANNEL_CREATIVE.instagram.need).toBe('required');
+    expect(CHANNEL_CREATIVE.meta.need).toBe('required');
     expect(CHANNEL_CREATIVE.blog.need).toBe('required');
     expect(CHANNEL_CREATIVE.reddit.need).toBe('never');
     expect(CHANNEL_CREATIVE.quora.need).toBe('never');
     expect(CHANNEL_CREATIVE.linkedin.need).toBe('optional');
   });
 
-  it('fails an Instagram post with nothing to show', () => {
-    expect(failed(creativeChecks({ channel: 'instagram' }, version({})))).toEqual(['creative']);
+  it('fails a Meta post with nothing to show', () => {
+    expect(failed(creativeChecks({ channel: 'meta' }, version({})))).toEqual(['creative']);
   });
 
   it('fails a Reddit reply that arrives with a branded card', () => {

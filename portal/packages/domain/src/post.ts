@@ -77,10 +77,10 @@ export type PostBody =
       readonly link: PostLink | null;
     }
   | {
-      readonly kind: 'instagram';
+      readonly kind: 'meta';
       /**
-       * ㉛: Instagram is "a repost surface only" — the atom card is the post, so the image
-       * lives on the version (`creative`) and a missing one fails a check.
+       * The Meta shell — §9.4. The card or cutdown is the post, so the image lives on the
+       * version (`creative`) and a missing one fails a check.
        */
       /** "No copy written for it." The caption is the source line and nothing else. */
       readonly caption: string;
@@ -129,7 +129,7 @@ export function postText(body: PostBody): string {
       return [body.headline, body.standfirst, ...body.paragraphs, body.cta].join('\n\n');
     case 'community':
       return body.paragraphs.join('\n\n');
-    case 'instagram':
+    case 'meta':
       return body.caption;
   }
 }
@@ -273,7 +273,7 @@ function textChecks(item: ContentItem, version: PostVersion): readonly ChannelCh
       ];
     }
 
-    case 'instagram': {
+    case 'meta': {
       const sourced = /^source:/i.test(body.caption.trim());
       return [
         {
@@ -365,7 +365,7 @@ const UTM_SOURCE: Readonly<Record<Channel, string>> = {
   outreach: 'outreach',
   reddit: 'reddit',
   quora: 'quora',
-  instagram: 'instagram',
+  meta: 'meta',
 };
 
 /**

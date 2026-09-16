@@ -49,6 +49,22 @@ export const REFERENCE_ENGAGEMENT: readonly EngagementTarget[] = [
     assignedTo: 'social',
     about: 'caspr',
     illustrative: true,
+    drafts: [
+      {
+        id: 'dr-m1-a',
+        lane: 'social',
+        stance: 'the_record',
+        text: 'Thank you for including us. The case we keep meeting is two credible sources, 36% apart, on the same market. Where they disagree on the same basis and the same year, the range is the finding — showing both beats choosing one.',
+        basis: 'index-engine.md §2',
+      },
+      {
+        id: 'dr-m1-b',
+        lane: 'social',
+        stance: 'sourcing',
+        text: 'The question your contributors kept raising is the one we built around: when the room asks where the number came from, the answer is already on the page. Where two sources disagree on the same basis, we show the range rather than pick an end of it.',
+        basis: 'index-engine.md §2',
+      },
+    ],
     status: 'open',
   },
   {
@@ -72,6 +88,7 @@ export const REFERENCE_ENGAGEMENT: readonly EngagementTarget[] = [
     assignedTo: 'social',
     about: 'caspr',
     illustrative: true,
+    drafts: [],
     status: 'open',
   },
   {
@@ -96,6 +113,22 @@ export const REFERENCE_ENGAGEMENT: readonly EngagementTarget[] = [
     assignedTo: 'social',
     about: 'caspr',
     illustrative: true,
+    drafts: [
+      {
+        id: 'dr-r1-a',
+        lane: 'social',
+        stance: 'the_record',
+        text: 'Three numbers and no basis on any of them is the common case. Most gaps close the moment each figure states what it counts and for which year. The ones that do not close are the finding.',
+        basis: 'index-engine.md §2',
+      },
+      {
+        id: 'dr-r1-b',
+        lane: 'social',
+        stance: 'icp_wounds',
+        text: 'Same pattern here: the figures disagree less often than the definitions do. Two or three days at the start of every project go into sorting that out. Nobody bills them.',
+        basis: 'index-engine.md §2 · icp-personas.md :527',
+      },
+    ],
     status: 'open',
   },
   {
@@ -119,6 +152,7 @@ export const REFERENCE_ENGAGEMENT: readonly EngagementTarget[] = [
     assignedTo: 'social',
     about: 'caspr',
     illustrative: true,
+    drafts: [],
     status: 'open',
   },
 
@@ -146,6 +180,22 @@ export const REFERENCE_ENGAGEMENT: readonly EngagementTarget[] = [
     assignedTo: 'joy',
     about: null,
     illustrative: true,
+    drafts: [
+      {
+        id: 'dr-c1-a',
+        lane: 'joy',
+        stance: 'the_record',
+        text: 'Worth pinning the basis before it goes into the review: published estimates on the same definition and base year run from $5.86bn to $6.46bn. The spread is the number, not either end of it.',
+        basis: 'index-engine.md §1',
+      },
+      {
+        id: 'dr-c1-b',
+        lane: 'joy',
+        stance: 'icp_wounds',
+        text: 'The page-one figures are further apart than they look — about $600m, once the definitions and the base year line up. Two or three days at the start of every review go into reconciling that, and nobody bills them.',
+        basis: 'index-engine.md §1 · icp-personas.md :527',
+      },
+    ],
     status: 'open',
   },
   {
@@ -170,6 +220,22 @@ export const REFERENCE_ENGAGEMENT: readonly EngagementTarget[] = [
     assignedTo: 'joy',
     about: null,
     illustrative: true,
+    drafts: [
+      {
+        id: 'dr-c2-a',
+        lane: 'joy',
+        stance: 'icp_wounds',
+        text: 'That matches what we heard. Every new project starts with two or three days of desk research nobody bills for, and at the proposal stage those hours are gone if the pitch does not convert.',
+        basis: 'icp-personas.md :527 · :534',
+      },
+      {
+        id: 'dr-c2-b',
+        lane: 'joy',
+        stance: 'what_research_costs',
+        text: 'The phase your contributors named is the unbillable one. Buy the report. Commission the study. Or ask the question. The first two answer what their publisher chose to ask, and the third is where those days go.',
+        basis: 'icp-personas.md :527',
+      },
+    ],
     status: 'open',
   },
 
@@ -195,6 +261,7 @@ export const REFERENCE_ENGAGEMENT: readonly EngagementTarget[] = [
     assignedTo: 'joy',
     about: null,
     illustrative: true,
+    drafts: [],
     status: 'open',
   },
   {
@@ -218,6 +285,7 @@ export const REFERENCE_ENGAGEMENT: readonly EngagementTarget[] = [
     assignedTo: 'jayant',
     about: null,
     illustrative: true,
+    drafts: [],
     status: 'open',
   },
   {
@@ -241,6 +309,7 @@ export const REFERENCE_ENGAGEMENT: readonly EngagementTarget[] = [
     assignedTo: 'social',
     about: null,
     illustrative: true,
+    drafts: [],
     status: 'open',
   },
 ];

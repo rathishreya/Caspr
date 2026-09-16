@@ -9,11 +9,13 @@ import { NAV, NAV_DESTINATIONS, UNBUILT_SLUGS, destinationBySlug } from './nav';
 describe('the tree', () => {
   it('is the corrected workstream tree, not the retired flat list', () => {
     expect(NAV.map((section) => section.id)).toEqual(['landing', 'workstreams', 'system']);
+    // Five workstreams since 2026-09-14 — Earned Media is the fifth (framework §0.1 row 6).
     expect(NAV[1]?.destinations.map((d) => d.id)).toEqual([
       'content-social',
       'seo',
       'performance',
       'email',
+      'earned-media',
     ]);
     expect(NAV[2]?.destinations.map((d) => d.id)).toEqual([
       'calendar',

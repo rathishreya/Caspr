@@ -25,10 +25,15 @@ export const CHANNEL_WORKSTREAM: Readonly<Record<Channel, string>> = {
   blog: 'content-social',
   community: 'content-social',
   // ㉛: the social platforms are one workstream's — the same people run all of them.
-  instagram: 'content-social',
+  meta: 'content-social',
   reddit: 'content-social',
   quora: 'content-social',
-  outreach: 'seo',
+  /**
+   * ⚑ Moved from SEO to Earned Media, 2026-09-16 — `activation-framework.md` §12: "a
+   * directory submission is a form; converting an editor is a relationship". Directories and
+   * backlink conversations stay with SEO; a pitch to a trade publication is earned media.
+   */
+  outreach: 'earned-media',
   email: 'email',
 };
 
@@ -37,6 +42,7 @@ export const WORKSTREAM_FILTERS = [
   { id: 'content-social', label: 'CONTENT & SOCIAL' },
   { id: 'seo', label: 'SEO' },
   { id: 'email', label: 'EMAIL' },
+  { id: 'earned-media', label: 'EARNED MEDIA' },
 ] as const;
 
 export type WorkstreamFilter = (typeof WORKSTREAM_FILTERS)[number]['id'];

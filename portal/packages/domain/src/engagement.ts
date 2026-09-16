@@ -19,6 +19,9 @@
  * that governs what we *start* also governs how we *answer*.
  */
 
+import type { PublishMode } from './content-item';
+import type { StanceAngle } from './stance';
+
 export const ENGAGEMENT_KINDS = ['comment', 'repost', 'mention', 'reshare'] as const;
 export type EngagementKind = (typeof ENGAGEMENT_KINDS)[number];
 
@@ -56,6 +59,28 @@ export interface ExternalPost {
   readonly postedAt: string;
 }
 
+/**
+ * A drafted response — `activation-framework.md` §6.4.
+ *
+ * ⚑ **This reverses ⑰ rule 1** ("the desk never drafts a finished comment for one-click
+ * sending"), on Joy's decision of 2026-09-14: "The portal drafts; nobody writes from
+ * scratch. People operate from emotion — drafts from approved lines are the brand-safety
+ * mechanism." What the old rule protected is kept by the shape of the draft rather than by
+ * its absence: **2–3 variants**, never the same draft for two people, each in that person's
+ * lane and each built on a specific sourced finding, and a person still approves every word
+ * before anything reaches a platform.
+ */
+export interface EngagementDraft {
+  readonly id: string;
+  /** The lane it is written in. Never the same draft for two people (§6.7 rule 2). */
+  readonly lane: string;
+  /** Which §5 angle it draws on. */
+  readonly stance: StanceAngle;
+  readonly text: string;
+  /** The specific finding underneath it — `file :line`, as everywhere else. */
+  readonly basis: string;
+}
+
 export interface EngagementTarget {
   readonly id: string;
   readonly kind: EngagementKind;
@@ -79,8 +104,31 @@ export interface EngagementTarget {
   readonly about: string | null;
   /** A stand-in: no listener runs yet, so no real post exists to quote. */
   readonly illustrative: boolean;
-  readonly status: 'open' | 'done' | 'skipped';
+  /**
+   * 2–3 lane-voiced variants, or empty where the desk must not draft.
+   *
+   * ⛔ Empty is a rule, not an omission, in two cases: the expert practitioners (§6.7 rule 6
+   * — "Never supply the words"), and a target nobody is acting on.
+   */
+  readonly drafts: readonly EngagementDraft[];
+  /**
+   * `not_my_lane` is its own ending, not a skip — §6.5's four actions. A skip says *not
+   * worth it*; not-my-lane says *right post, wrong person*, and the assignment was the
+   * mistake. Ranking reads them differently.
+   */
+  readonly status: EngagementStatus;
 }
+
+export const ENGAGEMENT_STATUSES = ['open', 'done', 'skipped', 'not_my_lane'] as const;
+export type EngagementStatus = (typeof ENGAGEMENT_STATUSES)[number];
+
+/** How each ending reads on the board, and in the counts at the bottom of it. */
+export const ENGAGEMENT_STATUS_LABEL: Readonly<Record<EngagementStatus, string>> = {
+  open: 'Open',
+  done: 'Acted on',
+  skipped: 'Skipped',
+  not_my_lane: 'Not my lane',
+};
 
 export type Surfacing = { readonly surfaced: true } | { readonly surfaced: false; readonly why: string };
 
@@ -144,6 +192,36 @@ export const INBOUND_RESPONSE_LABEL: Readonly<Record<InboundResponse, string>> =
  * The uniformity is the tell.
  */
 export const TEAM_POST_CEILING = 3;
+
+/**
+ * §6.7's guard rails, as numbers.
+ *
+ * Each one is a limit on us rather than on the drafts: ten approvals a day is "normal
+ * behaviour for a real professional", and two of us on one external post is the line before
+ * it reads as brigading — which is also what LinkedIn's 2026 pod detection looks for (§7.2).
+ */
+export const DAILY_APPROVAL_CAP = 10;
+export const MAX_PEOPLE_PER_EXTERNAL_POST = 2;
+/** §0.3 decision 16 — the volume the engine drafts across the team, not a target to hit. */
+export const WEEKLY_DRAFTED_ENGAGEMENTS = 100;
+
+/** True once two of us are already on this external post — §6.7 rule 3. */
+export function atBrigadingLimit(targets: readonly EngagementTarget[], postId: string): boolean {
+  const onPost = targets.filter((t) => t.post.id === postId && t.status !== 'skipped' && t.status !== 'not_my_lane');
+  return onPost.length >= MAX_PEOPLE_PER_EXTERNAL_POST;
+}
+
+/**
+ * How a response reaches the platform — §6.6.
+ *
+ * One tap rather than the API, and the reason is not technical: LinkedIn's 2026 enforcement
+ * targets comments "posted to LinkedIn through a third party", and the penalty is a comment
+ * shown only to the commenter's own network — "so the creator's audience, the reason we
+ * comment, never sees it". X replies are the same pipeline. Reddit is manual, always.
+ */
+export function engagementPublishMode(platform: EngagementPlatform): PublishMode {
+  return platform === 'reddit' ? 'manual' : 'one_tap';
+}
 
 export function teamPostCeilingReached(targets: readonly EngagementTarget[], postId: string): boolean {
   const onPost = targets.filter(

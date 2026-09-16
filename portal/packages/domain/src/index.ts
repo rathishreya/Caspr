@@ -11,6 +11,7 @@ export * from './creative';
 export * from './decision';
 export * from './platform-week';
 export * from './daily';
+export * from './stance';
 export * from './engagement';
 export * from './reference-week';
 export * from './reference-posts';

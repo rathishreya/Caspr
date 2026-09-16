@@ -21,6 +21,7 @@ import {
   REJECT_CODES,
   TRACKS,
   type CreativeSpec,
+  type EngagementDraft,
   type PostBody,
 } from '@caspr-portal/domain';
 import { relations } from 'drizzle-orm';
@@ -55,7 +56,8 @@ export const sourceableEnum = pgEnum('sourceable', ['found', 'thin', 'not_found'
 export const reviewActionEnum = pgEnum('review_action', ['approve', 'reject', 'hold']);
 export const trackEnum = pgEnum('track', TRACKS);
 export const engagementKindEnum = pgEnum('engagement_kind', ENGAGEMENT_KINDS);
-export const engagementStatusEnum = pgEnum('engagement_status', ['open', 'done', 'skipped']);
+// `not_my_lane` is one of §6.5's four actions and is not a skip — see `engagement.ts`.
+export const engagementStatusEnum = pgEnum('engagement_status', ['open', 'done', 'skipped', 'not_my_lane']);
 
 /**
  * `content_items`.
@@ -231,6 +233,8 @@ export const engagementTargets = pgTable(
     assignedTo: text('assigned_to').notNull(),
     /** Inbound acts only: who was tagged or reshared. */
     about: text('about'),
+    /** 2–3 lane-voiced variants the desk drafted — `engagement.ts`, framework §6.4. */
+    drafts: jsonb('drafts').$type<EngagementDraft[]>().notNull().default([]),
     status: engagementStatusEnum('status').notNull().default('open'),
     surfacedAt: timestamp('surfaced_at', { withTimezone: true }).notNull().defaultNow(),
     actedAt: timestamp('acted_at', { withTimezone: true }),

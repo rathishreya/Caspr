@@ -81,3 +81,46 @@ describe('the report never claims a check it did not run', () => {
     expect(report.notRun.every((r) => r.why.length > 0)).toBe(true);
   });
 });
+
+/**
+ * The rules added on 2026-09-16, from Joy's two updated documents. Each test names the
+ * decision it enforces, because a rule whose reason is not written down gets relaxed.
+ */
+describe('the 2026-09-14 and 2026-09-15 decisions', () => {
+  it('L12 · catches the retired brains, and leaves machine learning alone', () => {
+    expect(rules('Caspr’s Thinking Brain reasons through the data.')).toEqual(['L12']);
+    expect(rules('We weigh the sources and pick one.')).toEqual(['L12']);
+    expect(rules('Caspr Signals covers three topics.')).toEqual(['L12']);
+    expect(rules('Machine learning has nothing to do with it.')).toEqual([]);
+  });
+
+  it('L13 · catches a retired plan name, and not the tagline', () => {
+    expect(rules('Editing unlocks at the Business milestone.')).toEqual(['L13']);
+    expect(rules('Caspr means Business.')).toEqual([]);
+    expect(rules('Team adds a shared Data Room.')).toEqual([]);
+  });
+
+  it('L14 · blocks the budget written as a bill, and allows the budget written correctly', () => {
+    expect(lintDeterministic('Caspr is $200/mo.').blocked).toBe(true);
+    expect(rules('$600 a month of research, and unused balance carries forward.')).toEqual([]);
+    expect(rules('Published estimates run from $5.86bn to $6.46bn.')).toEqual([]);
+    expect(rules('Run one from $15.')).toEqual([]);
+  });
+
+  it('L15 · catches proof handed to the reader as work', () => {
+    expect(rules('Verify it yourself in the citations.')).toEqual(['L15']);
+    expect(rules('When the room asks, the answer is already on the page.')).toEqual([]);
+  });
+
+  it('L16 · blocks a depth that is not live, unless the line says so', () => {
+    expect(lintDeterministic('Run an Intelligence report for the board.').blocked).toBe(true);
+    expect(rules('Intelligence, the $300 depth, is coming soon.')).toEqual([]);
+  });
+
+  it('L17 · catches the claims register’s own prohibitions', () => {
+    expect(rules('Our EV charging analysis went out on Tuesday.')).toEqual(['L17']);
+    expect(rules('Every claim, triangulated.')).toEqual(['L17']);
+    expect(rules('A Study is where every claim, triangulated, means something.')).toEqual([]);
+    expect(rules('ChatGPT gets this wrong.')).toEqual(['L17']);
+  });
+});

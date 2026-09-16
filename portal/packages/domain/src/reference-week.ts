@@ -234,10 +234,10 @@ export const REFERENCE_WEEK: readonly ContentItem[] = [
   },
   {
     id: 'ci-0419-03',
-    // Was an X post on the copper split. Moved to Instagram 2026-09-15 so the platform has its
-    // item without changing the 23-item week the Figma frame counts. flowcharts/I-platforms
-    // C1: Instagram is "a repost surface only — the atom card. NOTHING is written for it."
-    channel: 'instagram',
+    // Was an X post on the copper split. Moved to the Meta shell 2026-09-15 so the surface has
+    // its item without changing the 23-item week the Figma frame counts. Framework §9.4: the
+    // shell auto-posts the cards and cutdowns already being made, and nothing is written for it.
+    channel: 'meta',
     track: 'weekly',
     generatedAt: QUEUE_OPENED,
     type: 'derivative',

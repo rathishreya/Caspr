@@ -16,11 +16,31 @@
  *  · `L11` needs ninety days of published history to compare against.
  *
  * `L08` (channel constraints) lives in `post.ts`, beside the channel rules it enforces.
+ *
+ * ⚑ **`L12`–`L17` are additions, 2026-09-16**, from two documents Joy updated on 2026-09-14
+ * and 2026-09-15: the **GTM activation framework v2** (§5 the stance library, §6.4 "the
+ * linter blocks") and the **content repository's Voice Cheat Sheet, Pass 4** ("supersede
+ * anything above that conflicts"). They are numbered after §4.1's set rather than folded
+ * into it, so a rule Joy wrote and a rule taken from her later decisions stay distinguishable.
  */
 
 import { copyLinesByTier } from './library';
 
-export type DeterministicRuleId = 'L01' | 'L02' | 'L03' | 'L04' | 'L05' | 'L06' | 'L07' | 'L10';
+export type DeterministicRuleId =
+  | 'L01'
+  | 'L02'
+  | 'L03'
+  | 'L04'
+  | 'L05'
+  | 'L06'
+  | 'L07'
+  | 'L10'
+  | 'L12'
+  | 'L13'
+  | 'L14'
+  | 'L15'
+  | 'L16'
+  | 'L17';
 export type UnrunRuleId = 'L09' | 'L11' | 'L20' | 'L21' | 'L22' | 'L23' | 'L24';
 
 export interface LintRule {
@@ -61,6 +81,12 @@ export const DETERMINISTIC_RULES: readonly LintRule[] = [
   { id: 'L06', name: 'Known-stale numbers', onFail: 'regenerate' },
   { id: 'L07', name: 'Brand boundary', onFail: 'block' },
   { id: 'L10', name: 'Platform-fee mention', onFail: 'block' },
+  { id: 'L12', name: 'Retired vocabulary', onFail: 'regenerate' },
+  { id: 'L13', name: 'Retired plan names', onFail: 'regenerate' },
+  { id: 'L14', name: 'Budget written as a subscription price', onFail: 'block' },
+  { id: 'L15', name: 'Proof framed as the reader’s work', onFail: 'regenerate' },
+  { id: 'L16', name: 'Not live at launch, written as live', onFail: 'block' },
+  { id: 'L17', name: 'Claims register', onFail: 'regenerate' },
 ];
 
 export const UNRUN_RULES: readonly (LintRule & { readonly why: string })[] = [
@@ -105,6 +131,72 @@ const L07 = /ghost research/gi;
  */
 const L10 = /(?<![\d.])7%|platform fee/gi;
 
+/**
+ * `L12` — words the company retired, 2026-08-27 and 2026-09-15.
+ *
+ * *Thinking* and *Learning* went with the two brains (`CLAUDE.md`: "Never reintroduce
+ * either, or the word *brain*"), and *weigh* lost to *Assess* — "having just retired
+ * *thinking* for being colonised, adopting a second contested word would be the same
+ * mistake twice". **Caspr Signals** is a name collision: the Signal is the opinion layer
+ * inside a report, never a plan feature and never priced.
+ *
+ * ⚠ `learning` and `weigh` are matched only where they read as ours — *the learning brain*,
+ * *we weigh*, *weighing the sources*. "Machine learning" and "the weight of evidence" are
+ * ordinary English, and a rule that fires on those is a rule reviewers learn to ignore.
+ */
+const L12 = /\bbrains?\b|\bthinking brain\b|\blearning brain\b|Caspr Signals|\b(?:we|caspr) weighs?\b|\bweigh(?:s|ed|ing)? (?:the )?(?:sources|claims|evidence|figures)\b/gi;
+
+/**
+ * `L13` — the retired plan names. Try · Solo · Team · Org, and nothing else.
+ *
+ * Matched with their noun, never bare: `Business` is an ordinary word, and *Caspr means
+ * Business* is the tagline. What is wrong is `Business` **as a plan**.
+ */
+const L13 =
+  /\b(?:Professional|Business|Enterprise|Free|Plus|Pro)\s+(?:plan|tier|milestone|subscription)\b|\b(?:at|on|with|unlocks? at|comes with)\s+(?:Professional|Business|Enterprise)\b/gi;
+
+/**
+ * `L14` — the Research Budget written as a bill. `COPY-11a` / `COPY-11b`.
+ *
+ * "$200 a month of research" is the budget. "$200 a month" is a subscription price, and the
+ * product does not have one — which is why this blocks rather than regenerating.
+ *
+ * ⚠ Price framings only. A bare `from $15` is the approved analysis-price line and a bare
+ * `$5.86bn` is a market figure — the first draft of this rule flagged the ready meals range,
+ * which is exactly the false positive that teaches a reviewer to stop reading the linter.
+ */
+const L14 =
+  /\$\d[\d,.]*\s*(?:\/\s*mo\b|\/\s*month\b|\s*(?:a|per)\s+month(?! of research))|\bstarting at \$\d[\d,.]*|\bthe \$\d[\d,.]*\s+plan\b|only what you run is recharged/gi;
+
+/**
+ * `L15` — proof as labour for the reader. Brand rule 2, and Pass 4 restates it.
+ *
+ * "Describe the artefact; never assign the labour." Citations answer *when the room asks*,
+ * not *so you can check*. The verbs are matched where they take the reader as their subject.
+ */
+const L15 =
+  /\bverify (?:it|them|any|every|the)\b|\bverify for yourself\b|\bcheck the working\b|\baudit it yourself\b|\bsee for yourself\b|\bspot-check\b|\bfact-check (?:it|them|every|each)\b/gi;
+
+/**
+ * `L16` — what is not live at launch, written as though it were.
+ *
+ * Pass 4's list: the $300 depth (Intelligence · Diligence · Strategic options), Insights,
+ * Updates, Connect-a-source, Legal Document, the Alerts bell. Allowed with *coming soon* or
+ * *not yet live* within 120 characters, which is how the repository itself writes them.
+ */
+const L16 = /\$300 depth|\bIntelligence\b|\bConnect-a-source\b|\bthe Alerts bell\b/g;
+const NOT_LIVE = /\b(?:coming soon|not (?:yet )?live|later phase|phase 2)\b/i;
+const NOT_LIVE_WINDOW = 120;
+
+/**
+ * `L17` — the claims register's own prohibitions (activation framework §5).
+ *
+ * "Never in a draft: anything about EV charging · unqualified *every claim, triangulated* —
+ * say *a Study* · any comparison led by price." Naming an AI tool belongs here too: §6.4
+ * blocks it, and the one permitted category line never names a product.
+ */
+const L17 = /\bEV charging\b|every claim,? triangulated|\b(?:ChatGPT|Perplexity|Gemini|Copilot|Claude|Bard)\b/gi;
+
 function matchAll(pattern: RegExp, text: string, rule: DeterministicRuleId): LintFinding[] {
   const found: LintFinding[] = [];
   for (const m of text.matchAll(pattern)) {
@@ -119,6 +211,22 @@ function contrastOnly(text: string): LintFinding[] {
     const end = Math.min(text.length, finding.index + finding.match.length + NEGATION_WINDOW);
     return !NEGATION.test(text.slice(start, end));
   });
+}
+
+/** A term that is allowed once the text says it is not live — `L16`. */
+function notLiveAsLive(text: string): LintFinding[] {
+  return matchAll(L16, text, 'L16').filter((finding) => {
+    const start = Math.max(0, finding.index - NOT_LIVE_WINDOW);
+    const end = Math.min(text.length, finding.index + finding.match.length + NOT_LIVE_WINDOW);
+    return !NOT_LIVE.test(text.slice(start, end));
+  });
+}
+
+/** `L17`, minus the one qualified use the register allows: "a Study" beside the proof line. */
+function claimsRegister(text: string): LintFinding[] {
+  return matchAll(L17, text, 'L17').filter(
+    (finding) => !(/^every claim/i.test(finding.match) && /\ba Study\b/i.test(text)),
+  );
 }
 
 function retiredCopy(text: string): LintFinding[] {
@@ -148,6 +256,12 @@ export function lintDeterministic(text: string): LintReport {
     ...matchAll(L06, text, 'L06'),
     ...matchAll(L07, text, 'L07'),
     ...matchAll(L10, text, 'L10'),
+    ...matchAll(L12, text, 'L12'),
+    ...matchAll(L13, text, 'L13'),
+    ...matchAll(L14, text, 'L14'),
+    ...matchAll(L15, text, 'L15'),
+    ...notLiveAsLive(text),
+    ...claimsRegister(text),
   ].sort((a, b) => a.index - b.index);
 
   const blocking = new Set(DETERMINISTIC_RULES.filter((r) => r.onFail === 'block').map((r) => r.id));

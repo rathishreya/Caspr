@@ -84,11 +84,11 @@ export const CHANNEL_CREATIVE: Readonly<Record<Channel, CreativeRule>> = {
   linkedin: { need: 'optional', canvas: 'social', rule: 'One atom or a document', source: `${PLATFORMS} A1` },
   linkedin_page: { need: 'optional', canvas: 'social', rule: 'One atom or a document', source: `${PLATFORMS} A1` },
   x: { need: 'optional', canvas: 'social', rule: 'A card, on the first post', source: `${PLATFORMS} B1` },
-  instagram: {
+  meta: {
     need: 'required',
     canvas: 'social',
-    rule: 'The atom card is the post — nothing is written for it',
-    source: `${PLATFORMS} C1`,
+    rule: 'The card is the post — nothing is written for it',
+    source: `${PLATFORMS} C1 · framework §9.3`,
   },
   blog: { need: 'required', canvas: 'hero', rule: 'One hero image, which is also the link preview', source: `${PLATFORMS} B2` },
   reddit: { need: 'never', canvas: null, rule: 'Native to the thread — no template shape', source: `${PLATFORMS} D1` },

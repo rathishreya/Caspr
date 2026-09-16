@@ -34,26 +34,62 @@ export const CHANNELS = [
   'outreach',
   'reddit',
   'quora',
-  'instagram',
+  // `activation-framework.md` §11 names the surface `meta`, and §9.4 says what it is: a thin
+  // shell over Instagram and Facebook that auto-posts cutdowns and cards. Was `instagram`
+  // until 2026-09-16 — the platform is not the channel; the shell is.
+  'meta',
 ] as const;
 export type Channel = (typeof CHANNELS)[number];
 
-/** How a channel is published. Build spec §3.6, operating model ㉛. */
-export const CHANNEL_PUBLISH_MODE: Readonly<Record<Channel, 'automated' | 'assisted' | 'human_only'>> = {
-  blog: 'automated',
-  email: 'automated',
-  linkedin_page: 'automated',
-  linkedin: 'automated',
-  x: 'automated',
-  /** ㉛: "The atom card, auto, no copy written for it." */
-  instagram: 'automated',
-  /** ⛔ Permanently out of scope for automation — build spec §11. */
-  community: 'human_only',
-  outreach: 'human_only',
+/**
+ * How a thing reaches its surface — `activation-framework.md` §11, the four `publish_mode`
+ * values, replacing this file's own three on 2026-09-16.
+ *
+ * The old set (`automated` · `assisted` · `human_only`) collapsed two different things into
+ * "assisted": a post a person *releases* and a comment a person *taps into the platform*.
+ * They are different actions, different risks and different screens, which is why Joy's set
+ * separates them.
+ */
+export const PUBLISH_MODES = ['auto', 'release', 'one_tap', 'manual'] as const;
+export type PublishMode = (typeof PUBLISH_MODES)[number];
+
+/** §13's key, verbatim — the words the team reads on the board. */
+export const PUBLISH_MODE_LABEL: Readonly<Record<PublishMode, string>> = {
+  auto: 'Auto',
+  release: 'Release',
+  one_tap: 'One tap',
+  manual: 'Manual',
+};
+
+export const PUBLISH_MODE_MEANING: Readonly<Record<PublishMode, string>> = {
+  auto: 'publishes once approved',
+  release: 'a person releases, the system sends',
+  one_tap: 'approved, then posted natively',
+  manual: 'a person does it',
+};
+
+/** How a channel is published. Build spec §3.6 · operating model ㉛ · framework §13.2. */
+export const CHANNEL_PUBLISH_MODE: Readonly<Record<Channel, PublishMode>> = {
+  blog: 'auto',
+  email: 'auto',
+  /**
+   * ⚠ `release` until LinkedIn approves the Community Management API, then `auto` —
+   * framework §13.2 and external dependency 2. The application is open; a rejection means a
+   * new app, so the board says Release rather than assuming the grant.
+   */
+  linkedin_page: 'release',
+  linkedin: 'auto',
+  x: 'auto',
+  /** §9.4: the shell auto-posts the cutdowns and cards already being made. Nothing else. */
+  meta: 'auto',
+  /** ⛔ §11: "Community surfaces are always manual." */
+  community: 'manual',
+  /** Earned media: a person sends a pitch, and Joy taps send on the founder's own messages. */
+  outreach: 'manual',
   /** ⛔ ㉛: "A human posts. Always" — capped at one a day, rotating person and subreddit. */
-  reddit: 'human_only',
+  reddit: 'manual',
   /** ⛔ Decided 2026-09-10: Reddit and Quora never flip to automated, whatever else does. */
-  quora: 'human_only',
+  quora: 'manual',
 };
 
 /**
@@ -239,5 +275,5 @@ export const CHANNEL_LABEL: Readonly<Record<Channel, string>> = {
   outreach: 'OUTREACH',
   reddit: 'REDDIT',
   quora: 'QUORA',
-  instagram: 'INSTAGRAM',
+  meta: 'META',
 };

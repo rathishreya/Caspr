@@ -198,7 +198,7 @@ export const REFERENCE_POSTS: readonly PostVersion[] = [
     researchBasis: ['index-engine.md §1', 'seo/hybrid-validation.md :17'],
     regeneratedAfter: null,
     body: {
-      kind: 'instagram',
+      kind: 'meta',
       caption: 'Source: IMARC Group; MarkNtel Advisors. Saudi Arabia industrial valves, market size, 2025.',
     },
     creative: VALVES_ATOM,

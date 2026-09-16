@@ -26,6 +26,7 @@ import {
   type DecisionInput,
   type EngagementPlatform,
   type EngagementTarget,
+  type EngagementStatus,
   type PostVersion,
   type RejectCode,
   type ReviewDecisionRecord,
@@ -92,8 +93,8 @@ export interface ContentRepository {
   decide(input: DecisionInput, reviewer: string): Promise<DecideResult>;
   /** Comments, reposts, tags and reshares surfaced in the week. Outside the review gate. */
   engagementsForWeek(weekStartDate: string): Promise<readonly EngagementTarget[]>;
-  /** Record that a person acted on a target, or chose not to. */
-  markEngagement(id: string, status: 'done' | 'skipped'): Promise<boolean>;
+  /** Record that a person acted on a target, chose not to, or sent it back as not theirs. */
+  markEngagement(id: string, status: EngagementStatus): Promise<boolean>;
   /** Which adapter answered. Surfaced on screen rather than hidden — see `FeedNotice`. */
   readonly kind: 'postgres' | 'reference';
 }
@@ -204,7 +205,7 @@ class ReferenceRepository implements ContentRepository {
     });
   }
 
-  async markEngagement(id: string, status: 'done' | 'skipped'): Promise<boolean> {
+  async markEngagement(id: string, status: EngagementStatus): Promise<boolean> {
     const target = REFERENCE_ENGAGEMENT.find((t) => t.id === id);
     if (!target || this.#engagement.has(id)) return false;
     this.#engagement.set(id, status);
@@ -309,11 +310,12 @@ class PostgresRepository implements ContentRepository {
       assignedTo: row.assignedTo,
       about: row.about,
       illustrative: false,
+      drafts: row.drafts,
       status: row.status,
     }));
   }
 
-  async markEngagement(id: string, status: 'done' | 'skipped'): Promise<boolean> {
+  async markEngagement(id: string, status: EngagementStatus): Promise<boolean> {
     const db = getDatabase();
     const updated = await db
       .update(engagementTargets)

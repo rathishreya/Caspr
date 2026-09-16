@@ -27,14 +27,26 @@ describe('the reject taxonomy', () => {
   });
 });
 
-describe('channels that are never automated', () => {
+describe('how each channel publishes — activation framework §11', () => {
   /**
    * Build spec §11 puts community posting permanently out of scope: "Automated posting
    * here gets accounts banned and burns the channel permanently."
    */
-  it('keeps community and outreach human-only', () => {
-    expect(CHANNEL_PUBLISH_MODE.community).toBe('human_only');
-    expect(CHANNEL_PUBLISH_MODE.outreach).toBe('human_only');
+  it('keeps every community surface manual', () => {
+    expect(CHANNEL_PUBLISH_MODE.community).toBe('manual');
+    expect(CHANNEL_PUBLISH_MODE.reddit).toBe('manual');
+    expect(CHANNEL_PUBLISH_MODE.quora).toBe('manual');
+    expect(CHANNEL_PUBLISH_MODE.outreach).toBe('manual');
+  });
+
+  /**
+   * §13.2: the Company Page is Release "until LinkedIn approves the API, then Auto" — and
+   * the approval is external dependency 2, with a rejection meaning a new application. The
+   * board promises what is true today.
+   */
+  it('holds the Company Page at release until the API is approved', () => {
+    expect(CHANNEL_PUBLISH_MODE.linkedin_page).toBe('release');
+    expect(CHANNEL_PUBLISH_MODE.linkedin).toBe('auto');
   });
 });
 

@@ -119,7 +119,7 @@ export function PostPreview({
         </Stage>
       );
 
-    case 'instagram':
+    case 'meta':
       return (
         <Stage platform="instagram" mode={mode}>
           <article className="pv pv-ig" aria-label="Post on Instagram">
@@ -135,7 +135,7 @@ export function PostPreview({
               </span>
             </header>
             {picture === null ? (
-              <div className="pv-ig__missing">No image — Instagram cannot publish this post</div>
+              <div className="pv-ig__missing">No image — the shell posts a card, and there is none</div>
             ) : (
               <CreativeImage picture={picture} className="pv-ig__image" />
             )}

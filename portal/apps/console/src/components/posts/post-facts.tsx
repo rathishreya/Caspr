@@ -1,5 +1,7 @@
 import {
   CHANNEL_PUBLISH_MODE,
+  PUBLISH_MODE_LABEL,
+  PUBLISH_MODE_MEANING,
   creativeFor,
   dailyDeadline,
   narrative,
@@ -30,7 +32,7 @@ export function PostChecks({ item, version }: { readonly item: ContentItem; read
   const review = reviewPost(item, version);
   const failed = review.checks.filter((check) => !check.pass).length + review.lint.findings.length;
   const link = linkOf(version);
-  const handPosted = CHANNEL_PUBLISH_MODE[item.channel] === 'human_only';
+  const mode = CHANNEL_PUBLISH_MODE[item.channel];
   const told = narrative(item.narrative);
 
   return (
@@ -90,8 +92,8 @@ export function PostChecks({ item, version }: { readonly item: ContentItem; read
                 <span className="check__value">
                   {' '}
                   — the metadata service is not reachable, so no image publishes yet
-                  {item.channel === 'instagram'
-                    ? ', and Instagram cannot post without one'
+                  {item.channel === 'meta'
+                    ? ', and the shell has nothing to post without one'
                     : '; the post goes out as text'}{' '}
                   (Rule 6 · integrations E8)
                 </span>
@@ -153,11 +155,11 @@ export function PostChecks({ item, version }: { readonly item: ContentItem; read
             ) : (
               <>
             After approval:{' '}
-            {handPosted
+            {mode === 'manual'
               ? `surfaced to ${personName(item.voiceLane)} on ${slotLabel(item)} to post by hand — never automatically.`
-              : item.scheduledFor === null
-                ? `hygiene pass, then ${PLATFORM_NAME[item.channel]} at the next open window.`
-                : `hygiene pass, then ${PLATFORM_NAME[item.channel]} at ${slotLabel(item)}.`}
+              : `${PUBLISH_MODE_LABEL[mode].toLowerCase()} — ${PUBLISH_MODE_MEANING[mode]}. Hygiene pass, then ${PLATFORM_NAME[item.channel]} ${
+                  item.scheduledFor === null ? 'at the next open window' : `at ${slotLabel(item)}`
+                }.`}
               </>
             )}
           </p>

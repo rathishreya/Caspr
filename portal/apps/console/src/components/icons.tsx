@@ -19,6 +19,7 @@ export type IconName =
   | 'search'
   | 'paid'
   | 'email'
+  | 'earned'
   | 'calendar'
   | 'dashboard'
   | 'truth'
@@ -114,6 +115,16 @@ const PATHS: Record<IconName, React.ReactNode> = {
     <>
       <path d="M3 13h5l1 3h6l1-3h5" />
       <path d="M4 6h16l1 7v6H3v-6z" />
+    </>
+  ),
+  /**
+   * Earned Media: a megaphone, drawn as an outline so it reads at 18px in the rail. The
+   * workstream is borrowed reach — somebody else's audience, carrying our finding.
+   */
+  earned: (
+    <>
+      <path d="M4 10v4a1 1 0 0 0 1 1h3l6 4V5L8 9H5a1 1 0 0 0-1 1z" />
+      <path d="M18 9a4 4 0 0 1 0 6" />
     </>
   ),
   /**

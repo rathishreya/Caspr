@@ -13,7 +13,7 @@ const ORDER: readonly Channel[] = [
   'linkedin',
   'linkedin_page',
   'x',
-  'instagram',
+  'meta',
   'reddit',
   'quora',
   'blog',
@@ -29,7 +29,7 @@ export const PLATFORM_NAME: Readonly<Record<Channel, string>> = {
   linkedin: 'LinkedIn',
   linkedin_page: 'LinkedIn Page',
   x: 'X',
-  instagram: 'Instagram',
+  meta: 'Meta',
   reddit: 'Reddit',
   quora: 'Quora',
   blog: 'Blog',
@@ -75,9 +75,9 @@ export const PLATFORM_REGISTER: readonly PlatformRole[] = [
     on: 'posts',
   },
   {
-    name: 'Instagram',
-    role: 'A repost surface for chart cards. Our buyer does not choose a research tool here, so it costs nothing extra and is expected to earn nothing.',
-    cadence: '3 a week · no copy written',
+    name: 'Meta — Instagram · Facebook',
+    role: 'The recall layer, not discovery. A thin shell that auto-posts the cutdowns and cards already made, so an ad leads somewhere credible. No community management.',
+    cadence: '~2 cutdowns a week, once cuts exist',
     on: 'posts',
   },
   {
@@ -88,7 +88,7 @@ export const PLATFORM_REGISTER: readonly PlatformRole[] = [
   },
   {
     name: 'Quora',
-    role: 'The one that compounds. An answer ranks in search and feeds answer engines for years.',
+    role: 'The one that compounds — an answer ranks in search and feeds answer engines for years. ⚠ Not in the activation framework’s surface list, which calls it a demand signal rather than a channel; kept at the workstream owner’s request, 2026-09-15.',
     cadence: '5 short answers a week, each linking to our own page',
     on: 'posts_by_hand',
   },
@@ -111,13 +111,19 @@ export const PLATFORM_REGISTER: readonly PlatformRole[] = [
     on: 'engagement',
   },
   {
-    name: 'Facebook',
-    role: 'Not a channel. The Page exists so the company looks real to anyone who checks, and mirrors the LinkedIn Page. Nothing is planned or measured on it.',
-    cadence: '—',
+    name: 'YouTube',
+    role: 'An issue’s walkthrough and its shorts — searchable for years, and cited by Google’s AI answers, which is why it feeds p. The engine writes the script and the caption; it does not make video.',
+    cadence: '3–4 per issue, released by a person',
+    on: 'engagement',
+  },
+  {
+    name: 'Product Hunt · Show HN',
+    role: 'One-shots, held for the peak. "We are live today, here is the link" — never "please upvote".',
+    cadence: 'Once, at the peak',
     on: 'not_a_channel',
   },
   {
-    name: 'YouTube · TikTok',
+    name: 'TikTok',
     role: 'Out of scope. Video belongs to the DM team’s editor, not the engine.',
     cadence: '—',
     on: 'not_a_channel',
@@ -148,7 +154,7 @@ export function authorOf(item: ContentItem): Author {
   return {
     name,
     detail:
-      CHANNEL_PUBLISH_MODE[item.channel] === 'human_only'
+      CHANNEL_PUBLISH_MODE[item.channel] === 'manual'
         ? `Posts by hand, from ${name}'s own account`
         : `${lane?.role ?? 'Team'} · Caspr`,
     mark: name.slice(0, 1).toUpperCase(),

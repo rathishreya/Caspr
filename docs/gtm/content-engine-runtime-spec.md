@@ -751,8 +751,16 @@ CommentTarget {
 
 **Three more rules that follow:**
 
-1. **A person posts it. Always.** The desk surfaces the target and the fact; it never posts, never drafts a
-   finished comment for one-click sending.
+1. **A person posts it. Always.** The desk surfaces the target and the fact.
+   ⚑ **Reversed in part, 2026-09-14 — `activation-framework.md` §0.3 decision 14 and §6.4.** The desk now
+   **drafts**: *"The portal drafts; nobody writes from scratch. People operate from emotion — drafts from
+   approved lines are the brand-safety mechanism."* What this rule protected moves into the shape of the
+   draft rather than its absence: **2–3 variants**, each in one person's lane, each built on a specific
+   sourced finding, drawn only from the stance library (§5) and the claims register. **No draft for the
+   expert practitioners** (§6.7 rule 6 — *"Never supply the words"*), and **nothing publishes through the
+   API**: the approved comment goes out by **one tap** (§6.6), because LinkedIn's 2026 enforcement pushes a
+   third-party comment out of *Most relevant* and shows it only to the commenter's own network — *"so the
+   creator's audience, the reason we comment, never sees it."*
 2. **Lane-matched.** A target is assigned to the person whose lane covers its subject. Kartikey never gets a
    target that speaks for the company; Jayant never gets one about pricing.
 3. **Timing is surfaced, not enforced.** LinkedIn weights substantive comments in the first 30–60 minutes, so

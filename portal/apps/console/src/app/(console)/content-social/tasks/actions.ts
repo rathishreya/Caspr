@@ -62,8 +62,13 @@ export async function decide(_previous: DecideState, formData: FormData): Promis
   redirect(`/content-social/tasks?${params.toString()}#decide` as Route);
 }
 
+/** The three endings §6.5 allows once a card is open. `open` is not one of them. */
+function isClosingStatus(value: FormDataEntryValue | null): value is 'done' | 'skipped' | 'not_my_lane' {
+  return value === 'done' || value === 'skipped' || value === 'not_my_lane';
+}
+
 /**
- * Record that a person acted on an engagement target — or chose not to.
+ * Record that a person acted on an engagement target, skipped it, or sent it back.
  *
  * Not a review decision, and deliberately a separate action: engagement sits outside the
  * review gate (operating model ㉖), so it carries no reason code, no note and no minutes.
@@ -73,7 +78,7 @@ export async function decide(_previous: DecideState, formData: FormData): Promis
 export async function markEngagement(_previous: DecideState, formData: FormData): Promise<DecideState> {
   const id = formData.get('targetId');
   const status = formData.get('status');
-  if (typeof id !== 'string' || (status !== 'done' && status !== 'skipped')) {
+  if (typeof id !== 'string' || !isClosingStatus(status)) {
     return { errors: ['That action did not arrive whole. Reload and try again.'] };
   }
 

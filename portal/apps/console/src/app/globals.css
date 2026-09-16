@@ -1986,3 +1986,82 @@ a.card:hover {
 .register__row--out td {
   color: var(--text-tertiary);
 }
+
+/* ── The drafted reply — activation framework §6.4, §6.5 ─────────────────── */
+
+.drafts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.drafts__set {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.drafts__legend {
+  padding: 0 0 var(--space-2);
+  color: var(--text-tertiary);
+}
+
+.draft {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.draft:hover {
+  border-color: var(--border-strong);
+}
+
+.draft--on {
+  border-color: var(--text-secondary);
+  background: var(--surface-hover);
+}
+
+.draft input {
+  margin-top: 3px;
+  accent-color: var(--text-primary);
+}
+
+.draft__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.draft__angle {
+  color: var(--text-tertiary);
+}
+
+.draft__text {
+  color: var(--text-primary);
+}
+
+.drafts__note {
+  align-self: center;
+}
+
+.engage-caps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-2);
+  margin: 0 0 var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-default);
+  border-left: 2px solid var(--text-secondary);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+}
