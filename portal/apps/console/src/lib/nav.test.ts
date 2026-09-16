@@ -69,19 +69,35 @@ describe("Content & Social's tabs", () => {
  * one way this tree can lie, so the two are checked against each other.
  */
 describe('the workstream tabs', () => {
-  it('gives every built workstream three tabs, starting at its rail destination', () => {
+  /**
+   * §12 gives every workstream three tabs. SEO has four since 2026-09-16 — the site itself
+   * turned out to be a second own-object, and Backlog was a to-do list beside the to-do
+   * list. The rule that has to hold is that a tab strip starts where the rail points, not
+   * that every strip is the same length.
+   */
+  it('starts every built workstream at its rail destination', () => {
     for (const id of ['content-social', 'seo', 'performance', 'email']) {
       const tabs = WORKSTREAM_TABS[id];
       const destination = NAV_DESTINATIONS.find((d) => d.id === id);
-      expect(tabs, id).toHaveLength(3);
+      expect(tabs?.length, id).toBeGreaterThanOrEqual(3);
       expect(destination?.built, id).toBe(true);
       expect(tabs?.[0]?.href, id).toBe(destination?.href);
     }
   });
 
-  it('names the third tab the same way in the tabs and in the register', () => {
+  it('gives Dashboard and Tasks to every workstream — §12’s two universals', () => {
     for (const [id, tabs] of Object.entries(WORKSTREAM_TABS)) {
-      expect(WORKSTREAM_THIRD_TAB[id], id).toBe(tabs[2]?.label);
+      const ids = tabs.map((tab) => tab.id);
+      expect(ids, id).toContain('dashboard');
+      expect(ids, id).toContain('tasks');
+    }
+  });
+
+  it('names the own-object tab the same way in the tabs and in the register', () => {
+    for (const [id, tabs] of Object.entries(WORKSTREAM_TABS)) {
+      const own = tabs.filter((tab) => tab.id !== 'dashboard' && tab.id !== 'tasks');
+      expect(own.length, id).toBeGreaterThan(0);
+      expect(own.some((tab) => tab.label === WORKSTREAM_THIRD_TAB[id]), id).toBe(true);
     }
   });
 

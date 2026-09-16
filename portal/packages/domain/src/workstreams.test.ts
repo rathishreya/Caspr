@@ -43,6 +43,17 @@ import {
   readClock,
 } from './discoverability';
 import {
+  LINK_ROUTES,
+  MIN_INBOUND_LINKS,
+  TECHNICAL,
+  checkPage,
+  postPage,
+  siteHealth,
+  slugify,
+  urlProblems,
+} from './page-seo';
+import { SITE_PAGES } from './reference-pages';
+import {
   BASELINE,
   CATEGORY_READING,
   KEYWORD_SHAPES,
@@ -353,6 +364,99 @@ describe('the target list', () => {
 
   it('counts the pitches nobody can send as lapsed rather than as a queue', () => {
     expect(approachProgress(REFERENCE_APPROACHES).lapsed).toBe(lapsedApproaches(REFERENCE_APPROACHES).length);
+  });
+});
+
+/**
+ * The site, page by page. These hold the architecture's own rules — the ones that are easy to
+ * lose in a redesign because nothing fails loudly when they break.
+ */
+describe('the site', () => {
+  it('carries every page from the architecture, with its phase', () => {
+    expect(SITE_PAGES.length).toBeGreaterThanOrEqual(30);
+    expect(new Set(SITE_PAGES.map((page) => page.path)).size).toBe(SITE_PAGES.length);
+    for (const page of SITE_PAGES) expect([1, 2, 3]).toContain(page.phase);
+  });
+
+  it('keeps every URL to the site’s own conventions', () => {
+    for (const page of SITE_PAGES) {
+      expect(urlProblems(page.path), page.path).toEqual([]);
+    }
+  });
+
+  it('catches an underscore, a capital, a trailing slash and a date', () => {
+    expect(urlProblems('/for_consulting')).toHaveLength(1);
+    expect(urlProblems('/For-Consulting')).toHaveLength(1);
+    expect(urlProblems('/consulting/')).toHaveLength(1);
+    expect(urlProblems('/blog/2026/a-post')).toHaveLength(1);
+    expect(urlProblems('/use-cases/due-diligence')).toEqual([]);
+  });
+
+  /**
+   * "No orphan pages. Every page receives minimum 2 inbound internal links." The plan itself
+   * leaves some pages short, and that is a planning defect worth seeing before it is a crawl
+   * result — so this asserts the check fires, not that the site is clean.
+   */
+  it('fails a page the linking plan leaves orphaned', () => {
+    const orphan = SITE_PAGES.find((page) => page.linkedFrom.length === 0);
+    expect(orphan).toBeDefined();
+    const links = checkPage(orphan!).find((check) => check.id === 'inbound_links');
+    expect(links?.pass).toBe(false);
+    expect(links?.weight).toBe('blocking');
+  });
+
+  it('counts a page with two inbound links as linked', () => {
+    const linked = SITE_PAGES.find((page) => page.linkedFrom.length >= MIN_INBOUND_LINKS);
+    expect(checkPage(linked!).find((check) => check.id === 'inbound_links')?.pass).toBe(true);
+  });
+
+  it('gives every failing check an instruction, never only a diagnosis', () => {
+    for (const page of SITE_PAGES) {
+      for (const check of checkPage(page)) {
+        if (check.pass) continue;
+        expect(check.fix.length, `${page.path} · ${check.id}`).toBeGreaterThan(20);
+      }
+    }
+  });
+
+  it('calls nothing ready while nothing is live', () => {
+    const health = siteHealth(SITE_PAGES);
+    expect(health.live).toBe(0);
+    expect(health.ready).toBe(0);
+    expect(health.indexed).toBe(0);
+    // Zero JSON-LD on any page is the standing fact; a few templates declare an intent.
+    expect(health.withSchema).toBeLessThan(health.pages);
+  });
+
+  it('names the commonest failure, because that one is a template fix', () => {
+    expect(siteHealth(SITE_PAGES).commonest?.count).toBeGreaterThan(1);
+  });
+
+  it('turns a post into a page without keeping a second list of posts', () => {
+    const page = postPage(
+      { id: 'x', title: 'Two published estimates, one market', channel: 'blog', status: 'approved' } as never,
+      undefined,
+    );
+    expect(page.path).toBe('/blog/two-published-estimates-one-market');
+    expect(page.kind).toBe('blog');
+    // No version yet means no brief, which means no target keyword — and the check says so.
+    expect(page.primaryKeyword).toBeNull();
+  });
+
+  it('slugifies the way a CMS would, so the URL checks read the real thing', () => {
+    expect(slugify('How much does market research cost?')).toBe('how-much-does-market-research-cost');
+    expect(slugify('  Spaces   and — punctuation!  ')).toBe('spaces-and-punctuation');
+  });
+
+  it('never lists paid links as a route', () => {
+    const paid = LINK_ROUTES.find((route) => route.id === 'paid-links');
+    expect(paid?.forbidden).toBe(true);
+    expect(paid?.owner).toBe('nobody');
+  });
+
+  it('names what every technical item affects, so a template fix is visible as one', () => {
+    expect(TECHNICAL.length).toBeGreaterThan(4);
+    for (const item of TECHNICAL) expect(item.fix.length).toBeGreaterThan(20);
   });
 });
 

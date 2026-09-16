@@ -1,4 +1,4 @@
-import { approachProgress, nextApproaches, openTasks } from '@caspr-portal/domain';
+import { nextApproaches, openTasks } from '@caspr-portal/domain';
 import type { ReactNode } from 'react';
 
 import { Tabs } from '@/components/primitives/tabs';
@@ -23,7 +23,6 @@ export const dynamic = 'force-dynamic';
 export default async function SeoLayout({ children }: { readonly children: ReactNode }) {
   const repository = getRepository();
   const [approaches, tasks] = await Promise.all([repository.approaches(), repository.seoTasks()]);
-  const progress = approachProgress(approaches);
 
   return (
     <>
@@ -39,7 +38,7 @@ export default async function SeoLayout({ children }: { readonly children: React
       <Tabs
         tabs={WORKSTREAM_TABS['seo'] ?? []}
         label="SEO"
-        badges={{ tasks: nextApproaches(approaches).length + openTasks(tasks).length, backlog: progress.identified }}
+        badges={{ tasks: openTasks(tasks).length, links: nextApproaches(approaches).length }}
       />
       {children}
     </>

@@ -17,6 +17,8 @@ export * from './presence';
 export * from './discoverability';
 export * from './approach';
 export * from './aeo';
+export * from './page-seo';
+export * from './reference-pages';
 export * from './paid';
 export * from './email';
 export * from './reference-week';

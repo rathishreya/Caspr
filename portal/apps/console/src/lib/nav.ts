@@ -226,10 +226,29 @@ export const WORKSTREAM_TABS: Readonly<Record<string, readonly WorkstreamTab[]>>
     { id: 'tasks', label: 'This week', href: '/content-social/tasks' as Route },
     { id: 'today', label: 'Today', href: '/content-social/today' as Route },
   ],
+  /**
+   * ⚑ **Four tabs, not three** — 2026-09-16, on the workstream owner's ask that the whole
+   * site's and every post's SEO be managed from here.
+   *
+   * §12 gives SEO "Dashboard · Tasks · Backlog", and Backlog was a thin surface: a to-do list
+   * beside the to-do list. What was actually missing is the thing an SEO person opens first —
+   * **the site**. So the workstream's own object is two objects, and each tab answers one
+   * plain question:
+   *
+   *   Dashboard  how are we doing?      the three clocks
+   *   Pages      is the site right?     every page and post, what is wrong, how to fix it
+   *   Links      are links coming in?   the routes, the target list, the entity
+   *   Tasks      what do I do today?    the week
+   *
+   * The backlog did not disappear: its debt is in Tasks, its standard and its families are in
+   * Pages, and its target list is in Links — each next to the work it governs rather than in
+   * a list of its own.
+   */
   seo: [
     { id: 'dashboard', label: 'Dashboard', href: '/seo/dashboard' as Route },
+    { id: 'pages', label: 'Pages', href: '/seo/pages' as Route },
+    { id: 'links', label: 'Links', href: '/seo/links' as Route },
     { id: 'tasks', label: 'Tasks', href: '/seo/tasks' as Route },
-    { id: 'backlog', label: 'Backlog', href: '/seo/backlog' as Route },
   ],
   performance: [
     { id: 'dashboard', label: 'Dashboard', href: '/performance/dashboard' as Route },
@@ -253,7 +272,9 @@ export const CONTENT_SOCIAL_TABS = WORKSTREAM_TABS['content-social'] as readonly
  */
 export const WORKSTREAM_THIRD_TAB: Readonly<Record<string, string>> = {
   'content-social': 'Today',
-  seo: 'Backlog',
+  // SEO's own object is the site. §12 said "Backlog"; that turned out to be a to-do list
+  // beside the to-do list, and the thing actually missing was every page and post.
+  seo: 'Pages',
   performance: 'Paid',
   email: 'Sequences',
   'earned-media': 'Pipeline',

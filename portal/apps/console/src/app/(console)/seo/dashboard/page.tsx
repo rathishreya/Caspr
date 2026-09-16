@@ -8,6 +8,8 @@ import {
   LEVERS,
   READINGS_BEFORE_A_THRESHOLD,
   SEO_CADENCE,
+  SITE_PAGES,
+  siteHealth,
   approachProgress,
   basketFor,
   firstApproachOn,
@@ -19,7 +21,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { Clocks } from '@/components/seo/clocks';
-import { Bar } from '@/components/primitives/tile';
+import { Bar, Tile } from '@/components/primitives/tile';
 import { getRepository } from '@/lib/repository';
 
 export const metadata: Metadata = { title: 'SEO — Dashboard' };
@@ -92,6 +94,8 @@ export default async function SeoDashboard() {
         <BaselinePanel />
         <CategoryPanel />
       </div>
+
+      <SitePanel />
 
       <LeverPanel />
 
@@ -182,6 +186,61 @@ function CategoryPanel() {
       <p className="t-body-s text-tertiary" style={{ marginTop: 'var(--space-3)' }}>
         {CATEGORY_READING.unresolved}
       </p>
+    </section>
+  );
+}
+
+/**
+ * The site, in one line and four numbers.
+ *
+ * The full picture is Pages; this exists so a person reading the dashboard knows whether the
+ * site is the problem before they go looking. Nothing here is a number the reader has to
+ * interpret — `0 of 36 findable` is not a percentage that could be fine.
+ */
+function SitePanel() {
+  const health = siteHealth(SITE_PAGES);
+
+  return (
+    <section className="panel panel--wide">
+      <div className="panel__title">
+        <h2 className="t-title-m">The site</h2>
+        <Link className="t-label" href="/seo/pages">
+          Every page, and what is wrong →
+        </Link>
+      </div>
+
+      <div className="tiles tiles--tight">
+        <Tile
+          label="PAGES"
+          value={String(health.pages)}
+          note="8 at launch, 23 at phase 2, 33 at phase 3. None is live."
+        />
+        <Tile
+          label="FINDABLE"
+          value={`${health.indexed} / ${health.pages}`}
+          attention
+          note="No sitemap is declared, so nothing is indexed — and the six-month ranking clock starts at indexation."
+        />
+        <Tile
+          label="ORPHANS"
+          value={String(health.orphans)}
+          attention={health.orphans > 0}
+          note="The architecture’s own rule is no orphans and a minimum of two inbound links. An orphan cannot rank and passes no authority."
+        />
+        <Tile
+          label="WITHOUT A QUESTION"
+          value={String(health.withoutKeyword)}
+          note="Pages with no primary keyword assigned. Some are legal and conversion pages, which is correct."
+        />
+      </div>
+
+      {health.commonest !== null && (
+        <p className="t-body-s text-secondary" style={{ marginTop: 'var(--space-4)', maxWidth: '72ch' }}>
+          The commonest gap across the site is <strong>{health.commonest.label.toLowerCase()}</strong>, on{' '}
+          {health.commonest.count} of {health.pages} pages — which is one template fix, not{' '}
+          {health.commonest.count} page fixes.
+        </p>
+      )}
     </section>
   );
 }

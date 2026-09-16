@@ -796,6 +796,235 @@ strong,
   color: var(--text-secondary);
 }
 
+/*
+ * ══ SEO · the site, page by page ═════════════════════════════════════════
+ *
+ * Thirty-six rows is a lot to look at, so the row itself carries almost nothing: the path,
+ * what the page is for, a strip of dots, and a count. The count is the decision — open it
+ * or move on — and the detail is where the instructions live.
+ *
+ * ⚑ The dots are the whole readability trick. Seven check names on every row is a wall;
+ * seven dots is a shape, and a person learns the shape of "fine" in about four rows.
+ */
+.lede {
+  max-width: 78ch;
+  color: var(--text-secondary);
+}
+
+.pages {
+  display: grid;
+}
+
+.page {
+  border-top: 1px solid var(--border-default);
+  scroll-margin-top: var(--space-5);
+}
+
+.page__summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.4fr) auto 84px 16px;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-2);
+  cursor: pointer;
+  list-style: none;
+}
+
+.page__summary::-webkit-details-marker {
+  display: none;
+}
+
+.page__summary:hover {
+  background: var(--surface-hover);
+}
+
+.page__summary:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: -2px;
+}
+
+.page__path {
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.page__for {
+  color: var(--text-secondary);
+}
+
+.page__score {
+  display: flex;
+  gap: 4px;
+}
+
+.page__count {
+  justify-self: end;
+  white-space: nowrap;
+}
+
+.page[open] .row__chevron {
+  transform: rotate(180deg);
+}
+
+/* Colour only where it is earned — if everything is red, red means nothing. */
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--border-strong);
+}
+
+.dot--pass {
+  background: var(--accent-approve);
+}
+
+.dot--blocking {
+  background: var(--accent-attention);
+}
+
+.dot--quality {
+  background: var(--text-tertiary);
+}
+
+.page__detail {
+  display: grid;
+  gap: var(--space-4);
+  padding: 0 var(--space-2) var(--space-5);
+}
+
+.fixes {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.fixes__title {
+  color: var(--text-tertiary);
+}
+
+/*
+ * One thing wrong, said twice: what is true, then what to do. The second line is the one
+ * that matters and it is the one panels like this usually leave out.
+ */
+.fix {
+  display: grid;
+  gap: 2px;
+  padding-left: var(--space-4);
+  border-left: 1px solid var(--border-default);
+}
+
+.fix__do {
+  color: var(--text-secondary);
+}
+
+.page__facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin: 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-default);
+}
+
+.page__facts dt {
+  color: var(--text-tertiary);
+}
+
+.page__facts dd {
+  margin: 2px 0 0;
+  color: var(--text-secondary);
+}
+
+.page-group {
+  margin-top: var(--space-5);
+}
+
+.page-group__head {
+  display: grid;
+  gap: 2px;
+  padding-bottom: var(--space-2);
+}
+
+/* Fixes that change every page at once. They earn the space above the list. */
+.site-fixes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.site-fix {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--border-default);
+  border-left: 2px solid var(--accent-attention);
+  border-radius: var(--radius-sm);
+  background: var(--surface-base);
+}
+
+.site-fix__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+/* ── SEO · where a link can come from ────────────────────────────────────── */
+
+.routes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.route {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface-base);
+}
+
+.route--never {
+  border-style: dashed;
+  border-color: var(--accent-attention);
+}
+
+.route__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.tiles--tight {
+  margin-top: var(--space-4);
+}
+
+@media (max-width: 1099px) {
+  .site-fixes,
+  .routes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page__summary {
+    grid-template-columns: minmax(0, 1fr) auto 72px 16px;
+  }
+
+  .page__for {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .site-fixes,
+  .routes,
+  .page__facts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* ── SEO · a target on the list ──────────────────────────────────────────── */
 
 .targets {
