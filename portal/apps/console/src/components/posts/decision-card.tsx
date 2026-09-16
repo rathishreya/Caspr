@@ -214,37 +214,47 @@ export function DecisionCard({
       </div>
 
       {panel === 'revise' && (
-        <form id={`revise-${itemId}`} className="reject" action={submitWith('revise')}>
+        <form id={`revise-${itemId}`} className="reject revise" action={submitWith('revise')}>
           {hidden}
-          <label className="reject__note">
-            <span className="t-meta reject__legend">
-              What to change — the writer rewrites it from this. You never type the post itself
-            </span>
-            <textarea
-              ref={promptField}
-              name="note"
-              value={prompt}
-              onChange={(event) => setPrompt(event.target.value)}
-              maxLength={PROMPT_MAX_CHARS}
-              required
-              rows={3}
-              placeholder="Cut the last paragraph and lead on the $600m gap. Keep the source line."
-            />
-            <span className={prompt.length > PROMPT_MAX_CHARS - 40 ? 'reject__count reject__count--near t-meta' : 'reject__count t-meta'}>
-              {prompt.length} / {PROMPT_MAX_CHARS}
-            </span>
-          </label>
+          <div className="revise__body">
+            <p className="t-meta reject__legend">Change it</p>
+            <p className="revise__lede t-body-s">
+              Say what to change. The writer rewrites the post from your words and it comes back for the same review —
+              you never type the post itself.
+            </p>
 
-          <div className="reject__actions">
-            <Submit variant="primary" pendingLabel="Sending">
-              Send to the writer
-            </Submit>
-            <button type="button" className="btn" onClick={() => setPanel('none')}>
-              Cancel <kbd className="kbd">Esc</kbd>
-            </button>
-            <span className="decide__hint t-body-s">
+            <label className="reject__note">
+              <textarea
+                ref={promptField}
+                name="note"
+                value={prompt}
+                onChange={(event) => setPrompt(event.target.value)}
+                maxLength={PROMPT_MAX_CHARS}
+                required
+                rows={3}
+                placeholder="Cut the last paragraph and lead on the $600m gap. Keep the source line."
+              />
+            </label>
+
+            <div className="reject__actions">
+              <Submit variant="primary" pendingLabel="Sending">
+                Send to the writer
+              </Submit>
+              <button type="button" className="btn" onClick={() => setPanel('none')}>
+                Cancel <kbd className="kbd">Esc</kbd>
+              </button>
+              <span
+                className={
+                  prompt.length > PROMPT_MAX_CHARS - 40 ? 'revise__count revise__count--near t-meta' : 'revise__count t-meta'
+                }
+              >
+                {prompt.length} / {PROMPT_MAX_CHARS}
+              </span>
+            </div>
+
+            <p className="revise__note t-body-s">
               ⑩ the Writer is not built yet, so the instruction is recorded and the post waits here.
-            </span>
+            </p>
           </div>
         </form>
       )}

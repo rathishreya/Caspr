@@ -1640,7 +1640,48 @@ a.card:hover {
 .reject__actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-2);
+}
+
+/*
+ * ── The revise panel ──────────────────────────────────────────────────────
+ *
+ * It shares the reject panel's chrome and nothing else. Reject is a ten-code grid that
+ * earns the full width of the card; revise is one sentence being typed, and at full width
+ * it read as an empty slab with a line of text lost in it.
+ *
+ * So the column is held to a typing measure, the instruction is a sentence in body type
+ * rather than 78 characters of uppercase mono, and the counter sits with the buttons
+ * instead of floating alone against the right edge.
+ */
+.revise__body {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 68ch;
+}
+
+.revise__lede {
+  margin-top: calc(-1 * var(--space-2));
+  color: var(--text-secondary);
+}
+
+.revise textarea {
+  min-height: 84px;
+}
+
+.revise__count {
+  margin-left: var(--space-2);
+  color: var(--text-tertiary);
+}
+
+.revise__count--near {
+  color: var(--text-primary);
+}
+
+.revise__note {
+  margin-top: calc(-1 * var(--space-1));
+  color: var(--text-tertiary);
 }
 
 /* ── 6e · The preview inside a decision card ─────────────────────────────── */
